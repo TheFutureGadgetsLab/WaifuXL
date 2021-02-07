@@ -37,6 +37,7 @@ for epoch in trange(epochs, desc="Epoch"):
     for full, _ in tqdm(train_loader, desc="Train", leave=False):
         full = full.to(device)
         down = downscale(full)
+
         optimizer.zero_grad()
 
         superScale, vqLoss = model(down)
