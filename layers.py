@@ -8,22 +8,23 @@ class DownScale(nn.Module):
 
         self.layers = nn.Sequential(
             nn.Conv2d(inChannels,     outChannels//2, kernel_size=4, stride=2, padding=1),
-            nn.ReLU(),
+            nn.ReLU(True),
             nn.Conv2d(outChannels//2, outChannels,    kernel_size=4, stride=2, padding=1),
-            nn.ReLU()
+            nn.ReLU(True)
         )
 
     def forward(self, x):
         return self.layers(x)
 
 class UpScale(nn.Module):
-    def __init__(self, inChannels, outChannels):
+    def __init__(self, inChannels, outChannels, noReLU=False):
         super().__init__()
 
-        self.layers = nn.Sequential(
-            nn.ConvTranspose2d(inChannels, outChannels, kernel_size=4, stride=2, padding=1),
-            nn.ReLU(),
-        )
+        layers = [nn.ConvTranspose2d(inChannels, outChannels, kernel_size=4, stride=2, padding=1)]
+        if noReLU == False:
+            layers.append(nn.ReLU(True))
+
+        self.layers = nn.Sequential(*layers)
 
     def forward(self, x):
         return self.layers(x)
@@ -34,18 +35,18 @@ class ResStack(nn.Module):
 
         layers = [
             nn.Conv2d(inChannels, residChannels, kernel_size=1, padding=0),
-            nn.ReLU()
+            nn.ReLU(True)
         ]
 
         for _ in range(nLayers):
             layers.extend([
                 nn.Conv2d(residChannels, residChannels, kernel_size=3, padding=1),
-                nn.ReLU()
+                nn.ReLU(True)
             ])
         
         layers.extend([
             nn.Conv2d(residChannels, inChannels, kernel_size=1, padding=0),
-            nn.ReLU()
+            nn.ReLU(True)
         ])
 
         self.stack = nn.Sequential(*layers)
