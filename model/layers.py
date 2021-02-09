@@ -7,9 +7,7 @@ class DownScale(nn.Module):
         super().__init__()
 
         self.layers = nn.Sequential(
-            nn.Conv2d(inChannels,     outChannels//2, kernel_size=4, stride=2, padding=1),
-            nn.ReLU(True),
-            nn.Conv2d(outChannels//2, outChannels,    kernel_size=4, stride=2, padding=1),
+            nn.Conv2d(inChannels, outChannels, kernel_size=4, stride=2, padding=1),
             nn.ReLU(True)
         )
 

@@ -5,7 +5,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from layers import UpScale, DownScale, ResStack
+from model.layers import UpScale, DownScale, ResStack
 
 IM_CHANS = 3
 
@@ -31,7 +31,6 @@ class VQ_VAE(nn.Module):
         self.dec = nn.Sequential(
             nn.Conv2d(self.embedDim, self.nHiddens, kernel_size=3, padding=1),
             ResStack(self.nResids, self.nHiddens, self.nRHiddens),
-            UpScale(self.nHiddens, self.nHiddens),
             UpScale(self.nHiddens, self.nHiddens),
             ResStack(self.nResids, self.nHiddens, self.nRHiddens),
             UpScale(self.nHiddens, 3, noReLU=True)

@@ -2,7 +2,7 @@ import torch
 import torch.nn.functional as F
 import torch.optim as optim
 from model import VQ_VAE
-from get_dataset import getSTL10
+from utils import getDataset
 from os import mkdir
 import torchvision.transforms as transforms
 from tqdm import tqdm, trange
@@ -16,45 +16,43 @@ def main():
 
     batchSize     = 128
     epochs        = 500
-
     learning_rate = 3e-4
 
     output_path = f"superRes/"
     mkdir(output_path)
 
-    downscale = transforms.Resize((96//2, 96//2))
-
-    train_loader, test_loader = getSTL10(batchSize)
+    train_loader, test_loader, _ = getDataset("/home/supa/lin_storage/Datasets/FFHQ/", "0032", "0064", batchSize)
 
     model = VQ_VAE().to(device)
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
-    sampleFull  = next(iter(test_loader))[0][:10].to(device)
-    sampleSmall = downscale(sampleFull)
+    sampleSmall, sampleFull = next(iter(test_loader))
+    sampleSmall = sampleSmall[:10].to(device)
+    sampleFull  = sampleFull[:10].to(device)
 
     MSE_tot   = []
     for epoch in trange(epochs, desc="Epoch"):
-        for full, _ in tqdm(train_loader, desc="Train", leave=False):
-            full = full.to(device)
-            down = downscale(full)
+        for small, full in tqdm(train_loader, desc="Train", leave=False):
+            small = small.to(device)
+            full  = full.to(device)
 
             optimizer.zero_grad()
 
-            superScale, vqLoss = model(down)
+            superScale, vqLoss = model(small)
 
             # Optimize model
-            loss = F.mse_loss(full, superScale) + vqLoss.mean()
-            loss.backward()
+            loss = F.mse_loss(full, superScale, reduction='none').mean(dim=(1, 2, 3)) + vqLoss
+            loss.mean().backward()
 
             optimizer.step()
 
         MSE_test  = []
-        for full, _ in tqdm(test_loader, desc="Test", leave=False):
-            full = full.to(device)
-            down = downscale(full)
+        for small, full in tqdm(test_loader, desc="Test", leave=False):
+            small = small.to(device)
+            full  = full.to(device)
 
             with torch.no_grad():
-                superScale, vqLoss = model(down)
+                superScale, vqLoss = model(small)
 
                 MSE_test.append(F.mse_loss(full, superScale).item())
 
