@@ -57,8 +57,8 @@ class VQ_StraightThrough(nn.Module):
         torch.nn.init.kaiming_uniform_(self.embedding.weight)
 
     def forward(self, z_e):
-        z_e = z_e.movedim(1, -1).contiguous()
-        dists = z_e.square().sum(dim=-1, keepdim=True) + (self.embedding.weight.square()).sum(dim=-1) - 2*torch.matmul(z_e, self.embedding.weight.t())
+        z_e = z_e.permute(0, 2, 3, 1).contiguous()
+        dists = z_e.pow(2).sum(dim=-1, keepdim=True) + (self.embedding.weight.pow(2)).sum(dim=-1) - 2*torch.matmul(z_e, self.embedding.weight.t())
 
         # Encoding
         inds = torch.argmin(dists, dim=-1)
@@ -67,13 +67,13 @@ class VQ_StraightThrough(nn.Module):
         z_q = self.embedding(inds)
 
         # Loss
-        e_latent_loss = ((z_q.detach() - z_e).square()).mean(dim=(1, 2, 3))
-        q_latent_loss = ((z_q - z_e.detach()).square()).mean(dim=(1, 2, 3))
+        e_latent_loss = ((z_q.detach() - z_e).pow(2)).mean(dim=(1, 2, 3))
+        q_latent_loss = ((z_q - z_e.detach()).pow(2)).mean(dim=(1, 2, 3))
         vq_loss = q_latent_loss + 0.25 * e_latent_loss
         
         z_q = z_e + (z_q - z_e).detach()
 
-        return z_q.movedim(-1, 1).contiguous(), vq_loss
+        return z_q.permute(0, 3, 1, 2).contiguous(), vq_loss
 
 def weights_init(m):
     if isinstance(m, nn.Conv2d):
