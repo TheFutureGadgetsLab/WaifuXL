@@ -21,4 +21,5 @@ def centerAndCropImage(targetDimensions, inputFile, outputPath):
     else:
         print("Smaller than target size")
 
-centerAndCropImage((500,500),"../images/sampleOne.png","../cropped/")
+if __name__ == "__main__":
+    centerAndCropImage((500,500),"../images/sampleOne.png","../cropped/")
