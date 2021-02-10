@@ -5,12 +5,8 @@ def centerAndCropImage(targetDimensions,path,outPath):
 
     width, height = im.size
 
-    print(width,height)
-
     widthDiff = width - targetDimensions[0]
     heightDiff = height - targetDimensions[1]
-
-    center = (int(width/2),int(height/2))
 
     newLeft = widthDiff/2
     newRight = width-(widthDiff/2)
