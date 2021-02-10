@@ -20,4 +20,5 @@ def centerAndCropImage(targetDimensions, inputFile, outputPath):
         im1.save(f"{outputPath}{fileName}")
     else:
         print("Smaller than target size")
+
 centerAndCropImage((500,500),"../images/sampleOne.png","../cropped/")
