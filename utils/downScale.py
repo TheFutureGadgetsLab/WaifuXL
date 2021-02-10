@@ -14,7 +14,7 @@ for targetSize in targetSizes:
     outPath = path.join(datasetPath, f"{targetSize}x{targetSize}")
     mkdir(outPath)
 
-for ref in tqdm(refs, desc="Refe Image"):
+for ref in tqdm(refs, desc="Ref Image"):
     with Image.open(ref) as refImage:
         for targetSize in tqdm(targetSizes, desc="Resizing", leave=False):
             outPath = path.join(datasetPath, f"{targetSize}x{targetSize}")
