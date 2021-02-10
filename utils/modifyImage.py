@@ -1,15 +1,7 @@
 from PIL import Image
 
 def centerAndCropImage(targetDimensions, inputFile, outputPath):
-    fileName = inputFile.split('/')[-1].split('.')[0]
-    fileExtension = inputFile.split(".")[-1]
-    if fileExtension == "png":
-        outFlag = "PNG"
-    #note that I haven't tested this on a jpg file
-    elif fileExtension == "jpeg" or fileExtension == "jpg":
-        outFlag = "JPEG"
-    else:
-        raise Exception("Unknown File Type")
+    fileName = inputFile.split('/')[-1]
     
     im = Image.open(inputFile)
 
@@ -24,6 +16,6 @@ def centerAndCropImage(targetDimensions, inputFile, outputPath):
     newBottom = height-(heightDiff/2) 
 
     im1 = im.crop((newLeft,newTop,newRight,newBottom))
-    im1.save(f"{outputPath}{fileName}_cropped.{fileExtension}",outFlag)
+    im1.save(f"{outputPath}{fileName}")
 
-centerAndCropImage((500,500),"../images/sampleOne.png","../images/")
+centerAndCropImage((500,500),"../images/sampleOne.png","../cropped/")
