@@ -24,6 +24,6 @@ def centerAndCropImage(targetDimensions,path,outPath):
     newBottom = height-(heightDiff/2) 
 
     im1 = im.crop((newLeft,newTop,newRight,newBottom))
-    im1.save(f"../images/{fileName}_cropped.{fileExtension}",outFlag)
+    im1.save(f"{outPath}{fileName}_cropped.{fileExtension}",outFlag)
 
 centerAndCropImage((500,500),"../images/sampleOne.png","../images/")
