@@ -5,11 +5,11 @@ async function sample(imageArray) {
     if(imageArray) {
         try {
             console.log(imageArray);
-            const width = imageArray.shape[2];
-            const height = imageArray.shape[3];
-            const session = await ort.InferenceSession.create('./identity.onnx');
+            const height = imageArray.shape[2];
+            const width = imageArray.shape[3];
+            const session = await ort.InferenceSession.create('./fucknames.onnx');
             // prepare inputs. a tensor need its corresponding TypedArray as data
-            const tensor = new ort.Tensor('float32', imageArray.data, [1,3,width,height]);
+            const tensor = new ort.Tensor('float32', imageArray.data, [1,3,height,width]);
             // prepare feeds. use model input names as keys.
             const feeds = { input: tensor };
     
