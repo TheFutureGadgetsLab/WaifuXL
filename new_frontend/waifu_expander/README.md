@@ -27,3 +27,7 @@ yarn create next-app --example with-tailwindcss with-tailwindcss-app
 ```
 
 Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+
+## Notes on Waifu Expander
+When you want to run this in browser, you need to copy the ort-wasm.wasm file from ./next to ./next/static/chunk/pages
+(Will find better solution for this at some point)

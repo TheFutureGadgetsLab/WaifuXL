@@ -6,13 +6,12 @@ import ops from "ndarray-ops";
 function drawImage(canvasContext, imageSource, setHeight, setWidth) {
   const img = new Image();
   img.crossOrigin = "Anonymous";
+  img.src = imageSource;
   img.onload = function () {
     setHeight(img.height);
     setWidth(img.width);
-
     canvasContext.drawImage(img, 0, 0);
   };
-  img.src = imageSource;
 }
 
 function drawOutput(canvasContext, data, setOutWidth, setOutHeight) {
@@ -27,7 +26,6 @@ function drawOutput(canvasContext, data, setOutWidth, setOutHeight) {
     width,
     4,
   ]);
-
   ops.assign(dataTensor.pick(null, null, 0), inputArray.pick(0, 0, null, null));
   ops.assign(dataTensor.pick(null, null, 1), inputArray.pick(0, 1, null, null));
   ops.assign(dataTensor.pick(null, null, 2), inputArray.pick(0, 2, null, null));
