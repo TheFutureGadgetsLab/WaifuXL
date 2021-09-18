@@ -51,6 +51,15 @@ export default function Home() {
   const canvasRef = createRef();
   const outputCanvasRef = createRef();
 
+  function downloadImage() {
+    var link = document.createElement("a");
+    let urlParts = url.split(/[\.\/]/i);
+    let imgName = urlParts[urlParts.length - 2];
+    link.download = `${imgName}_2x.png`;
+    link.href = outputCanvasRef.current.toDataURL();
+    link.click();
+  }
+
   useEffect(async () => {
     setCanvasContext(canvasRef.current.getContext("2d"));
     setOutputCanvasContext(outputCanvasRef.current.getContext("2d"));
@@ -67,12 +76,14 @@ export default function Home() {
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <div className="grid grid-cols-2 gap-4">
         <canvas
+          id="input"
           ref={canvasRef}
           width={width}
           height={height}
           style={{ width: 500 }}
         />
         <canvas
+          id="output"
           ref={outputCanvasRef}
           width={outWidth}
           height={outHeight}
@@ -85,7 +96,7 @@ export default function Home() {
             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
               Download Original
             </button>
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={downloadImage}>
               Download Upscaled
             </button>
           </>
@@ -101,10 +112,8 @@ export default function Home() {
       <div className="grid grid-cols-3 gap-3">
         <input
           className="bg-gray-200 shadow-inner rounded-l p-2 flex-1"
-          id="email"
-          type="email"
-          aria-label="email address"
-          placeholder="https://i.imgur.com/6QUUYAN.jpeg"
+          id="image-url"
+          placeholder="https://i.imgur.com/D0ZiNda.jpeg"
           onBlur={(inp) => {
             setUrl(inp.target.value);
           }}
