@@ -8,7 +8,7 @@ async function sample(imageArray) {
             console.log(imageArray);
             const height = imageArray.shape[2];
             const width = imageArray.shape[3];
-            const session = await ort.InferenceSession.create('./nonshittygrayscale.onnx', {executionProviders: ["wasm"]});
+            const session = await ort.InferenceSession.create('./fixedSuperRes.onnx', {executionProviders: ["wasm"]});
 
             console.log("Session created");
             // prepare inputs. a tensor need its corresponding TypedArray as data
