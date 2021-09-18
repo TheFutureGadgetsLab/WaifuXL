@@ -2,3 +2,5 @@
 **/__pycache__
 data
 superRes
+new_frontend/waifu_expander/static/chunks/pages/ort-wasm-threaded.wasm
+new_frontend/waifu_expander/static/chunks/pages/ort-wasm.wasm
