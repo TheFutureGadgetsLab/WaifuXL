@@ -15,13 +15,14 @@ function drawImage(canvasContext, imageSource, setHeight, setWidth) {
 }
 
 function drawOutput(canvasContext, data, setOutWidth, setOutHeight) {
+  console.log("Data befor draw:");
   console.log(data);
   const height = data.dims[2];
   const width = data.dims[3];
   setOutWidth(width);
   setOutHeight(height);
   const inputArray = ndarray(data.data, data.dims);
-  const dataTensor = ndarray(new Float32Array(width * height * 4).fill(255), [
+  const dataTensor = ndarray(new Uint8Array(width * height * 4).fill(255), [
     height,
     width,
     4,
@@ -45,7 +46,7 @@ export default function Home() {
   const [outHeight, setOutHeight] = useState(500);
   const [outWidth, setOutWidth] = useState(500);
   const [imageInput, setImageInput] = useState(undefined);
-  const [url, setUrl] = useState("https://i.imgur.com/D0ZiNda.jpeg");
+  const [url, setUrl] = useState("https://i.imgur.com/6QUUYAN.jpeg");
 
   const canvasRef = createRef();
   const outputCanvasRef = createRef();
@@ -103,7 +104,7 @@ export default function Home() {
           id="email"
           type="email"
           aria-label="email address"
-          placeholder="https://i.imgur.com/D0ZiNda.jpeg"
+          placeholder="https://i.imgur.com/6QUUYAN.jpeg"
           onBlur={(inp) => {
             setUrl(inp.target.value);
           }}
@@ -127,13 +128,13 @@ export default function Home() {
               canvasContext.canvas.height
             );
             const { data, width, height } = imageData;
-            const dataTensor = ndarray(new Float32Array(data), [
+            const dataTensor = ndarray(new Uint8Array(data), [
               height,
               width,
               4,
             ]);
             const dataProcessedTensor = ndarray(
-              new Float32Array(width * height * 3),
+              new Uint8Array(width * height * 3),
               [1, 3, height, width]
             );
             ops.assign(
