@@ -17,13 +17,12 @@ module.exports = {
         patterns: [
           {
             from: "node_modules/onnxruntime-web/dist/*.wasm",
-            to: "[name][ext]",
+            to: "../static/chunks/pages/[name][ext]",
           },
         ],
       })
     );
     
-    console.log(config);
     return config;
   },
 };
