@@ -1,16 +1,16 @@
-pytorch1.9:’
+pytorch1.10:€
 %
 inputoutput
-Identity_0"Identitytorch-jit-exportZ*
-input!
-
+Identity_0"Identitytorch-jit-exportZ!
+input
+
 
 
-width
-heightb+
-output!
-
+h
+wb"
+output
+
 
 
-width
-heightB
+h
+wB
