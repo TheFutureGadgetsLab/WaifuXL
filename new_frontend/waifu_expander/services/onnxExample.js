@@ -8,7 +8,18 @@ async function sample(imageArray) {
             console.log(imageArray);
             const height = imageArray.shape[2];
             const width = imageArray.shape[3];
-            const session = await ort.InferenceSession.create('./fixedSuperRes.onnx', {executionProviders: ["wasm"]});
+            ort.env.logLevel = "verbose";
+            ort.env.debug = true;
+            ort.env.wasm.numThreads = 16;
+            const session = await ort.InferenceSession.create('./fixedSuperRes.onnx', {
+                executionProviders: ["wasm"],
+                logSeverityLevel: 0,
+                logVerbosityLevel: 2,
+                executionMode: "parallel"
+            });
+            ort.env.logLevel = "verbose";
+            ort.env.debug = true;
+            ort.env.wasm.numThreads = 16;
 
             console.log("Session created");
             // prepare inputs. a tensor need its corresponding TypedArray as data
