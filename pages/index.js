@@ -17,7 +17,7 @@ export default function Home() {
   const [showDownloads, setShowDownloads] = useState(false);
   const [showOutput, setShowOutput] = useState(false);
   const [imageInput, setImageInput] = useState(undefined);
-  const [url, setUrl] = useState("https://i.imgur.com/OOFc0Af.png");
+  const [url, setUrl] = useState("https://i.imgur.com/v9Lwral.png");
   const [model, setModel] = useState("identity");
 
   const canvasRef = createRef();
@@ -36,35 +36,36 @@ export default function Home() {
     }
   }, [height, width, imageInput]);
   return (
-    <div style={{backgroundImage: `url("https://images4.alphacoders.com/861/861275.png")`}}>
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <div className="grid grid-cols-2 gap-4">
+    <div className="flex flex-col items-center justify-center min-h-screen py-2" 
+      style={{backgroundImage: `url("https://images4.alphacoders.com/861/861275.png")`}}>
+      <div className="flex-grow grid grid-cols-2 justify-items-center w-full max-w-6xl">
         <canvas
           id="input"
           ref={canvasRef}
           width={width}
           height={height}
-          style={{ width: 500 }}
+          style={{ width: 400 }}
         />
         <canvas
           id="output"
           ref={outputCanvasRef}
           width={outWidth}
           height={outHeight}
-          style={{ width: 500 }}
+          style={{ width: 400 }}
         />
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <br />
+      <div className="flex-shrink grid grid-cols-2 justify-items-center px-10 text-center w-full max-w-6xl">
         {showDownloads && (
           <>
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg"
               onClick={() => downloadImage("original", url, canvasRef)}
             >
               Download Original
             </button>
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg"
               onClick={() => downloadImage("2x", url, outputCanvasRef)}
             >
               Download Upscaled
@@ -72,8 +73,7 @@ export default function Home() {
           </>
         )}{" "}
       </div>
-      <br />
-      <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
+      <main className="flex flex-col items-center flex-shrink justify-center w-full p-10 text-center">
         <br />
         <h1 className="text-6xl font-bold">
           Expand your <span className="text-blue-600">{"waifu"}</span>
@@ -89,13 +89,13 @@ export default function Home() {
           }}
         />
         <select name="selectList" id="selectList" onChange={(inp) => {setModel(inp.target.value);}}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg"
         >
           <option value="identity">Identity</option>
           <option value="superRes">Super Resolution</option>
         </select>
         <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg"
           onClick={() => {
             setShowOutput(false);
             drawImage(canvasContext, url, setHeight, setWidth);
@@ -105,7 +105,7 @@ export default function Home() {
         </button>
 
         <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg"
           onClick={() => {
             setImageInput(buildNdarrayFromImage(canvasContext));
           }}
@@ -113,7 +113,6 @@ export default function Home() {
           Upscale
         </button>
       </div>
-    </div>
     </div>
   );
 }
