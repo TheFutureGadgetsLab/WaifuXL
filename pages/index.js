@@ -92,7 +92,7 @@ export default function Home() {
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
           <option value="identity">Identity</option>
-          <option value="superRes">Super Res</option>
+          <option value="superRes">Super Resolution</option>
         </select>
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
