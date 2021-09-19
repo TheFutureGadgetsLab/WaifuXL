@@ -37,7 +37,7 @@ export default function Home() {
   }, [height, width, imageInput]);
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2" 
-      style={{backgroundImage: `url("https://images4.alphacoders.com/861/861275.png")`}}>
+      style={{backgroundImage: `url("bg.png")`, backgroundSize: 'cover'}}>
       <div className="flex-grow grid grid-cols-2 justify-items-center w-full max-w-6xl">
         <canvas
           id="input"
