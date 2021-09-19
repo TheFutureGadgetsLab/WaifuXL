@@ -17,7 +17,7 @@ export default function Home() {
   const [showDownloads, setShowDownloads] = useState(false);
   const [showOutput, setShowOutput] = useState(false);
   const [imageInput, setImageInput] = useState(undefined);
-  const [url, setUrl] = useState("https://i.imgur.com/6QUUYAN.jpeg");
+  const [url, setUrl] = useState("https://i.imgur.com/OOFc0Af.png");
   const [model, setModel] = useState("identity");
 
   const canvasRef = createRef();
