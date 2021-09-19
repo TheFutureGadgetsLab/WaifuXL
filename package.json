@@ -9,7 +9,8 @@
     "ndarray": "^1.0.19",
     "ndarray-ops": "^1.2.2",
     "next": "latest",
-    "onnxruntime-web": "^1.8.2-dev.20210831.0",
+    "onnxruntime-common": "file:onnx_deps/onnxruntime-common-1.9.0.tgz",
+    "onnxruntime-web": "file:onnx_deps/onnxruntime-web-1.9.0.tgz",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },

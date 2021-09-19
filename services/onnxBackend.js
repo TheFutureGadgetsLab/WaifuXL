@@ -7,7 +7,7 @@ async function loadSession(modelVer) {
     ort.env.debug = true;
     ort.env.wasm.numThreads = 16;
     ort.env.wasm.simd = true;
-    //ort.env.wasm.proxy = true;
+    ort.env.wasm.proxy = true;
 
     console.log("Initializing session");
     const session = await ort.InferenceSession.create(model, {

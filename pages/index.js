@@ -35,8 +35,8 @@ export default function Home() {
       setShowDownloads(false);
     }
   }, [height, width, imageInput]);
-
   return (
+    <div style={{backgroundImage: `url("https://images4.alphacoders.com/861/861275.png")`}}>
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <div className="grid grid-cols-2 gap-4">
         <canvas
@@ -113,6 +113,7 @@ export default function Home() {
           Upscale
         </button>
       </div>
+    </div>
     </div>
   );
 }
