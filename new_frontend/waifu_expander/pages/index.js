@@ -1,43 +1,8 @@
-import sample from "../services/onnxExample";
+import runModel from "../services/onnxBackend";
 import { useState, useEffect, createRef } from "react";
-import ndarray from "ndarray";
-import ops from "ndarray-ops";
-import { downloadImage } from "../services/fileManipulation";
+import { downloadImage, drawImage, drawOutput } from "../services/imageUtilities";
 import { buildNdarrayFromImage } from "../services/processingUtilities";
 
-function drawImage(canvasContext, imageSource, setHeight, setWidth) {
-  const img = new Image();
-  img.crossOrigin = "Anonymous";
-  img.src = imageSource;
-  img.onload = function () {
-    setHeight(img.height);
-    setWidth(img.width);
-    canvasContext.drawImage(img, 0, 0);
-  };
-}
-
-function drawOutput(canvasContext, data, setOutWidth, setOutHeight) {
-  console.log("Data befor draw:");
-  console.log(data);
-  const height = data.dims[2];
-  const width = data.dims[3];
-  setOutWidth(width);
-  setOutHeight(height);
-  const inputArray = ndarray(data.data, data.dims);
-  const dataTensor = ndarray(new Uint8Array(width * height * 4).fill(255), [
-    height,
-    width,
-    4,
-  ]);
-  ops.assign(dataTensor.pick(null, null, 0), inputArray.pick(0, 0, null, null));
-  ops.assign(dataTensor.pick(null, null, 1), inputArray.pick(0, 1, null, null));
-  ops.assign(dataTensor.pick(null, null, 2), inputArray.pick(0, 2, null, null));
-  var idata = canvasContext.createImageData(width, height);
-  // set our buffer as source
-  idata.data.set(dataTensor.data);
-  // update canvas with new data
-  canvasContext.putImageData(idata, 0, 0);
-}
 
 export default function Home() {
   const [canvasContext, setCanvasContext] = useState(undefined);
@@ -56,7 +21,7 @@ export default function Home() {
   useEffect(async () => {
     setCanvasContext(canvasRef.current.getContext("2d"));
     setOutputCanvasContext(outputCanvasRef.current.getContext("2d"));
-    const tmp = await sample(imageInput);
+    const tmp = await runModel(imageInput);
     if (tmp) {
       drawOutput(outputCanvasContext, tmp, setOutWidth, setOutHeight);
       setShowDownloads(true);
