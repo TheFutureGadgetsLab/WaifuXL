@@ -1,5 +1,3 @@
-import ndarray from "ndarray";
-import ops from "ndarray-ops";
 import { buildNdarrayFromModelOutput } from "./processingUtilities";
 
 export function downloadImage(postFix, url, ref) {

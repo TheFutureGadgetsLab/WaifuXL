@@ -1,17 +1,21 @@
 import runModel from "../services/onnxBackend";
 import { useState, useEffect, createRef } from "react";
-import { downloadImage, drawImage, drawOutput } from "../services/imageUtilities";
+import {
+  downloadImage,
+  drawImage,
+  drawOutput,
+} from "../services/imageUtilities";
 import { buildNdarrayFromImage } from "../services/processingUtilities";
-
 
 export default function Home() {
   const [canvasContext, setCanvasContext] = useState(undefined);
   const [outputCanvasContext, setOutputCanvasContext] = useState(undefined);
   const [height, setHeight] = useState(500);
   const [width, setWidth] = useState(500);
-  const [showDownloads, setShowDownloads] = useState(false);
   const [outHeight, setOutHeight] = useState(500);
   const [outWidth, setOutWidth] = useState(500);
+  const [showDownloads, setShowDownloads] = useState(false);
+  const [showOutput, setShowOutput] = useState(false);
   const [imageInput, setImageInput] = useState(undefined);
   const [url, setUrl] = useState("https://i.imgur.com/6QUUYAN.jpeg");
 
@@ -25,6 +29,7 @@ export default function Home() {
     if (tmp) {
       drawOutput(outputCanvasContext, tmp, setOutWidth, setOutHeight);
       setShowDownloads(true);
+      setShowOutput(true);
     } else {
       setShowDownloads(false);
     }
@@ -77,7 +82,7 @@ export default function Home() {
         <input
           className="bg-gray-200 shadow-inner rounded-l p-2 flex-1"
           id="image-url"
-          placeholder="https://i.imgur.com/D0ZiNda.jpeg"
+          placeholder={url}
           onBlur={(inp) => {
             setUrl(inp.target.value);
           }}
@@ -85,6 +90,7 @@ export default function Home() {
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           onClick={() => {
+            setShowOutput(false);
             drawImage(canvasContext, url, setHeight, setWidth);
           }}
         >

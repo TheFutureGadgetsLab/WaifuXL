@@ -1,6 +1,5 @@
 const ort = require('onnxruntime-web');
 
-// use an async context to call onnxruntime functions.
 async function runModel(imageArray) {
     if(imageArray) {
         try {

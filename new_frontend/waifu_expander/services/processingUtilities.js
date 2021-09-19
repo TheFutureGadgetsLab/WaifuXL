@@ -1,7 +1,6 @@
 import ndarray from "ndarray";
 import ops from "ndarray-ops";
 
-
 export function buildNdarrayFromImage(canvasContext) {
   const imageData = canvasContext.getImageData(
     0,
