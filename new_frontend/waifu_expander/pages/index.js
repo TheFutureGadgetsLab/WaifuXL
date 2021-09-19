@@ -2,6 +2,8 @@ import sample from "../services/onnxExample";
 import { useState, useEffect, createRef } from "react";
 import ndarray from "ndarray";
 import ops from "ndarray-ops";
+import { downloadImage } from "../services/fileManipulation";
+import { buildNdarrayFromImage } from "../services/processingUtilities";
 
 function drawImage(canvasContext, imageSource, setHeight, setWidth) {
   const img = new Image();
@@ -51,15 +53,6 @@ export default function Home() {
   const canvasRef = createRef();
   const outputCanvasRef = createRef();
 
-  function downloadImage() {
-    var link = document.createElement("a");
-    let urlParts = url.split(/[\.\/]/i);
-    let imgName = urlParts[urlParts.length - 2];
-    link.download = `${imgName}_2x.png`;
-    link.href = outputCanvasRef.current.toDataURL();
-    link.click();
-  }
-
   useEffect(async () => {
     setCanvasContext(canvasRef.current.getContext("2d"));
     setOutputCanvasContext(outputCanvasRef.current.getContext("2d"));
@@ -93,10 +86,16 @@ export default function Home() {
       <div className="grid grid-cols-2 gap-4">
         {showDownloads && (
           <>
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={() => downloadImage("original", url, canvasRef)}
+            >
               Download Original
             </button>
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={downloadImage}>
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={() => downloadImage("2x", url, outputCanvasRef)}
+            >
               Download Upscaled
             </button>
           </>
@@ -130,35 +129,7 @@ export default function Home() {
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           onClick={() => {
-            const imageData = canvasContext.getImageData(
-              0,
-              0,
-              canvasContext.canvas.width,
-              canvasContext.canvas.height
-            );
-            const { data, width, height } = imageData;
-            const dataTensor = ndarray(new Uint8Array(data), [
-              height,
-              width,
-              4,
-            ]);
-            const dataProcessedTensor = ndarray(
-              new Uint8Array(width * height * 3),
-              [1, 3, height, width]
-            );
-            ops.assign(
-              dataProcessedTensor.pick(0, 0, null, null),
-              dataTensor.pick(null, null, 0)
-            );
-            ops.assign(
-              dataProcessedTensor.pick(0, 1, null, null),
-              dataTensor.pick(null, null, 1)
-            );
-            ops.assign(
-              dataProcessedTensor.pick(0, 2, null, null),
-              dataTensor.pick(null, null, 2)
-            );
-            setImageInput(dataProcessedTensor);
+            setImageInput(buildNdarrayFromImage(canvasContext));
           }}
         >
           Upscale

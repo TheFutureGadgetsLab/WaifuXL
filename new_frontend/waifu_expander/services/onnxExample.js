@@ -11,7 +11,7 @@ async function sample(imageArray) {
             ort.env.logLevel = "verbose";
             ort.env.debug = true;
             ort.env.wasm.numThreads = 16;
-            const session = await ort.InferenceSession.create('./fixedSuperRes.onnx', {
+            const session = await ort.InferenceSession.create('./identity.onnx', {
                 executionProviders: ["wasm"],
                 logSeverityLevel: 0,
                 logVerbosityLevel: 2,
