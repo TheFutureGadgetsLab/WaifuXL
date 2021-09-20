@@ -60,12 +60,14 @@ export default function Home() {
           <>
             <button
               className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg"
+              style={{backgroundColor: "#51393c"}}
               onClick={() => downloadImage("original", url, canvasRef)}
             >
               Download Original
             </button>
             <button
               className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg"
+              style={{backgroundColor: "#51393c"}}
               onClick={() => downloadImage("2x", url, outputCanvasRef)}
             >
               Download Upscaled
@@ -76,7 +78,7 @@ export default function Home() {
       <main className="flex flex-col items-center flex-shrink justify-center w-full p-10 text-center">
         <br />
         <h1 className="text-6xl font-bold">
-          Expand your <span className="text-blue-600">{"waifu"}</span>
+          Expand your <span style={{color: "#FF869E"}}>{"waifu"}</span>
         </h1>
       </main>
       <div className="grid grid-cols-4 gap-3">
@@ -89,13 +91,15 @@ export default function Home() {
           }}
         />
         <select name="selectList" id="selectList" onChange={(inp) => {setModel(inp.target.value);}}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg"
+          className="text-white font-bold py-2 px-4 rounded drop-shadow-lg"
+          style={{backgroundColor:"#44abbc"}}
         >
           <option value="identity">Identity</option>
           <option value="superRes">Super Resolution</option>
         </select>
         <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg"
+          className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg"
+          style={{backgroundColor:"#44abbc"}}
           onClick={() => {
             setShowOutput(false);
             drawImage(canvasContext, url, setHeight, setWidth);
@@ -105,7 +109,8 @@ export default function Home() {
         </button>
 
         <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg"
+          className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg"
+          style={{backgroundColor:"#44abbc"}}
           onClick={() => {
             setImageInput(buildNdarrayFromImage(canvasContext));
           }}
