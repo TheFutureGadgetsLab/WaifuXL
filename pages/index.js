@@ -7,6 +7,10 @@ import {
 } from "../services/imageUtilities";
 import { buildNdarrayFromImage } from "../services/processingUtilities";
 
+const PINK  = "#FF869E";
+const BROWN = "#51393C";
+const BLUE  = "#44ABBC";
+
 export default function Home() {
   const [canvasContext, setCanvasContext] = useState(undefined);
   const [outputCanvasContext, setOutputCanvasContext] = useState(undefined);
@@ -44,14 +48,14 @@ export default function Home() {
           ref={canvasRef}
           width={width}
           height={height}
-          style={{ width: 400 }}
+          style={{ width: 400, borderWidth: "4px", borderColor: PINK}}
         />
         <canvas
           id="output"
           ref={outputCanvasRef}
           width={outWidth}
           height={outHeight}
-          style={{ width: 400 }}
+          style={{ width: 400, borderWidth: "4px", borderColor: PINK}}
         />
       </div>
       <br />
@@ -60,14 +64,14 @@ export default function Home() {
           <>
             <button
               className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg"
-              style={{backgroundColor: "#51393c"}}
+              style={{backgroundColor: BROWN}}
               onClick={() => downloadImage("original", url, canvasRef)}
             >
               Download Original
             </button>
             <button
               className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg"
-              style={{backgroundColor: "#51393c"}}
+              style={{backgroundColor: BROWN}}
               onClick={() => downloadImage("2x", url, outputCanvasRef)}
             >
               Download Upscaled
@@ -78,7 +82,7 @@ export default function Home() {
       <main className="flex flex-col items-center flex-shrink justify-center w-full p-10 text-center">
         <br />
         <h1 className="text-6xl font-bold">
-          Expand your <span style={{color: "#FF869E"}}>{"waifu"}</span>
+          Expand your <span style={{color: PINK}}>{"waifu"}</span>
         </h1>
       </main>
       <div className="grid grid-cols-4 gap-3">
@@ -92,14 +96,14 @@ export default function Home() {
         />
         <select name="selectList" id="selectList" onChange={(inp) => {setModel(inp.target.value);}}
           className="text-white font-bold py-2 px-4 rounded drop-shadow-lg"
-          style={{backgroundColor:"#44abbc"}}
+          style={{backgroundColor: BLUE}}
         >
           <option value="identity">Identity</option>
           <option value="superRes">Super Resolution</option>
         </select>
         <button
           className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg"
-          style={{backgroundColor:"#44abbc"}}
+          style={{backgroundColor: BLUE}}
           onClick={() => {
             setShowOutput(false);
             drawImage(canvasContext, url, setHeight, setWidth);
@@ -110,7 +114,7 @@ export default function Home() {
 
         <button
           className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg"
-          style={{backgroundColor:"#44abbc"}}
+          style={{backgroundColor: BLUE}}
           onClick={() => {
             setImageInput(buildNdarrayFromImage(canvasContext));
           }}
