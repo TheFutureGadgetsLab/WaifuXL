@@ -9,7 +9,14 @@ export function downloadImage(postFix, url, ref) {
   link.click();
 }
 
-export function drawImage(canvasContext, imageSource, setHeight, setWidth, setOutHeight, setOutWidth) {
+export function drawImage(
+  canvasContext,
+  imageSource,
+  setHeight,
+  setWidth,
+  setOutHeight,
+  setOutWidth
+) {
   const img = new Image();
   img.crossOrigin = "Anonymous";
   img.src = imageSource;
@@ -18,8 +25,6 @@ export function drawImage(canvasContext, imageSource, setHeight, setWidth, setOu
     setWidth(img.width);
     setOutHeight(img.height);
     setOutWidth(img.width);
-    console.log(img.height);
-    console.log(img.width);
     canvasContext.drawImage(img, 0, 0);
   };
 }
@@ -32,4 +37,28 @@ export function drawOutput(canvasContext, data, setOutHeight, setOutWidth) {
   var idata = canvasContext.createImageData(width, height);
   idata.data.set(buildNdarrayFromModelOutput(data, height, width));
   canvasContext.putImageData(idata, 0, 0);
+}
+
+export function getImageFromFileUpload(
+  uploaded,
+  canvasContext,
+  setHeight,
+  setWidth,
+  setOutHeight,
+  setOutWidth
+) {
+  const file = uploaded;
+  const fr = new FileReader();
+  fr.onload = function () {
+    drawImage(
+      canvasContext,
+      fr.result,
+      setHeight,
+      setWidth,
+      setOutHeight,
+      setOutWidth
+    );
+
+  };
+  fr.readAsDataURL(file);
 }

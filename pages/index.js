@@ -4,6 +4,7 @@ import {
   downloadImage,
   drawImage,
   drawOutput,
+  getImageFromFileUpload,
 } from "../services/imageUtilities";
 import { buildNdarrayFromImage } from "../services/processingUtilities";
 
@@ -29,7 +30,6 @@ export default function Home() {
   const canvasRef = createRef();
   const outputCanvasRef = createRef();
 
-
   useEffect(async () => {
     setCanvasContext(canvasRef.current.getContext("2d"));
     setOutputCanvasContext(outputCanvasRef.current.getContext("2d"));
@@ -46,13 +46,13 @@ export default function Home() {
       setDrawnURL(url);
       setShowDownloads(false);
     }
-    if(shouldRun) {
+    if (shouldRun) {
       const tmp = await runModel(imageInput, model, setLoading);
       if (tmp) {
         drawOutput(outputCanvasContext, tmp, setOutHeight, setOutWidth);
         setShowDownloads(true);
         setShouldRun(false);
-      }  
+      }
     }
   }, [height, width, imageInput, canvasContext, url]);
 
@@ -105,10 +105,27 @@ export default function Home() {
         {loading && <img src={loadingLink} />}{" "}
         <h1 className="text-6xl font-bold">
           {loading ? "Expanding" : "Expand"} your{" "}
-          <span style={{ color: PINK }}>{"waifu"}{loading && "..."}</span>
+          <span style={{ color: PINK }}>
+            {"waifu"}
+            {loading && "..."}
+          </span>
         </h1>
       </main>
-      <div className="grid grid-cols-3 gap-3 py-2 px-4">
+      <div className="grid grid-cols-5 gap-3 py-2 px-4">
+        <input
+          type="file"
+          onChange={(e) => {
+            getImageFromFileUpload(
+              e.target.files[0],
+              canvasContext,
+              setHeight,
+              setWidth,
+              setOutHeight,
+              setOutWidth
+            );
+            setShowDownloads(false);
+          }}
+        />
         <input
           className="bg-gray-200 shadow-inner rounded-l"
           id="image-url"
