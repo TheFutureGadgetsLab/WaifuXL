@@ -30,12 +30,12 @@ function prepareImage(imageArray) {
     return { input: tensor };
 }
 
-async function runModel(imageArray, modelVer) {
+async function runModel(imageArray, modelVer, setLoading) {
     if (imageArray === undefined) {
         return undefined;
     }
     console.log("Using model: " + modelVer);
-
+    setLoading(true);
     let session;
     try {
         session = await loadSession(modelVer);
@@ -53,9 +53,10 @@ async function runModel(imageArray, modelVer) {
         const results = await session.run(feeds);
         console.timeEnd('run')
         console.log("Finished session");
-
+        setLoading(false);
         return results.output;
     } catch (e) {
+        setLoading(false);
         console.log("Failed to run model");
         console.log(e)
         return undefined;
