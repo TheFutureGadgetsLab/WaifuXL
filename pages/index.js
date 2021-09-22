@@ -7,9 +7,9 @@ import {
 } from "../services/imageUtilities";
 import { buildNdarrayFromImage } from "../services/processingUtilities";
 
-const PINK  = "#FF869E";
+const PINK = "#FF869E";
 const BROWN = "#51393C";
-const BLUE  = "#44ABBC";
+const BLUE = "#44ABBC";
 
 export default function Home() {
   const [canvasContext, setCanvasContext] = useState(undefined);
@@ -27,7 +27,7 @@ export default function Home() {
   useEffect(async () => {
     setCanvasContext(canvasRef.current.getContext("2d"));
     setOutputCanvasContext(outputCanvasRef.current.getContext("2d"));
-    if(canvasContext) {
+    if (canvasContext) {
       drawImage(canvasContext, url, setHeight, setWidth);
     }
     const tmp = await runModel(imageInput, model);
@@ -38,24 +38,26 @@ export default function Home() {
       setShowDownloads(false);
     }
   }, [height, width, imageInput, canvasContext, url]);
-  
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2" 
-      style={{backgroundImage: `url("bg.png")`, backgroundSize: 'cover'}}>
+    <div
+      className="flex flex-col items-center justify-center min-h-screen py-2"
+      style={{ backgroundImage: `url("bg.png")`, backgroundSize: "cover" }}
+    >
       <div className="flex-grow grid grid-cols-2 justify-items-center w-full max-w-6xl">
         <canvas
           id="input"
           ref={canvasRef}
           width={width}
           height={height}
-          style={{ width: 400, borderWidth: "4px", borderColor: PINK}}
+          style={{ width: 400, borderWidth: "4px", borderColor: PINK }}
         />
         <canvas
           id="output"
           ref={outputCanvasRef}
           width={width}
           height={height}
-          style={{ width: 400, borderWidth: "4px", borderColor: PINK}}
+          style={{ width: 400, borderWidth: "4px", borderColor: PINK }}
         />
       </div>
       <br />
@@ -64,14 +66,14 @@ export default function Home() {
           <>
             <button
               className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg"
-              style={{backgroundColor: BROWN}}
+              style={{ backgroundColor: BROWN }}
               onClick={() => downloadImage("original", url, canvasRef)}
             >
               Download Original
             </button>
             <button
               className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg"
-              style={{backgroundColor: BROWN}}
+              style={{ backgroundColor: BROWN }}
               onClick={() => downloadImage("2x", url, outputCanvasRef)}
             >
               Download Upscaled
@@ -82,7 +84,7 @@ export default function Home() {
       <main className="flex flex-col items-center flex-shrink justify-center w-full p-10 text-center">
         <br />
         <h1 className="text-6xl font-bold">
-          Expand your <span style={{color: PINK}}>{"waifu"}</span>
+          Expand your <span style={{ color: PINK }}>{"waifu"}</span>
         </h1>
       </main>
       <div className="grid grid-cols-3 gap-3">
@@ -93,17 +95,28 @@ export default function Home() {
           onBlur={(inp) => {
             setUrl(inp.target.value);
           }}
+          list="defaultOptions"
         />
-        <select name="selectList" id="selectList" onChange={(inp) => {setModel(inp.target.value);}}
+        <datalist id="defaultOptions">
+          <option value="https://i.imgur.com/v9Lwral.png">Megumin(Literally a child)</option>
+          <option value="https://i.imgur.com/yhIwVjZ.jpeg">Aqua (Best Girl)</option>
+          <option value="https://i.imgur.com/9MQHsx8.jpeg">Darkness (Worst Girl)</option>
+        </datalist>
+        <select
+          name="selectList"
+          id="selectList"
+          onChange={(inp) => {
+            setModel(inp.target.value);
+          }}
           className="text-white font-bold py-2 px-4 rounded drop-shadow-lg"
-          style={{backgroundColor: BLUE}}
+          style={{ backgroundColor: BLUE }}
         >
           <option value="identity">Identity</option>
           <option value="superRes">Super Resolution</option>
         </select>
         <button
           className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg"
-          style={{backgroundColor: BLUE}}
+          style={{ backgroundColor: BLUE }}
           onClick={() => {
             setImageInput(buildNdarrayFromImage(canvasContext));
           }}
