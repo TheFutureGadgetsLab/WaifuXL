@@ -22,15 +22,18 @@ export default function Home() {
   const [showDownloads, setShowDownloads] = useState(false);
   const [imageInput, setImageInput] = useState(undefined);
   const [url, setUrl] = useState("https://i.imgur.com/Sf6sfPj.png");
+  const [drawnURL, setDrawnURL] = useState("");
+  const [shouldRun, setShouldRun] = useState(false);
   const [model, setModel] = useState("identity");
   const loadingLink = "https://i.4pcdn.org/pol/1552671673728.gif";
   const canvasRef = createRef();
   const outputCanvasRef = createRef();
 
+
   useEffect(async () => {
     setCanvasContext(canvasRef.current.getContext("2d"));
     setOutputCanvasContext(outputCanvasRef.current.getContext("2d"));
-    if (canvasContext) {
+    if (canvasContext && outputCanvasContext && drawnURL !== url) {
       drawImage(
         canvasContext,
         url,
@@ -39,13 +42,17 @@ export default function Home() {
         setOutHeight,
         setOutWidth
       );
-    }
-    const tmp = await runModel(imageInput, model, setLoading);
-    if (tmp) {
-      drawOutput(outputCanvasContext, tmp, setOutHeight, setOutWidth);
-      setShowDownloads(true);
-    } else {
+      outputCanvasContext.clearRect(0, 0, outWidth, outHeight);
+      setDrawnURL(url);
       setShowDownloads(false);
+    }
+    if(shouldRun) {
+      const tmp = await runModel(imageInput, model, setLoading);
+      if (tmp) {
+        drawOutput(outputCanvasContext, tmp, setOutHeight, setOutWidth);
+        setShowDownloads(true);
+        setShouldRun(false);
+      }  
     }
   }, [height, width, imageInput, canvasContext, url]);
 
@@ -113,7 +120,7 @@ export default function Home() {
         />
         <datalist id="defaultOptions">
           <option value="https://i.imgur.com/v9Lwral.png">
-            Megumin(Literally a child)
+            Megumin (Literally a child)
           </option>
           <option value="https://i.imgur.com/yhIwVjZ.jpeg">
             Aqua (Best Girl)
@@ -142,6 +149,7 @@ export default function Home() {
           style={{ backgroundColor: BLUE }}
           onClick={() => {
             setImageInput(buildNdarrayFromImage(canvasContext));
+            setShouldRun(true);
           }}
         >
           Upscale
