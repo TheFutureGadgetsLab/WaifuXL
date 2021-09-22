@@ -37,7 +37,7 @@ export default function Home() {
     } else {
       setShowDownloads(false);
     }
-  }, [height, width, imageInput, canvasContext]);
+  }, [height, width, imageInput, canvasContext, url]);
   
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2" 
@@ -85,14 +85,13 @@ export default function Home() {
           Expand your <span style={{color: PINK}}>{"waifu"}</span>
         </h1>
       </main>
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-3 gap-3">
         <input
           className="bg-gray-200 shadow-inner rounded-l p-2 flex-1"
           id="image-url"
           placeholder={url}
           onBlur={(inp) => {
             setUrl(inp.target.value);
-            drawImage(canvasContext, inp.target.value, setHeight, setWidth);
           }}
         />
         <select name="selectList" id="selectList" onChange={(inp) => {setModel(inp.target.value);}}
@@ -102,16 +101,6 @@ export default function Home() {
           <option value="identity">Identity</option>
           <option value="superRes">Super Resolution</option>
         </select>
-        <button
-          className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg"
-          style={{backgroundColor: BLUE}}
-          onClick={() => {
-            drawImage(canvasContext, url, setHeight, setWidth);
-          }}
-        >
-          Display Image
-        </button>
-
         <button
           className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg"
           style={{backgroundColor: BLUE}}
