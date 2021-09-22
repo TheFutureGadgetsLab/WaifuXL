@@ -16,10 +16,7 @@ export default function Home() {
   const [outputCanvasContext, setOutputCanvasContext] = useState(undefined);
   const [height, setHeight] = useState(500);
   const [width, setWidth] = useState(500);
-  const [outHeight, setOutHeight] = useState(500);
-  const [outWidth, setOutWidth] = useState(500);
   const [showDownloads, setShowDownloads] = useState(false);
-  const [showOutput, setShowOutput] = useState(false);
   const [imageInput, setImageInput] = useState(undefined);
   const [url, setUrl] = useState("https://i.imgur.com/v9Lwral.png");
   const [model, setModel] = useState("identity");
@@ -30,15 +27,18 @@ export default function Home() {
   useEffect(async () => {
     setCanvasContext(canvasRef.current.getContext("2d"));
     setOutputCanvasContext(outputCanvasRef.current.getContext("2d"));
+    if(canvasContext) {
+      drawImage(canvasContext, url, setHeight, setWidth);
+    }
     const tmp = await runModel(imageInput, model);
     if (tmp) {
-      drawOutput(outputCanvasContext, tmp, setOutWidth, setOutHeight);
+      drawOutput(outputCanvasContext, tmp);
       setShowDownloads(true);
-      setShowOutput(true);
     } else {
       setShowDownloads(false);
     }
-  }, [height, width, imageInput]);
+  }, [height, width, imageInput, canvasContext]);
+  
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2" 
       style={{backgroundImage: `url("bg.png")`, backgroundSize: 'cover'}}>
@@ -53,8 +53,8 @@ export default function Home() {
         <canvas
           id="output"
           ref={outputCanvasRef}
-          width={outWidth}
-          height={outHeight}
+          width={width}
+          height={height}
           style={{ width: 400, borderWidth: "4px", borderColor: PINK}}
         />
       </div>
@@ -92,6 +92,7 @@ export default function Home() {
           placeholder={url}
           onBlur={(inp) => {
             setUrl(inp.target.value);
+            drawImage(canvasContext, inp.target.value, setHeight, setWidth);
           }}
         />
         <select name="selectList" id="selectList" onChange={(inp) => {setModel(inp.target.value);}}
@@ -105,7 +106,6 @@ export default function Home() {
           className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg"
           style={{backgroundColor: BLUE}}
           onClick={() => {
-            setShowOutput(false);
             drawImage(canvasContext, url, setHeight, setWidth);
           }}
         >

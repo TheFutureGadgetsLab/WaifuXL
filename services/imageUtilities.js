@@ -20,11 +20,9 @@ export function drawImage(canvasContext, imageSource, setHeight, setWidth) {
   };
 }
 
-export function drawOutput(canvasContext, data, setOutWidth, setOutHeight) {
+export function drawOutput(canvasContext, data) {
   const height = data.dims[2];
   const width = data.dims[3];
-  setOutWidth(width);
-  setOutHeight(height);
   var idata = canvasContext.createImageData(width, height);
   idata.data.set(buildNdarrayFromModelOutput(data, height, width));
   canvasContext.putImageData(idata, 0, 0);
