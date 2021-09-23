@@ -1,4 +1,3 @@
-import runModel from "../services/onnxBackend";
 import { useState, useEffect, createRef } from "react";
 import {
   downloadImage,
@@ -7,6 +6,7 @@ import {
   getImageFromFileUpload,
 } from "../services/imageUtilities";
 import { buildNdarrayFromImage } from "../services/processingUtilities";
+import { initialize, runModel } from "../services/onnxBackend";
 
 const PINK = "#FF869E";
 const BROWN = "#51393C";
@@ -29,6 +29,7 @@ export default function Home() {
   const loadingLink = "https://i.4pcdn.org/pol/1552671673728.gif";
   const canvasRef = createRef();
   const outputCanvasRef = createRef();
+
 
   useEffect(async () => {
     setCanvasContext(canvasRef.current.getContext("2d"));
@@ -55,6 +56,8 @@ export default function Home() {
       }
     }
   }, [height, width, imageInput, canvasContext, url]);
+
+  initialize("superResolution");
 
   return (
     <div

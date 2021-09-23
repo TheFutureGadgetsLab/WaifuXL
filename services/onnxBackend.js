@@ -1,24 +1,25 @@
 const ort = require('onnxruntime-web');
 
+// Cached session state
+var session = null;
+
 function sleep (time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
 
-async function loadSession(modelVer) {
+export async function initialize(modelVer) {
     const model = './' + modelVer + '.onnx';
 
     ort.env.wasm.numThreads = 16;
     ort.env.wasm.simd = true;
     ort.env.wasm.proxy = true;
 
-    console.log("Initializing session");
-    const session = await ort.InferenceSession.create(model, ['wasm']);
+    console.log("(Re)initializing session");
+    session = await ort.InferenceSession.create(model, ['wasm']);
 
     // Needed because WASM workers are created async, wait for them
     // to be ready
     await sleep(1000);
-
-    return session;
 }
 
 function prepareImage(imageArray) {
@@ -28,20 +29,12 @@ function prepareImage(imageArray) {
     return { input: tensor };
 }
 
-async function runModel(imageArray, modelVer, setLoading) {
+export async function runModel(imageArray, modelVer, setLoading) {
     if (imageArray === undefined) {
         return undefined;
     }
     console.log("Using model: " + modelVer);
     setLoading(true);
-    let session;
-    try {
-        session = await loadSession(modelVer);
-    } catch (e) {
-        console.log("Failed to initialize ONNX session");
-        console.log(e);
-        return undefined;
-    }
 
     const feeds = prepareImage(imageArray);
 
@@ -60,5 +53,3 @@ async function runModel(imageArray, modelVer, setLoading) {
         return undefined;
     }    
 }
-
-export default runModel;
