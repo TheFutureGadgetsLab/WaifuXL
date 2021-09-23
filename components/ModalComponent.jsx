@@ -31,64 +31,68 @@ function ModalComponent({
         </span>
 
         <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-          <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <div className="sm:flex sm:items-start">
-              <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                <h3
-                  className="text-lg leading-6 font-medium text-gray-900"
-                  id="modal-title"
-                >
-                  Upload Image
-                </h3>
-                <div className="mt-2">
-                  <input
-                    type="file"
-                    onChange={(e) => {
-                      getImageFromFileUpload(
-                        e.target.files[0],
-                        canvasContexts,
-                        setHeight,
-                        setWidth
-                      );
-                      setShowDownloads(false);
-                    }}
-                  />
-                  <input
-                    className="bg-gray-200 shadow-inner rounded-l"
-                    id="image-url"
-                    placeholder={url}
-                    onBlur={(inp) => {
-                      setUrl(inp.target.value);
-                    }}
-                    list="defaultOptions"
-                  />
-                  <datalist id="defaultOptions">
-                    <option value="https://i.imgur.com/v9Lwral.png">
-                      Megumin (Literally a child)
-                    </option>
-                    <option value="https://i.imgur.com/yhIwVjZ.jpeg">
-                      Aqua (Best Girl)
-                    </option>
-                    <option value="https://i.imgur.com/9MQHsx8.jpeg">
-                      Darkness (Worst Girl)
-                    </option>
-                    <option value="https://i.imgur.com/Sf6sfPj.png">
-                      Ozen (Best Girl)
-                    </option>
-                  </datalist>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+          <label className="flex flex-col items-center justify-center cursor-pointer hover:bg-blue p-32">
+            <label className="flex-col flex items-center px-4 py-6 bg-white text-blue tracking-wide uppercase cursor-pointer hover:bg-blue">
+              <span className="mt-2 text-base leading-normal">
+                Select a file
+              </span>
+              <svg
+                className="w-8 h-8"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
+              </svg>
+              <input
+                type="file"
+                className="hidden"
+                onChange={(e) => {
+                  getImageFromFileUpload(
+                    e.target.files[0],
+                    canvasContexts,
+                    setHeight,
+                    setWidth
+                  );
+                  setShowDownloads(false);
+                }}
+              />
+            </label>
+          </label>
+          <div className="bg-gray-50 px-4 py-3 px-6 flex justify-between">
+            <input
+              className="bg-gray-200 shadow-inner rounded-l"
+              id="image-url"
+              placeholder={url}
+              onBlur={(inp) => {
+                setUrl(inp.target.value);
+              }}
+              list="defaultOptions"
+            />
+            <datalist id="defaultOptions">
+              <option value="https://i.imgur.com/v9Lwral.png">
+                Megumin (Literally a child)
+              </option>
+              <option value="https://i.imgur.com/yhIwVjZ.jpeg">
+                Aqua (Best Girl)
+              </option>
+              <option value="https://i.imgur.com/9MQHsx8.jpeg">
+                Darkness (Worst Girl)
+              </option>
+              <option value="https://i.imgur.com/Sf6sfPj.png">
+                Ozen (Best Girl)
+              </option>
+            </datalist>
+
             <button
               type="button"
+              className="rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2"
               style={{ backgroundColor: BLUE }}
-              className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
               onClick={() => setOpen(false)}
             >
-              Close
+              Done
             </button>
+
           </div>
         </div>
       </div>
