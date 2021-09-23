@@ -2,25 +2,27 @@ import { useEffect, useState } from "react";
 import { BLUE } from "../constants/colors";
 import { buildNdarrayFromImage } from "../services/processingUtilities";
 import { runModel } from "../services/onnxBackend";
-import { drawOutput } from "../services/imageUtilities";
+import { drawOutput, clearOutput } from "../services/imageUtilities";
 
 const RunComponent = ({ canvasContext, outputCanvasContext, setShowDownloads, setLoading, setHeight, setWidth, height, width }) => {
   const [shouldRun, setShouldRun] = useState(false);
 
   useEffect(async () => {
     if (shouldRun) {
-      //run the model
+      // Clear previous output
+      clearOutput(outputCanvasContext);
+      // Run the model
       const tmp = await runModel(
         buildNdarrayFromImage(canvasContext),
         setLoading
       );
-      //if the models output is valid
+      // If the models output is valid
       if (tmp) {
-        //draw the model output onto the output canvas
+        // Draw the model output onto the output canvas
         drawOutput(outputCanvasContext, tmp, setHeight, setWidth, height, width);
-        //show the download buttons
+        // Show the download buttons
         setShowDownloads(true);
-        //set should run to false
+        // Set should run to false
         setShouldRun(false);
       }
     }

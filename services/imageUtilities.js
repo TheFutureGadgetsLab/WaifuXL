@@ -35,6 +35,10 @@ export function drawOutput(canvasContext, data, setHeight, setWidth, height, wid
   canvasContext.putImageData(idata, 0, 0);
 }
 
+export function clearOutput(canvasContext) {
+  canvasContext.clearRect(0, 0, canvasContext.canvas.width, canvasContext.canvas.height);
+}
+
 export function getImageFromFileUpload(
   uploaded,
   canvasContext,

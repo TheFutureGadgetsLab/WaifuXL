@@ -9,7 +9,7 @@ import InputComponent from "../components/InputComponent";
 import RunComponent from "../components/RunComponent";
 
 export default function Home() {
-  const loadingLink = "https://i.4pcdn.org/pol/1552671673728.gif";
+  const loadingLink = "https://thumbs.gfycat.com/LavishHappyGuineapig.webp";
   const canvasRef = createRef();
   const outputCanvasRef = createRef();
 
@@ -58,6 +58,8 @@ export default function Home() {
         height={height}
         canvasRef={canvasRef}
         outputCanvasRef={outputCanvasRef}
+        loadingImgSrc={loadingLink}
+        loading={loading}
       />
       <br />
       {showDownloads && (
@@ -67,7 +69,7 @@ export default function Home() {
           url={url}
         />
       )}
-      <HeroComponent loading={loading} loadingLink={loadingLink} />
+      <HeroComponent loading={loading} />
       <div className="grid grid-cols-2 gap-3 py-2 px-4">
         <InputComponent
           canvasContext={canvasContexts}
