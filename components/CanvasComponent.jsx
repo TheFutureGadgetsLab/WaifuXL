@@ -1,6 +1,4 @@
-const PINK = "#FF869E";
-const BROWN = "#51393C";
-const BLUE = "#44ABBC";
+import { PINK } from "../constants/colors";
 
 const CanvasComponent = ({
   width,
