@@ -27,7 +27,7 @@ const CanvasComponent = ({
         />
         {loading &&
           <div className="flex justify-center absolute left-0 bottom-0" style={{ width: 400 }}>
-            <img src={loadingImgSrc} alt="loading image" style={{ width: 200, height: 200 }} />
+            <img src={loadingImgSrc} alt="loading image" style={{ width: 400, height: 400, marginBottom: 4 }} />
           </div>
         }
       </div>
