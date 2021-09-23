@@ -1,5 +1,5 @@
 import { useState, useEffect, createRef } from "react";
-import { drawImage, drawOutput } from "../services/imageUtilities";
+import { drawImage } from "../services/imageUtilities";
 import { initializeONNX, runModel } from "../services/onnxBackend";
 import { clearCanvas  } from "../services/canvasUtilities";
 import CanvasComponent from "../components/CanvasComponent";
@@ -17,10 +17,8 @@ export default function Home() {
   const [outWidth, setOutWidth] = useState(500);
   const [loading, setLoading] = useState(false);
   const [showDownloads, setShowDownloads] = useState(false);
-  const [imageInput, setImageInput] = useState(undefined);
   const [url, setUrl] = useState("https://i.imgur.com/Sf6sfPj.png");
   const [drawnURL, setDrawnURL] = useState("");
-  const [shouldRun, setShouldRun] = useState(false);
   const [model, setModel] = useState("identity");
   const loadingLink = "https://i.4pcdn.org/pol/1552671673728.gif";
   const canvasRef = createRef();
@@ -45,21 +43,7 @@ export default function Home() {
       //make sure downloads are not shown
       setShowDownloads(false);
     }
-    //if the model should run
-    if (shouldRun) {
-      //run the model
-      const tmp = await runModel(imageInput, model, setLoading);
-      //if the models output is valid
-      if (tmp) {
-        //draw the model output onto the output canvas
-        drawOutput(outputCanvasContext, tmp, setOutHeight, setOutWidth);
-        //show the download buttons
-        setShowDownloads(true);
-        //set should run to false
-        setShouldRun(false);
-      }
-    }
-  }, [height, width, imageInput, canvasContext, url]);
+  }, [height, width, canvasContext, url]);
 
   useEffect(async () => {
     initializeONNX();
@@ -102,9 +86,13 @@ export default function Home() {
           setModel={setModel}
         />
         <RunComponent
-          setImageInput={setImageInput}
-          setShouldRun={setShouldRun}
           canvasContext={canvasContext}
+          outputCanvasContext={outputCanvasContext}
+          setShowDownloads={setShowDownloads}
+          setLoading={setLoading}
+          model={model}
+          setOutHeight={setOutHeight}
+          setOutWidth={setOutWidth}
         />
       </div>
     </div>
