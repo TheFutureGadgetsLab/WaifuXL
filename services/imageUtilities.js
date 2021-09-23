@@ -14,28 +14,26 @@ export function drawImage(
   imageSource,
   setHeight,
   setWidth,
-  setOutHeight,
-  setOutWidth
 ) {
   const img = new Image();
   img.crossOrigin = "Anonymous";
   img.src = imageSource;
   img.onload = function () {
-    setHeight(img.height);
-    setWidth(img.width);
-    setOutHeight(img.height);
-    setOutWidth(img.width);
+    setHeight({input: img.height, output: img.height});
+    setWidth({input: img.width, output: img.width});
     canvasContext.drawImage(img, 0, 0);
   };
 }
 
-export function drawOutput(canvasContext, data, setOutHeight, setOutWidth) {
-  const height = data.dims[2];
-  const width = data.dims[3];
-  setOutHeight(height);
-  setOutWidth(width);
-  var idata = canvasContext.createImageData(width, height);
-  idata.data.set(buildNdarrayFromModelOutput(data, height, width));
+export function drawOutput(canvasContext, data, setHeight, setWidth, height, width) {
+  const imageHeight = data.dims[2];
+  const imageWidth = data.dims[3];
+  console.log(height);
+  console.log(width)
+  setHeight({...height, output: imageHeight})
+  setWidth({...width, output: imageWidth});
+  var idata = canvasContext.createImageData(imageWidth, imageHeight);
+  idata.data.set(buildNdarrayFromModelOutput(data, imageHeight, imageWidth));
   canvasContext.putImageData(idata, 0, 0);
 }
 
@@ -44,19 +42,15 @@ export function getImageFromFileUpload(
   canvasContext,
   setHeight,
   setWidth,
-  setOutHeight,
-  setOutWidth
 ) {
   const file = uploaded;
   const fr = new FileReader();
   fr.onload = function () {
     drawImage(
-      canvasContext,
+      canvasContext.input,
       fr.result,
       setHeight,
       setWidth,
-      setOutHeight,
-      setOutWidth
     );
 
   };

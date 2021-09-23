@@ -5,8 +5,6 @@ const InputComponent = ({
   canvasContext,
   setHeight,
   setWidth,
-  setOutHeight,
-  setOutWidth,
   url,
   setShowDownloads,
   setUrl,
@@ -21,8 +19,6 @@ const InputComponent = ({
             canvasContext,
             setHeight,
             setWidth,
-            setOutHeight,
-            setOutWidth
           );
           setShowDownloads(false);
         }}

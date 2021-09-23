@@ -3,8 +3,6 @@ import { PINK } from "../constants/colors";
 const CanvasComponent = ({
   width,
   height,
-  outWidth,
-  outHeight,
   canvasRef,
   outputCanvasRef,
 }) => {
@@ -13,16 +11,16 @@ const CanvasComponent = ({
       <canvas
         id="input"
         ref={canvasRef}
-        width={width}
-        height={height}
+        width={width.input}
+        height={height.input}
         style={{ width: 400, borderWidth: "4px", borderColor: PINK }}
       />
       <div>
         <canvas
           id="output"
           ref={outputCanvasRef}
-          width={outWidth}
-          height={outHeight}
+          width={width.output}
+          height={height.output}
           style={{ width: 400, borderWidth: "4px", borderColor: PINK }}
         />
       </div>

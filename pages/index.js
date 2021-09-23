@@ -13,12 +13,9 @@ export default function Home() {
   const canvasRef = createRef();
   const outputCanvasRef = createRef();
 
-  const [canvasContext, setCanvasContext] = useState(undefined);
-  const [outputCanvasContext, setOutputCanvasContext] = useState(undefined);
-  const [height, setHeight] = useState(500);
-  const [width, setWidth] = useState(500);
-  const [outHeight, setOutHeight] = useState(500);
-  const [outWidth, setOutWidth] = useState(500);
+  const [canvasContexts, setCanvasContexts] = useState({input: undefined, output: undefined});
+  const [height, setHeight] = useState({input: 500, output: 500});
+  const [width, setWidth] = useState({input: 500, output: 500});
   const [loading, setLoading] = useState(false);
   const [showDownloads, setShowDownloads] = useState(false);
   const [url, setUrl] = useState("https://i.imgur.com/Sf6sfPj.png");
@@ -28,30 +25,27 @@ export default function Home() {
   //when height, width, canvasContext, or url change
   useEffect(async () => {
     //when canvases are available, and we've got a fresh url to draw
-    if (canvasContext && outputCanvasContext && drawnURL !== url) {
+    if (canvasContexts.input && canvasContexts.output && drawnURL !== url) {
       //draw the url
       drawImage(
-        canvasContext,
+        canvasContexts.input,
         url,
         setHeight,
         setWidth,
-        setOutHeight,
-        setOutWidth
       );
       //clear the canvas
-      clearCanvas(outputCanvasContext, outWidth, outHeight)
+      clearCanvas(canvasContexts.output, width.out, height.out)
       //store this url as the currently drawn url
       setDrawnURL(url);
       //make sure downloads are not shown
       setShowDownloads(false);
     }
-  }, [canvasContext, url]);
+  }, [canvasContexts, url]);
 
   //at startup
   useEffect(async () => {
     initializeONNX();
-    setCanvasContext(canvasRef.current.getContext("2d"));
-    setOutputCanvasContext(outputCanvasRef.current.getContext("2d"));
+    setCanvasContexts({input:canvasRef.current.getContext("2d"), output: outputCanvasRef.current.getContext("2d")});
   }, []);
 
   return (
@@ -62,8 +56,6 @@ export default function Home() {
       <CanvasComponent
         width={width}
         height={height}
-        outWidth={outWidth}
-        outHeight={outHeight}
         canvasRef={canvasRef}
         outputCanvasRef={outputCanvasRef}
       />
@@ -78,22 +70,22 @@ export default function Home() {
       <HeroComponent loading={loading} loadingLink={loadingLink} />
       <div className="grid grid-cols-2 gap-3 py-2 px-4">
         <InputComponent
-          canvasContext={canvasContext}
+          canvasContext={canvasContexts}
           setHeight={setHeight}
           setWidth={setWidth}
-          setOutHeight={setOutHeight}
-          setOutWidth={setOutWidth}
           url={url}
           setShowDownloads={setShowDownloads}
           setUrl={setUrl}
         />
         <RunComponent
-          canvasContext={canvasContext}
-          outputCanvasContext={outputCanvasContext}
+          canvasContext={canvasContexts.input}
+          outputCanvasContext={canvasContexts.output}
           setShowDownloads={setShowDownloads}
           setLoading={setLoading}
-          setOutHeight={setOutHeight}
-          setOutWidth={setOutWidth}
+          setHeight={setHeight}
+          setWidth={setWidth}
+          height={height}
+          width={width}
         />
       </div>
     </div>
