@@ -29,6 +29,7 @@ function prepareImage(imageArray) {
 
 export async function runModel(imageArray, setLoading) {
     if (imageArray === undefined) {
+        console.log("Why the hell is the image array undefined benson")
         return undefined;
     }
     setLoading(true);
@@ -42,7 +43,8 @@ export async function runModel(imageArray, setLoading) {
     console.time('run')
     let results = undefined;
     try {
-        results = await session.run(feeds);
+        const output = await session.run(feeds);
+        results = output.output;
         setLoading(false);
     } catch (e) {
         setLoading(false);
@@ -51,5 +53,5 @@ export async function runModel(imageArray, setLoading) {
     }    
     console.timeEnd('run')
     console.log("Session done");
-    return results.output;
+    return results;
 }
