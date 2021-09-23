@@ -9,7 +9,7 @@ import InputComponent from "../components/InputComponent";
 import RunComponent from "../components/RunComponent";
 
 export default function Home() {
-  const loadingLink = "https://thumbs.gfycat.com/LavishHappyGuineapig.webp";
+  const loadingLink = "https://thumbs.gfycat.com/ThunderousScratchyArthropods.webp";
   const canvasRef = createRef();
   const outputCanvasRef = createRef();
 
