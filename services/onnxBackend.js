@@ -1,24 +1,22 @@
 const ort = require('onnxruntime-web');
 
+function sleep (time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
+
 async function loadSession(modelVer) {
     const model = './' + modelVer + '.onnx';
 
-    ort.env.logLevel = "verbose";
-    ort.env.debug = true;
     ort.env.wasm.numThreads = 16;
     ort.env.wasm.simd = true;
     ort.env.wasm.proxy = true;
 
     console.log("Initializing session");
-    const session = await ort.InferenceSession.create(model, {
-        executionProviders: ["wasm"],
-        logSeverityLevel: 0,
-        logVerbosityLevel: 2,
-        graphOptimizationLevel: 'all',
-        enableCpuMemArena: true,
-        enableMemPattern: true,
-        executionMode: 'parallel',
-    });
+    const session = await ort.InferenceSession.create(model, ['wasm']);
+
+    // Needed because WASM workers are created async, wait for them
+    // to be ready
+    await sleep(1000);
 
     return session;
 }
