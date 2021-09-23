@@ -1,7 +1,7 @@
 import { useState, useEffect, createRef } from "react";
 import { drawImage, drawOutput } from "../services/imageUtilities";
 import { initializeONNX, runModel } from "../services/onnxBackend";
-
+import { clearCanvas  } from "../services/canvasUtilities";
 import CanvasComponent from "../components/CanvasComponent";
 import DownloadComponent from "../components/DownloadComponent";
 import HeroComponent from "../components/HeroComponent";
@@ -27,9 +27,9 @@ export default function Home() {
   const outputCanvasRef = createRef();
 
   useEffect(async () => {
-    setCanvasContext(canvasRef.current.getContext("2d"));
-    setOutputCanvasContext(outputCanvasRef.current.getContext("2d"));
+    //when canvases are available, and we've got a fresh url to draw
     if (canvasContext && outputCanvasContext && drawnURL !== url) {
+      //draw the url
       drawImage(
         canvasContext,
         url,
@@ -38,15 +38,24 @@ export default function Home() {
         setOutHeight,
         setOutWidth
       );
-      outputCanvasContext.clearRect(0, 0, outWidth, outHeight);
+      //clear the canvas
+      clearCanvas(outputCanvasContext, outWidth, outHeight)
+      //store this url as the currently drawn url
       setDrawnURL(url);
+      //make sure downloads are not shown
       setShowDownloads(false);
     }
+    //if the model should run
     if (shouldRun) {
+      //run the model
       const tmp = await runModel(imageInput, model, setLoading);
+      //if the models output is valid
       if (tmp) {
+        //draw the model output onto the output canvas
         drawOutput(outputCanvasContext, tmp, setOutHeight, setOutWidth);
+        //show the download buttons
         setShowDownloads(true);
+        //set should run to false
         setShouldRun(false);
       }
     }
@@ -54,6 +63,8 @@ export default function Home() {
 
   useEffect(async () => {
     initializeONNX();
+    setCanvasContext(canvasRef.current.getContext("2d"));
+    setOutputCanvasContext(outputCanvasRef.current.getContext("2d"));
   }, []);
 
   return (
@@ -90,7 +101,11 @@ export default function Home() {
           setUrl={setUrl}
           setModel={setModel}
         />
-        <RunComponent setImageInput={setImageInput} setShouldRun={setShouldRun} canvasContext={canvasContext}/>
+        <RunComponent
+          setImageInput={setImageInput}
+          setShouldRun={setShouldRun}
+          canvasContext={canvasContext}
+        />
       </div>
     </div>
   );
