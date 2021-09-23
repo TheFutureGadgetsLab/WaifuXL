@@ -1,12 +1,12 @@
 import { useState, useEffect, createRef } from "react";
 import { drawImage, drawOutput } from "../services/imageUtilities";
-import { buildNdarrayFromImage } from "../services/processingUtilities";
+import { initializeONNX, runModel } from "../services/onnxBackend";
+
 import CanvasComponent from "../components/CanvasComponent";
 import DownloadComponent from "../components/DownloadComponent";
 import HeroComponent from "../components/HeroComponent";
 import InputComponent from "../components/InputComponent";
-import { BLUE } from "../constants/colors";
-import { initializeONNX, runModel } from "../services/onnxBackend";
+import RunComponent from "../components/RunComponent";
 
 export default function Home() {
   const [canvasContext, setCanvasContext] = useState(undefined);
@@ -90,16 +90,7 @@ export default function Home() {
           setUrl={setUrl}
           setModel={setModel}
         />
-        <button
-          className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg"
-          style={{ backgroundColor: BLUE }}
-          onClick={() => {
-            setImageInput(buildNdarrayFromImage(canvasContext));
-            setShouldRun(true);
-          }}
-        >
-          Upscale
-        </button>
+        <RunComponent setImageInput={setImageInput} setShouldRun={setShouldRun} canvasContext={canvasContext}/>
       </div>
     </div>
   );
