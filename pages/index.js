@@ -1,8 +1,5 @@
 import { useState, useEffect, createRef } from "react";
-import {
-  drawImage,
-  drawOutput,
-} from "../services/imageUtilities";
+import { drawImage, drawOutput } from "../services/imageUtilities";
 import { buildNdarrayFromImage } from "../services/processingUtilities";
 import CanvasComponent from "../components/CanvasComponent";
 import DownloadComponent from "../components/DownloadComponent";
@@ -82,7 +79,17 @@ export default function Home() {
       )}
       <HeroComponent loading={loading} loadingLink={loadingLink} />
       <div className="grid grid-cols-2 gap-3 py-2 px-4">
-        <InputComponent canvasContext={canvasContext} setHeight={setHeight} setWidth={setWidth} setOutHeight={setOutHeight} setOutWidth={setOutWidth} url={url} setShowDownloads={setShowDownloads} setUrl={setUrl}/>
+        <InputComponent
+          canvasContext={canvasContext}
+          setHeight={setHeight}
+          setWidth={setWidth}
+          setOutHeight={setOutHeight}
+          setOutWidth={setOutWidth}
+          url={url}
+          setShowDownloads={setShowDownloads}
+          setUrl={setUrl}
+          setModel={setModel}
+        />
         <button
           className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg"
           style={{ backgroundColor: BLUE }}

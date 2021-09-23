@@ -1,3 +1,4 @@
+import { BLUE } from "../constants/colors";
 import { getImageFromFileUpload } from "../services/imageUtilities";
 
 const InputComponent = ({
@@ -9,6 +10,7 @@ const InputComponent = ({
   url,
   setShowDownloads,
   setUrl,
+  setModel,
 }) => {
   return (
     <>
@@ -49,6 +51,18 @@ const InputComponent = ({
           Ozen (Best Girl)
         </option>
       </datalist>
+      <select
+        name="selectList"
+        id="selectList"
+        onChange={(inp) => {
+          setModel(inp.target.value);
+        }}
+        className="text-white font-bold py-2 px-4 rounded drop-shadow-lg"
+        style={{ backgroundColor: BLUE }}
+      >
+        <option value="identity">Identity</option>
+        <option value="superRes">Super Resolution</option>
+      </select>
     </>
   );
 };
