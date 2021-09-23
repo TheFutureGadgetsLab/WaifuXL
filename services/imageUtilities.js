@@ -41,7 +41,7 @@ export function clearOutput(canvasContext) {
 
 export function getImageFromFileUpload(
   uploaded,
-  canvasContext,
+  canvasContexts,
   setHeight,
   setWidth,
 ) {
@@ -49,7 +49,7 @@ export function getImageFromFileUpload(
   const fr = new FileReader();
   fr.onload = function () {
     drawImage(
-      canvasContext.input,
+      canvasContexts.input,
       fr.result,
       setHeight,
       setWidth,

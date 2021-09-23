@@ -23,6 +23,7 @@ export default function Home() {
   const [showDownloads, setShowDownloads] = useState(false);
   const [url, setUrl] = useState("https://i.imgur.com/Sf6sfPj.png");
   const [drawnURL, setDrawnURL] = useState("");
+  const [open, setOpen] = useState(false);
 
   //when height, width, canvasContext, or url change
   useEffect(async () => {
@@ -72,7 +73,9 @@ export default function Home() {
       <TitleComponent loading={loading} />
       <div className="grid grid-cols-2 gap-3 py-2 px-4">
         <InputComponent
-          canvasContext={canvasContexts}
+          open={open}
+          setOpen={setOpen}
+          canvasContexts={canvasContexts}
           setHeight={setHeight}
           setWidth={setWidth}
           url={url}

@@ -1,7 +1,9 @@
-import { getImageFromFileUpload } from "../services/imageUtilities";
-
+import ModalComponent from "../components/ModalComponent";
+import { BLUE } from "../constants/colors";
 const InputComponent = ({
-  canvasContext,
+  open,
+  setOpen,
+  canvasContexts,
   setHeight,
   setWidth,
   url,
@@ -10,41 +12,25 @@ const InputComponent = ({
 }) => {
   return (
     <>
-      <input
-        type="file"
-        onChange={(e) => {
-          getImageFromFileUpload(
-            e.target.files[0],
-            canvasContext,
-            setHeight,
-            setWidth,
-          );
-          setShowDownloads(false);
-        }}
-      />
-      <input
-        className="bg-gray-200 shadow-inner rounded-l"
-        id="image-url"
-        placeholder={url}
-        onBlur={(inp) => {
-          setUrl(inp.target.value);
-        }}
-        list="defaultOptions"
-      />
-      <datalist id="defaultOptions">
-        <option value="https://i.imgur.com/v9Lwral.png">
-          Megumin (Literally a child)
-        </option>
-        <option value="https://i.imgur.com/yhIwVjZ.jpeg">
-          Aqua (Best Girl)
-        </option>
-        <option value="https://i.imgur.com/9MQHsx8.jpeg">
-          Darkness (Worst Girl)
-        </option>
-        <option value="https://i.imgur.com/Sf6sfPj.png">
-          Ozen (Best Girl)
-        </option>
-      </datalist>
+      {open && (
+        <ModalComponent
+          setOpen={setOpen}
+          canvasContexts={canvasContexts}
+          setHeight={setHeight}
+          setWidth={setWidth}
+          url={url}
+          setShowDownloads={setShowDownloads}
+          setUrl={setUrl}
+        />
+      )}
+      <button
+        type="button"
+        className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg"
+        style={{ backgroundColor: BLUE }}
+          onClick={() => setOpen(true)}
+      >
+        Upload Image
+      </button>
     </>
   );
 };
