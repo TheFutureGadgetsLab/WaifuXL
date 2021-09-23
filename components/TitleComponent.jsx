@@ -1,6 +1,6 @@
 import { PINK } from "../constants/colors";
 
-const HeroComponent = ({ loading }) => {
+const TitleComponent = ({ loading }) => {
   return (
     <main className="flex flex-col items-center flex-shrink justify-center w-full p-10 text-center">
       <br />
@@ -15,4 +15,4 @@ const HeroComponent = ({ loading }) => {
   );
 };  
 
-export default HeroComponent;
+export default TitleComponent;

@@ -1,4 +1,3 @@
-import { BLUE } from "../constants/colors";
 import { getImageFromFileUpload } from "../services/imageUtilities";
 
 const InputComponent = ({
