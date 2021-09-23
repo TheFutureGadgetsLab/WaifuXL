@@ -28,8 +28,6 @@ export function drawImage(
 export function drawOutput(canvasContext, data, setHeight, setWidth, height, width) {
   const imageHeight = data.dims[2];
   const imageWidth = data.dims[3];
-  console.log(height);
-  console.log(width)
   setHeight({...height, output: imageHeight})
   setWidth({...width, output: imageWidth});
   var idata = canvasContext.createImageData(imageWidth, imageHeight);
