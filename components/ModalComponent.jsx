@@ -57,7 +57,7 @@ function ModalComponent({
                     className="bg-gray-200 shadow-inner rounded-l"
                     id="image-url"
                     placeholder={url}
-                    onBlur={(inp) => {
+                    onInput={(inp) => {
                       setUrl(inp.target.value);
                     }}
                     list="defaultOptions"
