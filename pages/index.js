@@ -6,7 +6,7 @@ import {
   getImageFromFileUpload,
 } from "../services/imageUtilities";
 import { buildNdarrayFromImage } from "../services/processingUtilities";
-import { initialize, runModel } from "../services/onnxBackend";
+import { initializeONNX, runModel } from "../services/onnxBackend";
 import CanvasComponent from "../components/canvasComponent";
 const PINK = "#FF869E";
 const BROWN = "#51393C";
@@ -58,7 +58,7 @@ export default function Home() {
   }, [height, width, imageInput, canvasContext, url]);
 
   useEffect(async () => {
-    initialize("superRes");
+    initializeONNX();
   }, []);
 
   return (
