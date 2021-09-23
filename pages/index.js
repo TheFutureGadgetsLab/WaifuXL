@@ -57,7 +57,9 @@ export default function Home() {
     }
   }, [height, width, imageInput, canvasContext, url]);
 
-  initialize("superResolution");
+  useEffect(async () => {
+    initialize("superRes");
+  }, []);
 
   return (
     <div

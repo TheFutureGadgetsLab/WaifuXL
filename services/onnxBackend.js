@@ -16,7 +16,6 @@ export async function initialize(modelVer) {
 
     console.log("(Re)initializing session");
     session = await ort.InferenceSession.create(model, ['wasm']);
-
     // Needed because WASM workers are created async, wait for them
     // to be ready
     await sleep(1000);
