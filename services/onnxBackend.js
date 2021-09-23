@@ -1,21 +1,22 @@
 const ort = require('onnxruntime-web');
 
 // Cached session state
-var session = null;
+var superSession = null;
+var identSession = null;
 
 function sleep (time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
 
-export async function initialize(modelVer) {
-    const model = './' + modelVer + '.onnx';
-
-    ort.env.wasm.numThreads = 16;
-    ort.env.wasm.simd = true;
-    ort.env.wasm.proxy = true;
+export async function initializeONNX() {
+    ort.env.wasm.numThreads = navigator.hardwareConcurrency / 2;
+    ort.env.wasm.simd       = true;
+    ort.env.wasm.proxy      = true;
 
     console.log("(Re)initializing session");
-    session = await ort.InferenceSession.create(model, ['wasm']);
+    superSession = await ort.InferenceSession.create("./superRes.onnx", ['wasm']);
+    identSession = await ort.InferenceSession.create("./identity.onnx", ['wasm']);
+
     // Needed because WASM workers are created async, wait for them
     // to be ready
     await sleep(1000);
@@ -37,18 +38,25 @@ export async function runModel(imageArray, modelVer, setLoading) {
 
     const feeds = prepareImage(imageArray);
 
+    let session = null;
+    if (modelVer == "identity") {
+        session = identSession;
+    } else {
+        session = superSession;
+    }
+
+    console.log("Running session");
+    console.time('run')
+    let results = undefined;
     try {
-        console.log("Running session");
-        console.time('run')
-        const results = await session.run(feeds);
-        console.timeEnd('run')
-        console.log("Finished session");
+        results = await session.run(feeds);
         setLoading(false);
-        return results.output;
     } catch (e) {
         setLoading(false);
         console.log("Failed to run model");
         console.log(e)
-        return undefined;
     }    
+    console.timeEnd('run')
+    console.log("Session done");
+    return results.output;
 }

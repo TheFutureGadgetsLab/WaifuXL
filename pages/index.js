@@ -4,12 +4,12 @@ import {
   drawOutput,
 } from "../services/imageUtilities";
 import { buildNdarrayFromImage } from "../services/processingUtilities";
-import { initialize, runModel } from "../services/onnxBackend";
 import CanvasComponent from "../components/CanvasComponent";
 import DownloadComponent from "../components/DownloadComponent";
 import HeroComponent from "../components/HeroComponent";
 import InputComponent from "../components/InputComponent";
 import { BLUE } from "../constants/colors";
+import { initializeONNX, runModel } from "../services/onnxBackend";
 
 export default function Home() {
   const [canvasContext, setCanvasContext] = useState(undefined);
@@ -56,7 +56,7 @@ export default function Home() {
   }, [height, width, imageInput, canvasContext, url]);
 
   useEffect(async () => {
-    initialize("superRes");
+    initializeONNX();
   }, []);
 
   return (
