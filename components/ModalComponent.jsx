@@ -59,30 +59,29 @@ function ModalComponent({
               />
             </label>
           </label>
-          <div className="bg-gray-50 px-4 py-3 px-6 flex justify-between">
-            <input
-              className="bg-gray-200 shadow-inner rounded-l"
-              id="image-url"
-              placeholder={url}
-              onInput={(inp) => {
-                setUrl(inp.target.value);
-              }}
-              list="defaultOptions"
-            />
-            <datalist id="defaultOptions">
-              <option value="https://i.imgur.com/v9Lwral.png">
-                Megumin (Literally a child)
-              </option>
-              <option value="https://i.imgur.com/yhIwVjZ.jpeg">
-                Aqua (Best Girl)
-              </option>
-              <option value="https://i.imgur.com/9MQHsx8.jpeg">
-                Darkness (Worst Girl)
-              </option>
-              <option value="https://i.imgur.com/Sf6sfPj.png">
-                Ozen (Best Girl)
-              </option>
-            </datalist>
+          <div className="px-4 py-3 px-6 flex justify-between">
+            <label>
+              <span className="text-gray-700">Preset Images</span>
+              <select
+                className="form-select rounded mt-1 block w-full"
+                onInput={(inp) => {
+                  setUrl(inp.target.value);
+                }}
+              >
+                <option value="https://i.imgur.com/Sf6sfPj.png">
+                  Ozen (Best Girl)
+                </option>
+                <option value="https://i.imgur.com/v9Lwral.png">
+                  Megumin (Literally a child)
+                </option>
+                <option value="https://i.imgur.com/yhIwVjZ.jpeg">
+                  Aqua (Best Girl)
+                </option>
+                <option value="https://i.imgur.com/9MQHsx8.jpeg">
+                  Darkness (Worst Girl)
+                </option>
+              </select>
+            </label>
 
             <button
               type="button"
