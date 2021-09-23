@@ -7,7 +7,7 @@ import {
 } from "../services/imageUtilities";
 import { buildNdarrayFromImage } from "../services/processingUtilities";
 import { initialize, runModel } from "../services/onnxBackend";
-
+import CanvasComponent from "../components/canvasComponent";
 const PINK = "#FF869E";
 const BROWN = "#51393C";
 const BLUE = "#44ABBC";
@@ -66,24 +66,7 @@ export default function Home() {
       className="flex flex-col items-center justify-center min-h-screen py-2"
       style={{ backgroundImage: `url("bg.png")`, backgroundSize: "cover" }}
     >
-      <div className="flex-grow grid grid-cols-2 justify-items-center w-full max-w-6xl">
-        <canvas
-          id="input"
-          ref={canvasRef}
-          width={width}
-          height={height}
-          style={{ width: 400, borderWidth: "4px", borderColor: PINK }}
-        ></canvas>
-        <div>
-          <canvas
-            id="output"
-            ref={outputCanvasRef}
-            width={outWidth}
-            height={outHeight}
-            style={{ width: 400, borderWidth: "4px", borderColor: PINK }}
-          ></canvas>
-        </div>
-      </div>
+      <CanvasComponent width={width} height={height} outWidth={outWidth} outHeight={outHeight} canvasRef={canvasRef} outputCanvasRef={outputCanvasRef}/>
       <br />
       <div className="flex-shrink grid grid-cols-2 justify-items-center px-10 text-center w-full max-w-6xl">
         {showDownloads && (
