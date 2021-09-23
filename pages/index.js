@@ -1,6 +1,6 @@
 import { useState, useEffect, createRef } from "react";
 import { drawImage } from "../services/imageUtilities";
-import { initializeONNX, runModel } from "../services/onnxBackend";
+import { initializeONNX } from "../services/onnxBackend";
 import { clearCanvas  } from "../services/canvasUtilities";
 import CanvasComponent from "../components/CanvasComponent";
 import DownloadComponent from "../components/DownloadComponent";
@@ -9,6 +9,10 @@ import InputComponent from "../components/InputComponent";
 import RunComponent from "../components/RunComponent";
 
 export default function Home() {
+  const loadingLink = "https://i.4pcdn.org/pol/1552671673728.gif";
+  const canvasRef = createRef();
+  const outputCanvasRef = createRef();
+
   const [canvasContext, setCanvasContext] = useState(undefined);
   const [outputCanvasContext, setOutputCanvasContext] = useState(undefined);
   const [height, setHeight] = useState(500);
@@ -19,11 +23,9 @@ export default function Home() {
   const [showDownloads, setShowDownloads] = useState(false);
   const [url, setUrl] = useState("https://i.imgur.com/Sf6sfPj.png");
   const [drawnURL, setDrawnURL] = useState("");
-  const [model, setModel] = useState("identity");
-  const loadingLink = "https://i.4pcdn.org/pol/1552671673728.gif";
-  const canvasRef = createRef();
-  const outputCanvasRef = createRef();
 
+
+  //when height, width, canvasContext, or url change
   useEffect(async () => {
     //when canvases are available, and we've got a fresh url to draw
     if (canvasContext && outputCanvasContext && drawnURL !== url) {
@@ -43,8 +45,9 @@ export default function Home() {
       //make sure downloads are not shown
       setShowDownloads(false);
     }
-  }, [height, width, canvasContext, url]);
+  }, [canvasContext, url]);
 
+  //at startup
   useEffect(async () => {
     initializeONNX();
     setCanvasContext(canvasRef.current.getContext("2d"));
@@ -83,14 +86,12 @@ export default function Home() {
           url={url}
           setShowDownloads={setShowDownloads}
           setUrl={setUrl}
-          setModel={setModel}
         />
         <RunComponent
           canvasContext={canvasContext}
           outputCanvasContext={outputCanvasContext}
           setShowDownloads={setShowDownloads}
           setLoading={setLoading}
-          model={model}
           setOutHeight={setOutHeight}
           setOutWidth={setOutWidth}
         />

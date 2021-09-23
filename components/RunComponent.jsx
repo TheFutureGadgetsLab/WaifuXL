@@ -4,7 +4,7 @@ import { buildNdarrayFromImage } from "../services/processingUtilities";
 import { runModel } from "../services/onnxBackend";
 import { drawOutput } from "../services/imageUtilities";
 
-const RunComponent = ({ canvasContext, outputCanvasContext, setShowDownloads, setLoading, model, setOutHeight, setOutWidth }) => {
+const RunComponent = ({ canvasContext, outputCanvasContext, setShowDownloads, setLoading, setOutHeight, setOutWidth }) => {
   const [shouldRun, setShouldRun] = useState(false);
 
   useEffect(async () => {
@@ -12,7 +12,6 @@ const RunComponent = ({ canvasContext, outputCanvasContext, setShowDownloads, se
       //run the model
       const tmp = await runModel(
         buildNdarrayFromImage(canvasContext),
-        model,
         setLoading
       );
       //if the models output is valid

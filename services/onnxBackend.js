@@ -2,7 +2,6 @@ const ort = require('onnxruntime-web');
 
 // Cached session state
 var superSession = null;
-var identSession = null;
 
 function sleep (time) {
   return new Promise((resolve) => setTimeout(resolve, time));
@@ -15,7 +14,6 @@ export async function initializeONNX() {
 
     console.log("(Re)initializing session");
     superSession = await ort.InferenceSession.create("./superRes.onnx", ['wasm']);
-    identSession = await ort.InferenceSession.create("./identity.onnx", ['wasm']);
 
     // Needed because WASM workers are created async, wait for them
     // to be ready
@@ -29,21 +27,16 @@ function prepareImage(imageArray) {
     return { input: tensor };
 }
 
-export async function runModel(imageArray, modelVer, setLoading) {
+export async function runModel(imageArray, setLoading) {
     if (imageArray === undefined) {
         return undefined;
     }
-    console.log("Using model: " + modelVer);
     setLoading(true);
 
     const feeds = prepareImage(imageArray);
 
     let session = null;
-    if (modelVer == "identity") {
-        session = identSession;
-    } else {
-        session = superSession;
-    }
+    session = superSession;
 
     console.log("Running session");
     console.time('run')
