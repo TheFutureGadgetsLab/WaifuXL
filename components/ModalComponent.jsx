@@ -21,6 +21,34 @@ function ModalComponent({
   useEffect(() => {
     // Update the document title using the browser API
     focusDiv();
+    document.addEventListener("paste", (e) => {
+      if (e.clipboardData.getData("text/plain")) {
+        setUrl(e.clipboardData.getData("text/plain"));
+      } else {
+        try {
+          var items = (e.clipboardData || e.originalEvent.clipboardData)
+            .items;
+          for (var index in items) {
+            var item = items[index];
+            if (item.kind === "file") {
+              var blob = item.getAsFile();
+              var reader = new FileReader();
+              reader.onload = function (e) {
+                drawImage(
+                  canvasContexts.input,
+                  reader.result,
+                  setHeight,
+                  setWidth
+                );
+              };
+              reader.readAsDataURL(blob);
+            }
+          }
+        } catch {
+          console.log("Unrecognized paste");
+        }
+      }
+    });
   }, [divRef]);
 
   return (
@@ -119,6 +147,9 @@ function ModalComponent({
                 </option>
                 <option value="https://i.imgur.com/v9Lwral.png">
                   Megumin (Literally a child)
+                </option>
+                <option value="https://i.imgur.com/lgTo3BX.png">
+                  Megumin (small) (Age is just a number)
                 </option>
                 <option value="https://i.imgur.com/yhIwVjZ.jpeg">
                   Aqua (Best Girl)
