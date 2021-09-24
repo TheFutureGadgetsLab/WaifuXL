@@ -9,7 +9,7 @@ const CanvasComponent = ({
   loading,
   loadingImgSrc
 }) => {
-  const [style, setStyle] = useState({ width: 500, borderWidth: "4px", borderColor: PINK });
+  const [style, setStyle] = useState({ width: 500, borderWidth: "4px", borderColor: PINK, backgroundColor: "white" });
 
   return (
     <div className="flex-grow grid grid-cols-2 justify-items-stretch w-full">
