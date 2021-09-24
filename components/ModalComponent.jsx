@@ -1,5 +1,5 @@
 import { getImageFromFileUpload } from "../services/imageUtilities";
-import { BLUE } from "../constants/colors";
+import { BLUE, PINK } from "../constants/colors";
 import { drawImage } from "../services/imageUtilities";
 import { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
@@ -108,6 +108,7 @@ function ModalComponent({
               <span className="text-gray-700">Preset Images</span>
               <select
                 className="form-select rounded mt-1 block w-full"
+                style={{ backgroundColor: BLUE }}
                 onInput={(inp) => {
                   setUrl(inp.target.value);
                 }}
@@ -129,7 +130,7 @@ function ModalComponent({
 
             <button
               type="button"
-              className="rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2"
+              className="rounded-md border border-transparent shadow-sm px-4 py-1 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2"
               style={{ backgroundColor: BLUE }}
               onClick={() => setOpen(false)}
             >
