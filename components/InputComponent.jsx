@@ -29,7 +29,7 @@ const InputComponent = ({
         style={{ backgroundColor: BLUE }}
           onClick={() => setOpen(true)}
       >
-        Upload Image
+        Choose Image
       </button>
     </>
   );

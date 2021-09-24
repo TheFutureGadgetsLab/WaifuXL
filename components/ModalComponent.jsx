@@ -1,6 +1,5 @@
-import { getImageFromFileUpload } from "../services/imageUtilities";
+import { getImageFromFileUpload, drawImage, clearOutput } from "../services/imageUtilities";
 import { BLUE, PINK } from "../constants/colors";
-import { drawImage } from "../services/imageUtilities";
 import { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 
@@ -75,13 +74,13 @@ function ModalComponent({
         </span>
 
         <div className="inline-block align-bottom bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-          <label className="flex flex-col items-center justify-center cursor-pointer hover:bg-blue p-32">
-            <label className="flex-col flex items-center px-4 py-6 bg-white text-blue tracking-wide cursor-pointer hover:bg-blue">
-              <span className="mt-2">
-                Select a file or click anywhere to paste
+          <label className="flex flex-col items-center justify-center cursor-pointer hover:bg-blue h-96 m-3 rounded-lg border-2 border-gray-400 border-dashed bg-gray-200">
+            <label className="flex-col flex items-center px-4 py-6 text-blue tracking-wide cursor-pointer hover:bg-blue">
+              <span className="mt-2 text-gray-400">
+                select, drag, or paste file
               </span>
               <svg
-                className="w-8 h-8"
+                className="w-8 h-8 text-gray-400"
                 fill="currentColor"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
@@ -99,18 +98,20 @@ function ModalComponent({
                     setWidth
                   );
                   setShowDownloads(false);
+                  clearOutput(canvasContexts.output);
                 }}
               />
             </label>
           </label>
-          <div className="px-4 py-3 px-6 flex justify-between">
+          <div className="p-3 flex justify-between relative">
             <label>
               <span className="text-gray-700">Preset Images</span>
               <select
-                className="form-select rounded mt-1 block w-full"
-                style={{ backgroundColor: BLUE }}
+                className="form-select rounded mt-1 block w-full p-3 text-white"
+                style={{ backgroundColor: PINK }}
                 onInput={(inp) => {
                   setUrl(inp.target.value);
+                  clearOutput(canvasContexts.output);
                 }}
               >
                 <option value="https://i.imgur.com/Sf6sfPj.png">
@@ -130,7 +131,7 @@ function ModalComponent({
 
             <button
               type="button"
-              className="rounded-md border border-transparent shadow-sm px-4 py-1 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2"
+              className="rounded-md absolute m-3 right-0 bottom-0 border border-transparent shadow-sm px-4 py-1 text-base font-medium text-white h-12 focus:outline-none focus:ring-2 focus:ring-offset-2"
               style={{ backgroundColor: BLUE }}
               onClick={() => setOpen(false)}
             >
