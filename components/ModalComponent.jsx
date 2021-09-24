@@ -1,6 +1,7 @@
 import { getImageFromFileUpload } from "../services/imageUtilities";
 import { BLUE } from "../constants/colors";
-
+import { drawImage } from "../services/imageUtilities";
+import { useCallback } from "react";
 function ModalComponent({
   setOpen,
   canvasContexts,
@@ -18,10 +19,30 @@ function ModalComponent({
       aria-modal="true"
       onPaste={(e) => {
         if (e.clipboardData.getData("text/plain")) {
-          console.log(e.clipboardData.getData("text/plain"));
           setUrl(e.clipboardData.getData("text/plain"));
-        } else if (e.clipboardData.getData("text/html")) {
-          console.log(e.clipboardData.getData("text/html"));
+        } else {
+          try {
+            var items = (e.clipboardData || e.originalEvent.clipboardData)
+              .items;
+            for (var index in items) {
+              var item = items[index];
+              if (item.kind === "file") {
+                var blob = item.getAsFile();
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                  drawImage(
+                    canvasContexts.input,
+                    reader.result,
+                    setHeight,
+                    setWidth
+                  );
+                };
+                reader.readAsDataURL(blob);
+              }
+            }
+          } catch {
+            console.log("Unrecognized paste");
+          }
         }
       }}
     >
