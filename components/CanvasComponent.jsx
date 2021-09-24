@@ -1,5 +1,5 @@
 import { PINK } from "../constants/colors";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const CanvasComponent = ({
   width,
@@ -10,9 +10,6 @@ const CanvasComponent = ({
   loadingImgSrc
 }) => {
   const [style, setStyle] = useState({ width: 500, borderWidth: "4px", borderColor: PINK });
-  useEffect(() => {
-    setStyle({ width: 500, borderWidth: "4px", borderColor: PINK });
-  });
 
   return (
     <div className="flex-grow grid grid-cols-2 justify-items-stretch w-full">
