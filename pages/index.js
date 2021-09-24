@@ -69,15 +69,15 @@ export default function Home() {
           />
         </div>
         <div className="absolute bottom-0" >
+          {showDownloads && (
+            <DownloadComponent
+              canvasRef={canvasRef}
+              outputCanvasRef={outputCanvasRef}
+              url={url}
+            />
+          )}
           <TitleComponent loading={loading} />
           <div className="grid grid-cols-2 gap-3 py-2 px-4">
-            {showDownloads && (
-              <DownloadComponent
-                canvasRef={canvasRef}
-                outputCanvasRef={outputCanvasRef}
-                url={url}
-              />
-            )}
             <InputComponent
               open={open}
               setOpen={setOpen}
