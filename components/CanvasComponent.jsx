@@ -1,4 +1,5 @@
 import { PINK } from "../constants/colors";
+import { useEffect } from "react";
 
 const CanvasComponent = ({
   width,
@@ -8,6 +9,11 @@ const CanvasComponent = ({
   loading,
   loadingImgSrc
 }) => {
+  const [style, setStyle] = useState({ width: 500, borderWidth: "4px", borderColor: PINK });
+  useEffect(() => {
+    setStyle({ width: 500, borderWidth: "4px", borderColor: PINK });
+  }, []);
+
   return (
     <div className="flex-grow grid grid-cols-2 justify-items-stretch w-full">
       <canvas className="justify-self-end mr-3"
@@ -15,7 +21,7 @@ const CanvasComponent = ({
         ref={canvasRef}
         width={width.input}
         height={height.input}
-        style={{ width: 500, borderWidth: "4px", borderColor: PINK }}
+        style={style}
       />
       <div className="relative">
         <canvas className="justify-self-start ml-3"
@@ -23,7 +29,7 @@ const CanvasComponent = ({
           ref={outputCanvasRef}
           width={width.output}
           height={height.output}
-          style={{ width: 500, borderWidth: "4px", borderColor: PINK }}
+          style={style}
         />
         {loading &&
           <div className="flex justify-center absolute left-0 bottom-0" style={{ width: 400 }}>
