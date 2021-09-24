@@ -57,18 +57,17 @@ export default function Home() {
         style={{ backgroundImage: `url("bg.png")`, backgroundSize: "cover" }}
       >
         <NavbarComponent />
-        <br />
-        <br />
-        <br />
 
-        <CanvasComponent
-          width={width}
-          height={height}
-          canvasRef={canvasRef}
-          outputCanvasRef={outputCanvasRef}
-          loadingImgSrc={loadingLink}
-          loading={loading}
-        />
+        <div className="flex absolute w-screen h-screen items-center justify-center">
+          <CanvasComponent
+            width={width}
+            height={height}
+            canvasRef={canvasRef}
+            outputCanvasRef={outputCanvasRef}
+            loadingImgSrc={loadingLink}
+            loading={loading}
+          />
+        </div>
         {showDownloads && (
           <DownloadComponent
             canvasRef={canvasRef}
@@ -76,28 +75,30 @@ export default function Home() {
             url={url}
           />
         )}
-        <TitleComponent loading={loading} />
-        <div className="grid grid-cols-2 gap-3 py-2 px-4">
-          <InputComponent
-            open={open}
-            setOpen={setOpen}
-            canvasContexts={canvasContexts}
-            setHeight={setHeight}
-            setWidth={setWidth}
-            url={url}
-            setShowDownloads={setShowDownloads}
-            setUrl={setUrl}
-          />
-          <RunComponent
-            canvasContext={canvasContexts.input}
-            outputCanvasContext={canvasContexts.output}
-            setShowDownloads={setShowDownloads}
-            setLoading={setLoading}
-            setHeight={setHeight}
-            setWidth={setWidth}
-            height={height}
-            width={width}
-          />
+        <div className="absolute bottom-0" >
+          <TitleComponent loading={loading} />
+          <div className="grid grid-cols-2 gap-3 py-2 px-4">
+            <InputComponent
+              open={open}
+              setOpen={setOpen}
+              canvasContexts={canvasContexts}
+              setHeight={setHeight}
+              setWidth={setWidth}
+              url={url}
+              setShowDownloads={setShowDownloads}
+              setUrl={setUrl}
+            />
+            <RunComponent
+              canvasContext={canvasContexts.input}
+              outputCanvasContext={canvasContexts.output}
+              setShowDownloads={setShowDownloads}
+              setLoading={setLoading}
+              setHeight={setHeight}
+              setWidth={setWidth}
+              height={height}
+              width={width}
+            />
+          </div>
         </div>
       </div>
     </>
