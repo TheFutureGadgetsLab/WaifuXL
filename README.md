@@ -8,11 +8,4 @@ Simply provide a link in the left most box on the bottom, select Super Resolutio
 Later, when we have the full model trained.
 
 # Performance
-[ONNX Runtime's](https://github.com/microsoft/onnxruntime) JS WASM backend refuses to run in parallel, so until we (or more likely, they fix some bug) figure out how to make that happen, performance is going to suck. Be patient.
-
-# ONNX Install
-Uninstall `onnxruntime-common` and `onnxruntime-web`, then run
-```
-npm install ./onnx_deps/onnxruntime-common-1.9.0.tgz
-npm install ./onnx_deps/onnxruntime-web-1.9.0.tgz
-```
+[ONNX Runtime](https://github.com/microsoft/onnxruntime) supports SIMD acceleration and multithreading, using a beefier computer will definitely speed things up!
