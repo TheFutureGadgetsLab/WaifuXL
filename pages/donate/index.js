@@ -12,7 +12,7 @@ export default function About() {
           className="text-6xl font-bold"
           style={{ textShadow: "white 0px 2px 4px" }}
         >
-          Donate To <element class="text-pink">Us</element>
+          Donate To <span className="text-pink">Us</span>
         </h1>
       </main>
     </div>

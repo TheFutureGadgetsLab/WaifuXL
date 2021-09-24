@@ -13,7 +13,7 @@ export default function About() {
           className="text-6xl font-bold"
           style={{ textShadow: "white 0px 2px 4px" }}
         >
-          About <element class="text-pink">Us</element>
+          About <span className="text-pink">Us</span>
         </h1>
       </main>
     </div>

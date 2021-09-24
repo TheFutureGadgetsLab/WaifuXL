@@ -4,10 +4,10 @@ const TitleComponent = ({ loading }) => {
       <br />
       <h1 className="text-6xl font-bold" style={{ textShadow: "white 0px 2px 4px" }}>
         {loading ? "Expanding" : "Expand"} your{" "}
-        <element class="text-pink">
+        <span className="text-pink">
           {"waifu"}
           {loading && "..."}
-        </element>
+        </span>
       </h1>
     </main>
   );
