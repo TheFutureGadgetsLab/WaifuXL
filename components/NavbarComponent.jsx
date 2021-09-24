@@ -1,4 +1,3 @@
-import { PINK } from "../constants/colors";
 import Router from "next/router";
 
 const NavbarComponent = () => {
@@ -8,8 +7,7 @@ const NavbarComponent = () => {
         <nav className="">
           <div className="container mx-auto py-4 flex justify-between items-center">
             <h1
-              className="text-2xl font-bold text-black cursor-pointer"
-              style={{ color: PINK }}
+              className="text-2xl font-bold text-black cursor-pointer text-pink"
               onClick={() => Router.push("/")}
             >
               WaifuXL

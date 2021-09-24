@@ -1,4 +1,3 @@
-import { PINK } from "../../constants/colors";
 import NavbarComponent from "../../components/NavbarComponent";
 export default function About() {
   return (
@@ -13,7 +12,7 @@ export default function About() {
           className="text-6xl font-bold"
           style={{ textShadow: "white 0px 2px 4px" }}
         >
-          Donate To <span style={{ color: PINK }}>{"Us"}</span>
+          Donate To <element class="text-pink">Us</element>
         </h1>
       </main>
     </div>

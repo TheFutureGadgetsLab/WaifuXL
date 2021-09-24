@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { BLUE } from "../constants/colors";
 import { buildNdarrayFromImage } from "../services/processingUtilities";
 import { runModel } from "../services/onnxBackend";
 import { drawOutput, clearOutput } from "../services/imageUtilities";
@@ -30,8 +29,7 @@ const RunComponent = ({ canvasContext, outputCanvasContext, setShowDownloads, se
 
   return (
     <button
-      className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg"
-      style={{ backgroundColor: BLUE }}
+      className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-blue"
       onClick={() => {
         setShouldRun(true);
       }}

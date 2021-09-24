@@ -2,7 +2,6 @@ import { useState, useEffect, createRef } from "react";
 import { drawImage } from "../services/imageUtilities";
 import { initializeONNX } from "../services/onnxBackend";
 import { clearCanvas } from "../services/canvasUtilities";
-import { PINK } from "../constants/colors";
 import CanvasComponent from "../components/CanvasComponent";
 import DownloadComponent from "../components/DownloadComponent";
 import TitleComponent from "../components/TitleComponent";

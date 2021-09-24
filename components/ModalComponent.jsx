@@ -1,5 +1,4 @@
 import { getImageFromFileUpload, drawImage, clearOutput } from "../services/imageUtilities";
-import { BLUE, PINK } from "../constants/colors";
 import { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 
@@ -102,7 +101,7 @@ function ModalComponent({
         </span>
 
         <div className="inline-block align-bottom bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-          <label className="flex flex-col items-center justify-center cursor-pointer hover:bg-blue h-96 m-3 rounded-lg border-2 border-gray-400 border-dashed bg-gray-200">
+          <label className="flex flex-col items-center justify-center cursor-pointer hover:bg-blue h-96 m-3 rounded-lg border-2 border-pink border-dashed bg-gray-200">
             <label className="flex-col flex items-center px-4 py-6 text-blue tracking-wide cursor-pointer hover:bg-blue">
               <span className="mt-2 text-gray-400">
                 select, drag, or paste file
@@ -135,8 +134,7 @@ function ModalComponent({
             <label>
               <span className="text-gray-700">Preset Images</span>
               <select
-                className="form-select rounded mt-1 block w-full p-3 text-white"
-                style={{ backgroundColor: PINK }}
+                className="form-select rounded mt-1 block w-full p-3 text-white bg-pink"
                 onInput={(inp) => {
                   setUrl(inp.target.value);
                   clearOutput(canvasContexts.output);
@@ -162,8 +160,7 @@ function ModalComponent({
 
             <button
               type="button"
-              className="rounded-md absolute m-3 right-0 bottom-0 border border-transparent shadow-sm px-4 py-1 text-base font-medium text-white h-12 focus:outline-none focus:ring-2 focus:ring-offset-2"
-              style={{ backgroundColor: BLUE }}
+              className="rounded-md absolute m-3 right-0 bottom-0 border border-transparent shadow-sm px-4 py-1 text-base font-medium text-white h-12 focus:outline-none focus:ring-2 focus:ring-offset-2 bg-blue"
               onClick={() => setOpen(false)}
             >
               Done

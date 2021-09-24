@@ -1,5 +1,4 @@
 import ModalComponent from "../components/ModalComponent";
-import { BLUE } from "../constants/colors";
 const InputComponent = ({
   open,
   setOpen,
@@ -25,8 +24,7 @@ const InputComponent = ({
       )}
       <button
         type="button"
-        className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg"
-        style={{ backgroundColor: BLUE }}
+        className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-blue"
           onClick={() => setOpen(true)}
       >
         Choose Image
