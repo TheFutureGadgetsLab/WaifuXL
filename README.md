@@ -9,10 +9,3 @@ Later, when we have the full model trained.
 
 # Performance
 [ONNX Runtime](https://github.com/microsoft/onnxruntime) supports SIMD acceleration and multithreading, using a beefier computer will definitely speed things up!
-
-# ONNX Install
-Uninstall `onnxruntime-common` and `onnxruntime-web`, then run
-```
-npm install ./onnx_deps/onnxruntime-common-1.9.0.tgz
-npm install ./onnx_deps/onnxruntime-web-1.9.0.tgz
-```
