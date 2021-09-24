@@ -12,7 +12,7 @@ const CanvasComponent = ({
   const [style, setStyle] = useState({ width: 500, borderWidth: "4px", borderColor: PINK });
   useEffect(() => {
     setStyle({ width: 500, borderWidth: "4px", borderColor: PINK });
-  }, []);
+  });
 
   return (
     <div className="flex-grow grid grid-cols-2 justify-items-stretch w-full">
