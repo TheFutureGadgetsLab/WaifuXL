@@ -8,7 +8,7 @@ import DownloadComponent from "../components/DownloadComponent";
 import TitleComponent from "../components/TitleComponent";
 import InputComponent from "../components/InputComponent";
 import RunComponent from "../components/RunComponent";
-import Router from "next/router";
+import NavbarComponent from "../components/NavbarComponent";
 export default function Home() {
   const loadingLink =
     "https://thumbs.gfycat.com/ThunderousScratchyArthropods.webp";
@@ -56,23 +56,7 @@ export default function Home() {
         className="flex flex-col items-center min-h-screen"
         style={{ backgroundImage: `url("bg.png")`, backgroundSize: "cover" }}
       >
-        <div class="fixed">
-          <header>
-            <nav class="">
-              <div class="container mx-auto py-4 flex justify-between items-center">
-                <h1 class="text-2xl font-bold text-black" style={{ color: PINK }}>WaifuXL</h1>
-                <div class="flex px-10 space-x-10">
-                  <div class="flex items-center space-x-2" onClick={() => Router.push("/about")}>
-                    <span class="text-black">About</span>
-                  </div>
-                  <div class="flex items-center space-x-2" onClick={() => Router.push("/donate")}>
-                    <span class="text-black">Donate</span>
-                  </div>
-                </div>
-              </div>
-            </nav>
-          </header>
-        </div>
+        <NavbarComponent />
         <br />
         <br />
         <br />
