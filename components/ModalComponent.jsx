@@ -1,7 +1,9 @@
 import { getImageFromFileUpload } from "../services/imageUtilities";
 import { BLUE } from "../constants/colors";
 import { drawImage } from "../services/imageUtilities";
-import { useCallback } from "react";
+import { useEffect, useRef } from 'react';
+import ReactDOM from 'react-dom';
+
 function ModalComponent({
   setOpen,
   canvasContexts,
@@ -11,12 +13,25 @@ function ModalComponent({
   setShowDownloads,
   setUrl,
 }) {
+  const divRef = useRef(null);
+
+  function focusDiv() {
+    divRef.current.focus();
+  }
+
+  useEffect(() => {
+    // Update the document title using the browser API
+    focusDiv();
+  }, [divRef]);
+
   return (
     <div
       className="fixed z-10 inset-0 overflow-y-auto"
       aria-labelledby="modal-title"
       role="dialog"
       aria-modal="true"
+      tabIndex="-1"
+      ref={divRef}
       onPaste={(e) => {
         if (e.clipboardData.getData("text/plain")) {
           setUrl(e.clipboardData.getData("text/plain"));
@@ -59,11 +74,11 @@ function ModalComponent({
           &#8203;
         </span>
 
-        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        <div className="inline-block align-bottom bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
           <label className="flex flex-col items-center justify-center cursor-pointer hover:bg-blue p-32">
-            <label className="flex-col flex items-center px-4 py-6 bg-white text-blue tracking-wide uppercase cursor-pointer hover:bg-blue">
-              <span className="mt-2 text-base leading-normal">
-                Select a file
+            <label className="flex-col flex items-center px-4 py-6 bg-white text-blue tracking-wide cursor-pointer hover:bg-blue">
+              <span className="mt-2">
+                Select a file or click anywhere to paste
               </span>
               <svg
                 className="w-8 h-8"
