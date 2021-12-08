@@ -8,7 +8,7 @@ function sleep (time) {
 }
 
 export async function initializeONNX() {
-    ort.env.wasm.numThreads = navigator.hardwareConcurrency / 2;
+    ort.env.wasm.numThreads = navigator.hardwareConcurrency;
     ort.env.wasm.simd       = true;
     ort.env.wasm.proxy      = true;
 
