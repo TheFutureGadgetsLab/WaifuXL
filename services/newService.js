@@ -20,6 +20,23 @@ export function getPixelsFromInput(input) {
     })
 }
 
+export function getDataURIFromInput(input) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.src = input;
+      img.crossOrigin = "Anonymous";
+      var results = null;
+      img.onload = function () {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const context = canvas.getContext('2d');
+        context.drawImage(img, 0, 0);
+        resolve(canvas.toDataURL());
+      }
+    })
+}
+
 export function buildNdarrayFromImage(imageData) {
     const { data, width, height } = imageData;
     const dataTensor = ndarray(new Uint8Array(data), [height, width, 4]);
@@ -55,11 +72,20 @@ export function buildImageFromND(nd, height, width) {
     return canvas.toDataURL();
 }
 
-export async function  upScaleFromURI(uri) {
+export async function  upScaleFromURI(uri, setLoading) {
     const inputData = await getPixelsFromInput(uri);
     const inputND = buildNdarrayFromImage(inputData);
-    const results = await runModel(inputND, (e) => console.log("Loading"));
+    const results = await runModel(inputND, setLoading);
     const outputND = buildNdarrayFromModelOutput(results, results.dims[2], results.dims[3])
     const outputImage = buildImageFromND(outputND, results.dims[2], results.dims[3]);
     return outputImage;
+}
+
+export function downloadImage(postFix, inputURI, downloadURI) {
+    var link = document.createElement("a");
+    let urlParts = inputURI.split(/[\.\/]/i);
+    let imgName = urlParts[urlParts.length - 2];
+    link.download = `${imgName}_${postFix}.png`;
+    link.href = downloadURI;
+    link.click();
 }
