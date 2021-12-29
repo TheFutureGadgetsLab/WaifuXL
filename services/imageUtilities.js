@@ -48,6 +48,7 @@ export function getImageFromFileUpload(
   const file = uploaded;
   const fr = new FileReader();
   fr.onload = function () {
+    console.log(fr.result)
     drawImage(
       canvasContexts.input,
       fr.result,
@@ -58,3 +59,4 @@ export function getImageFromFileUpload(
   };
   fr.readAsDataURL(file);
 }
+
