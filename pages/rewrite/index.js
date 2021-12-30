@@ -8,15 +8,18 @@ import {
 import NavbarComponent from "../../components/NavbarComponent";
 import TitleComponent from "../../components/TitleComponent";
 import DownloadComponent from "../../components/DownloadRewrite";
+import RunComponent from "../../components/RunRewrite";
+
 export default function Home() {
-  const [inputURI, setInputURI] = useState("https://i.imgur.com/yhIwVjZ.jpeg");
+  const [inputURI, setInputURI] = useState("https://i.imgur.com/Sf6sfPj.png");
   const [outputURI, setOutputURI] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [inputModalOpen, setInputModalOpen] = useState(false);
 
   useEffect(async () => {
-    setInputURI(await getDataURIFromInput("https://i.imgur.com/yhIwVjZ.jpeg"));
     await initializeONNX();
-    setOutputURI(await upScaleFromURI(inputURI, setLoading));
+    //note: this is the input logic (given some from of URI)
+    setInputURI(await getDataURIFromInput(inputURI));
   }, []);
   return (
     <>
@@ -55,13 +58,17 @@ export default function Home() {
         </div>
         <div className="absolute bottom-0">
           {outputURI != null && (
-            <DownloadComponent
-              inputURI={inputURI}
-              outputURI={outputURI}
-            />
+            <DownloadComponent inputURI={inputURI} outputURI={outputURI} />
           )}
 
           <TitleComponent loading={loading} />
+          <div className="grid grid-cols-2 gap-3 py-2 px-4">
+            <RunComponent
+              setLoading={setLoading}
+              inputURI={inputURI}
+              setOutputURI={setOutputURI}
+            />
+          </div>
         </div>
       </div>
     </>
