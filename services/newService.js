@@ -89,3 +89,12 @@ export function downloadImage(postFix, inputURI, downloadURI) {
     link.href = downloadURI;
     link.click();
 }
+
+export function getDataURIFromFileUpload(uploaded, setDataURI) {
+    const file = uploaded;
+    const fr = new FileReader();
+    fr.onload = function() {
+        setDataURI(fr.result);
+    }
+    fr.readAsDataURL(file);
+}

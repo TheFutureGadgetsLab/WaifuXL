@@ -9,6 +9,7 @@ import NavbarComponent from "../../components/NavbarComponent";
 import TitleComponent from "../../components/TitleComponent";
 import DownloadComponent from "../../components/DownloadRewrite";
 import RunComponent from "../../components/RunRewrite";
+import InputComponent from "../../components/InputRewrite";
 
 export default function Home() {
   const [inputURI, setInputURI] = useState("https://i.imgur.com/Sf6sfPj.png");
@@ -63,6 +64,12 @@ export default function Home() {
 
           <TitleComponent loading={loading} />
           <div className="grid grid-cols-2 gap-3 py-2 px-4">
+            <InputComponent
+              inputModalOpen={inputModalOpen}
+              setInputModalOpen={setInputModalOpen}
+              setInputURI={setInputURI}
+              setOutputURI={setOutputURI}
+            />
             <RunComponent
               setLoading={setLoading}
               inputURI={inputURI}
