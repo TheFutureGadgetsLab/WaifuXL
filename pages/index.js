@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getDataURIFromInput } from "../services/newService";
+import { getDataURIFromInput } from "../services/imageUtilities";
 import { initializeONNX } from "../services/onnxBackend";
 import {
   ReactCompareSlider,

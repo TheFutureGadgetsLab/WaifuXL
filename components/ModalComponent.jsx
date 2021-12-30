@@ -1,14 +1,8 @@
-import {
-  getImageFromFileUpload,
-  drawImage,
-  clearOutput,
-} from "../services/imageUtilities";
 import { useEffect, useRef } from "react";
-import ReactDOM from "react-dom";
 import {
   getDataURIFromInput,
   getDataURIFromFileUpload,
-} from "../services/newService";
+} from "../services/imageUtilities";
 
 function ModalComponent({ setInputModalOpen, setInputURI, setOutputURI }) {
   const divRef = useRef(null);

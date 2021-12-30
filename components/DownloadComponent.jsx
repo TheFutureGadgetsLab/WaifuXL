@@ -1,6 +1,6 @@
 import {
     downloadImage,
-  } from "../services/newService";
+  } from "../services/imageUtilities";
   
   const DownloadComponent = ({
         inputURI,

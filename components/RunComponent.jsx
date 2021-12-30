@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { upScaleFromURI } from "../services/newService";
+import { upScaleFromURI } from "../services/processingUtilities";
 
 const RunComponent = ({ setLoading, inputURI, setOutputURI }) => {
   const [shouldRun, setShouldRun] = useState(false);
