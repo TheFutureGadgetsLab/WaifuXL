@@ -32,17 +32,8 @@ function ModalComponent({ setInputModalOpen, setInputURI, setOutputURI }) {
             var item = items[index];
             if (item.kind === "file") {
               var blob = item.getAsFile();
-              var reader = new FileReader();
-              reader.onload = function (e) {
-                drawImage(
-                  canvasContexts.input,
-                  reader.result,
-                  setHeight,
-                  setWidth
-                );
-              };
-              reader.readAsDataURL(blob);
-            }
+              getDataURIFromFileUpload(blob, setInputURI);
+          }
           }
         } catch {
           console.log("Unrecognized paste");
@@ -59,9 +50,11 @@ function ModalComponent({ setInputModalOpen, setInputURI, setOutputURI }) {
       aria-modal="true"
       tabIndex="-1"
       ref={divRef}
-      onPaste={(e) => {
+      onPaste={async (e) => {
         if (e.clipboardData.getData("text/plain")) {
-          setUrl(e.clipboardData.getData("text/plain"));
+          setInputURI(
+            await getDataURIFromInput(e.clipboardData.getData("text/plain"))
+          );
         } else {
           try {
             var items = (e.clipboardData || e.originalEvent.clipboardData)
@@ -70,16 +63,7 @@ function ModalComponent({ setInputModalOpen, setInputURI, setOutputURI }) {
               var item = items[index];
               if (item.kind === "file") {
                 var blob = item.getAsFile();
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                  drawImage(
-                    canvasContexts.input,
-                    reader.result,
-                    setHeight,
-                    setWidth
-                  );
-                };
-                reader.readAsDataURL(blob);
+                getDataURIFromFileUpload(blob, setInputURI);
               }
             }
           } catch {
@@ -130,9 +114,9 @@ function ModalComponent({ setInputModalOpen, setInputURI, setOutputURI }) {
               <span className="text-gray-700">Preset Images</span>
               <select
                 className="form-select rounded mt-1 block w-full p-3 text-white bg-pink"
-                onInput={(inp) => {
-                  setUrl(inp.target.value);
-                  clearOutput(canvasContexts.output);
+                onInput={async (inp) => {
+                  setInputURI(await getDataURIFromInput(inp.target.value));
+                  setOutputURI(null);
                 }}
               >
                 <option value="https://i.imgur.com/Sf6sfPj.png">
