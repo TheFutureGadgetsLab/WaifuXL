@@ -35,7 +35,7 @@ export default function Home() {
               src={inputURI}
               className={"border-pink"}
               style={{
-                width: 500,
+                height: 500,
                 borderWidth: "4px",
                 backgroundColor: "white",
               }}
@@ -44,7 +44,7 @@ export default function Home() {
             <ReactCompareSlider
               className={"border-pink"}
               style={{
-                width: 500,
+                height: 500,
                 borderWidth: "4px",
                 backgroundColor: "white",
               }}
