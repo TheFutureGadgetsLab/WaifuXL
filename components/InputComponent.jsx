@@ -1,31 +1,18 @@
-import ModalComponent from "../components/ModalComponent";
-const InputComponent = ({
-  open,
-  setOpen,
-  canvasContexts,
-  setHeight,
-  setWidth,
-  url,
-  setShowDownloads,
-  setUrl,
-}) => {
+import ModalComponent from "./ModalComponent";
+const InputComponent = ({ inputModalOpen, setInputModalOpen, setInputURI, setOutputURI }) => {
   return (
     <>
-      {open && (
+      {inputModalOpen && (
         <ModalComponent
-          setOpen={setOpen}
-          canvasContexts={canvasContexts}
-          setHeight={setHeight}
-          setWidth={setWidth}
-          url={url}
-          setShowDownloads={setShowDownloads}
-          setUrl={setUrl}
+          setInputModalOpen={setInputModalOpen}
+          setInputURI={setInputURI}
+          setOutputURI={setOutputURI}
         />
       )}
       <button
         type="button"
         className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-blue"
-          onClick={() => setOpen(true)}
+        onClick={() => setInputModalOpen(true)}
       >
         Choose Image
       </button>
