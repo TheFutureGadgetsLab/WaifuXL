@@ -1,26 +1,18 @@
 import { useEffect, useState } from "react";
-import { buildNdarrayFromImage } from "../services/processingUtilities";
-import { runModel } from "../services/onnxBackend";
-import { drawOutput, clearOutput } from "../services/imageUtilities";
+import { upScaleFromURI } from "../services/processingUtilities";
 
-const RunComponent = ({ canvasContext, outputCanvasContext, setShowDownloads, setLoading, setHeight, setWidth, height, width }) => {
+const RunComponent = ({ setLoading, inputURI, setOutputURI }) => {
   const [shouldRun, setShouldRun] = useState(false);
 
   useEffect(async () => {
     if (shouldRun) {
       // Clear previous output
-      clearOutput(outputCanvasContext);
-      // Run the model
-      const tmp = await runModel(
-        buildNdarrayFromImage(canvasContext),
-        setLoading
-      );
+      setOutputURI(null);
+      const result = await upScaleFromURI(inputURI, setLoading);
       // If the models output is valid
-      if (tmp) {
-        // Draw the model output onto the output canvas
-        drawOutput(outputCanvasContext, tmp, setHeight, setWidth, height, width);
-        // Show the download buttons
-        setShowDownloads(true);
+      if (result) {
+        //set the output
+        setOutputURI(result);
         // Set should run to false
         setShouldRun(false);
       }

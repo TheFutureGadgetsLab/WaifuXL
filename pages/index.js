@@ -1,54 +1,27 @@
-import { useState, useEffect, createRef } from "react";
-import { drawImage } from "../services/imageUtilities";
+import { useState, useEffect } from "react";
+import { getDataURIFromInput } from "../services/imageUtilities";
 import { initializeONNX } from "../services/onnxBackend";
-import { clearCanvas } from "../services/canvasUtilities";
-import CanvasComponent from "../components/CanvasComponent";
-import DownloadComponent from "../components/DownloadComponent";
-import TitleComponent from "../components/TitleComponent";
-import InputComponent from "../components/InputComponent";
-import RunComponent from "../components/RunComponent";
+import {
+  ReactCompareSlider,
+  ReactCompareSliderImage,
+} from "react-compare-slider";
 import NavbarComponent from "../components/NavbarComponent";
+import TitleComponent from "../components/TitleComponent";
+import DownloadComponent from "../components/DownloadComponent";
+import RunComponent from "../components/RunComponent";
+import InputComponent from "../components/InputComponent";
+
 export default function Home() {
-  const loadingLink =
-    "https://thumbs.gfycat.com/ThunderousScratchyArthropods.webp";
-  const canvasRef = createRef();
-  const outputCanvasRef = createRef();
-  const [canvasContexts, setCanvasContexts] = useState({
-    input: undefined,
-    output: undefined,
-  });
-  const [height, setHeight] = useState({ input: 500, output: 500 });
-  const [width, setWidth] = useState({ input: 500, output: 500 });
+  const [inputURI, setInputURI] = useState("https://i.imgur.com/Sf6sfPj.png");
+  const [outputURI, setOutputURI] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [showDownloads, setShowDownloads] = useState(false);
-  const [url, setUrl] = useState("https://i.imgur.com/Sf6sfPj.png");
-  const [drawnURL, setDrawnURL] = useState("");
-  const [open, setOpen] = useState(false);
+  const [inputModalOpen, setInputModalOpen] = useState(false);
 
-  //when height, width, canvasContext, or url change
   useEffect(async () => {
-    //when canvases are available, and we've got a fresh url to draw
-    if (canvasContexts.input && canvasContexts.output && drawnURL !== url) {
-      //draw the url
-      drawImage(canvasContexts.input, url, setHeight, setWidth);
-      //clear the canvas
-      clearCanvas(canvasContexts.output, width.out, height.out);
-      //store this url as the currently drawn url
-      setDrawnURL(url);
-      //make sure downloads are not shown
-      setShowDownloads(false);
-    }
-  }, [canvasContexts, url]);
-
-  //at startup
-  useEffect(async () => {
-    initializeONNX();
-    setCanvasContexts({
-      input: canvasRef.current.getContext("2d"),
-      output: outputCanvasRef.current.getContext("2d"),
-    });
+    await initializeONNX();
+    //note: this is the input logic (given some from of URI)
+    setInputURI(await getDataURIFromInput(inputURI));
   }, []);
-
   return (
     <>
       <div
@@ -56,46 +29,51 @@ export default function Home() {
         style={{ backgroundImage: `url("bg.png")`, backgroundSize: "cover" }}
       >
         <NavbarComponent />
-
         <div className="flex absolute w-screen h-screen items-center justify-center">
-          <CanvasComponent
-            width={width}
-            height={height}
-            canvasRef={canvasRef}
-            outputCanvasRef={outputCanvasRef}
-            loadingImgSrc={loadingLink}
-            loading={loading}
-          />
-        </div>
-        <div className="absolute bottom-0" >
-          {showDownloads && (
-            <DownloadComponent
-              canvasRef={canvasRef}
-              outputCanvasRef={outputCanvasRef}
-              url={url}
+          {outputURI == null ? (
+            <img
+              src={inputURI}
+              className={"border-pink"}
+              style={{
+                width: 500,
+                borderWidth: "4px",
+                backgroundColor: "white",
+              }}
+            />
+          ) : (
+            <ReactCompareSlider
+              className={"border-pink"}
+              style={{
+                width: 500,
+                borderWidth: "4px",
+                backgroundColor: "white",
+              }}
+              itemOne={
+                <ReactCompareSliderImage src={inputURI} alt="Image one" />
+              }
+              itemTwo={
+                <ReactCompareSliderImage src={outputURI} alt="Image two" />
+              }
             />
           )}
+        </div>
+        <div className="absolute bottom-0">
+          {outputURI != null && (
+            <DownloadComponent inputURI={inputURI} outputURI={outputURI} />
+          )}
+
           <TitleComponent loading={loading} />
           <div className="grid grid-cols-2 gap-3 py-2 px-4">
             <InputComponent
-              open={open}
-              setOpen={setOpen}
-              canvasContexts={canvasContexts}
-              setHeight={setHeight}
-              setWidth={setWidth}
-              url={url}
-              setShowDownloads={setShowDownloads}
-              setUrl={setUrl}
+              inputModalOpen={inputModalOpen}
+              setInputModalOpen={setInputModalOpen}
+              setInputURI={setInputURI}
+              setOutputURI={setOutputURI}
             />
             <RunComponent
-              canvasContext={canvasContexts.input}
-              outputCanvasContext={canvasContexts.output}
-              setShowDownloads={setShowDownloads}
               setLoading={setLoading}
-              setHeight={setHeight}
-              setWidth={setWidth}
-              height={height}
-              width={width}
+              inputURI={inputURI}
+              setOutputURI={setOutputURI}
             />
           </div>
         </div>

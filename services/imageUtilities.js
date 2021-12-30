@@ -1,60 +1,73 @@
-import { buildNdarrayFromModelOutput } from "./processingUtilities";
+function isValidHttpUrl(string) {
+  let url;
 
-export function downloadImage(postFix, url, ref) {
+  try {
+    url = new URL(string);
+  } catch (_) {
+    return false;
+  }
+
+  return url.protocol === "http:" || url.protocol === "https:";
+}
+
+export function getPixelsFromInput(input) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.src = input;
+    img.crossOrigin = "Anonymous";
+    var results = null;
+    img.onload = function () {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const context = canvas.getContext("2d");
+      context.drawImage(img, 0, 0);
+      resolve(context.getImageData(0, 0, img.width, img.height));
+    };
+  });
+}
+
+export function getDataURIFromInput(input) {
+  return new Promise(async (resolve, reject) => {
+    if (isValidHttpUrl(input)) {
+      let blob = await fetch(input).then(r => r.blob());
+      let dataUrl = await new Promise(resolve => {
+        let reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.readAsDataURL(blob);
+      });
+      resolve(dataUrl);
+    } else {
+      const img = new Image();
+      img.src = input;
+      img.crossOrigin = "Anonymous";
+      var results = null;
+      img.onload = function () {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const context = canvas.getContext("2d");
+        context.drawImage(img, 0, 0);
+        resolve(canvas.toDataURL());
+      };
+    }
+  });
+}
+
+export function downloadImage(postFix, inputURI, downloadURI) {
   var link = document.createElement("a");
-  let urlParts = url.split(/[\.\/]/i);
+  let urlParts = inputURI.split(/[\.\/]/i);
   let imgName = urlParts[urlParts.length - 2];
   link.download = `${imgName}_${postFix}.png`;
-  link.href = ref.current.toDataURL();
+  link.href = downloadURI;
   link.click();
 }
 
-export function drawImage(
-  canvasContext,
-  imageSource,
-  setHeight,
-  setWidth,
-) {
-  const img = new Image();
-  img.crossOrigin = "Anonymous";
-  img.src = imageSource;
-  img.onload = function () {
-    setHeight({input: img.height, output: img.height});
-    setWidth({input: img.width, output: img.width});
-    canvasContext.drawImage(img, 0, 0);
-  };
-}
-
-export function drawOutput(canvasContext, data, setHeight, setWidth, height, width) {
-  const imageHeight = data.dims[2];
-  const imageWidth = data.dims[3];
-  setHeight({...height, output: imageHeight})
-  setWidth({...width, output: imageWidth});
-  var idata = canvasContext.createImageData(imageWidth, imageHeight);
-  idata.data.set(buildNdarrayFromModelOutput(data, imageHeight, imageWidth));
-  canvasContext.putImageData(idata, 0, 0);
-}
-
-export function clearOutput(canvasContext) {
-  canvasContext.clearRect(0, 0, canvasContext.canvas.width, canvasContext.canvas.height);
-}
-
-export function getImageFromFileUpload(
-  uploaded,
-  canvasContexts,
-  setHeight,
-  setWidth,
-) {
+export function getDataURIFromFileUpload(uploaded, setDataURI) {
   const file = uploaded;
   const fr = new FileReader();
   fr.onload = function () {
-    drawImage(
-      canvasContexts.input,
-      fr.result,
-      setHeight,
-      setWidth,
-    );
-
+    setDataURI(fr.result);
   };
   fr.readAsDataURL(file);
 }

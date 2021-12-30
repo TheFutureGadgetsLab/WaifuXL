@@ -1,47 +1,33 @@
-import { getImageFromFileUpload, drawImage, clearOutput } from "../services/imageUtilities";
-import { useEffect, useRef } from 'react';
-import ReactDOM from 'react-dom';
+import { useEffect, useRef } from "react";
+import {
+  getDataURIFromInput,
+  getDataURIFromFileUpload,
+} from "../services/imageUtilities";
 
-function ModalComponent({
-  setOpen,
-  canvasContexts,
-  setHeight,
-  setWidth,
-  url,
-  setShowDownloads,
-  setUrl,
-}) {
+function ModalComponent({ setInputModalOpen, setInputURI, setOutputURI }) {
   const divRef = useRef(null);
 
   function focusDiv() {
     divRef.current.focus();
   }
 
-  useEffect(() => {
+  useEffect(async () => {
     // Update the document title using the browser API
     focusDiv();
-    document.addEventListener("paste", (e) => {
+    document.addEventListener("paste", async (e) => {
       if (e.clipboardData.getData("text/plain")) {
-        setUrl(e.clipboardData.getData("text/plain"));
+        setInputURI(
+          await getDataURIFromInput(e.clipboardData.getData("text/plain"))
+        );
       } else {
         try {
-          var items = (e.clipboardData || e.originalEvent.clipboardData)
-            .items;
+          var items = (e.clipboardData || e.originalEvent.clipboardData).items;
           for (var index in items) {
             var item = items[index];
             if (item.kind === "file") {
               var blob = item.getAsFile();
-              var reader = new FileReader();
-              reader.onload = function (e) {
-                drawImage(
-                  canvasContexts.input,
-                  reader.result,
-                  setHeight,
-                  setWidth
-                );
-              };
-              reader.readAsDataURL(blob);
-            }
+              getDataURIFromFileUpload(blob, setInputURI);
+          }
           }
         } catch {
           console.log("Unrecognized paste");
@@ -58,9 +44,11 @@ function ModalComponent({
       aria-modal="true"
       tabIndex="-1"
       ref={divRef}
-      onPaste={(e) => {
+      onPaste={async (e) => {
         if (e.clipboardData.getData("text/plain")) {
-          setUrl(e.clipboardData.getData("text/plain"));
+          setInputURI(
+            await getDataURIFromInput(e.clipboardData.getData("text/plain"))
+          );
         } else {
           try {
             var items = (e.clipboardData || e.originalEvent.clipboardData)
@@ -69,16 +57,7 @@ function ModalComponent({
               var item = items[index];
               if (item.kind === "file") {
                 var blob = item.getAsFile();
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                  drawImage(
-                    canvasContexts.input,
-                    reader.result,
-                    setHeight,
-                    setWidth
-                  );
-                };
-                reader.readAsDataURL(blob);
+                getDataURIFromFileUpload(blob, setInputURI);
               }
             }
           } catch {
@@ -118,14 +97,8 @@ function ModalComponent({
                 type="file"
                 className="hidden"
                 onChange={(e) => {
-                  getImageFromFileUpload(
-                    e.target.files[0],
-                    canvasContexts,
-                    setHeight,
-                    setWidth
-                  );
-                  setShowDownloads(false);
-                  clearOutput(canvasContexts.output);
+                  getDataURIFromFileUpload(e.target.files[0], setInputURI);
+                  setOutputURI(null);
                 }}
               />
             </label>
@@ -135,9 +108,9 @@ function ModalComponent({
               <span className="text-gray-700">Preset Images</span>
               <select
                 className="form-select rounded mt-1 block w-full p-3 text-white bg-pink"
-                onInput={(inp) => {
-                  setUrl(inp.target.value);
-                  clearOutput(canvasContexts.output);
+                onInput={async (inp) => {
+                  setInputURI(await getDataURIFromInput(inp.target.value));
+                  setOutputURI(null);
                 }}
               >
                 <option value="https://i.imgur.com/Sf6sfPj.png">
@@ -161,7 +134,7 @@ function ModalComponent({
             <button
               type="button"
               className="rounded-md absolute m-3 right-0 bottom-0 border border-transparent shadow-sm px-4 py-1 text-base font-medium text-white h-12 focus:outline-none focus:ring-2 focus:ring-offset-2 bg-blue"
-              onClick={() => setOpen(false)}
+              onClick={() => setInputModalOpen(false)}
             >
               Done
             </button>
