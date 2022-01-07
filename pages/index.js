@@ -9,7 +9,7 @@ import TitleComponent from "../components/TitleComponent";
 import DownloadComponent from "../components/DownloadComponent";
 import RunComponent from "../components/RunComponent";
 import InputComponent from "../components/InputComponent";
-
+import {useState, useEffect} from 'react';
 export default function Example() {
   const [inputURI, setInputURI] = useState("https://i.imgur.com/Sf6sfPj.png");
   const [outputURI, setOutputURI] = useState(null);
