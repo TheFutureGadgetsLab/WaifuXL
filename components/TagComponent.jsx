@@ -60,7 +60,7 @@ const TagComponent = ({ tags }) => {
       </div>
       {tags.topDesc.map((x) => buildTagLine(x))}
       <div
-        className="text-xl font-bold mt-10"
+        className="text-xl font-bold"
         style={{ textShadow: "white 0px 2px 4px" }}
       >
         Character
@@ -68,7 +68,7 @@ const TagComponent = ({ tags }) => {
       {tags.topChars.map((x) => buildTagLine(x))}
 
       <div
-        className="text-xl font-bold mt-10"
+        className="text-xl font-bold"
         style={{ textShadow: "white 0px 2px 4px" }}
       >
         Explicitness
