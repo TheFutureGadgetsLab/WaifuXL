@@ -30,35 +30,40 @@ export default function Example() {
         <div className="hidden md:flex md:w-80 md:flex-col md:fixed md:inset-y-0 drop-shadow-lg">
           <div className="flex-1 flex flex-col min-h-0 bg-gray-100">
             <div className="flex-1 flex flex-col overflow-y-auto">
-              <div className="space-y-2 mx-8 grid grid-cols-1">
+              <div className="">
                 <br />
                 <br />
-                <InputComponent
-                  inputModalOpen={inputModalOpen}
-                  setInputModalOpen={setInputModalOpen}
-                  setInputURI={setInputURI}
-                  setOutputURI={setOutputURI}
-                />
-                {outputURI != null ? (
-                  <DownloadComponent
-                    inputURI={inputURI}
-                    outputURI={outputURI}
-                  />
-                ) : (
-                  <RunComponent
-                    setLoading={setLoading}
-                    inputURI={inputURI}
+                <div className="mx-8 space-y-2 grid grid-cols-1">
+                  <InputComponent
+                    inputModalOpen={inputModalOpen}
+                    setInputModalOpen={setInputModalOpen}
+                    setInputURI={setInputURI}
                     setOutputURI={setOutputURI}
-                    setTags={setTags}
                   />
-                )}
-
+                  {outputURI != null ? (
+                    <DownloadComponent
+                      inputURI={inputURI}
+                      outputURI={outputURI}
+                    />
+                  ) : (
+                    <RunComponent
+                      setLoading={setLoading}
+                      inputURI={inputURI}
+                      setOutputURI={setOutputURI}
+                      setTags={setTags}
+                    />
+                  )}
+                </div>
                 {tags != null && (
                   <>
-                    <br />
+                    <br/>
+                    <br/>
                     <hr />
                     <br />
+                    <br />
+                    <div className="mx-3 space-y-2 grid grid-cols-1">
                     <TagComponent tags={tags} />
+                    </div>
                   </>
                 )}
               </div>

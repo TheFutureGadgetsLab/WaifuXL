@@ -28,9 +28,9 @@ export function topK(ndarray, k, startIndex, stopIndex) {
     const values = ndarray.data.slice(startIndex, stopIndex);
     const indices = new Array(values.length);
     for (let i = 0; i < values.length; i++) {
-        indices[i] = [i + startIndex, values[i + startIndex]];
+        indices[i] = [i + startIndex, values[i]];
     }
-    indices.sort((a, b) => values[b[0]] - values[a[0]]);
+    indices.sort((a, b) => b[1] - a[1]);
     console.log(indices);
     return indices.slice(0, k);
 }
@@ -41,7 +41,7 @@ export async function getTopTags(data) {
 
     const topDesc  = topK(flattened, 10, 0, 1000).map((i) => [tags[i[0]], i[1]]);
     const topChars = topK(flattened, 10, 1000, 2000).map((i) => [tags[i[0]], i[1]]);
-    const rating   = topK(flattened, 1, 2000, 2003).map((i) => [tags[i[0]], i[1]]);
+    const rating   = topK(flattened, 3, 2000, 2003).map((i) => [tags[i[0]], i[1]]);
 
     return { topDesc, topChars, rating };
 }
