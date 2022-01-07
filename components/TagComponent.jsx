@@ -13,7 +13,7 @@ function titleCase(str) {
 
 function truncateString(str) {
   str = cleanString(str);
-  const split = str.length > 12 ? str.slice(0, 12) + "..." : str;
+  const split = str.length > 13 ? str.slice(0, 13) + "…" : str;
   return split;
 }
 
