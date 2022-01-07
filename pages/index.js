@@ -17,9 +17,10 @@ export default function Example() {
   const [loading, setLoading] = useState(false);
   const [inputModalOpen, setInputModalOpen] = useState(false);
   const [tags, setTags] = useState(null);
-
+  const [isInitialized, setIsInitialized] = useState(false);
   useEffect(async () => {
     await initializeONNX();
+    setIsInitialized(true);
     //note: this is the input logic (given some from of URI)
     setInputURI(await getDataURIFromInput(inputURI));
   }, []);
@@ -45,7 +46,7 @@ export default function Example() {
                       inputURI={inputURI}
                       outputURI={outputURI}
                     />
-                  ) : (
+                  ) : isInitialized && (
                     <RunComponent
                       setLoading={setLoading}
                       inputURI={inputURI}
