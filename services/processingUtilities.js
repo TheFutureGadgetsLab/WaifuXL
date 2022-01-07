@@ -1,9 +1,9 @@
 import ndarray from "ndarray";
 import ops from "ndarray-ops";
 import { getPixelsFromInput } from "./imageUtilities";
-import { runModel } from "./onnxBackend";
+import { runSuperRes, runTagger } from "./onnxBackend";
 
-export function buildNdarrayFromModelOutput(data, height, width) {
+export function buildNdarrayFromImageOutput(data, height, width) {
     const inputArray = ndarray(data.data, data.dims);
     const dataTensor = ndarray(new Uint8Array(width * height * 4).fill(255), [
       height,
@@ -14,6 +14,35 @@ export function buildNdarrayFromModelOutput(data, height, width) {
     ops.assign(dataTensor.pick(null, null, 1), inputArray.pick(0, 1, null, null));
     ops.assign(dataTensor.pick(null, null, 2), inputArray.pick(0, 2, null, null));
     return dataTensor.data;
+}
+
+export async function loadTags() {
+    const tags = await fetch("/tags.json");
+    const tagsJson = await tags.json();
+    const tagsArray = tagsJson.map((tag) => tag[1]);
+    return tagsArray;
+}
+
+// find indices of top k values in ndarray
+export function topK(ndarray, k, startIndex, stopIndex) {
+    const values = ndarray.data.slice(startIndex, stopIndex);
+    const indices = [...Array(values.length).keys()];
+    indices.sort((a, b) => values[b] - values[a]);
+
+    // zip indices and values into an array of tuples
+    const tuples = indices.map((i) => [i+startIndex, values[i]]);
+    return tuples.slice(0, k);
+}
+
+export async function getTopTags(data) {
+    const tags = await loadTags();
+    const flattened = ndarray(data.data, data.dims);
+
+    const topDesc  = topK(flattened, 10, 0, 1000).map((i) => [tags[i[0]], i[1]]);
+    const topChars = topK(flattened, 10, 1000, 2000).map((i) => [tags[i[0]], i[1]]);
+    const rating   = topK(flattened, 3, 2000, 2003).map((i) => [tags[i[0]], i[1]]);
+
+    return { topDesc, topChars, rating };
 }
 
 export function buildNdarrayFromImage(imageData) {
@@ -51,11 +80,18 @@ export function buildImageFromND(nd, height, width) {
   return canvas.toDataURL();
 }
 
-export async function  upScaleFromURI(uri, setLoading) {
+export async function  upScaleFromURI(uri, setLoading, setTags) {
   const inputData = await getPixelsFromInput(uri);
-  const inputND = buildNdarrayFromImage(inputData);
-  const results = await runModel(inputND, setLoading);
-  const outputND = buildNdarrayFromModelOutput(results, results.dims[2], results.dims[3])
-  const outputImage = buildImageFromND(outputND, results.dims[2], results.dims[3]);
+  
+  const tagInput  = buildNdarrayFromImage(inputData);
+  const tagOutput = await runTagger(tagInput);
+  const tags = await getTopTags(tagOutput);
+  setTags(tags);
+  
+  const superResInput = buildNdarrayFromImage(inputData);
+  const superResOutput = await runSuperRes(superResInput, setLoading);
+
+  const outputND = buildNdarrayFromImageOutput(superResOutput, superResOutput.dims[2], superResOutput.dims[3])
+  const outputImage = buildImageFromND(outputND, superResOutput.dims[2], superResOutput.dims[3]);
   return outputImage;
 }
