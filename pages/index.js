@@ -19,6 +19,7 @@ export default function Example() {
   const [tags, setTags] = useState(null);
   const [isInitialized, setIsInitialized] = useState(false);
   useEffect(async () => {
+    document.body.style.overflow = "hidden";
     await initializeONNX();
     setIsInitialized(true);
     //note: this is the input logic (given some from of URI)
@@ -28,13 +29,11 @@ export default function Example() {
   return (
     <>
       <div>
-        <div className="hidden md:flex md:w-80 md:flex-col md:fixed md:inset-y-0 drop-shadow-lg">
+        <div className="md:flex md:w-80 md:flex-col md:fixed md:inset-y-0">
           <div className="flex-1 flex flex-col min-h-0 bg-gray-100">
             <div className="flex-1 flex flex-col overflow-y-auto">
               <div className="">
-                <br />
-                <br />
-                <div className="mx-8 space-y-2 grid grid-cols-1">
+                <div className="mt-10 mb-10 mx-8 space-y-2 grid grid-cols-1">
                   <InputComponent
                     inputModalOpen={inputModalOpen}
                     setInputModalOpen={setInputModalOpen}
@@ -46,24 +45,22 @@ export default function Example() {
                       inputURI={inputURI}
                       outputURI={outputURI}
                     />
-                  ) : isInitialized && (
-                    <RunComponent
-                      setLoading={setLoading}
-                      inputURI={inputURI}
-                      setOutputURI={setOutputURI}
-                      setTags={setTags}
-                    />
+                  ) : (
+                    isInitialized && (
+                      <RunComponent
+                        setLoading={setLoading}
+                        inputURI={inputURI}
+                        setOutputURI={setOutputURI}
+                        setTags={setTags}
+                      />
+                    )
                   )}
                 </div>
                 {tags != null && (
                   <>
-                    <br/>
-                    <br/>
                     <hr />
-                    <br />
-                    <br />
-                    <div className="mx-3 space-y-2 grid grid-cols-1">
-                    <TagComponent tags={tags} />
+                    <div className="mt-10 mx-3 space-y-2 grid grid-cols-1">
+                      <TagComponent tags={tags} />
                     </div>
                   </>
                 )}
