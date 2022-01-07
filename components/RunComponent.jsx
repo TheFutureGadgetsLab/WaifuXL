@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { upScaleFromURI } from "../services/processingUtilities";
 
-const RunComponent = ({ setLoading, inputURI, setOutputURI }) => {
+const RunComponent = ({ setLoading, inputURI, setOutputURI, setTags }) => {
   const [shouldRun, setShouldRun] = useState(false);
 
   useEffect(async () => {
     if (shouldRun) {
       // Clear previous output
       setOutputURI(null);
-      const result = await upScaleFromURI(inputURI, setLoading);
+      const result = await upScaleFromURI(inputURI, setLoading, setTags);
       // If the models output is valid
       if (result) {
         //set the output

@@ -9,12 +9,14 @@ import TitleComponent from "../components/TitleComponent";
 import DownloadComponent from "../components/DownloadComponent";
 import RunComponent from "../components/RunComponent";
 import InputComponent from "../components/InputComponent";
-import {useState, useEffect} from 'react';
+import TagComponent from "../components/TagComponent";
+import { useState, useEffect } from "react";
 export default function Example() {
   const [inputURI, setInputURI] = useState("https://i.imgur.com/Sf6sfPj.png");
   const [outputURI, setOutputURI] = useState(null);
   const [loading, setLoading] = useState(false);
   const [inputModalOpen, setInputModalOpen] = useState(false);
+  const [tags, setTags] = useState(null);
 
   useEffect(async () => {
     await initializeONNX();
@@ -29,8 +31,8 @@ export default function Example() {
           <div className="flex-1 flex flex-col min-h-0 bg-gray-100">
             <div className="flex-1 flex flex-col overflow-y-auto">
               <div className="space-y-2 mx-8 grid grid-cols-1">
-                <br/>
-                <br/>
+                <br />
+                <br />
                 <InputComponent
                   inputModalOpen={inputModalOpen}
                   setInputModalOpen={setInputModalOpen}
@@ -42,15 +44,16 @@ export default function Example() {
                   setLoading={setLoading}
                   inputURI={inputURI}
                   setOutputURI={setOutputURI}
+                  setTags={setTags}
                 />
-                <br/>
-                <br/>
-                <hr />
-                <br/>
-                <br/>
-                <div className="text-xl font-bold" style={{ textShadow: "white 0px 2px 4px" }}>Tags</div>
-                <br/>
-
+                {tags != null && (
+                  <>
+                    <br />
+                    <hr />
+                    <br />
+                    <TagComponent tags={tags}/>
+                  </>
+                )}
               </div>
             </div>
           </div>

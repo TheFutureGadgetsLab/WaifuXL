@@ -80,14 +80,14 @@ export function buildImageFromND(nd, height, width) {
   return canvas.toDataURL();
 }
 
-export async function  upScaleFromURI(uri, setLoading) {
+export async function  upScaleFromURI(uri, setLoading, setTags) {
   const inputData = await getPixelsFromInput(uri);
   
   const tagInput  = buildNdarrayFromImage(inputData);
   const tagOutput = await runTagger(tagInput);
   const tags = await getTopTags(tagOutput);
-  console.log(tags);
-
+  setTags(tags);
+  
   const superResInput = buildNdarrayFromImage(inputData);
   const superResOutput = await runSuperRes(superResInput, setLoading);
 
