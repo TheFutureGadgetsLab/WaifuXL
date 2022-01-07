@@ -27,7 +27,7 @@ export default function Example() {
   return (
     <>
       <div>
-        <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
+        <div className="hidden md:flex md:w-80 md:flex-col md:fixed md:inset-y-0 drop-shadow-lg">
           <div className="flex-1 flex flex-col min-h-0 bg-gray-100">
             <div className="flex-1 flex flex-col overflow-y-auto">
               <div className="space-y-2 mx-8 grid grid-cols-1">
@@ -39,19 +39,26 @@ export default function Example() {
                   setInputURI={setInputURI}
                   setOutputURI={setOutputURI}
                 />
+                {outputURI != null ? (
+                  <DownloadComponent
+                    inputURI={inputURI}
+                    outputURI={outputURI}
+                  />
+                ) : (
+                  <RunComponent
+                    setLoading={setLoading}
+                    inputURI={inputURI}
+                    setOutputURI={setOutputURI}
+                    setTags={setTags}
+                  />
+                )}
 
-                <RunComponent
-                  setLoading={setLoading}
-                  inputURI={inputURI}
-                  setOutputURI={setOutputURI}
-                  setTags={setTags}
-                />
                 {tags != null && (
                   <>
                     <br />
                     <hr />
                     <br />
-                    <TagComponent tags={tags}/>
+                    <TagComponent tags={tags} />
                   </>
                 )}
               </div>
@@ -104,13 +111,6 @@ export default function Example() {
                   )}
                 </div>
                 <div className="absolute bottom-0">
-                  {outputURI != null && (
-                    <DownloadComponent
-                      inputURI={inputURI}
-                      outputURI={outputURI}
-                    />
-                  )}
-
                   <TitleComponent loading={loading} />
                 </div>
               </div>

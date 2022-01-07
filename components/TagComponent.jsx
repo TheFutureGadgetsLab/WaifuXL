@@ -17,7 +17,7 @@ const TagComponent = ({ tags }) => {
           {x[0].replace("_", " ")}
           <div className="w-full bg-gray-200 rounded-full" style={{height: "1rem"}}>
             <div
-              className="bg-pink text-xs font-medium p-0.5 text-center leading-none rounded-full"
+              className="bg-blue text-xs font-medium p-0.5 text-center leading-none rounded-full"
               style={{ width: `${Math.round(x[1] * 100)}%` }}
             >
               <span className="text-white">{Math.round(x[1] * 100)}% </span>
@@ -33,18 +33,18 @@ const TagComponent = ({ tags }) => {
         Character
       </div>
       {tags.topChars.map((x) => (
-        <div key={x[0]}>
-          {x[0].replace("_", " ")}
-          <div className="w-full bg-gray-200 rounded-full">
-            <div
-              className="bg-pink text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-l-full"
-              style={{ width: `${Math.round(x[1] * 100)}%` }}
-            >
-              <span className="text-white">{Math.round(x[1] * 100)}% </span>
-            </div>
+        <div className="grid grid-cols-2" key={x[0]}>
+        {x[0].replace("_", " ")}
+        <div className="w-full bg-gray-200 rounded-full" style={{height: "1rem"}}>
+          <div
+            className="bg-blue text-xs font-medium p-0.5 text-center leading-none rounded-full"
+            style={{ width: `${Math.round(x[1] * 100)}%` }}
+          >
+            <span className="text-white">{Math.round(x[1] * 100)}% </span>
           </div>
         </div>
-      ))}
+      </div>
+    ))}
       <br />
       <div
         className="text-xl font-bold"
