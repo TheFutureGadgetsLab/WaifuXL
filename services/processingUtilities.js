@@ -26,13 +26,12 @@ export async function loadTags() {
 // find indices of top k values in ndarray
 export function topK(ndarray, k, startIndex, stopIndex) {
     const values = ndarray.data.slice(startIndex, stopIndex);
-    const indices = new Array(values.length);
-    for (let i = 0; i < values.length; i++) {
-        indices[i] = [i + startIndex, values[i]];
-    }
-    indices.sort((a, b) => b[1] - a[1]);
-    console.log(indices);
-    return indices.slice(0, k);
+    const indices = [...Array(values.length).keys()];
+    indices.sort((a, b) => values[b] - values[a]);
+
+    // zip indices and values into an array of tuples
+    const tuples = indices.map((i) => [i+startIndex, values[i]]);
+    return tuples.slice(0, k);
 }
 
 export async function getTopTags(data) {
