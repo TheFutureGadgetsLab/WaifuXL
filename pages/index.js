@@ -86,18 +86,16 @@ export default function Example() {
                   {outputURI == null ? (
                     <img
                       src={inputURI}
-                      className={"border-pink"}
+                      className={"border-pink h-4/6"}
                       style={{
-                        height: 500,
                         borderWidth: "4px",
                         backgroundColor: "white",
                       }}
                     />
                   ) : (
                     <ReactCompareSlider
-                      className={"border-pink"}
+                      className={"border-pink h-4/6"}
                       style={{
-                        height: 500,
                         borderWidth: "4px",
                         backgroundColor: "white",
                       }}
