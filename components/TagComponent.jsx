@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import Tooltip from "./TooltipComponent";
 
 function titleCase(str) {
   return str
@@ -10,13 +11,36 @@ function titleCase(str) {
     .join(" ");
 }
 
-function cleanString(str) {
-  const split =
-    str.replace(/_/g, " ").split("(")[0].length > 10
-      ? str.replace(/_/g, " ").split("(")[0].slice(0, 10) + "..."
-      : str.replace(/_/g, " ").split("(")[0];
+function truncateString(str) {
+  str = cleanString(str);
+  const split = str.length > 10 ? str.slice(0, 10) + "..." : str;
+  return split;
+}
 
-  return titleCase(split);
+function cleanString(str) {
+  return titleCase(str.replace(/_/g, " ").split("(")[0]);
+}
+
+function buildTagLine(x) {
+  return (
+    <div className="grid grid-cols-7 font-mono h-4" key={x[0]}>
+      <span className="col-span-3">
+        <Tooltip tooltipText={cleanString(x[0])}>
+          {truncateString(x[0])}{" "}
+        </Tooltip>
+      </span>
+      <div
+        className="w-full bg-gray-200 rounded-full col-span-3"
+        style={{ height: "1rem" }}
+      >
+        <div
+          className="bg-blue text-xs font-medium p-0.5 text-center leading-none rounded-full"
+          style={{ width: `${Math.round(x[1] * 100)}%`, height: "1rem" }}
+        ></div>
+      </div>
+      <span className="text-black ml-3">{Math.round(x[1] * 100)}% </span>
+    </div>
+  );
 }
 
 const TagComponent = ({ tags }) => {
@@ -32,21 +56,7 @@ const TagComponent = ({ tags }) => {
       >
         Tags
       </div>
-      {tags.topDesc.map((x) => (
-        <div className="grid grid-cols-7 font-mono h-4" key={x[0]}>
-          <span className="col-span-3">{cleanString(x[0])}</span>
-          <div
-            className="w-full bg-gray-200 rounded-full col-span-3"
-            style={{ height: "1rem" }}
-          >
-            <div
-              className="bg-blue text-xs font-medium p-0.5 text-center leading-none rounded-full"
-              style={{ width: `${Math.round(x[1] * 100)}%`, height: "1rem" }}
-            ></div>
-          </div>
-          <span className="text-black ml-3">{Math.round(x[1] * 100)}% </span>
-        </div>
-      ))}
+      {tags.topDesc.map((x) => buildTagLine(x))}
       <br />
       <div
         className="text-xl font-bold"
@@ -54,21 +64,7 @@ const TagComponent = ({ tags }) => {
       >
         Character
       </div>
-      {tags.topChars.map((x) => (
-        <div className="grid grid-cols-7 font-mono h-4" key={x[0]}>
-          <span className="col-span-3">{cleanString(x[0])}</span>
-          <div
-            className="w-full bg-gray-200 rounded-full col-span-3"
-            style={{ height: "1rem" }}
-          >
-            <div
-              className="bg-blue text-xs font-medium p-0.5 text-center leading-none rounded-full"
-              style={{ width: `${Math.round(x[1] * 100)}%`, height: "1rem" }}
-            ></div>
-          </div>
-          <span className="text-black ml-3">{Math.round(x[1] * 100)}% </span>
-        </div>
-      ))}
+      {tags.topChars.map((x) => buildTagLine(x))}
       <br />
       <div
         className="text-xl font-bold"
