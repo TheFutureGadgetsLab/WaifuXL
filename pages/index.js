@@ -74,12 +74,12 @@ export default function Example() {
               <div
                 className="flex flex-col items-center min-h-screen z-0"
                 style={{
-                  backgroundImage: `url("bg.png")`,
+                  backgroundImage: `url("bg.svg")`,
                   backgroundSize: "cover",
                 }}
               >
                 <NavbarComponent />
-                <div className="flex h-screen items-center justify-center">
+                <div className="flex h-screen items-center justify-center drop-shadow-2xl">
                   {outputURI == null ? (
                     <img
                       src={inputURI}

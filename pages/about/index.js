@@ -4,7 +4,7 @@ export default function About() {
   return (
     <div
       className="flex flex-col items-center min-h-screen"
-      style={{ backgroundImage: `url("bg.png")`, backgroundSize: "cover" }}
+      style={{ backgroundImage: `url("bg.svg")`, backgroundSize: "cover" }}
     >
       <NavbarComponent />
       <main className="flex flex-col items-center flex-shrink justify-center w-full p-10 text-center">

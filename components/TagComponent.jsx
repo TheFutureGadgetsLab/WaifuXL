@@ -63,7 +63,7 @@ const TagComponent = ({ tags }) => {
         className="text-xl font-bold"
         style={{ textShadow: "white 0px 2px 4px" }}
       >
-        Character
+        Characters
       </div>
       {tags.topChars.map((x) => buildTagLine(x))}
 
