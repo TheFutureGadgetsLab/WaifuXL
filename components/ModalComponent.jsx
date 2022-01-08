@@ -1,11 +1,17 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   getDataURIFromInput,
   getDataURIFromFileUpload,
 } from "../services/imageUtilities";
 
-function ModalComponent({ setInputModalOpen, setInputURI, setOutputURI, inputURI }) {
+function ModalComponent({
+  setInputModalOpen,
+  setInputURI,
+  setOutputURI,
+  inputURI,
+}) {
   const divRef = useRef(null);
+  const [previewURI, setPreviewURI] = useState(inputURI);
 
   function focusDiv() {
     divRef.current.focus();
@@ -16,7 +22,7 @@ function ModalComponent({ setInputModalOpen, setInputURI, setOutputURI, inputURI
     focusDiv();
     document.addEventListener("paste", async (e) => {
       if (e.clipboardData.getData("text/plain")) {
-        setInputURI(
+        setPreviewURI(
           await getDataURIFromInput(e.clipboardData.getData("text/plain"))
         );
       } else {
@@ -26,7 +32,7 @@ function ModalComponent({ setInputModalOpen, setInputURI, setOutputURI, inputURI
             var item = items[index];
             if (item.kind === "file") {
               var blob = item.getAsFile();
-              getDataURIFromFileUpload(blob, setInputURI);
+              getDataURIFromFileUpload(blob, setPreviewURI);
             }
           }
         } catch {
@@ -46,7 +52,7 @@ function ModalComponent({ setInputModalOpen, setInputURI, setOutputURI, inputURI
       ref={divRef}
       onPaste={async (e) => {
         if (e.clipboardData.getData("text/plain")) {
-          setInputURI(
+          setPreviewURI(
             await getDataURIFromInput(e.clipboardData.getData("text/plain"))
           );
         } else {
@@ -57,7 +63,7 @@ function ModalComponent({ setInputModalOpen, setInputURI, setOutputURI, inputURI
               var item = items[index];
               if (item.kind === "file") {
                 var blob = item.getAsFile();
-                getDataURIFromFileUpload(blob, setInputURI);
+                getDataURIFromFileUpload(blob, setPreviewURI);
               }
             }
           } catch {
@@ -84,20 +90,14 @@ function ModalComponent({ setInputModalOpen, setInputURI, setOutputURI, inputURI
 
         <div className="inline-block align-bottom bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
           <label className="flex flex-col items-center justify-center cursor-pointer h-96 m-3">
-            <label className="flex-col flex items-center px-4 py-6 tracking-wide cursor-pointer">
-              {/* <span className="mt-2 text-gray-400">
-                select, drag, or paste file
-              </span>
-              <svg
-                className="w-8 h-8 text-gray-400"
-                fill="currentColor"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-              >
-                <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
-              </svg> */}
+            <label className="flex items-center px-4 py-6 tracking-wide cursor-pointer">
               <img
-                src={inputURI}
+                src={previewURI}
+                style={{
+                  "max-height": "20rem",
+                  "min-height": "15rem",
+                  "min-width": "15rem",
+                }}
                 className={"mt-10 drop-shadow-2xl border-pink border-2"}
               />
 
@@ -105,7 +105,7 @@ function ModalComponent({ setInputModalOpen, setInputURI, setOutputURI, inputURI
                 type="file"
                 className="hidden"
                 onChange={(e) => {
-                  getDataURIFromFileUpload(e.target.files[0], setInputURI);
+                  getDataURIFromFileUpload(e.target.files[0], setPreviewURI);
                   setOutputURI(null);
                 }}
               />
@@ -117,7 +117,7 @@ function ModalComponent({ setInputModalOpen, setInputURI, setOutputURI, inputURI
               <select
                 className="form-select rounded mt-1 block w-full p-3 text-white bg-pink"
                 onInput={async (inp) => {
-                  setInputURI(await getDataURIFromInput(inp.target.value));
+                  setPreviewURI(await getDataURIFromInput(inp.target.value));
                   setOutputURI(null);
                 }}
               >
@@ -142,7 +142,10 @@ function ModalComponent({ setInputModalOpen, setInputURI, setOutputURI, inputURI
             <button
               type="button"
               className="rounded-md absolute m-3 right-0 bottom-0 border border-transparent shadow-sm px-4 py-1 text-base font-medium text-white h-12 focus:outline-none focus:ring-2 focus:ring-offset-2 bg-blue"
-              onClick={() => setInputModalOpen(false)}
+              onClick={() => {
+                setInputURI(previewURI);
+                setInputModalOpen(false);
+              }}
             >
               Done
             </button>
