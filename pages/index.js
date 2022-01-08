@@ -29,7 +29,7 @@ export default function Example() {
   return (
     <>
       <div>
-        <div className="hidden md:flex md:w-80 md:flex-col md:fixed md:inset-y-0">
+        <div className="hidden md:flex md:w-80 md:flex-col md:fixed md:inset-y-0 z-10">
           <div className="flex-1 flex flex-col min-h-0 bg-gray-100">
             <div className="flex-1 flex flex-col overflow-y-auto">
               <div className="">
@@ -69,11 +69,13 @@ export default function Example() {
             </div>
           </div>
         </div>
+
+        {/* Image display, title, navbar */}
         <div className="flex flex-col">
           <main className="flex-1">
             <div className="py-6">
               <div
-                className="flex flex-col items-center min-h-screen z-0"
+                className="flex flex-col items-center min-h-screen relative"
                 style={{
                   backgroundImage: `url("bg.svg")`,
                   backgroundSize: "cover",

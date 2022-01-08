@@ -24,7 +24,7 @@ function cleanString(str) {
 function buildTagLine(x) {
   return (
     <div className="grid grid-cols-2 font-mono h-4" key={x[0]}>
-      <span className="z-10">
+      <span className="">
         <Tooltip tooltipText={cleanString(x[0])}>
           {truncateString(x[0])}{" "}
         </Tooltip>

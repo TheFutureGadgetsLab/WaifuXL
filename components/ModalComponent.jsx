@@ -44,7 +44,7 @@ function ModalComponent({
 
   return (
     <div
-      className="fixed inset-0 overflow-y-auto"
+      className="fixed inset-0 overflow-y-auto z-20"
       aria-labelledby="modal-title"
       role="dialog"
       aria-modal="true"
