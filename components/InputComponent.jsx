@@ -8,14 +8,6 @@ const InputComponent = ({
 }) => {
   return (
     <>
-      {inputModalOpen && (
-        <ModalComponent
-          setInputModalOpen={setInputModalOpen}
-          setInputURI={setInputURI}
-          setOutputURI={setOutputURI}
-          inputURI={inputURI}
-        />
-      )}
       <button
         type="button"
         className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center"
@@ -38,6 +30,14 @@ const InputComponent = ({
         </svg>{" "}
         <span>Choose Image</span>
       </button>
+      {inputModalOpen && (
+        <ModalComponent
+          setInputModalOpen={setInputModalOpen}
+          setInputURI={setInputURI}
+          setOutputURI={setOutputURI}
+          inputURI={inputURI}
+        />
+      )}
     </>
   );
 };

@@ -88,19 +88,10 @@ function ModalComponent({
           &#8203;
         </span>
 
-        <div className="inline-block align-bottom bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-          <label className="flex flex-col items-center justify-center cursor-pointer h-96 m-3">
+        <div className="inline-block align-bottom bg-white rounded-lg shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+          <label className="flex flex-col items-center justify-center cursor-pointer h-96 m-3 bg-contain bg-origin-content p-4 bg-no-repeat bg-center" 
+                  style={{backgroundImage: `url(${previewURI})`, boxShadow: "inset 0px 0px 12px #00000050"}}>
             <label className="flex items-center px-4 py-6 tracking-wide cursor-pointer">
-              <img
-                src={previewURI}
-                style={{
-                  "max-height": "20rem",
-                  "min-height": "15rem",
-                  "min-width": "15rem",
-                }}
-                className={"mt-10 drop-shadow-2xl border-pink border-2"}
-              />
-
               <input
                 type="file"
                 className="hidden"
