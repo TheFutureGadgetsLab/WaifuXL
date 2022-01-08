@@ -7,6 +7,8 @@ const InputComponent = ({
   inputURI,
   previewURI,
   setPreviewURI,
+  setFileName,
+  setTags,
 }) => {
   return (
     <>
@@ -40,6 +42,8 @@ const InputComponent = ({
           inputURI={inputURI}
           previewURI={previewURI}
           setPreviewURI={setPreviewURI}
+          setFileName={setFileName}
+          setTags={setTags}
         />
       )}
     </>

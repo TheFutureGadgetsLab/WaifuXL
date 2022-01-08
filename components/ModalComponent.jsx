@@ -11,6 +11,8 @@ function ModalComponent({
   inputURI,
   previewURI,
   setPreviewURI,
+  setFileName,
+  setTags,
 }) {
   const divRef = useRef(null);
 
@@ -33,6 +35,7 @@ function ModalComponent({
       ref={divRef}
       onKeyDown={(e) => {
         setInputModalOpen(e.key != "Escape");
+        setFileName();
       }}
     >
       <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -65,6 +68,7 @@ function ModalComponent({
                 className="hidden"
                 onChange={(e) => {
                   getDataURIFromFileUpload(e.target.files[0], setPreviewURI);
+                  setFileName(e.target.files[0].name.split(".")[0]);
                   setOutputURI(null);
                 }}
               />
@@ -80,29 +84,31 @@ function ModalComponent({
                 id="preset-select"
                 className="form-select rounded mt-1 block w-full p-3 bg-blue text-white"
                 onInput={async (inp) => {
-                  setPreviewURI(await getDataURIFromInput(inp.target.value));
+                  const [name, url] = inp.target.value.split("|");
+                  setPreviewURI(await getDataURIFromInput(url));
+                  setFileName(`example_${name}`);
                   setOutputURI(null);
                 }}
               >
-                <option value="https://i.imgur.com/Sf6sfPj.png">
+                <option value="ozen|https://i.imgur.com/Sf6sfPj.png">
                   Ozen (Best Girl)
                 </option>
-                <option value="https://i.imgur.com/v9Lwral.png">
+                <option value="megumin1|https://i.imgur.com/v9Lwral.png">
                   Megumin (Literally a child)
                 </option>
-                <option value="https://i.imgur.com/lgTo3BX.png">
+                <option value="megumin2|https://i.imgur.com/lgTo3BX.png">
                   Megumin (small) (Age is just a number)
                 </option>
-                <option value="https://i.imgur.com/yhIwVjZ.jpeg">
+                <option value="aqua|https://i.imgur.com/yhIwVjZ.jpeg">
                   Aqua (Best Girl)
                 </option>
-                <option value="https://i.imgur.com/9MQHsx8.jpeg">
+                <option value="darkness|https://i.imgur.com/9MQHsx8.jpeg">
                   Darkness (Worst Girl)
                 </option>
               </select>
             </label>
 
-            <button
+            <button id="done-button"
               type="button"
               className="rounded-md absolute m-3 right-0 bottom-0 text-blue shadow-sm px-4 py-1 
                 text-base font-medium h-12 focus:outline-none focus:ring-2 focus:ring-offset-2 
@@ -110,6 +116,7 @@ function ModalComponent({
               onClick={() => {
                 setInputURI(previewURI);
                 setOutputURI(null);
+                setTags(null);
                 setInputModalOpen(false);
               }}
             >

@@ -19,6 +19,18 @@ export default function Example() {
   const [inputModalOpen, setInputModalOpen] = useState(false);
   const [tags, setTags] = useState(null);
   const [isInitialized, setIsInitialized] = useState(false);
+  var fileName = null;
+  var lastFileName = null;
+
+  function setFileName(name=null) {
+    if (name == null) {
+      fileName = lastFileName;
+    } else {
+      fileName = name;
+    }
+    console.debug("set filename to", fileName);
+  }
+
   useEffect(async () => {
     document.body.style.overflow = "hidden";
     await initializeONNX();
@@ -26,27 +38,59 @@ export default function Example() {
     //note: this is the input logic (given some from of URI)
     setInputURI(await getDataURIFromInput(inputURI));
 
-    document.addEventListener("paste", async (e) => {
-      if (e.clipboardData.getData("text/plain")) {
-        setPreviewURI(
-          await getDataURIFromInput(e.clipboardData.getData("text/plain"))
-        );
-      } else {
-        try {
-          var items = (e.clipboardData || e.originalEvent.clipboardData).items;
-          for (var index in items) {
-            var item = items[index];
-            if (item.kind === "file") {
-              var blob = item.getAsFile();
-              getDataURIFromFileUpload(blob, setPreviewURI);
-            }
+    function handleInputFile(items) {
+      try {
+        for (let index in items) {
+          let item = items[index];
+          if (item.kind === "file") {
+            let file = item.getAsFile();
+            setFileName(file.name.split("/").at(-1).split(".")[0]);
+            getDataURIFromFileUpload(file, setPreviewURI);
+            return true;
           }
-        } catch (e) {
-          console.error(e);
-          console.error("Unrecognized paste");
         }
+      } catch (e) {
+        console.error(e);
+        console.error("Unable to handle input image");
+        return false;
       }
-      setInputModalOpen(true);
+    }
+
+    document.addEventListener("paste", async (e) => {
+      console.debug(e);
+      let success = false;
+      if (e.clipboardData.getData("text/plain")) {
+        let url = e.clipboardData.getData("text/plain");
+        setPreviewURI(
+          await getDataURIFromInput(url)
+        );
+        setFileName(url.split("/").at(-1).split(".")[0]);
+        success = true;
+      } else {
+        success = handleInputFile((e.clipboardData || e.originalEvent.clipboardData).items);
+      }
+      if (success) {
+        setInputModalOpen(true);
+      }
+    });
+
+    document.addEventListener("dragenter", (e) => {e.preventDefault();});
+    document.addEventListener("drag", (e) => {e.preventDefault();});
+    document.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "copy";
+    });
+    document.addEventListener("dragend", (e) => {e.preventDefault();});
+    document.addEventListener("dragstart", (e) => {e.preventDefault();});
+
+    document.addEventListener("drop", async (e) => {
+      console.debug("drop event");
+      e.preventDefault();
+      e.stopPropagation();
+      let success = handleInputFile(e.dataTransfer.items);
+      if (success) {
+        setInputModalOpen(true);
+      }
     });
   }, []);
 
@@ -67,11 +111,14 @@ export default function Example() {
                     inputURI={inputURI}
                     previewURI={previewURI}
                     setPreviewURI={setPreviewURI}
+                    setFileName={setFileName}
+                    setTags={setTags}
                   />
                   {outputURI != null ? (
                     <DownloadComponent
                       inputURI={inputURI}
                       outputURI={outputURI}
+                      fileName={fileName}
                     />
                   ) : (
                     isInitialized && (
