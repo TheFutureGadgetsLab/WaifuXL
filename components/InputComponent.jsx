@@ -4,6 +4,7 @@ const InputComponent = ({
   setInputModalOpen,
   setInputURI,
   setOutputURI,
+  inputURI,
 }) => {
   return (
     <>
@@ -12,6 +13,7 @@ const InputComponent = ({
           setInputModalOpen={setInputModalOpen}
           setInputURI={setInputURI}
           setOutputURI={setOutputURI}
+          inputURI={inputURI}
         />
       )}
       <button

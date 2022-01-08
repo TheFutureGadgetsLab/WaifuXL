@@ -4,7 +4,7 @@ import {
   getDataURIFromFileUpload,
 } from "../services/imageUtilities";
 
-function ModalComponent({ setInputModalOpen, setInputURI, setOutputURI }) {
+function ModalComponent({ setInputModalOpen, setInputURI, setOutputURI, inputURI }) {
   const divRef = useRef(null);
 
   function focusDiv() {
@@ -83,9 +83,9 @@ function ModalComponent({ setInputModalOpen, setInputURI, setOutputURI }) {
         </span>
 
         <div className="inline-block align-bottom bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-          <label className="flex flex-col items-center justify-center cursor-pointer hover:bg-blue h-96 m-3 rounded-lg border-2 border-pink border-dashed bg-gray-200">
-            <label className="flex-col flex items-center px-4 py-6 text-blue tracking-wide cursor-pointer hover:bg-blue">
-              <span className="mt-2 text-gray-400">
+          <label className="flex flex-col items-center justify-center cursor-pointer h-96 m-3">
+            <label className="flex-col flex items-center px-4 py-6 tracking-wide cursor-pointer">
+              {/* <span className="mt-2 text-gray-400">
                 select, drag, or paste file
               </span>
               <svg
@@ -95,7 +95,12 @@ function ModalComponent({ setInputModalOpen, setInputURI, setOutputURI }) {
                 viewBox="0 0 20 20"
               >
                 <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
-              </svg>
+              </svg> */}
+              <img
+                src={inputURI}
+                className={"mt-10 drop-shadow-2xl border-pink border-2"}
+              />
+
               <input
                 type="file"
                 className="hidden"
@@ -106,7 +111,7 @@ function ModalComponent({ setInputModalOpen, setInputURI, setOutputURI }) {
               />
             </label>
           </label>
-          <div className="p-3 flex justify-between relative">
+          <div className="mt-10 p-3 flex justify-between relative">
             <label>
               <span className="text-gray-700">Preset Images</span>
               <select

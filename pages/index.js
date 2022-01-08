@@ -39,6 +39,7 @@ export default function Example() {
                     setInputModalOpen={setInputModalOpen}
                     setInputURI={setInputURI}
                     setOutputURI={setOutputURI}
+                    inputURI={inputURI}
                   />
                   {outputURI != null ? (
                     <DownloadComponent
@@ -79,24 +80,16 @@ export default function Example() {
                 }}
               >
                 <NavbarComponent />
-                <div className="flex h-screen items-center justify-center drop-shadow-2xl">
+                <div className="flex h-screen items-center justify-center">
                   {outputURI == null ? (
                     <img
                       src={inputURI}
-                      className={"border-pink h-4/6"}
-                      style={{
-                        borderWidth: "4px",
-                        backgroundColor: "white",
-                      }}
+                      className={"border-pink border-4 h-4/6"}
                     />
                   ) : (
                     <ReactCompareSlider
-                      className={"border-pink h-4/6"}
-                      style={{
-                        borderWidth: "4px",
-                        backgroundColor: "white",
-                      }}
-                      itemOne={
+                    className={"border-pink border-4 h-4/6"}
+                    itemOne={
                         <ReactCompareSliderImage
                           src={inputURI}
                           alt="Image one"
