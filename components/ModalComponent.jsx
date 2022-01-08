@@ -9,9 +9,10 @@ function ModalComponent({
   setInputURI,
   setOutputURI,
   inputURI,
+  previewURI,
+  setPreviewURI,
 }) {
   const divRef = useRef(null);
-  const [previewURI, setPreviewURI] = useState(inputURI);
 
   function focusDiv() {
     divRef.current.focus();
@@ -20,26 +21,6 @@ function ModalComponent({
   useEffect(async () => {
     // Update the document title using the browser API
     focusDiv();
-    document.addEventListener("paste", async (e) => {
-      if (e.clipboardData.getData("text/plain")) {
-        setPreviewURI(
-          await getDataURIFromInput(e.clipboardData.getData("text/plain"))
-        );
-      } else {
-        try {
-          var items = (e.clipboardData || e.originalEvent.clipboardData).items;
-          for (var index in items) {
-            var item = items[index];
-            if (item.kind === "file") {
-              var blob = item.getAsFile();
-              getDataURIFromFileUpload(blob, setPreviewURI);
-            }
-          }
-        } catch {
-          console.log("Unrecognized paste");
-        }
-      }
-    });
   }, [divRef]);
 
   return (
@@ -50,27 +31,6 @@ function ModalComponent({
       aria-modal="true"
       tabIndex="-1"
       ref={divRef}
-      onPaste={async (e) => {
-        if (e.clipboardData.getData("text/plain")) {
-          setPreviewURI(
-            await getDataURIFromInput(e.clipboardData.getData("text/plain"))
-          );
-        } else {
-          try {
-            var items = (e.clipboardData || e.originalEvent.clipboardData)
-              .items;
-            for (var index in items) {
-              var item = items[index];
-              if (item.kind === "file") {
-                var blob = item.getAsFile();
-                getDataURIFromFileUpload(blob, setPreviewURI);
-              }
-            }
-          } catch {
-            console.log("Unrecognized paste");
-          }
-        }
-      }}
       onKeyDown={(e) => {
         setInputModalOpen(e.key != "Escape");
       }}
@@ -149,6 +109,7 @@ function ModalComponent({
                 border-blue border-2 bg-white hover:bg-blue hover:text-white"
               onClick={() => {
                 setInputURI(previewURI);
+                setOutputURI(null);
                 setInputModalOpen(false);
               }}
             >

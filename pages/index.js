@@ -1,4 +1,4 @@
-import { getDataURIFromInput } from "../services/imageUtilities";
+import { getDataURIFromInput, getDataURIFromFileUpload } from "../services/imageUtilities";
 import { initializeONNX } from "../services/onnxBackend";
 import {
   ReactCompareSlider,
@@ -14,6 +14,7 @@ import { useState, useEffect } from "react";
 export default function Example() {
   const [inputURI, setInputURI] = useState("https://i.imgur.com/Sf6sfPj.png");
   const [outputURI, setOutputURI] = useState(null);
+  const [previewURI, setPreviewURI] = useState("https://i.imgur.com/Sf6sfPj.png");
   const [loading, setLoading] = useState(false);
   const [inputModalOpen, setInputModalOpen] = useState(false);
   const [tags, setTags] = useState(null);
@@ -24,7 +25,31 @@ export default function Example() {
     setIsInitialized(true);
     //note: this is the input logic (given some from of URI)
     setInputURI(await getDataURIFromInput(inputURI));
+
+    document.addEventListener("paste", async (e) => {
+      if (e.clipboardData.getData("text/plain")) {
+        setPreviewURI(
+          await getDataURIFromInput(e.clipboardData.getData("text/plain"))
+        );
+      } else {
+        try {
+          var items = (e.clipboardData || e.originalEvent.clipboardData).items;
+          for (var index in items) {
+            var item = items[index];
+            if (item.kind === "file") {
+              var blob = item.getAsFile();
+              getDataURIFromFileUpload(blob, setPreviewURI);
+            }
+          }
+        } catch (e) {
+          console.error(e);
+          console.error("Unrecognized paste");
+        }
+      }
+      setInputModalOpen(true);
+    });
   }, []);
+
 
   return (
     <>
@@ -40,6 +65,8 @@ export default function Example() {
                     setInputURI={setInputURI}
                     setOutputURI={setOutputURI}
                     inputURI={inputURI}
+                    previewURI={previewURI}
+                    setPreviewURI={setPreviewURI}
                   />
                   {outputURI != null ? (
                     <DownloadComponent

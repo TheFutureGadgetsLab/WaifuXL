@@ -5,6 +5,8 @@ const InputComponent = ({
   setInputURI,
   setOutputURI,
   inputURI,
+  previewURI,
+  setPreviewURI,
 }) => {
   return (
     <>
@@ -36,6 +38,8 @@ const InputComponent = ({
           setInputURI={setInputURI}
           setOutputURI={setOutputURI}
           inputURI={inputURI}
+          previewURI={previewURI}
+          setPreviewURI={setPreviewURI}
         />
       )}
     </>

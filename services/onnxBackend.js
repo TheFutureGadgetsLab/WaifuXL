@@ -46,7 +46,7 @@ export async function runSuperRes(imageArray, setLoading) {
         setLoading(false);
     } catch (e) {
         setLoading(false);
-        console.log("Failed to run super resolution");
+        console.error("Failed to run super resolution");
         console.log(e)
     }    
     console.timeEnd('run_super_res');
@@ -67,7 +67,7 @@ export async function runTagger(imageArray) {
         const output = await session.run(feeds);
         results = output.output;
     } catch (e) {
-        console.log("Failed to run tagger");
+        console.error("Failed to run tagger");
         console.log(e)
     }    
     console.timeEnd('run_tagger')
