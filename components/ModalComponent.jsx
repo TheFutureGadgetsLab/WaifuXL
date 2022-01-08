@@ -89,6 +89,7 @@ function ModalComponent({
         </span>
 
         <div className="inline-block align-bottom bg-white rounded-lg shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+          <span className="block text-gray-700 pt-3">Click preview to open file dialogue</span>
           <label className="flex flex-col items-center justify-center cursor-pointer h-96 m-3 bg-contain bg-origin-content p-4 bg-no-repeat bg-center" 
                   style={{backgroundImage: `url(${previewURI})`, boxShadow: "inset 0px 0px 12px #00000050"}}>
             <label className="flex items-center px-4 py-6 tracking-wide cursor-pointer">
@@ -102,11 +103,11 @@ function ModalComponent({
               />
             </label>
           </label>
-          <div className="mt-10 p-3 flex justify-between relative">
+          <div id="preset-menu" className="mt-10 p-3 flex justify-between relative">
             <label>
               <span className="text-gray-700">Preset Images</span>
-              <select
-                className="form-select rounded mt-1 block w-full p-3 text-white bg-pink"
+              <select id="preset-select"
+                className="form-select rounded mt-1 block w-full p-3 bg-blue text-white"
                 onInput={async (inp) => {
                   setPreviewURI(await getDataURIFromInput(inp.target.value));
                   setOutputURI(null);
