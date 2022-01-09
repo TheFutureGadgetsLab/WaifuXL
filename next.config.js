@@ -11,7 +11,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   assetPrefix: ".",
-  basePath: isProd ? "/WaifuXLTmp" : "",
+  basePath: isProd ? "/WaifuXL" : "",
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Important: return the modified config
     config.plugins.push(
