@@ -9,13 +9,25 @@ function sleep (time) {
 }
 
 export async function initializeONNX() {
-    ort.env.wasm.numThreads = navigator.hardwareConcurrency;
+    ort.env.wasm.numThreads = navigator.hardwareConcurrency / 2;
     ort.env.wasm.simd       = true;
     ort.env.wasm.proxy      = true;
 
     console.log("Initializing session");
-    superSession = await ort.InferenceSession.create("./superRes.onnx", ['wasm']);
-    tagSession = await ort.InferenceSession.create("./tagger.onnx", ['wasm']);
+    superSession = await ort.InferenceSession.create("./superRes.onnx", {
+        executionProviders: ["wasm"],
+        graphOptimizationLevel: 'all',
+        enableCpuMemArena: true,
+        enableMemPattern: true,
+        executionMode: 'parallel',
+    });
+    tagSession = await ort.InferenceSession.create("./tagger.onnx", {
+        executionProviders: ["wasm"],
+        graphOptimizationLevel: 'all',
+        enableCpuMemArena: true,
+        enableMemPattern: true,
+        executionMode: 'parallel',
+    });
 
     // Needed because WASM workers are created async, wait for them
     // to be ready
