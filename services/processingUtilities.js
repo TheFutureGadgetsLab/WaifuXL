@@ -17,7 +17,7 @@ export function buildNdarrayFromImageOutput(data, height, width) {
 }
 
 export async function loadTags() {
-    const tags = await fetch("/tags.json");
+    const tags = await fetch("./tags.json");
     const tagsJson = await tags.json();
     const tagsArray = tagsJson.map((tag) => tag[1]);
     return tagsArray;

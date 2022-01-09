@@ -13,15 +13,18 @@ export async function initializeONNX() {
     ort.env.wasm.simd       = true;
     ort.env.wasm.proxy      = true;
 
+    const superBuffer = await fetchMyModel('./superRes.onnx');
+    const tagBuffer = await fetchMyModel('./tagger.onnx');
+
     console.log("Initializing session");
-    superSession = await ort.InferenceSession.create("./superRes.onnx", {
+    superSession = await ort.InferenceSession.create(superBuffer, {
         executionProviders: ["wasm"],
         graphOptimizationLevel: 'all',
         enableCpuMemArena: true,
         enableMemPattern: true,
         executionMode: 'parallel',
     });
-    tagSession = await ort.InferenceSession.create("./tagger.onnx", {
+    tagSession = await ort.InferenceSession.create(tagBuffer, {
         executionProviders: ["wasm"],
         graphOptimizationLevel: 'all',
         enableCpuMemArena: true,
@@ -85,4 +88,12 @@ export async function runTagger(imageArray) {
     console.timeEnd('run_tagger')
     console.log("Tagging done");
     return results;
+}
+
+async function fetchMyModel(filepathOrUri) {
+    // use fetch to read model file (browser) as ArrayBuffer
+    if (typeof fetch !== 'undefined') {
+        const response = await fetch(filepathOrUri);
+        return await response.arrayBuffer();
+    }
 }

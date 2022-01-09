@@ -1,3 +1,4 @@
+const isProd = process.env.NODE_ENV === "production";
 /**
  * @type {import('next').NextConfig}
  */
@@ -9,6 +10,8 @@ const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
+  assetPrefix: ".",
+  basePath: isProd ? "/WaifuXLTmp" : "",
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Important: return the modified config
     config.plugins.push(
@@ -22,7 +25,7 @@ module.exports = {
         ],
       })
     );
-    
+
     return config;
   },
 };

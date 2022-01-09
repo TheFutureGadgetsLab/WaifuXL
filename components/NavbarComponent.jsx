@@ -9,20 +9,20 @@ const NavbarComponent = () => {
             <div className="flex px-10 space-x-10">
               <div
                 className="flex items-center space-x-2"
-                onClick={() => Router.push("/about")}
+                onClick={() => Router.push("./about")}
               >
                 <span className="text-2xl font-semibold text-black cursor-pointer">About</span>
               </div>
               <div
                 className="text-3xl font-bold cursor-pointer text-pink"
-                onClick={() => Router.push("/")}
+                onClick={() => Router.push("./")}
               >
                 WaifuXL
               </div>
 
               <div
                 className="flex items-center space-x-2"
-                onClick={() => Router.push("/donate")}
+                onClick={() => Router.push("./donate")}
               >
                 <span className="text-2xl font-semibold text-black cursor-pointer">Donate</span>
               </div>
