@@ -1,4 +1,7 @@
-import { getDataURIFromInput, getDataURIFromFileUpload } from "../services/imageUtilities";
+import {
+  getDataURIFromInput,
+  getDataURIFromFileUpload,
+} from "../services/imageUtilities";
 import { initializeONNX } from "../services/onnxBackend";
 import {
   ReactCompareSlider,
@@ -14,7 +17,9 @@ import { useState, useEffect } from "react";
 export default function Example() {
   const [inputURI, setInputURI] = useState("https://i.imgur.com/Sf6sfPj.png");
   const [outputURI, setOutputURI] = useState(null);
-  const [previewURI, setPreviewURI] = useState("https://i.imgur.com/Sf6sfPj.png");
+  const [previewURI, setPreviewURI] = useState(
+    "https://i.imgur.com/Sf6sfPj.png"
+  );
   const [loading, setLoading] = useState(false);
   const [inputModalOpen, setInputModalOpen] = useState(false);
   const [tags, setTags] = useState(null);
@@ -22,7 +27,7 @@ export default function Example() {
   var fileName = null;
   var lastFileName = null;
 
-  function setFileName(name=null) {
+  function setFileName(name = null) {
     if (name == null) {
       fileName = lastFileName;
     } else {
@@ -61,27 +66,35 @@ export default function Example() {
       let success = false;
       if (e.clipboardData.getData("text/plain")) {
         let url = e.clipboardData.getData("text/plain");
-        setPreviewURI(
-          await getDataURIFromInput(url)
-        );
+        setPreviewURI(await getDataURIFromInput(url));
         setFileName(url.split("/").at(-1).split(".")[0]);
         success = true;
       } else {
-        success = handleInputFile((e.clipboardData || e.originalEvent.clipboardData).items);
+        success = handleInputFile(
+          (e.clipboardData || e.originalEvent.clipboardData).items
+        );
       }
       if (success) {
         setInputModalOpen(true);
       }
     });
 
-    document.addEventListener("dragenter", (e) => {e.preventDefault();});
-    document.addEventListener("drag", (e) => {e.preventDefault();});
+    document.addEventListener("dragenter", (e) => {
+      e.preventDefault();
+    });
+    document.addEventListener("drag", (e) => {
+      e.preventDefault();
+    });
     document.addEventListener("dragover", (e) => {
       e.preventDefault();
       e.dataTransfer.dropEffect = "copy";
     });
-    document.addEventListener("dragend", (e) => {e.preventDefault();});
-    document.addEventListener("dragstart", (e) => {e.preventDefault();});
+    document.addEventListener("dragend", (e) => {
+      e.preventDefault();
+    });
+    document.addEventListener("dragstart", (e) => {
+      e.preventDefault();
+    });
 
     document.addEventListener("drop", async (e) => {
       console.debug("drop event");
@@ -93,7 +106,6 @@ export default function Example() {
       }
     });
   }, []);
-
 
   return (
     <>
@@ -121,14 +133,13 @@ export default function Example() {
                       fileName={fileName}
                     />
                   ) : (
-                    isInitialized && (
-                      <RunComponent
-                        setLoading={setLoading}
-                        inputURI={inputURI}
-                        setOutputURI={setOutputURI}
-                        setTags={setTags}
-                      />
-                    )
+                    <RunComponent
+                      setLoading={setLoading}
+                      inputURI={inputURI}
+                      setOutputURI={setOutputURI}
+                      setTags={setTags}
+                      isInitialized={isInitialized}
+                    />
                   )}
                 </div>
                 {tags != null && (
@@ -164,8 +175,8 @@ export default function Example() {
                     />
                   ) : (
                     <ReactCompareSlider
-                    className={"border-pink border-4 h-4/6"}
-                    itemOne={
+                      className={"border-pink border-4 h-4/6"}
+                      itemOne={
                         <ReactCompareSliderImage
                           src={inputURI}
                           alt="Image one"

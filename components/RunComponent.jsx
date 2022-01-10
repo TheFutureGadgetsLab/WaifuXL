@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { upScaleFromURI } from "../services/processingUtilities";
 
-const RunComponent = ({ setLoading, inputURI, setOutputURI, setTags }) => {
+const RunComponent = ({ setLoading, inputURI, setOutputURI, setTags, isInitialized }) => {
   const [shouldRun, setShouldRun] = useState(false);
 
   useEffect(async () => {
@@ -21,10 +21,11 @@ const RunComponent = ({ setLoading, inputURI, setOutputURI, setTags }) => {
 
   return (
     <button
-      className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center"
+      className={`hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg ${isInitialized ? "bg-pink" : "bg-gray-200"} inline-flex items-center`}
       onClick={() => {
         setShouldRun(true);
       }}
+      disabled={!isInitialized}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
