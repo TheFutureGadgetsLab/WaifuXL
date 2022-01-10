@@ -91,19 +91,19 @@ function ModalComponent({
                 }}
               >
                 <option value="ozen|https://i.imgur.com/Sf6sfPj.png">
-                  Ozen (Best Girl)
+                  Ozen "The Immovable"
                 </option>
-                <option value="megumin1|https://i.imgur.com/v9Lwral.png">
-                  Megumin (Literally a child)
+                <option value="moomin|https://i.imgur.com/9I91yMq.png">
+                  Moomin
                 </option>
-                <option value="megumin2|https://i.imgur.com/lgTo3BX.png">
-                  Megumin (small) (Age is just a number)
+                <option value="megumin|https://i.imgur.com/BKBt6bC.png">
+                  Megumin
                 </option>
                 <option value="aqua|https://i.imgur.com/yhIwVjZ.jpeg">
-                  Aqua (Best Girl)
+                  Aqua
                 </option>
-                <option value="darkness|https://i.imgur.com/9MQHsx8.jpeg">
-                  Darkness (Worst Girl)
+                <option value="natsumi|https://i.imgur.com/yIIl7Z1.png">
+                  Natsumi Kurobe
                 </option>
               </select>
             </label>
