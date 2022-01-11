@@ -38,8 +38,8 @@ export async function getTopTags(data) {
     const tags = await loadTags();
     const flattened = ndarray(data.data, data.dims);
 
-    const topDesc  = topK(flattened, 10, 0, 1000).map((i) => [tags[i[0]], i[1]]);
-    const topChars = topK(flattened, 10, 1000, 2000).map((i) => [tags[i[0]], i[1]]);
+    const topDesc  = topK(flattened, 1000, 0, 1000).map((i) => [tags[i[0]], i[1]]);
+    const topChars = topK(flattened, 1000, 1000, 2000).map((i) => [tags[i[0]], i[1]]);
     const rating   = topK(flattened, 3, 2000, 2003).map((i) => [tags[i[0]], i[1]]);
 
     return { topDesc, topChars, rating };
