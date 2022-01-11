@@ -56,7 +56,7 @@ const TagComponent = ({ tags }) => {
   return (
     <>
       <div
-        className="text-xl font-bold grid grid-cols-6"
+        className="text-xl font-bold grid grid-cols-6 pb-5"
         style={{ textShadow: "white 0px 2px 4px" }}
       >
         <span className="col-span-4">Tags</span>
@@ -89,7 +89,7 @@ const TagComponent = ({ tags }) => {
         .slice(10 * tagPage, 10 * (tagPage + 1))
         .map((x) => buildTagLine(x))}
       <div
-        className="text-xl font-bold grid grid-cols-6 pt-10"
+        className="text-xl font-bold grid grid-cols-6 pt-10 pb-5"
         style={{ textShadow: "white 0px 2px 4px" }}
       >
         <span className="col-span-4">Characters</span>
@@ -122,7 +122,7 @@ const TagComponent = ({ tags }) => {
         .slice(10 * charPage, 10 * (charPage + 1))
         .map((x) => buildTagLine(x))}
       <div
-        className="text-xl font-bold pt-10"
+        className="text-xl font-bold pt-10 pb-5"
         style={{ textShadow: "white 0px 2px 4px" }}
       >
         Explicitness
