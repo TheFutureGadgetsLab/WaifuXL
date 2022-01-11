@@ -22,12 +22,24 @@ function cleanString(str) {
 }
 
 function buildTagLine(x) {
+  const [isHidden, setIsHidden] = useState(true);
+  function handleMouseEnter() {
+    setIsHidden(false);
+  }
+  function handleMouseLeave() {
+    setIsHidden(true);
+  }
+
   return (
     <div className="grid grid-cols-2 font-mono h-4" key={x[0]}>
       <span className="">
-        <Tooltip tooltipText={cleanString(x[0])}>
-          {truncateString(x[0])}{" "}
-        </Tooltip>
+        <Tooltip tooltipText={cleanString(x[0])} isHidden={isHidden}></Tooltip>
+        <span
+          onMouseEnter={(e) => handleMouseEnter()}
+          onMouseLeave={(e) => handleMouseLeave()}
+        >
+          {truncateString(x[0])}
+        </span>
       </span>
       <div
         className="top-1 w-full relative bg-gray-200 rounded-full text-center text-black"
@@ -73,7 +85,9 @@ const TagComponent = ({ tags }) => {
             <path d="M0 0h24v24H0V0z" fill="none" />
             <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
           </svg>
-        ) : <span></span>}
+        ) : (
+          <span></span>
+        )}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="24px"
@@ -108,7 +122,9 @@ const TagComponent = ({ tags }) => {
             <path d="M0 0h24v24H0V0z" fill="none" />
             <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
           </svg>
-        ) : <span></span>}
+        ) : (
+          <span></span>
+        )}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="24px"
