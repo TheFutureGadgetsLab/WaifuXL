@@ -50,9 +50,6 @@ jobs:
           npm run build
           npm run export
 
-      - name: Copy Files
-        run: mv out/static/chunks/pages/*.wasm out/_next/static/chunks/pages/
-
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
