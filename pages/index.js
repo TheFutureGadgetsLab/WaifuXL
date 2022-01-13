@@ -38,10 +38,10 @@ export default function Example() {
 
   useEffect(async () => {
     document.body.style.overflow = "hidden";
+    setInputURI(await getDataURIFromInput(inputURI));
     await initializeONNX();
     setIsInitialized(true);
     //note: this is the input logic (given some from of URI)
-    setInputURI(await getDataURIFromInput(inputURI));
 
     function handleInputFile(items) {
       try {
