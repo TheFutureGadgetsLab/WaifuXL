@@ -118,22 +118,7 @@ export default function Example() {
             <div className="flex-1 flex flex-col min-h-0 bg-gray-100">
               <div className="flex-1 flex flex-col overflow-y-auto">
                 <div className="">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24px"
-                    viewBox="0 0 24 24"
-                    width="24px"
-                    fill="#000000"
-                    className="mt-3 mr-3 float-right"
-                    onClick={(e) => {
-                      setShowSidebar(false);
-                    }}
-                  >
-                    <path d="M0 0h24v24H0V0z" fill="none" />
-                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-                  </svg>
-
-                  <div className="mt-10 mb-10 mx-8 space-y-2 grid grid-cols-1">
+                  <div className="pt-5 mt-10 mb-10 mx-8 space-y-2 grid grid-cols-1">
                     <InputComponent
                       inputModalOpen={inputModalOpen}
                       setInputModalOpen={setInputModalOpen}
@@ -189,12 +174,12 @@ export default function Example() {
                 <NavbarComponent />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  height="24px"
+                  height="32px"
                   viewBox="0 0 24 24"
-                  width="24px"
+                  width="32px"
                   fill="#000000"
-                  className="absolute left-10 top-3"
-                  onClick={e => setShowSidebar(true)}
+                  className="absolute left-5 top-4 z-40"
+                  onClick={e => setShowSidebar(!showSidebar)}
                 >
                   <path d="M0 0h24v24H0V0z" fill="none" />
                   <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
