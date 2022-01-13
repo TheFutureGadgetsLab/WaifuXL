@@ -24,6 +24,8 @@ export default function Example() {
   const [inputModalOpen, setInputModalOpen] = useState(false);
   const [tags, setTags] = useState(null);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(true);
+
   var fileName = null;
   var lastFileName = null;
 
@@ -38,7 +40,7 @@ export default function Example() {
 
   useEffect(async () => {
     document.body.style.overflow = "hidden";
-    console.log("Pushed")
+    console.log("Pushed");
     setInputURI(await getDataURIFromInput(inputURI));
     await initializeONNX();
     setIsInitialized(true);
@@ -111,50 +113,67 @@ export default function Example() {
   return (
     <>
       <div>
-        <div className="w-1/6 flex flex-col fixed inset-y-0 z-10">
-          <div className="flex-1 flex flex-col min-h-0 bg-gray-100">
-            <div className="flex-1 flex flex-col overflow-y-auto">
-              <div className="">
-                <div className="mt-10 mb-10 mx-8 space-y-2 grid grid-cols-1">
-                  <InputComponent
-                    inputModalOpen={inputModalOpen}
-                    setInputModalOpen={setInputModalOpen}
-                    setInputURI={setInputURI}
-                    setOutputURI={setOutputURI}
-                    inputURI={inputURI}
-                    previewURI={previewURI}
-                    setPreviewURI={setPreviewURI}
-                    setFileName={setFileName}
-                    setTags={setTags}
-                  />
-                  {outputURI != null ? (
-                    <DownloadComponent
-                      inputURI={inputURI}
-                      outputURI={outputURI}
-                      fileName={fileName}
-                    />
-                  ) : (
-                    <RunComponent
-                      setLoading={setLoading}
-                      inputURI={inputURI}
+        {showSidebar && (
+          <div className="w-80 flex flex-col fixed inset-y-0 z-10">
+            <div className="flex-1 flex flex-col min-h-0 bg-gray-100">
+              <div className="flex-1 flex flex-col overflow-y-auto">
+                <div className="">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24px"
+                    viewBox="0 0 24 24"
+                    width="24px"
+                    fill="#000000"
+                    className="mt-3 mr-3 float-right"
+                    onClick={(e) => {
+                      setShowSidebar(false);
+                    }}
+                  >
+                    <path d="M0 0h24v24H0V0z" fill="none" />
+                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+                  </svg>
+
+                  <div className="mt-10 mb-10 mx-8 space-y-2 grid grid-cols-1">
+                    <InputComponent
+                      inputModalOpen={inputModalOpen}
+                      setInputModalOpen={setInputModalOpen}
+                      setInputURI={setInputURI}
                       setOutputURI={setOutputURI}
+                      inputURI={inputURI}
+                      previewURI={previewURI}
+                      setPreviewURI={setPreviewURI}
+                      setFileName={setFileName}
                       setTags={setTags}
-                      isInitialized={isInitialized}
                     />
+                    {outputURI != null ? (
+                      <DownloadComponent
+                        inputURI={inputURI}
+                        outputURI={outputURI}
+                        fileName={fileName}
+                      />
+                    ) : (
+                      <RunComponent
+                        setLoading={setLoading}
+                        inputURI={inputURI}
+                        setOutputURI={setOutputURI}
+                        setTags={setTags}
+                        isInitialized={isInitialized}
+                      />
+                    )}
+                  </div>
+                  {tags != null && (
+                    <>
+                      <hr />
+                      <div className="mt-10 mx-3 space-y-2 grid grid-cols-1">
+                        <TagComponent tags={tags} />
+                      </div>
+                    </>
                   )}
                 </div>
-                {tags != null && (
-                  <>
-                    <hr />
-                    <div className="mt-10 mx-3 space-y-2 grid grid-cols-1">
-                      <TagComponent tags={tags} />
-                    </div>
-                  </>
-                )}
               </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Image display, title, navbar */}
         <div className="flex flex-col">
@@ -168,6 +187,18 @@ export default function Example() {
                 }}
               >
                 <NavbarComponent />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24px"
+                  viewBox="0 0 24 24"
+                  width="24px"
+                  fill="#000000"
+                  className="absolute left-10 top-3"
+                  onClick={e => setShowSidebar(true)}
+                >
+                  <path d="M0 0h24v24H0V0z" fill="none" />
+                  <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+                </svg>
                 <div className="flex h-screen items-center justify-center">
                   {outputURI == null ? (
                     <img
