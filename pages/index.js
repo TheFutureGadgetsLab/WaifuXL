@@ -111,7 +111,7 @@ export default function Example() {
   return (
     <>
       <div>
-        <div className="hidden md:flex md:w-1/8 md:flex-col md:fixed md:inset-y-0 z-10">
+        <div className="w-1/6 flex flex-col fixed inset-y-0 z-10">
           <div className="flex-1 flex flex-col min-h-0 bg-gray-100">
             <div className="flex-1 flex flex-col overflow-y-auto">
               <div className="">
