@@ -2,7 +2,7 @@ import Router from "next/router";
 
 const NavbarComponent = () => {
   return (
-    <div className="fixed">
+    <div id="sidebar" className="fixed">
       <header>
         <nav className="">
           <div className="container mx-auto py-4 flex justify-between items-center">

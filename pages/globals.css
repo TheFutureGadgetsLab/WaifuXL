@@ -2,3 +2,18 @@
 @import 'tailwindcss/components';
 @import './base.css';
 @import 'tailwindcss/utilities';
+
+#sidebar {
+    animation-duration: 0.25s;
+    animation-name: slidein;
+}
+  
+@keyframes slidein {
+    from {
+        transform: translateX(-600px);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
