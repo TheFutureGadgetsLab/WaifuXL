@@ -15,9 +15,9 @@ import InputComponent from "../components/InputComponent";
 import TagComponent from "../components/TagComponent";
 import { useState, useEffect } from "react";
 export default function Example() {
-  const [inputURI, setInputURI] = useState("https://i.imgur.com/Sf6sfPj.png");
+  const [inputURI, setInputURI] = useState("./ozen.png");
   const [outputURI, setOutputURI] = useState(null);
-  const [previewURI, setPreviewURI] = useState("https://i.imgur.com/Sf6sfPj.png");
+  const [previewURI, setPreviewURI] = useState("/ozen.png");
   const [loading, setLoading] = useState(false);
   const [inputModalOpen, setInputModalOpen] = useState(false);
   const [tags, setTags] = useState(null);
@@ -39,7 +39,7 @@ export default function Example() {
   useEffect(async () => {
     // const initialURI = require("ozenURL.json");
     document.body.style.overflow = "hidden";
-    setInputURI(await getDataURIFromInput("https://i.imgur.com/Sf6sfPj.png"));
+    setInputURI(await getDataURIFromInput("/ozen.png"));
     await initializeONNX();
     setIsInitialized(true);
     //note: this is the input logic (given some from of URI)
