@@ -38,6 +38,7 @@ export default function Example() {
 
   useEffect(async () => {
     document.body.style.overflow = "hidden";
+    console.log("Pushed")
     setInputURI(await getDataURIFromInput(inputURI));
     await initializeONNX();
     setIsInitialized(true);
