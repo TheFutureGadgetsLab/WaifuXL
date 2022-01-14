@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   getDataURIFromInput,
   getDataURIFromFileUpload,
+  checkDimensions,
 } from "../services/imageUtilities";
 
 function ModalComponent({
@@ -15,7 +16,7 @@ function ModalComponent({
   setTags,
 }) {
   const divRef = useRef(null);
-
+  const [showWarning, setShowWarning] = useState(false);
   function focusDiv() {
     divRef.current.focus();
   }
@@ -24,6 +25,10 @@ function ModalComponent({
     // Update the document title using the browser API
     focusDiv();
   }, [divRef]);
+
+  useEffect(async () => {
+    setShowWarning(await checkDimensions(previewURI));
+  }, [previewURI]);
 
   return (
     <div
@@ -95,6 +100,11 @@ function ModalComponent({
               />
             </label>
           </label>
+          {showWarning ? (
+            <span className="text-red-500 text-sm">Warning: Image is too large (Height/Width must be less than 950)</span>
+          ) : (
+            <span className="text-sm">&#10240;</span>
+          )}
           <div
             id="preset-menu"
             className="mt-10 p-3 flex justify-between relative"
@@ -134,7 +144,8 @@ function ModalComponent({
               type="button"
               className="rounded-md absolute m-3 right-0 bottom-0 text-blue shadow-sm px-4 py-1 
                 text-base font-medium h-12 focus:outline-none focus:ring-2 focus:ring-offset-2 
-                border-blue border-2 bg-white hover:bg-blue hover:text-white"
+                border-blue border-2 bg-white hover:bg-blue hover:text-white disabled:bg-white disabled:text-gray-200 disabled:border-gray-200"
+              disabled={showWarning}
               onClick={() => {
                 setInputURI(previewURI);
                 setOutputURI(null);

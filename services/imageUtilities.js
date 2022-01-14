@@ -30,8 +30,8 @@ export function getPixelsFromInput(input) {
 export function getDataURIFromInput(input) {
   return new Promise(async (resolve, reject) => {
     if (isValidHttpUrl(input)) {
-      let blob = await fetch(input).then(r => r.blob());
-      let dataUrl = await new Promise(resolve => {
+      let blob = await fetch(input).then((r) => r.blob());
+      let dataUrl = await new Promise((resolve) => {
         let reader = new FileReader();
         reader.onload = () => resolve(reader.result);
         reader.readAsDataURL(blob);
@@ -54,7 +54,7 @@ export function getDataURIFromInput(input) {
   });
 }
 
-export function downloadImage(postFix, inputURI, downloadURI, fileName=null) {
+export function downloadImage(postFix, inputURI, downloadURI, fileName = null) {
   let link = document.createElement("a");
   let urlParts = inputURI.split(/[\.\/]/i);
   var imgName = fileName || urlParts[urlParts.length - 2];
@@ -73,4 +73,26 @@ export function getDataURIFromFileUpload(uploaded, setDataURI) {
     setDataURI(fr.result);
   };
   fr.readAsDataURL(file);
+}
+
+export function checkDimensions(uri) {
+  return new Promise(async (resolve, reject) => {
+    {
+      const img = new Image();
+      img.src = uri;
+      img.crossOrigin = "Anonymous";
+      img.onload = function () {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const context = canvas.getContext("2d");
+        context.drawImage(img, 0, 0);
+        if (canvas.width > 950 || canvas.height > 950) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      };
+    }
+  });
 }
