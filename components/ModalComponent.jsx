@@ -103,9 +103,9 @@ function ModalComponent({
             </label>
           </label>
           {showWarning ? (
-            <span className="text-red-500 text-sm">Warning: Image is too large (Height/Width must be less than 950)</span>
+            <span className="text-red-500 text-sm font-bold">Warning: Image is too large <br/> Max dimension: 950 x 950</span>
           ) : (
-            <span className="text-sm">&#10240;</span>
+            <span className="text-sm">&#10240;<br/>&#10240;</span>
           )}
           <div
             id="preset-menu"
