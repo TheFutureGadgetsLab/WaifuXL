@@ -76,6 +76,7 @@ export default function Example() {
         );
       }
       if (success) {
+        setShowSidebar(true);
         setInputModalOpen(true);
       }
     });
@@ -103,6 +104,7 @@ export default function Example() {
       e.stopPropagation();
       let success = handleInputFile(e.dataTransfer.items);
       if (success) {
+        setShowSidebar(true);
         setInputModalOpen(true);
       }
     });
