@@ -93,9 +93,11 @@ function ModalComponent({
                 type="file"
                 className="hidden"
                 onChange={(e) => {
-                  getDataURIFromFileUpload(e.target.files[0], setPreviewURI);
-                  setFileName(e.target.files[0].name.split(".")[0]);
-                  setOutputURI(null);
+                  if (e.target.files[0]) {
+                    getDataURIFromFileUpload(e.target.files[0], setPreviewURI);
+                    setFileName(e.target.files[0].name.split(".")[0]);
+                    setOutputURI(null);  
+                  }
                 }}
               />
             </label>
