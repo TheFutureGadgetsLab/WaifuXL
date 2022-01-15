@@ -68,7 +68,7 @@ function ModalComponent({
               viewBox="0 0 24 24"
               width="24px"
               fill="#000000"
-              className="mt-3 mr-3 float-right"
+              className="mt-3 mr-3 float-right cursor-pointer"
               onClick={(e) => {
                 setInputModalOpen(false);
                 setFileName();
@@ -115,7 +115,7 @@ function ModalComponent({
               <span className="text-gray-700">Preset Images</span>
               <select
                 id="preset-select"
-                className="form-select rounded mt-1 block w-full p-3 bg-blue text-white"
+                className="form-select rounded mt-1 block w-full p-3 bg-blue text-white cursor-pointer"
                 onInput={async (inp) => {
                   const [name, url] = inp.target.value.split("|");
                   setPreviewURI(await getDataURIFromInput(url));

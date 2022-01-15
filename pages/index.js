@@ -178,7 +178,7 @@ export default function Example() {
                   viewBox="0 0 24 24"
                   width="32px"
                   fill="#000000"
-                  className="absolute left-5 top-4 z-40"
+                  className="absolute left-5 top-4 z-40 cursor-pointer"
                   onClick={(e) => setShowSidebar(!showSidebar)}
                 >
                   <path d="M0 0h24v24H0V0z" fill="none" />

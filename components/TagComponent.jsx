@@ -79,7 +79,7 @@ const TagComponent = ({ tags }) => {
             viewBox="0 0 24 24"
             width="24px"
             fill="#000000"
-            className="mt-1"
+            className="mt-1 cursor-pointer"
             onClick={(e) => setTagPage(tagPage - 1)}
           >
             <path d="M0 0h24v24H0V0z" fill="none" />
@@ -94,7 +94,7 @@ const TagComponent = ({ tags }) => {
           viewBox="0 0 24 24"
           width="24px"
           fill="#000000"
-          className="mt-1"
+          className="mt-1 cursor-pointer"
           onClick={(e) => setTagPage(tagPage + 1)}
         >
           <path d="M0 0h24v24H0V0z" fill="none" />
@@ -116,7 +116,7 @@ const TagComponent = ({ tags }) => {
             viewBox="0 0 24 24"
             width="24px"
             fill="#000000"
-            className="mt-1"
+            className="mt-1 cursor-pointer"
             onClick={(e) => setCharPage(charPage - 1)}
           >
             <path d="M0 0h24v24H0V0z" fill="none" />
@@ -131,7 +131,7 @@ const TagComponent = ({ tags }) => {
           viewBox="0 0 24 24"
           width="24px"
           fill="#000000"
-          className="mt-1"
+          className="mt-1 cursor-pointer"
           onClick={(e) => setCharPage(charPage + 1)}
         >
           <path d="M0 0h24v24H0V0z" fill="none" />
