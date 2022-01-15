@@ -126,6 +126,9 @@ function ModalComponent({
                 <option value="ozen|https://i.imgur.com/Sf6sfPj.png">
                   Ozen "The Immovable"
                 </option>
+                <option value="senjougahara|https://i.imgur.com/cMX8YcK.jpg">
+                  Hitagi Senjougahara
+                </option>
                 <option value="moomin|https://i.imgur.com/9I91yMq.png">
                   Moomin
                 </option>
@@ -136,7 +139,7 @@ function ModalComponent({
                   Aqua
                 </option>
                 <option value="natsumi|https://i.imgur.com/yIIl7Z1.png">
-                  Natsumi Kurobe
+                  Kurobe Natsumi
                 </option>
               </select>
             </label>
