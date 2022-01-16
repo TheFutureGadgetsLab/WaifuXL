@@ -128,6 +128,8 @@ function ModalComponent({
                 </option>
                 <option value="deku|https://c.tenor.com/mkunLNebofwAAAAC/anime-headbang.gif">
                   Deku Headbang (GIF)
+                <option value="senjougahara|https://i.imgur.com/cMX8YcK.jpg">
+                  Hitagi Senjougahara
                 </option>
                 <option value="moomin|https://i.imgur.com/9I91yMq.png">
                   Moomin
@@ -139,7 +141,7 @@ function ModalComponent({
                   Aqua
                 </option>
                 <option value="natsumi|https://i.imgur.com/yIIl7Z1.png">
-                  Natsumi Kurobe
+                  Kurobe Natsumi
                 </option>
               </select>
             </label>
