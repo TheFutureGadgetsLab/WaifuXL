@@ -2,7 +2,7 @@ import ndarray from "ndarray";
 import ops from "ndarray-ops";
 import { getPixelsFromInput } from "./imageUtilities";
 import { runSuperRes, runTagger } from "./onnxBackend";
-
+import { doGif  } from "./gifUtilities";
 export function buildNdarrayFromImageOutput(data, height, width) {
   const inputArray = ndarray(data.data, data.dims);
   const dataTensor = ndarray(new Uint8Array(width * height * 4).fill(255), [
@@ -84,36 +84,49 @@ export function buildImageFromND(nd, height, width) {
 }
 
 export async function upScaleFromURI(uri, setLoading, setTags) {
-  const inputData = await getPixelsFromInput(uri);
+  if (uri.slice(0, 14) == "data:image/gif") {
+    //is gif
+    const results = await doGif(uri, setLoading, setTags);
+    setLoading(false);
+    return results;
+  } else {
+    //is image
+    const inputData = await getPixelsFromInput(uri);
 
-  const tagInput = buildNdarrayFromImage(inputData);
-  const tagOutput = await runTagger(tagInput);
-  const tags = await getTopTags(tagOutput);
-  setTags(tags);
+    const tagInput = buildNdarrayFromImage(inputData);
+    const tagOutput = await runTagger(tagInput);
+    const tags = await getTopTags(tagOutput);
+    setTags(tags);
 
-  const superResInput = buildNdarrayFromImage(inputData);
-  const superResOutput = await runSuperRes(superResInput, setLoading);
+    const superResInput = buildNdarrayFromImage(inputData);
+    const superResOutput = await runSuperRes(superResInput, setLoading);
 
-  const outputND = buildNdarrayFromImageOutput(
-    superResOutput,
-    superResOutput.dims[2],
-    superResOutput.dims[3]
-  );
-  const outputImage = buildImageFromND(
-    outputND,
-    superResOutput.dims[2],
-    superResOutput.dims[3]
-  );
-  return outputImage;
+    const outputND = buildNdarrayFromImageOutput(
+      superResOutput,
+      superResOutput.dims[2],
+      superResOutput.dims[3]
+    );
+    const outputImage = buildImageFromND(
+      outputND,
+      superResOutput.dims[2],
+      superResOutput.dims[3]
+    );
+    setLoading(false);
+    return outputImage;
+  }
 }
 
-export async function upScaleGifFrameFromURI(frameData, setLoading, height, width) {
+export async function upScaleGifFrameFromURI(
+  frameData,
+  setLoading,
+  height,
+  width
+) {
   return new Promise(async (resolve, reject) => {
-    console.log("Starting")
-    const inputData = await getPixelsFromInput(buildImageFromND(frameData, height, width));
-    console.log("Set pixels properly");
+    const inputData = await getPixelsFromInput(
+      buildImageFromND(frameData, height, width)
+    );
     const superResInput = buildNdarrayFromImage(inputData);
-    console.log("Build nd")
     const superResOutput = await runSuperRes(superResInput, setLoading);
     const outputND = buildNdarrayFromImageOutput(
       superResOutput,

@@ -1,5 +1,12 @@
 import { parseGIF, decompressFrames } from "gifuct-js";
-import { buildImageFromND, upScaleGifFrameFromURI } from "./processingUtilities";
+import {
+  buildImageFromND,
+  upScaleGifFrameFromURI,
+  buildNdarrayFromImage,
+  getTopTags
+} from "./processingUtilities";
+import { getPixelsFromInput } from "./imageUtilities";
+import { runTagger } from "./onnxBackend";
 
 async function frameAdd(frame, gif, setLoading) {
   return new Promise(async (resolve, reject) => {
@@ -17,11 +24,9 @@ async function frameAdd(frame, gif, setLoading) {
     };
   });
 }
-export default async function doGif(setLoading) {
+export async function doGif(inputURI, setLoading, setTags) {
   return new Promise(async (resolve, reject) => {
-    var promisedGif = await fetch(
-      "https://c.tenor.com/mkunLNebofwAAAAC/anime-headbang.gif"
-    )
+    var promisedGif = await fetch(inputURI)
       .then((resp) => resp.arrayBuffer())
       .then((buff) => parseGIF(buff))
       .then((gif) => decompressFrames(gif, true));
@@ -33,6 +38,18 @@ export default async function doGif(setLoading) {
       width: promisedGif[0].dims.width * 2,
       height: promisedGif[0].dims.height * 2,
     });
+
+    const inputData = await getPixelsFromInput(
+      buildImageFromND(
+        promisedGif[0].patch,
+        promisedGif[0].dims.height,
+        promisedGif[0].dims.width
+      )
+    );
+    const tagInput = buildNdarrayFromImage(inputData);
+    const tagOutput = await runTagger(tagInput);
+    const tags = await getTopTags(tagOutput);
+    setTags(tags);
 
     for (var frame of promisedGif) {
       await frameAdd(frame, gif, setLoading);

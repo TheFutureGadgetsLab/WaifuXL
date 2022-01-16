@@ -14,7 +14,7 @@ import RunComponent from "../components/RunComponent";
 import InputComponent from "../components/InputComponent";
 import TagComponent from "../components/TagComponent";
 import { useState, useEffect } from "react";
-import doGif from "../services/gifUtilities";
+
 export default function Example() {
   const [inputURI, setInputURI] = useState("./ozen.png");
   const [outputURI, setOutputURI] = useState(null);
@@ -40,18 +40,15 @@ export default function Example() {
   useEffect(async () => {
     await initializeONNX();
     setIsInitialized(true);
-    // const initialURI = require("ozenURL.json");
     document.body.style.overflow = "hidden";
-    setInputURI("https://c.tenor.com/mkunLNebofwAAAAC/anime-headbang.gif");
-    setOutputURI(await doGif(setLoading))
-    // setInputURI(await getDataURIFromInput("/ozen.png"));
-    //note: this is the input logic (given some from of URI)
+    setInputURI("./ozen.png")
 
     function handleInputFile(items) {
       try {
         for (let index in items) {
           let item = items[index];
           if (item.kind === "file") {
+            console.log(item)
             let file = item.getAsFile();
             setFileName(file.name.split("/").at(-1).split(".")[0]);
             getDataURIFromFileUpload(file, setPreviewURI);
