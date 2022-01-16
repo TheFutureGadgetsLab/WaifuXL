@@ -24,7 +24,7 @@ export default function Example() {
   const [tags, setTags] = useState(null);
   const [isInitialized, setIsInitialized] = useState(false);
   const [showSidebar, setShowSidebar] = useState(true);
-
+  const [upscaleProgress, setUpscaleProgress] = useState(null);
   var fileName = null;
   var lastFileName = null;
 
@@ -41,7 +41,7 @@ export default function Example() {
     await initializeONNX();
     setIsInitialized(true);
     document.body.style.overflow = "hidden";
-    setInputURI("./ozen.png")
+    setInputURI("./ozen.png");
 
     function handleInputFile(items) {
       try {
@@ -128,6 +128,7 @@ export default function Example() {
                       setPreviewURI={setPreviewURI}
                       setFileName={setFileName}
                       setTags={setTags}
+                      setUpscaleProgress={setUpscaleProgress}
                     />
                     {outputURI != null ? (
                       <DownloadComponent
@@ -142,6 +143,7 @@ export default function Example() {
                         setOutputURI={setOutputURI}
                         setTags={setTags}
                         isInitialized={isInitialized}
+                        setUpscaleProgress={setUpscaleProgress}
                       />
                     )}
                   </div>
@@ -219,7 +221,7 @@ export default function Example() {
                   )}
                 </div>
                 <div className="absolute bottom-0">
-                  <TitleComponent loading={loading} />
+                  <TitleComponent loading={loading} upscaleProgress={upscaleProgress} />
                 </div>
               </div>
             </div>

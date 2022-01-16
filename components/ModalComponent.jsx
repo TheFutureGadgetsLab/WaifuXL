@@ -14,6 +14,7 @@ function ModalComponent({
   setPreviewURI,
   setFileName,
   setTags,
+  setUpscaleProgress,
 }) {
   const divRef = useRef(null);
   const [showWarning, setShowWarning] = useState(false);
@@ -159,6 +160,7 @@ function ModalComponent({
                 setOutputURI(null);
                 setTags(null);
                 setInputModalOpen(false);
+                setUpscaleProgress(null);
               }}
             >
               Done

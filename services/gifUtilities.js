@@ -24,13 +24,12 @@ async function frameAdd(frame, gif, setLoading) {
     };
   });
 }
-export async function doGif(inputURI, setLoading, setTags) {
+export async function doGif(inputURI, setLoading, setTags, setUpscaleProgress) {
   return new Promise(async (resolve, reject) => {
     var promisedGif = await fetch(inputURI)
       .then((resp) => resp.arrayBuffer())
       .then((buff) => parseGIF(buff))
       .then((gif) => decompressFrames(gif, true));
-    console.log(promisedGif);
     var GIF = require("./gif.js");
     var gif = new GIF({
       workers: 2,
@@ -50,14 +49,14 @@ export async function doGif(inputURI, setLoading, setTags) {
     const tagOutput = await runTagger(tagInput);
     const tags = await getTopTags(tagOutput);
     setTags(tags);
-
+    var i = 0;
+    setUpscaleProgress([0, promisedGif.length]);
     for (var frame of promisedGif) {
+      setUpscaleProgress([i, promisedGif.length])
       await frameAdd(frame, gif, setLoading);
+      i++;
     }
-    var result = null;
     gif.on("finished", function (blob) {
-      console.log("Finished!");
-      console.log(blob);
       const reader = new FileReader();
       reader.readAsDataURL(blob);
       reader.onload = function () {

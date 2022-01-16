@@ -9,6 +9,7 @@ const InputComponent = ({
   setPreviewURI,
   setFileName,
   setTags,
+  setUpscaleProgress,
 }) => {
   return (
     <>
@@ -44,6 +45,7 @@ const InputComponent = ({
           setPreviewURI={setPreviewURI}
           setFileName={setFileName}
           setTags={setTags}
+          setUpscaleProgress={setUpscaleProgress}
         />
       )}
     </>
