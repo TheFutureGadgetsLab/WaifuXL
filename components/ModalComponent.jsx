@@ -124,6 +124,9 @@ function ModalComponent({
                   setOutputURI(null);
                 }}
               >
+                <option>
+                  Select a Preset
+                </option>
                 <option value="ozen|https://i.imgur.com/Sf6sfPj.png">
                   Ozen "The Immovable"
                 </option>
