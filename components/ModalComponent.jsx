@@ -128,6 +128,7 @@ function ModalComponent({
                 </option>
                 <option value="deku|https://c.tenor.com/mkunLNebofwAAAAC/anime-headbang.gif">
                   Deku Headbang (GIF)
+                </option>
                 <option value="senjougahara|https://i.imgur.com/cMX8YcK.jpg">
                   Hitagi Senjougahara
                 </option>
