@@ -56,14 +56,14 @@ export function getDataURIFromInput(input) {
   });
 }
 
-export function downloadImage(postFix, inputURI, downloadURI, fileName = null) {
+export function downloadImage(postFix, inputURI, downloadURI, extension, fileName = null) {
   let link = document.createElement("a");
   let urlParts = inputURI.split(/[\.\/]/i);
   var imgName = fileName || urlParts[urlParts.length - 2];
   if (imgName.length > 20) {
     imgName = imgName.substring(0, 20);
   }
-  link.download = `${imgName}_${postFix}.png`;
+  link.download = `${imgName}_${postFix}.${extension}`;
   link.href = downloadURI;
   link.click();
 }

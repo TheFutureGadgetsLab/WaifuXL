@@ -1,10 +1,10 @@
 import { downloadImage } from "../services/imageUtilities";
 
-const DownloadComponent = ({ inputURI, outputURI, fileName }) => {
+const DownloadComponent = ({ inputURI, outputURI, fileName, extension }) => {
   return (
     <button
       className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center"
-      onClick={() => downloadImage("2x", inputURI, outputURI, fileName)}
+      onClick={() => downloadImage("2x", inputURI, outputURI, extension, fileName)}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

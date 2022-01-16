@@ -83,8 +83,9 @@ export function buildImageFromND(nd, height, width) {
   return canvas.toDataURL();
 }
 
-export async function upScaleFromURI(uri, setLoading, setTags, setUpscaleProgress) {
+export async function upScaleFromURI(uri, setLoading, setTags, setUpscaleProgress, setExtension) {
   if (uri.slice(0, 14) == "data:image/gif") {
+    setExtension("gif")
     //is gif
     const results = await doGif(uri, setLoading, setTags, setUpscaleProgress);
     setLoading(false);

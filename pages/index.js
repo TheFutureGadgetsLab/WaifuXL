@@ -25,6 +25,8 @@ export default function Example() {
   const [isInitialized, setIsInitialized] = useState(false);
   const [showSidebar, setShowSidebar] = useState(true);
   const [upscaleProgress, setUpscaleProgress] = useState(null);
+  const [extension, setExtension] = useState("png");
+
   var fileName = null;
   var lastFileName = null;
 
@@ -135,6 +137,7 @@ export default function Example() {
                         inputURI={inputURI}
                         outputURI={outputURI}
                         fileName={fileName}
+                        extension={extension}
                       />
                     ) : (
                       <RunComponent
@@ -144,6 +147,7 @@ export default function Example() {
                         setTags={setTags}
                         isInitialized={isInitialized}
                         setUpscaleProgress={setUpscaleProgress}
+                        setExtension={setExtension}
                       />
                     )}
                   </div>
