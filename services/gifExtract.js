@@ -4,15 +4,12 @@ const pify = require('pify')
 const getPixels = pify(require('get-pixels'))
 
 const supportedFormats = new Set([
-  'jpg',
-  'png',
   'gif'
 ])
 
 module.exports = async (opts) => {
   const {
     input,
-    output,
     coalesce = true
   } = opts
 

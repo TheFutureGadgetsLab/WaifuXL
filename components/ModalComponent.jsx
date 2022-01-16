@@ -130,8 +130,8 @@ function ModalComponent({
                 <option value="ozen|https://i.imgur.com/Sf6sfPj.png">
                   Ozen "The Immovable"
                 </option>
-                <option value="deku|https://c.tenor.com/mkunLNebofwAAAAC/anime-headbang.gif">
-                  Deku Headbang (GIF)
+                <option value="eat|https://c.tenor.com/rnhV3fu39f8AAAAM/eating-anime.gif">
+                  Eating (GIF)
                 </option>
                 <option value="senjougahara|https://i.imgur.com/cMX8YcK.jpg">
                   Hitagi Senjougahara
