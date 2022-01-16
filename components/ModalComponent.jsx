@@ -126,6 +126,9 @@ function ModalComponent({
                 <option value="ozen|https://i.imgur.com/Sf6sfPj.png">
                   Ozen "The Immovable"
                 </option>
+                <option value="deku|https://c.tenor.com/mkunLNebofwAAAAC/anime-headbang.gif">
+                  Deku Headbang (GIF)
+                </option>
                 <option value="moomin|https://i.imgur.com/9I91yMq.png">
                   Moomin
                 </option>
@@ -137,9 +140,6 @@ function ModalComponent({
                 </option>
                 <option value="natsumi|https://i.imgur.com/yIIl7Z1.png">
                   Natsumi Kurobe
-                </option>
-                <option value="deku|https://c.tenor.com/mkunLNebofwAAAAC/anime-headbang.gif">
-                  Deku Headbang (GIF)
                 </option>
               </select>
             </label>
