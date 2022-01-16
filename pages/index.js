@@ -14,6 +14,7 @@ import RunComponent from "../components/RunComponent";
 import InputComponent from "../components/InputComponent";
 import TagComponent from "../components/TagComponent";
 import { useState, useEffect } from "react";
+
 export default function Example() {
   const [inputURI, setInputURI] = useState("./ozen.png");
   const [outputURI, setOutputURI] = useState(null);
@@ -37,12 +38,10 @@ export default function Example() {
   }
 
   useEffect(async () => {
-    // const initialURI = require("ozenURL.json");
-    document.body.style.overflow = "hidden";
-    setInputURI(await getDataURIFromInput("/ozen.png"));
     await initializeONNX();
     setIsInitialized(true);
-    //note: this is the input logic (given some from of URI)
+    document.body.style.overflow = "hidden";
+    setInputURI("./ozen.png")
 
     function handleInputFile(items) {
       try {

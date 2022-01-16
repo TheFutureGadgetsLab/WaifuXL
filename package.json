@@ -8,6 +8,7 @@
     "netlify_deploy": "next build && next export"
   },
   "dependencies": {
+    "gifuct-js": "^2.1.2",
     "ndarray": "^1.0.19",
     "ndarray-ops": "^1.2.2",
     "next": "latest",
