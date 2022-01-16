@@ -8,12 +8,14 @@
     "netlify_deploy": "next build && next export"
   },
   "dependencies": {
+    "get-pixels": "^3.3.3",
     "gifuct-js": "^2.1.2",
     "ndarray": "^1.0.19",
     "ndarray-ops": "^1.2.2",
     "next": "latest",
     "onnxruntime-common": "^1.10.0",
     "onnxruntime-web": "^1.10.0",
+    "pify": "^5.0.0",
     "react": "^17.0.2",
     "react-compare-slider": "^2.2.0",
     "react-dom": "^17.0.2"

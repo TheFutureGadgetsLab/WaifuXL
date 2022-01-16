@@ -5,7 +5,7 @@ const TitleComponent = ({ loading, upscaleProgress }) => {
         {loading && upscaleProgress != null && (
           <>
             <span >Frame {upscaleProgress[0]} / {upscaleProgress[1]}</span>
-            <div class="w-full bg-gray-200 h-1">
+            <div className="w-full bg-gray-200 h-1">
               <div
                 className="bg-blue h-1"
                 style={{
