@@ -3,7 +3,7 @@ import {
   buildImageFromND,
   upScaleGifFrameFromURI,
   buildNdarrayFromImage,
-  getTopTags
+  getTopTags,
 } from "./processingUtilities";
 import { getPixelsFromInput } from "./imageUtilities";
 import { runTagger } from "./onnxBackend";
@@ -26,6 +26,11 @@ async function frameAdd(frame, gif, setLoading) {
 }
 export async function doGif(inputURI, setLoading, setTags, setUpscaleProgress) {
   return new Promise(async (resolve, reject) => {
+    const extractFrames = require("./gifExtract.js");
+    const results = await extractFrames({
+      input: "https://c.tenor.com/mkunLNebofwAAAAC/anime-headbang.gif",
+    });
+    console.log(results);
     var promisedGif = await fetch(inputURI)
       .then((resp) => resp.arrayBuffer())
       .then((buff) => parseGIF(buff))
@@ -52,7 +57,7 @@ export async function doGif(inputURI, setLoading, setTags, setUpscaleProgress) {
     var i = 0;
     setUpscaleProgress([0, promisedGif.length]);
     for (var frame of promisedGif) {
-      setUpscaleProgress([i, promisedGif.length])
+      setUpscaleProgress([i, promisedGif.length]);
       await frameAdd(frame, gif, setLoading);
       i++;
     }
