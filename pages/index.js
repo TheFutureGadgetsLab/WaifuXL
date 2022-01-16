@@ -48,7 +48,6 @@ export default function Example() {
         for (let index in items) {
           let item = items[index];
           if (item.kind === "file") {
-            console.log(item)
             let file = item.getAsFile();
             setFileName(file.name.split("/").at(-1).split(".")[0]);
             getDataURIFromFileUpload(file, setPreviewURI);

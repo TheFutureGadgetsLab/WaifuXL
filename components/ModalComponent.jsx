@@ -138,6 +138,9 @@ function ModalComponent({
                 <option value="natsumi|https://i.imgur.com/yIIl7Z1.png">
                   Natsumi Kurobe
                 </option>
+                <option value="deku|https://c.tenor.com/mkunLNebofwAAAAC/anime-headbang.gif">
+                  Deku Headbang (GIF)
+                </option>
               </select>
             </label>
 
