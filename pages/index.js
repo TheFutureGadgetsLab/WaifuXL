@@ -6,7 +6,8 @@ import Sidebar from "../components/SidebarComponent";
 import ScreenIcons from "../components/ScreenIconsComponent";
 import ImageDisplay from "../components/ImageDisplayComponent";
 import { setEventListeners } from "../services/setEventListeners";
-export default function Example() {
+
+export default function Main() {
   const [inputURI, setInputURI] = useState("./ozen.png");
   const [outputURI, setOutputURI] = useState("./ozen_2x.png");
   const [previewURI, setPreviewURI] = useState("/ozen.png");
