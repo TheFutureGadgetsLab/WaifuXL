@@ -10,10 +10,6 @@ const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
-  i18n: {
-    locales: ["en"],
-    defaultLocale: "en",
-  },
   assetPrefix: ".",
   basePath: isProd ? "/WaifuXL" : "",
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
