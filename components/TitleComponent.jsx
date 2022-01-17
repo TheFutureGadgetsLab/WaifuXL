@@ -4,13 +4,13 @@ const TitleComponent = ({ loading, upscaleProgress }) => {
   const [loadingText, setLoadingText] = useState("...");
   useEffect(async () => {
     const interval = setInterval(function () {
+
       loadingText == (".")
         ? setLoadingText("..")
         : loadingText == ".."
         ? setLoadingText("...")
         : setLoadingText(".");
-      console.log("Called");
-      clearInterval(interval);
+        clearInterval(interval);
     }, 750);
   });
   return (
