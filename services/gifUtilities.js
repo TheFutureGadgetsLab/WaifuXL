@@ -8,12 +8,11 @@ import {
 import { getPixelsFromInput } from "./imageUtilities";
 import { runTagger } from "./onnxBackend";
 
-async function frameAdd(frame, gif, setLoading, height, width, delay) {
+async function frameAdd(frame, gif, height, width, delay) {
   return new Promise(async (resolve, reject) => {
     const img = new Image();
     img.src = await upScaleGifFrameFromURI(
       frame,
-      setLoading,
       height,
       width
     );
@@ -24,7 +23,7 @@ async function frameAdd(frame, gif, setLoading, height, width, delay) {
     };
   });
 }
-export async function doGif(inputURI, setLoading, setTags, setUpscaleProgress) {
+export async function doGif(inputURI, setTags, setUpscaleProgress) {
   return new Promise(async (resolve, reject) => {
     const extractFrames = require("./gifExtract.js");
     const results = await extractFrames({
@@ -62,7 +61,7 @@ export async function doGif(inputURI, setLoading, setTags, setUpscaleProgress) {
         (j + 1) * results.stride[0]
       );
       setUpscaleProgress([i, results.shape[0]]);
-      await frameAdd(currentND, gif, setLoading, results.shape[2], results.shape[1], promisedGif[j].delay);
+      await frameAdd(currentND, gif, results.shape[2], results.shape[1], promisedGif[j].delay);
       i++;
     }
 

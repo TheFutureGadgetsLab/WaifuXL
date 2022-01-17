@@ -83,73 +83,58 @@ export function buildImageFromND(nd, height, width) {
   return canvas.toDataURL();
 }
 
-export async function upScaleSingleURI(inputData, allowSplitting=true) {
-  const dataArr = buildNdarrayFromImage(inputData);
-  const imgH = dataArr.shape[2];
-  const imgW = dataArr.shape[3];
-  console.debug(dataArr.data.length, dataArr.shape);
+export async function upScaleSingleURI(inputData, setUpscaleProgress) {
+  const inArr = buildNdarrayFromImage(inputData);
+  const imgH = inArr.shape[2];
+  const imgW = inArr.shape[3];
 
-  let superResOutput = null;
-  if (allowSplitting) {
-    const chunkSize = 900;
-    const pad = 4;
-    // Split the image in chunks and run super resolution on each chunk
-    const combArr = ndarray(new Uint8Array(3 * (imgH * 2) * (imgW * 2)), [1, 3, imgH * 2, imgW * 2]);
-    console.debug(combArr.shape);
-    let chunkIdx = 0;
-    console.debug(`splitting into ${Math.ceil(imgH / chunkSize) * Math.ceil(imgW / chunkSize)} chunks`);
-    for (let i = 0; i < imgH; i += chunkSize) {
-      for (let j = 0; j < imgW; j += chunkSize) {
-        console.debug("processing chunk", chunkIdx, i, j);
-        // Compute chunk bounds including padding
-        const iStart = Math.max(0, i - pad);
-        const inH = iStart + chunkSize + pad*2 > imgH ? imgH - iStart : chunkSize + pad*2;
-        const outH = Math.min(imgH, i + chunkSize) - i;
-        const jStart = Math.max(0, j - pad);
-        const inW = jStart + chunkSize + pad*2 > imgW ? imgW - jStart : chunkSize + pad*2;
-        const outW = Math.min(imgW, j + chunkSize) - j;
-        console.debug(inH, inW);
-        // Create sliced and copy
-        const inSlice = dataArr.lo(0, 0, iStart, jStart).hi(1, 3, inH, inW);
-        console.debug("inSlice:", inSlice.shape);
-        const subArr = ndarray(new Uint8Array(inH * inW * 3), inSlice.shape);
-        console.debug("subArr:", subArr.shape);
-        ops.assign(subArr, inSlice);
-        // Run the super resolution model on the chunk, copy the result into the combined array
-        const chunkData = await runSuperRes(subArr);
-        const chunkArr = ndarray(chunkData.data, chunkData.dims);
-        console.debug("chunkArr:", chunkArr.shape);
-        console.debug(`finished chunk (${iStart}, ${jStart}) [${inH}, ${inW}]`);
-        const chunkSlice = chunkArr
-          .lo(0, 0, (i - iStart)*2, (j - jStart)*2)
-          .hi(1, 3, outH * 2, outW * 2);
-        console.debug("chunkSlice:", chunkSlice.shape);
-        const outSlice = combArr
-          .lo(0, 0, i*2, j*2)
-          .hi(1, 3, outH * 2, outW * 2);
-        console.debug("outSlice:", outSlice.shape);
-        ops.assign(outSlice, chunkSlice);
-        chunkIdx++;
-      }
+  const chunkSize = 900;
+  const pad = 4;
+  // Split the image in chunks and run super resolution on each chunk
+  const outArr = ndarray(new Uint8Array(3 * (imgH * 2) * (imgW * 2)), [1, 3, imgH * 2, imgW * 2]);
+  let chunkIdx = 0;
+  let nChunks = Math.ceil(imgH / chunkSize) * Math.ceil(imgW / chunkSize);
+  for (let i = 0; i < imgH; i += chunkSize) {
+    for (let j = 0; j < imgW; j += chunkSize) {
+      // Compute chunk bounds including padding
+      const iStart = Math.max(0, i - pad);
+      const inH = iStart + chunkSize + pad*2 > imgH ? imgH - iStart : chunkSize + pad*2;
+      const outH = Math.min(imgH, i + chunkSize) - i;
+      const jStart = Math.max(0, j - pad);
+      const inW = jStart + chunkSize + pad*2 > imgW ? imgW - jStart : chunkSize + pad*2;
+      const outW = Math.min(imgW, j + chunkSize) - j;
+      // Create sliced and copy
+      const inSlice = inArr.lo(0, 0, iStart, jStart).hi(1, 3, inH, inW);
+      const subArr = ndarray(new Uint8Array(inH * inW * 3), inSlice.shape);
+      ops.assign(subArr, inSlice);
+      // Run the super resolution model on the chunk, copy the result into the combined array
+      const chunkData = await runSuperRes(subArr);
+      const chunkArr = ndarray(chunkData.data, chunkData.dims);
+      const chunkSlice = chunkArr
+        .lo(0, 0, (i - iStart)*2, (j - jStart)*2)
+        .hi(1, 3, outH * 2, outW * 2);
+      const outSlice = outArr
+        .lo(0, 0, i*2, j*2)
+        .hi(1, 3, outH * 2, outW * 2);
+      ops.assign(outSlice, chunkSlice);
+      setUpscaleProgress([chunkIdx, nChunks]);
+      chunkIdx++;
     }
-    superResOutput = combArr;
-  } else {
-    superResOutput = await runSuperRes(dataArr, setLoading);
   }
 
   // Reshape network output into a normal image
-  const outNDArr = buildNdarrayFromImageOutput(superResOutput, imgH * 2, imgW * 2)
-  const outURI = buildImageFromND(outNDArr, imgH * 2, imgW * 2);
+  const outImg = buildNdarrayFromImageOutput(outArr, imgH * 2, imgW * 2)
+  const outURI = buildImageFromND(outImg, imgH * 2, imgW * 2);
   return outURI;
 }
 
 export async function upScaleFromURI(uri, setLoading, setTags, setUpscaleProgress, setExtension) {
+  setLoading(true);
+  let resultURI = null;
   if (uri.slice(0, 14) == "data:image/gif") {
     setExtension("gif")
     //is gif
-    const results = await doGif(uri, setLoading, setTags, setUpscaleProgress);
-    setLoading(false);
-    return results;
+    resultURI = await doGif(uri, setTags, setUpscaleProgress);
   } else {
     //is image
     const inputData = await getPixelsFromInput(uri);
@@ -159,17 +144,15 @@ export async function upScaleFromURI(uri, setLoading, setTags, setUpscaleProgres
     const tags = await getTopTags(tagOutput);
     setTags(tags);
 
-    setLoading(true);
     console.debug("starting upscaling");
-    const outURI = upScaleSingleURI(inputData);
-    setLoading(false);
-    return outURI;
+    resultURI = await upScaleSingleURI(inputData, setUpscaleProgress);
   }
+  setLoading(false);
+  return resultURI;
 }
 
 export async function upScaleGifFrameFromURI(
   frameData,
-  setLoading,
   height,
   width
 ) {
@@ -178,7 +161,7 @@ export async function upScaleGifFrameFromURI(
       buildImageFromND(frameData, height, width)
     );
     const superResInput = buildNdarrayFromImage(inputData);
-    const superResOutput = await runSuperRes(superResInput, setLoading);
+    const superResOutput = await runSuperRes(superResInput);
     const outputND = buildNdarrayFromImageOutput(
       superResOutput,
       superResOutput.dims[2],
