@@ -209,6 +209,7 @@ export default function Example() {
                   ) : (
                     <ReactCompareSlider
                       className={"border-pink border-4 h-4/6"}
+                      position={50}
                       itemOne={
                         <ReactCompareSliderImage
                           src={inputURI}
