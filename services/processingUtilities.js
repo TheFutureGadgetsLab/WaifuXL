@@ -85,13 +85,14 @@ export function buildImageFromND(nd, height, width) {
 
 export async function upScaleFromURI(uri, setLoading, setTags, setUpscaleProgress, setExtension) {
   if (uri.slice(0, 14) == "data:image/gif") {
-    setExtension("gif")
     //is gif
+    setExtension("gif")
     const results = await doGif(uri, setLoading, setTags, setUpscaleProgress);
     setLoading(false);
     return results;
   } else {
     //is image
+    setExtension("png")
     const inputData = await getPixelsFromInput(uri);
 
     const tagInput = buildNdarrayFromImage(inputData);
