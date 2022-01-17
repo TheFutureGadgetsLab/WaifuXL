@@ -10,6 +10,10 @@ const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
+  i18n: {
+    locales: ["en"],
+    defaultLocale: "en",
+  },
   assetPrefix: ".",
   basePath: isProd ? "/WaifuXL" : "",
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
@@ -19,7 +23,10 @@ module.exports = {
         // Use copy plugin to copy *.wasm to output folder.
         patterns: [
           {
-            from: path.join(__dirname, "node_modules/onnxruntime-web/dist/*.wasm"),
+            from: path.join(
+              __dirname,
+              "node_modules/onnxruntime-web/dist/*.wasm"
+            ),
             to: path.join(__dirname, ".next/static/chunks/pages/[name][ext]"),
           },
         ],
