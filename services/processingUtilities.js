@@ -4,16 +4,16 @@ import { getPixelsFromInput } from "./imageUtilities";
 import { runSuperRes, runTagger } from "./onnxBackend";
 import { doGif  } from "./gifUtilities";
 export function buildNdarrayFromImageOutput(data, height, width) {
-  const inputArray = ndarray(data.data, data.dims);
-  const dataTensor = ndarray(new Uint8Array(width * height * 4).fill(255), [
-    height,
-    width,
-    4,
-  ]);
-  ops.assign(dataTensor.pick(null, null, 0), inputArray.pick(0, 0, null, null));
-  ops.assign(dataTensor.pick(null, null, 1), inputArray.pick(0, 1, null, null));
-  ops.assign(dataTensor.pick(null, null, 2), inputArray.pick(0, 2, null, null));
-  return dataTensor.data;
+    const inputArray = ndarray(data.data, data.dims || data.shape);
+    const dataTensor = ndarray(new Uint8Array(width * height * 4).fill(255), [
+      height,
+      width,
+      4,
+    ]);
+    ops.assign(dataTensor.pick(null, null, 0), inputArray.pick(0, 0, null, null));
+    ops.assign(dataTensor.pick(null, null, 1), inputArray.pick(0, 1, null, null));
+    ops.assign(dataTensor.pick(null, null, 2), inputArray.pick(0, 2, null, null));
+    return dataTensor.data;
 }
 
 export async function loadTags() {
@@ -141,4 +141,61 @@ export async function upScaleGifFrameFromURI(
     );
     resolve(outputImage);
   });
+}
+
+export async function upScaleFromURI(uri, setLoading=null, setTags=null, allowSplitting=true) {
+  const inputData = await getPixelsFromInput(uri);
+  
+  const tagInput  = buildNdarrayFromImage(inputData);
+  const tagOutput = await runTagger(tagInput);
+  if (setTags) {
+    const tags = await getTopTags(tagOutput);
+    setTags(tags);
+  }
+  
+  const dataArr = buildNdarrayFromImage(inputData);
+  const imgH = dataArr.shape[2];
+  const imgW = dataArr.shape[3];
+  console.debug(dataArr.data.length, dataArr.shape);
+
+  let superResOutput = null;
+  if (allowSplitting) {
+    const chunkSize = 64;
+    // Split the image in chunks and run super resolution on each chunk
+    const combArr = ndarray(new Uint8Array(dataArr.data.length * 4), [1, 3, imgH * 2, imgW * 2]);
+    let chunkIdx = 0;
+    console.debug(`splitting into ${Math.ceil(imgH / chunkSize) * Math.ceil(imgW / chunkSize)} chunks`);
+    for (let i = 0; i < imgH; i += chunkSize) {
+      for (let j = 0; j < imgW; j += chunkSize) {
+        console.debug("processing chunk", chunkIdx);
+        const iStart = i;
+        const iEnd = Math.min(imgH, i + chunkSize);
+        const jStart = j;
+        const jEnd = Math.min(imgW, j + chunkSize);
+        const inSlice = dataArr.lo(0, 0, iStart, jStart).hi(1, 3, iEnd, jEnd);
+        const sliceH = inSlice.shape[2];
+        const sliceW = inSlice.shape[3];
+        const subArr = ndarray(new Uint8Array(sliceH * sliceW * 3), inSlice.shape);
+        ops.assign(subArr, inSlice);
+        const subOutput = await runSuperRes(subArr);
+        const subOutArr = ndarray(subOutput.data, subOutput.dims);
+        console.debug("finished chunk", iStart, iEnd, jStart, jEnd);
+        const outH = subOutArr.shape[2];
+        const outW = subOutArr.shape[3];
+        const outSlice = combArr.lo(0, 0, iStart*2, jStart*2).hi(1, 3, outH, outW);
+        console.debug(subOutArr.shape, subOutArr.data.length);
+        console.debug(outSlice.shape, outSlice.data.length);
+        ops.assign(outSlice, subOutArr)
+        chunkIdx++;
+      }
+    }
+    superResOutput = combArr;
+  } else {
+    superResOutput = await runSuperRes(dataArr, setLoading);
+  }
+
+  // Reshape network output into a normal image
+  const outNDArr = buildNdarrayFromImageOutput(superResOutput, imgH * 2, imgW * 2)
+  const outURI = buildImageFromND(outNDArr, imgH * 2, imgW * 2);
+  return outURI;
 }

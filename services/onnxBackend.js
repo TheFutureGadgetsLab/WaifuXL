@@ -45,7 +45,7 @@ function prepareImage(imageArray) {
 }
 
 export async function runSuperRes(imageArray, setLoading) {
-    setLoading(true);
+    if (setLoading) setLoading(true);
 
     const feeds = prepareImage(imageArray);
 
@@ -59,8 +59,8 @@ export async function runSuperRes(imageArray, setLoading) {
         const output = await session.run(feeds);
         results = output.output;
     } catch (e) {
-        setLoading(false);
-        console.error("Failed to run super resolution");
+        if (setLoading) setLoading(false);
+        console.log("Failed to run super resolution");
         console.log(e)
     }    
     console.timeEnd('run_super_res');
