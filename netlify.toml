@@ -1,9 +1,0 @@
-[build]
-  command = "npm run build && npm run export"
-  publish = "out"
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    Cross-Origin-Embedder-Policy = "require-corp"
-    Cross-Origin-Opener-Policy =  "same-origin"
