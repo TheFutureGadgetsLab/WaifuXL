@@ -37,9 +37,7 @@ export function getDataURIFromInput(input) {
         reader.readAsDataURL(blob);
       });
       resolve(dataUrl);
-    }
-    //TODO: Implement gif functionality here
-     else {
+    } else {
       const img = new Image();
       img.src = input;
       img.crossOrigin = "Anonymous";

@@ -28,7 +28,7 @@ const TitleComponent = ({ loading, upscaleProgress }) => {
         {loading && upscaleProgress != null && (
           <>
             <span>
-              Frame {upscaleProgress[0]} / {upscaleProgress[1]}
+              {Math.round((upscaleProgress[0] / upscaleProgress[1]) * 100)}%
             </span>
             <div className=" bg-gray-200 h-1" style={{ width: "700px" }}>
               <div

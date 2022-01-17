@@ -44,9 +44,7 @@ function prepareImage(imageArray) {
     return { input: tensor };
 }
 
-export async function runSuperRes(imageArray, setLoading) {
-    setLoading(true);
-
+export async function runSuperRes(imageArray) {
     const feeds = prepareImage(imageArray);
 
     let session = null;
@@ -59,8 +57,7 @@ export async function runSuperRes(imageArray, setLoading) {
         const output = await session.run(feeds);
         results = output.output;
     } catch (e) {
-        setLoading(false);
-        console.error("Failed to run super resolution");
+        console.log("Failed to run super resolution");
         console.log(e)
     }    
     console.timeEnd('run_super_res');

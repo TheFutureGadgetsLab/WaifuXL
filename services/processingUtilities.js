@@ -4,16 +4,16 @@ import { getPixelsFromInput } from "./imageUtilities";
 import { runSuperRes, runTagger } from "./onnxBackend";
 import { doGif  } from "./gifUtilities";
 export function buildNdarrayFromImageOutput(data, height, width) {
-  const inputArray = ndarray(data.data, data.dims);
-  const dataTensor = ndarray(new Uint8Array(width * height * 4).fill(255), [
-    height,
-    width,
-    4,
-  ]);
-  ops.assign(dataTensor.pick(null, null, 0), inputArray.pick(0, 0, null, null));
-  ops.assign(dataTensor.pick(null, null, 1), inputArray.pick(0, 1, null, null));
-  ops.assign(dataTensor.pick(null, null, 2), inputArray.pick(0, 2, null, null));
-  return dataTensor.data;
+    const inputArray = ndarray(data.data, data.dims || data.shape);
+    const dataTensor = ndarray(new Uint8Array(width * height * 4).fill(255), [
+      height,
+      width,
+      4,
+    ]);
+    ops.assign(dataTensor.pick(null, null, 0), inputArray.pick(0, 0, null, null));
+    ops.assign(dataTensor.pick(null, null, 1), inputArray.pick(0, 1, null, null));
+    ops.assign(dataTensor.pick(null, null, 2), inputArray.pick(0, 2, null, null));
+    return dataTensor.data;
 }
 
 export async function loadTags() {
@@ -83,13 +83,58 @@ export function buildImageFromND(nd, height, width) {
   return canvas.toDataURL();
 }
 
+export async function upScaleSingleURI(inputData, setUpscaleProgress) {
+  const inArr = buildNdarrayFromImage(inputData);
+  const imgH = inArr.shape[2];
+  const imgW = inArr.shape[3];
+
+  const chunkSize = 900;
+  const pad = 4;
+  // Split the image in chunks and run super resolution on each chunk
+  const outArr = ndarray(new Uint8Array(3 * (imgH * 2) * (imgW * 2)), [1, 3, imgH * 2, imgW * 2]);
+  let chunkIdx = 0;
+  let nChunks = Math.ceil(imgH / chunkSize) * Math.ceil(imgW / chunkSize);
+  for (let i = 0; i < imgH; i += chunkSize) {
+    for (let j = 0; j < imgW; j += chunkSize) {
+      // Compute chunk bounds including padding
+      const iStart = Math.max(0, i - pad);
+      const inH = iStart + chunkSize + pad*2 > imgH ? imgH - iStart : chunkSize + pad*2;
+      const outH = Math.min(imgH, i + chunkSize) - i;
+      const jStart = Math.max(0, j - pad);
+      const inW = jStart + chunkSize + pad*2 > imgW ? imgW - jStart : chunkSize + pad*2;
+      const outW = Math.min(imgW, j + chunkSize) - j;
+      // Create sliced and copy
+      const inSlice = inArr.lo(0, 0, iStart, jStart).hi(1, 3, inH, inW);
+      const subArr = ndarray(new Uint8Array(inH * inW * 3), inSlice.shape);
+      ops.assign(subArr, inSlice);
+      // Run the super resolution model on the chunk, copy the result into the combined array
+      const chunkData = await runSuperRes(subArr);
+      const chunkArr = ndarray(chunkData.data, chunkData.dims);
+      const chunkSlice = chunkArr
+        .lo(0, 0, (i - iStart)*2, (j - jStart)*2)
+        .hi(1, 3, outH * 2, outW * 2);
+      const outSlice = outArr
+        .lo(0, 0, i*2, j*2)
+        .hi(1, 3, outH * 2, outW * 2);
+      ops.assign(outSlice, chunkSlice);
+      setUpscaleProgress([chunkIdx, nChunks]);
+      chunkIdx++;
+    }
+  }
+
+  // Reshape network output into a normal image
+  const outImg = buildNdarrayFromImageOutput(outArr, imgH * 2, imgW * 2)
+  const outURI = buildImageFromND(outImg, imgH * 2, imgW * 2);
+  return outURI;
+}
+
 export async function upScaleFromURI(uri, setLoading, setTags, setUpscaleProgress, setExtension) {
+  setLoading(true);
+  let resultURI = null;
   if (uri.slice(0, 14) == "data:image/gif") {
-    //is gif
     setExtension("gif")
-    const results = await doGif(uri, setLoading, setTags, setUpscaleProgress);
-    setLoading(false);
-    return results;
+    //is gif
+    resultURI = await doGif(uri, setTags, setUpscaleProgress);
   } else {
     //is image
     setExtension("png")
@@ -100,27 +145,15 @@ export async function upScaleFromURI(uri, setLoading, setTags, setUpscaleProgres
     const tags = await getTopTags(tagOutput);
     setTags(tags);
 
-    const superResInput = buildNdarrayFromImage(inputData);
-    const superResOutput = await runSuperRes(superResInput, setLoading);
-
-    const outputND = buildNdarrayFromImageOutput(
-      superResOutput,
-      superResOutput.dims[2],
-      superResOutput.dims[3]
-    );
-    const outputImage = buildImageFromND(
-      outputND,
-      superResOutput.dims[2],
-      superResOutput.dims[3]
-    );
-    setLoading(false);
-    return outputImage;
+    console.debug("starting upscaling");
+    resultURI = await upScaleSingleURI(inputData, setUpscaleProgress);
   }
+  setLoading(false);
+  return resultURI;
 }
 
 export async function upScaleGifFrameFromURI(
   frameData,
-  setLoading,
   height,
   width
 ) {
@@ -129,7 +162,7 @@ export async function upScaleGifFrameFromURI(
       buildImageFromND(frameData, height, width)
     );
     const superResInput = buildNdarrayFromImage(inputData);
-    const superResOutput = await runSuperRes(superResInput, setLoading);
+    const superResOutput = await runSuperRes(superResInput);
     const outputND = buildNdarrayFromImageOutput(
       superResOutput,
       superResOutput.dims[2],
@@ -143,3 +176,4 @@ export async function upScaleGifFrameFromURI(
     resolve(outputImage);
   });
 }
+
