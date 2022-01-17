@@ -17,7 +17,7 @@ const TitleComponent = ({ loading, upscaleProgress }) => {
   return (
     <>
       <div className="flex flex-col items-center justify-center w-full text-center">
-        <h1 className="text-6xl font-bold mt-10">
+        <h1 className="lg:text-6xl md:text-4xl text-3xl font-bold mt-10">
           {loading ? "Expanding" : "Expand"} your{" "}
           <span className="text-pink">
             {"waifu"}

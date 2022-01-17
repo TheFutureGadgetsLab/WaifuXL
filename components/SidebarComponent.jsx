@@ -23,7 +23,6 @@ const Sidebar = ({
   showSidebar,
   tags,
 }) => {
-
   return (
     <div
       id="sidebar"
@@ -35,6 +34,24 @@ const Sidebar = ({
         <div className="flex-1 flex flex-col overflow-y-auto">
           <div className="">
             <div className="pt-5 mt-10 mb-10 mx-8 space-y-2 grid grid-cols-1">
+              <div
+                className="md:hidden flex items-center space-x-2"
+                onClick={() => Router.push("./about")}
+              >
+                <span className="text-2xl font-semibold text-black cursor-pointer">
+                  About
+                </span>
+              </div>
+              <div
+                className="md:hidden flex items-center space-x-2"
+                onClick={() => Router.push("./donate")}
+              >
+                <span className="text-2xl font-semibold text-black cursor-pointer">
+                  Donate
+                </span>
+              </div>
+              <hr className="md:hidden"/>
+
               <InputComponent
                 inputModalOpen={inputModalOpen}
                 setInputModalOpen={setInputModalOpen}
