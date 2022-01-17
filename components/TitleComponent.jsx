@@ -1,27 +1,36 @@
 import { useEffect, useState } from "react";
 
 const TitleComponent = ({ loading, upscaleProgress }) => {
-  const [loadingText, setLoadingText] = useState("...");
+  const [loadingText, setLoadingText] = useState("");
   useEffect(async () => {
     const interval = setInterval(function () {
-
-      loadingText == (".")
+      loadingText == ""
+        ? setLoadingText(".")
+        : loadingText == "."
         ? setLoadingText("..")
         : loadingText == ".."
         ? setLoadingText("...")
-        : setLoadingText(".");
-        clearInterval(interval);
+        : setLoadingText("");
+      clearInterval(interval);
     }, 750);
   });
   return (
     <>
-      <main className="flex flex-col items-center flex-shrink justify-center w-full p-10 text-center">
+      <div className="flex flex-col items-center justify-center w-full text-center">
+        <h1 className="text-6xl font-bold mt-10">
+          {loading ? "Expanding" : "Expand"} your{" "}
+          <span className="text-pink">
+            {"waifu"}
+            {loading && loadingText}
+          </span>
+        </h1>
+        <br />
         {loading && upscaleProgress != null && (
           <>
             <span>
               {Math.round((upscaleProgress[0] / upscaleProgress[1]) * 100)}%
             </span>
-            <div className=" bg-gray-200 h-1" style={{width: "700px"}}>
+            <div className=" bg-gray-200 h-1" style={{ width: "700px" }}>
               <div
                 className="bg-blue h-1"
                 style={{
@@ -31,15 +40,7 @@ const TitleComponent = ({ loading, upscaleProgress }) => {
             </div>
           </>
         )}
-
-        <h1 className="text-6xl font-bold mt-10">
-          {loading ? "Expanding" : "Expand"} your{" "}
-          <span className="text-pink">
-            {"waifu"}
-            {loading && loadingText}
-          </span>
-        </h1>
-      </main>
+      </div>
     </>
   );
 };

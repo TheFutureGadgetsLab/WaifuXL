@@ -97,7 +97,6 @@ function ModalComponent({
                   if (e.target.files[0]) {
                     getDataURIFromFileUpload(e.target.files[0], setPreviewURI);
                     setFileName(e.target.files[0].name.split(".")[0]);
-                    setOutputURI(null);  
                   }
                 }}
               />
@@ -121,7 +120,6 @@ function ModalComponent({
                   const [name, url] = inp.target.value.split("|");
                   setPreviewURI(await getDataURIFromInput(url));
                   setFileName(`example_${name}`);
-                  setOutputURI(null);
                 }}
               >
                 <option>

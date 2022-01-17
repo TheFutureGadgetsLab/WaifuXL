@@ -43,7 +43,7 @@ export async function getTopTags(data) {
     tags[i[0]],
     i[1],
   ]);
-  const rating = topK(flattened, 3, 4000, 2003).map((i) => [tags[i[0]], i[1]]);
+  const rating = topK(flattened, 3, 4000, 4003).map((i) => [tags[i[0]], i[1]]);
 
   return { topDesc, topChars, rating };
 }
@@ -137,6 +137,7 @@ export async function upScaleFromURI(uri, setLoading, setTags, setUpscaleProgres
     resultURI = await doGif(uri, setTags, setUpscaleProgress);
   } else {
     //is image
+    setExtension("png")
     const inputData = await getPixelsFromInput(uri);
 
     const tagInput = buildNdarrayFromImage(inputData);

@@ -1,5 +1,3 @@
-[![Netlify Status](https://api.netlify.com/api/v1/badges/c20d19e6-35b7-4e42-a104-2227cb4f0161/deploy-status)](https://app.netlify.com/sites/sharp-mcnulty-262953/deploys)
-
 # Waifu Expander
 Waifu Expander is a state of the art super resolution model based on the [Real-ESRGAN](https://arxiv.org/abs/2107.10833). This model has been trained on ~1,000,000 anime style images from the [Danbooru2020](https://www.gwern.net/Danbooru2020) dataset.
 

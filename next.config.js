@@ -19,7 +19,10 @@ module.exports = {
         // Use copy plugin to copy *.wasm to output folder.
         patterns: [
           {
-            from: path.join(__dirname, "node_modules/onnxruntime-web/dist/*.wasm"),
+            from: path.join(
+              __dirname,
+              "node_modules/onnxruntime-web/dist/*.wasm"
+            ),
             to: path.join(__dirname, ".next/static/chunks/pages/[name][ext]"),
           },
         ],
