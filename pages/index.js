@@ -17,7 +17,7 @@ import { useState, useEffect } from "react";
 
 export default function Example() {
   const [inputURI, setInputURI] = useState("./ozen.png");
-  const [outputURI, setOutputURI] = useState(null);
+  const [outputURI, setOutputURI] = useState("./ozen_2x.png");
   const [previewURI, setPreviewURI] = useState("/ozen.png");
   const [loading, setLoading] = useState(false);
   const [inputModalOpen, setInputModalOpen] = useState(false);
@@ -44,6 +44,7 @@ export default function Example() {
     setIsInitialized(true);
     document.body.style.overflow = "hidden";
     setInputURI("./ozen.png");
+    setOutputURI("./ozen_2x.png")
 
     function handleInputFile(items) {
       try {
