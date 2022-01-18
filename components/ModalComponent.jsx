@@ -103,28 +103,32 @@ function ModalComponent({
             </label>
           </label>
           {showWarning ? (
-            <span className="text-red-500 text-sm font-bold">Warning: Image is too large <br/> Max dimension: 950 x 950</span>
+            <span className="text-red-500 text-sm font-bold">
+              Warning: Image is too large <br /> Max dimension: 950 x 950
+            </span>
           ) : (
-            <span className="text-sm">&#10240;<br/>&#10240;</span>
+            <span className="text-sm">
+              &#10240;
+              <br />
+              &#10240;
+            </span>
           )}
           <div
             id="preset-menu"
-            className="mt-10 p-3 flex justify-between relative"
+            className="mt-10 p-3 flex justify-between relative gap-4"
           >
             <label>
               <span className="text-gray-700">Preset Images</span>
               <select
                 id="preset-select"
-                className="form-select rounded mt-1 block w-full p-3 bg-blue text-white cursor-pointer"
+                className="form-select rounded mt-1 block text-ellipsis w-full p-3 bg-blue text-white cursor-pointer"
                 onInput={async (inp) => {
                   const [name, url] = inp.target.value.split("|");
                   setPreviewURI(await getDataURIFromInput(url));
                   setFileName(`example_${name}`);
                 }}
               >
-                <option>
-                  Select a Preset
-                </option>
+                <option>Select a Preset</option>
                 <option value="ozen|https://i.imgur.com/Sf6sfPj.png">
                   Ozen "The Immovable"
                 </option>
@@ -148,24 +152,26 @@ function ModalComponent({
                 </option>
               </select>
             </label>
-
-            <button
-              id="done-button"
-              type="button"
-              className="rounded-md absolute m-3 right-0 bottom-0 text-blue shadow-sm px-4 py-1 
+            <div className="grid grid-cols-1">
+              <span className="text-gray-700"> &#10240;</span>
+              <button
+                id="done-button"
+                type="button"
+                className="rounded-md right-0 bottom-0 text-blue shadow-sm px-4 py-1 
                 text-base font-medium h-12 focus:outline-none focus:ring-2 focus:ring-offset-2 
                 border-blue border-2 bg-white hover:bg-blue hover:text-white disabled:bg-white disabled:text-gray-200 disabled:border-gray-200"
-              disabled={showWarning}
-              onClick={() => {
-                setInputURI(previewURI);
-                setOutputURI(null);
-                setTags(null);
-                setInputModalOpen(false);
-                setUpscaleProgress(null);
-              }}
-            >
-              Done
-            </button>
+                disabled={showWarning}
+                onClick={() => {
+                  setInputURI(previewURI);
+                  setOutputURI(null);
+                  setTags(null);
+                  setInputModalOpen(false);
+                  setUpscaleProgress(null);
+                }}
+              >
+                Done
+              </button>
+            </div>
           </div>
         </div>
       </div>
