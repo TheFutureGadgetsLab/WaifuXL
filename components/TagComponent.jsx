@@ -8,17 +8,25 @@ function titleCase(str) {
     .map(function (word) {
       return word.charAt(0).toUpperCase() + word.slice(1);
     })
-    .join(" ");
+    .join(" ")
+    .split("(")
+    .map(function (word) {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    }).join("(");
 }
 
 function truncateString(str) {
-  str = cleanString(str);
+  str = cleanStringRemoveParen(str);
   const split = str.length > 13 ? str.slice(0, 13) + "…" : str;
   return split;
 }
 
-function cleanString(str) {
+function cleanStringRemoveParen(str) {
   return titleCase(str.replace(/_/g, " ").split("(")[0]);
+}
+
+function cleanString(str) {
+  return titleCase(str.replace(/_/g, " "));
 }
 
 function buildTagLine(x) {
