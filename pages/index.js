@@ -74,13 +74,13 @@ export default function Main() {
         />
         {/* Image display, title, navbar */}
         <main className="flex-1">
-          <div className="flex flex-col items-center h-screen relative">
+          <div className="flex flex-col items-center h-screen w-screen relative">
             <NavbarComponent />
             <ScreenIcons
               setShowSidebar={setShowSidebar}
               showSidebar={showSidebar}
             />
-            <div className="h-full">
+            <div className="h-full grow w-full">
               <ImageDisplay inputURI={inputURI} outputURI={outputURI} />
               <TitleComponent
                 loading={loading}

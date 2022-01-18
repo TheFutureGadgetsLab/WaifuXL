@@ -5,9 +5,9 @@ import {
   
 const ImageDisplay = ({ outputURI, inputURI }) => {
   return (
-      <div className="h-5/6 flex items-center justify-center">
+      <div className="h-5/6 flex items-center justify-center w-full">
         {outputURI == null ? (
-          <img src={inputURI} className="border-pink border-4 lg:h-4/6" />
+          <img src={inputURI} className="border-pink border-4 lg:h-4/6 md:w-auto w-full" />
         ) : (
           <ReactCompareSlider
             className="border-pink border-4 lg:h-4/6"
