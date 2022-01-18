@@ -88,7 +88,7 @@ export async function upScaleSingleURI(inputData, setUpscaleProgress) {
   const imgH = inArr.shape[2];
   const imgW = inArr.shape[3];
 
-  const chunkSize = 900;
+  const chunkSize = 800;
   const pad = 4;
   // Split the image in chunks and run super resolution on each chunk
   const outArr = ndarray(new Uint8Array(3 * (imgH * 2) * (imgW * 2)), [1, 3, imgH * 2, imgW * 2]);
