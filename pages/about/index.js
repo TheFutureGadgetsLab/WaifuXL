@@ -1,15 +1,20 @@
+import { useEffect } from "react";
 import NavbarComponent from "../../components/NavbarComponent";
 
 export default function About() {
+  useEffect(() => {
+    document.body.style.overflow = "auto";
+  }, [])
+
   return (
     <div
       className="flex flex-col items-center min-h-screen"
       style={{ backgroundImage: `url("bg.svg")`, backgroundSize: "cover" }}
     >
       <NavbarComponent />
-      <main className="flex flex-col items-center flex-shrink justify-center w-5/12 p-10 text-center">
-        <div className="mt-20 text-6xl">At a Glance</div>
-        <div className="mt-5 text-lg text-left">
+      <main className="flex flex-col items-center flex-shrink justify-center lg:w-5/12 p-10 text-center">
+        <div className="lg:mt-20 mt-5 lg:text-6xl text-2xl">At a Glance</div>
+        <div className="mt-5 lg:text-lg text-sm text-left">
           <a href="https://www.waifuxl.com" className="text-pink underline">
             WaifuXL
           </a>{" "}
@@ -19,8 +24,8 @@ export default function About() {
           and your images are <span className="text-blue font-bold">never</span>{" "}
           sent to us. Everything is done locally!
         </div>
-        <div className="mt-20 text-6xl">About Us</div>
-        <div className="mt-5 text-lg text-left">
+        <div className="lg:mt-20 mt-5 lg:text-6xl text-2xl">About Us</div>
+        <div className="mt-5 lg:text-lg text-sm text-left">
           Hi, we’re the{" "}
           <span className="text-blue font-bold">Future Gadgets Lab</span>! We
           make a lot of random stuff, check out our organization{" "}
@@ -29,8 +34,8 @@ export default function About() {
           </a>
           .
         </div>
-        <div className="mt-20 text-6xl">In Depth</div>
-        <div className="mt-5 text-lg text-left">
+        <div className="lg:mt-20 mt-5 lg:text-6xl text-2xl">In Depth</div>
+        <div className="mt-5 lg:text-lg text-sm text-left">
           We send you neural networks to execute direclty in your browser using
           the{" "}
           <a
