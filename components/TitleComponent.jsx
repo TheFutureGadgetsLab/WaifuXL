@@ -18,22 +18,22 @@ const TitleComponent = ({ loading, upscaleProgress }) => {
     <>
       <div className="flex flex-col items-center justify-center w-full text-center">
         {loading && upscaleProgress != null && (
-          <>
+          <div className="absolute bottom-24">
             <span>
               {Math.round((upscaleProgress[0] / upscaleProgress[1]) * 100)}%
             </span>
             <div className=" bg-gray-200 h-1 w-60 md:w-96">
               <div
-                className="bg-blue h-1"
+                className="bg-blue h-1 transition-all duration-500 ease-in-out"
                 style={{
                   width: `${(upscaleProgress[0] / upscaleProgress[1]) * 100}%`,
                 }}
               ></div>
             </div>
-          </>
+          </div>
         )}
 
-        <h1 className="lg:text-6xl md:text-4xl text-2xl font-bold mt-10">
+        <h1 id="title" className="absolute select-none bottom-4 lg:text-6xl md:text-4xl text-2xl font-bold mt-10">
           {loading ? "Expanding" : "Expand"} your{" "}
           <span className="text-pink">
             {"waifu"}

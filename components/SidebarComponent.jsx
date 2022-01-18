@@ -27,9 +27,8 @@ const Sidebar = ({
   return (
     <div
       id="sidebar"
-      className={`w-80 flex flex-col fixed inset-y-0 z-10 ${
-        showSidebar ? "" : "hidden"
-      }`}
+      className={`w-80 flex flex-col fixed inset-y-0 z-10 transition-transform`}
+      style={{transform: `translateX(${showSidebar ? 0 : -100}%)`}}
     >
       <div className="flex-1 flex flex-col min-h-0 bg-gray-100">
         <div className="flex-1 flex flex-col overflow-y-auto">

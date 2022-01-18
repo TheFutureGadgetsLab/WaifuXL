@@ -5,10 +5,10 @@ const NavbarComponent = () => {
     <div className="">
       <header>
         <nav className="">
-          <div className="md:pl-4 container mx-auto py-4 flex justify-between items-center">
-            <div className="flex px-10 space-x-10">
+          <div className="container mx-auto py-4 flex justify-between items-center">
+            <div className="flex px-10 gap-4">
               <div
-                className="md:flex md:items-center md:space-x-2 hidden"
+                className="grow md:flex md:items-center hidden"
                 onClick={() => Router.push("./about")}
               >
                 <span className="text-2xl font-semibold text-black cursor-pointer">
@@ -16,14 +16,14 @@ const NavbarComponent = () => {
                 </span>
               </div>
               <div
-                className="text-3xl font-bold cursor-pointer text-pink md:pl-4 pr-4"
+                className="grow text-3xl font-bold cursor-pointer text-pink"
                 onClick={() => Router.push("./")}
               >
                 WaifuXL
               </div>
 
               <div
-                className="md:flex md:items-center md:space-x-2 hidden"
+                className="grow md:flex md:items-center hidden"
                 onClick={() => Router.push("./donate")}
               >
                 <span className="text-2xl font-semibold text-black cursor-pointer">
