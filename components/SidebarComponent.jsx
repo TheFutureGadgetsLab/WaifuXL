@@ -2,6 +2,7 @@ import DownloadComponent from "./DownloadComponent";
 import RunComponent from "./RunComponent";
 import InputComponent from "./InputComponent";
 import TagComponent from "./TagComponent";
+import Router from "next/router";
 
 const Sidebar = ({
   inputModalOpen,
