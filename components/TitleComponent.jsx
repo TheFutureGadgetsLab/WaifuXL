@@ -17,16 +17,13 @@ const TitleComponent = ({ loading, upscaleProgress }) => {
   return (
     <>
       <div className="flex flex-col items-center justify-center w-full text-center">
-        {loading && upscaleProgress != null && (
+        {loading && (
           <div className="absolute bottom-24">
-            <span>
-              {Math.round((upscaleProgress[0] / upscaleProgress[1]) * 100)}%
-            </span>
             <div className=" bg-gray-200 h-1 w-60 md:w-96">
               <div
-                className="bg-blue h-1 transition-all duration-500 ease-in-out"
+                className="bg-blue h-1 transition-all duration-1000 ease-linear"
                 style={{
-                  width: `${(upscaleProgress[0] / upscaleProgress[1]) * 100}%`,
+                  width: `${upscaleProgress * 100}%`,
                 }}
               ></div>
             </div>

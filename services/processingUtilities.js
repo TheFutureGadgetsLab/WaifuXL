@@ -1,8 +1,16 @@
 import ndarray from "ndarray";
 import ops from "ndarray-ops";
 import { getPixelsFromInput } from "./imageUtilities";
-import { runSuperRes, runTagger } from "./onnxBackend";
+import { getTagTime, runSuperRes, runTagger } from "./onnxBackend";
 import { doGif  } from "./gifUtilities";
+
+// Global variables for progress estimation
+var imageNpixels = 0;
+var imgProgressStopAt = 1.0;
+export function setImgProgressStopAt(v) {
+  imgProgressStopAt = Math.max(0, Math.min(1, v));
+}
+
 export function buildNdarrayFromImageOutput(data, height, width) {
     const inputArray = ndarray(data.data, data.dims || data.shape);
     const dataTensor = ndarray(new Uint8Array(width * height * 4).fill(255), [
@@ -57,6 +65,7 @@ export function buildNdarrayFromImage(imageData) {
     height,
     width,
   ]);
+  imageNpixels = width * height;
   ops.assign(
     dataProcessedTensor.pick(0, 0, null, null),
     dataTensor.pick(null, null, 0)
@@ -96,6 +105,7 @@ export async function upScaleSingleURI(inputData, setUpscaleProgress) {
   let nChunks = Math.ceil(imgH / chunkSize) * Math.ceil(imgW / chunkSize);
   for (let i = 0; i < imgH; i += chunkSize) {
     for (let j = 0; j < imgW; j += chunkSize) {
+      setImgProgressStopAt((chunkIdx + 1) / nChunks);
       // Compute chunk bounds including padding
       const iStart = Math.max(0, i - pad);
       const inH = iStart + chunkSize + pad*2 > imgH ? imgH - iStart : chunkSize + pad*2;
@@ -103,6 +113,7 @@ export async function upScaleSingleURI(inputData, setUpscaleProgress) {
       const jStart = Math.max(0, j - pad);
       const inW = jStart + chunkSize + pad*2 > imgW ? imgW - jStart : chunkSize + pad*2;
       const outW = Math.min(imgW, j + chunkSize) - j;
+      imageNpixels = inH * inW;
       // Create sliced and copy
       const inSlice = inArr.lo(0, 0, iStart, jStart).hi(1, 3, inH, inW);
       const subArr = ndarray(new Uint8Array(inH * inW * 3), inSlice.shape);
@@ -117,7 +128,7 @@ export async function upScaleSingleURI(inputData, setUpscaleProgress) {
         .lo(0, 0, i*2, j*2)
         .hi(1, 3, outH * 2, outW * 2);
       ops.assign(outSlice, chunkSlice);
-      setUpscaleProgress([chunkIdx, nChunks]);
+      setUpscaleProgress((chunkIdx + 1) / nChunks);
       chunkIdx++;
     }
   }
@@ -177,3 +188,21 @@ export async function upScaleGifFrameFromURI(
   });
 }
 
+// Progress estimation
+const baseTagTime = 40 / 1000;
+export const upscaleEstFreq = 0.3;
+const baseEstSecPerPixel = 0.000055;
+export function upscaleIncrementProgress(upscaleProgress, setUpscaleProgress)
+{
+  if (imageNpixels > 0) {
+    let speedFactor = baseTagTime / getTagTime();
+    if (typeof SharedArrayBuffer === "undefined") {
+      speedFactor *= 3;
+    }
+    let totalTimeEst = baseEstSecPerPixel * speedFactor * imageNpixels;
+    let progressToStop = Math.min(1, upscaleProgress / imgProgressStopAt);
+    let slowdownFactor = Math.max(0, 1 - Math.pow(progressToStop + 0.03, 8));
+    let estProgress = upscaleProgress + (upscaleEstFreq / totalTimeEst) * slowdownFactor;
+    setUpscaleProgress(Math.min(imgProgressStopAt, estProgress));
+  }
+}

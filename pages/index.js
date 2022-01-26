@@ -6,6 +6,7 @@ import Sidebar from "../components/SidebarComponent";
 import ScreenIcons from "../components/ScreenIconsComponent";
 import ImageDisplay from "../components/ImageDisplayComponent";
 import { setEventListeners } from "../services/setEventListeners";
+import { upscaleIncrementProgress, upscaleEstFreq } from "../services/processingUtilities";
 
 export default function Main() {
   const [inputURI, setInputURI] = useState("./ozen.png");
@@ -16,7 +17,8 @@ export default function Main() {
   const [tags, setTags] = useState(null);
   const [isInitialized, setIsInitialized] = useState(false);
   const [showSidebar, setShowSidebar] = useState(true);
-  const [upscaleProgress, setUpscaleProgress] = useState(null);
+  const [upscaleIncIntervalID, setUpscaleIncIntervalID] = useState(null);
+  const [upscaleProgress, setUpscaleProgress] = useState(0);
   const [extension, setExtension] = useState("png");
 
   var fileName = null;
@@ -43,6 +45,17 @@ export default function Main() {
     setInputURI("./ozen.png");
     setOutputURI("./ozen_2x.png");
   }, []);
+
+  useEffect(() => {
+    if (upscaleIncIntervalID != null) {
+      clearInterval(upscaleIncIntervalID);
+      setUpscaleIncIntervalID(null);
+    }
+    if (loading) {
+      setUpscaleIncIntervalID(setInterval(
+        upscaleIncrementProgress, upscaleEstFreq * 1000, upscaleProgress, setUpscaleProgress));
+    }
+  }, [loading, upscaleProgress]);
 
   return (
     <>

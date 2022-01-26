@@ -154,7 +154,7 @@ function ModalComponent({
                   setOutputURI(null);
                   setTags(null);
                   setInputModalOpen(false);
-                  setUpscaleProgress(null);
+                  setUpscaleProgress(0);
                 }}
               >
                 Done

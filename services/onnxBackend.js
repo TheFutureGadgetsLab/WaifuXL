@@ -4,6 +4,12 @@ const ort = require('onnxruntime-web');
 var superSession = null;
 var tagSession   = null;
 
+// Processing speed estimate
+var tagTime = 0;
+export function getTagTime() {
+    return tagTime;
+}
+
 function sleep (time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
@@ -73,6 +79,7 @@ export async function runTagger(imageArray) {
 
     console.log("Running tagger session");
     console.time('run_tagger')
+    let timeStart = performance.now();
     let results = undefined;
     try {
         const output = await session.run(feeds);
@@ -80,7 +87,8 @@ export async function runTagger(imageArray) {
     } catch (e) {
         console.error("Failed to run tagger");
         console.log(e)
-    }    
+    }
+    tagTime = (performance.now() - timeStart) / 1000.0;
     console.timeEnd('run_tagger')
     console.log("Tagging done");
     return results;
