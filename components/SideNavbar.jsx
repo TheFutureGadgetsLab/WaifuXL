@@ -6,7 +6,7 @@ const SideNavbar = ({
   return (
     <div
       id="sidebar"
-      className={`md:hidden w-80 flex flex-col fixed inset-y-0 z-10 ${
+      className={`md:hidden w-80 flex flex-col fixed inset-y-0 ${
         showSidebar ? "" : "hidden"
       }`}
     >

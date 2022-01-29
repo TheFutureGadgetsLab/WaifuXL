@@ -35,19 +35,6 @@ const InputComponent = ({
         </svg>{" "}
         <span>Choose Image/Gif</span>
       </button>
-      {inputModalOpen && (
-        <ModalComponent
-          setInputModalOpen={setInputModalOpen}
-          setInputURI={setInputURI}
-          setOutputURI={setOutputURI}
-          inputURI={inputURI}
-          previewURI={previewURI}
-          setPreviewURI={setPreviewURI}
-          setFileName={setFileName}
-          setTags={setTags}
-          setUpscaleProgress={setUpscaleProgress}
-        />
-      )}
     </>
   );
 };

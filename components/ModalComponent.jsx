@@ -27,8 +27,8 @@ function ModalComponent({
   }, [divRef]);
 
   return (
-    <div
-      className="absolute inset-0 overflow-y-auto z-20 w-screen h-screen"
+    <div id="modal-component-container"
+      className="absolute inset-0 overflow-y-auto w-screen h-screen m-0"
       aria-labelledby="modal-title"
       role="dialog"
       aria-modal="true"
@@ -39,26 +39,21 @@ function ModalComponent({
         setFileName();
       }}
     >
-      <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <div id="modal-bg"
-          className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity w-screen h-screen"
-          aria-hidden="true"
-          onClick={(e) => {
-            setInputModalOpen(false);
-            setFileName();
-          }}
-        ></div>
-
-        <span
-          className="hidden sm:inline-block sm:align-middle sm:h-screen"
-          aria-hidden="true"
-        >
-          &#8203;
-        </span>
-
-        <div className="inline-block align-bottom bg-white rounded-lg shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-          <div className="">
-            <svg
+      <div id="modal-bg"
+        className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity w-screen h-screen"
+        aria-hidden="true"
+        onClick={(e) => {
+          setInputModalOpen(false);
+          setFileName();
+        }}
+      ></div>
+      <div id="modal-container"
+        className="flex items-center justify-center w-screen h-screen">
+        <div id="modal"
+          className="bg-white rounded-lg shadow-xl transform transition-all text-center
+            w-full h-full md:w-96 md:h-auto">
+          <div>
+            <svg id="close-button"
               xmlns="http://www.w3.org/2000/svg"
               height="24px"
               viewBox="0 0 24 24"
@@ -75,7 +70,7 @@ function ModalComponent({
             </svg>
           </div>
           <span className="block text-gray-700 pt-3">
-            Click preview to open file dialogue
+            Click / tap preview below to choose file
           </span>
           <label
             className="flex flex-col items-center justify-center cursor-pointer h-96 m-3 bg-contain bg-origin-content p-4 bg-no-repeat bg-center"
@@ -97,11 +92,6 @@ function ModalComponent({
               />
             </label>
           </label>
-          <span className="text-sm">
-            &#10240;
-            <br />
-            &#10240;
-          </span>
           <div
             id="preset-menu"
             className="mt-10 p-3 flex justify-between relative gap-4"

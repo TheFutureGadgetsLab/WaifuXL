@@ -3,6 +3,8 @@ import RunComponent from "./RunComponent";
 import InputComponent from "./InputComponent";
 import TagComponent from "./TagComponent";
 import Router from "next/router";
+import ScreenIcons from "./ScreenIconsComponent";
+import ModalComponent from "./ModalComponent";
 
 const Sidebar = ({
   inputModalOpen,
@@ -22,18 +24,20 @@ const Sidebar = ({
   isInitialized,
   setExtension,
   showSidebar,
+  setShowSidebar,
   tags,
 }) => {
   return (
     <div
       id="sidebar"
-      className={`w-80 flex flex-col fixed inset-y-0 z-10 transition-transform`}
-      style={{transform: `translateX(${showSidebar ? 0 : -100}%)`}}
+      className="w-80 flex flex-col fixed inset-y-0 z-20"
     >
-      <div className="flex-1 flex flex-col min-h-0 bg-gray-100">
+      <div className="relative flex-1 flex flex-col min-h-0 bg-gray-100 transition-all"
+        style={{left: `${showSidebar ? 0 : -100}%`}}>
+        <ScreenIcons setShowSidebar={setShowSidebar} showSidebar={showSidebar} />
         <div className="flex-1 flex flex-col overflow-y-auto">
           <div className="">
-            <div className="pt-5 mt-10 mb-10 mx-8 space-y-2 grid grid-cols-1">
+            <div className="pt-5 mt-10 mb-10 mx-8 grid grid-cols-1 space-y-2">
               <div
                 className="md:hidden flex items-center space-x-2"
                 onClick={() => Router.push("./about")}
@@ -94,6 +98,19 @@ const Sidebar = ({
           </div>
         </div>
       </div>
+      {inputModalOpen && (
+        <ModalComponent
+          setInputModalOpen={setInputModalOpen}
+          setInputURI={setInputURI}
+          setOutputURI={setOutputURI}
+          inputURI={inputURI}
+          previewURI={previewURI}
+          setPreviewURI={setPreviewURI}
+          setFileName={setFileName}
+          setTags={setTags}
+          setUpscaleProgress={setUpscaleProgress}
+        />
+      )}
     </div>
   );
 };

@@ -63,6 +63,7 @@ export default function Main() {
         style={{
           backgroundImage: `url("bg.svg")`,
           backgroundSize: "cover",
+          backgroundPositionX: "right",
         }}
       >
         <Sidebar
@@ -83,16 +84,13 @@ export default function Main() {
           isInitialized={isInitialized}
           setExtension={setExtension}
           showSidebar={showSidebar}
+          setShowSidebar={setShowSidebar}
           tags={tags}
         />
         {/* Image display, title, navbar */}
         <main className="flex-1">
           <div className="flex flex-col items-center h-screen w-screen relative">
             <NavbarComponent />
-            <ScreenIcons
-              setShowSidebar={setShowSidebar}
-              showSidebar={showSidebar}
-            />
             <div className="h-full grow w-full">
               <ImageDisplay inputURI={inputURI} outputURI={outputURI} />
               <TitleComponent
