@@ -20,6 +20,7 @@ export default function Main() {
   const [upscaleIncIntervalID, setUpscaleIncIntervalID] = useState(null);
   const [upscaleProgress, setUpscaleProgress] = useState(0);
   const [extension, setExtension] = useState("png");
+  const [upscaleFactor, setUpscaleFactor] = useState(0);
 
   var fileName = null;
   var lastFileName = null;

@@ -28,13 +28,15 @@ const Sidebar = ({
   tags,
 }) => {
   return (
-    <div
-      id="sidebar"
-      className="w-80 flex flex-col fixed inset-y-0 z-20"
-    >
-      <div className="relative flex-1 flex flex-col min-h-0 bg-gray-100 transition-all"
-        style={{left: `${showSidebar ? 0 : -100}%`}}>
-        <ScreenIcons setShowSidebar={setShowSidebar} showSidebar={showSidebar} />
+    <div id="sidebar" className="w-80 flex flex-col fixed inset-y-0 z-20">
+      <div
+        className="relative flex-1 flex flex-col min-h-0 bg-gray-100 transition-all"
+        style={{ left: `${showSidebar ? 0 : -100}%` }}
+      >
+        <ScreenIcons
+          setShowSidebar={setShowSidebar}
+          showSidebar={showSidebar}
+        />
         <div className="flex-1 flex flex-col overflow-y-auto">
           <div className="">
             <div className="pt-5 mt-10 mb-10 mx-8 grid grid-cols-1 space-y-2">
@@ -54,7 +56,7 @@ const Sidebar = ({
                   Donate
                 </span>
               </div>
-              <hr className="md:hidden"/>
+              <hr className="md:hidden" />
 
               <InputComponent
                 inputModalOpen={inputModalOpen}
@@ -76,15 +78,26 @@ const Sidebar = ({
                   extension={extension}
                 />
               ) : (
-                <RunComponent
-                  setLoading={setLoading}
-                  inputURI={inputURI}
-                  setOutputURI={setOutputURI}
-                  setTags={setTags}
-                  isInitialized={isInitialized}
-                  setUpscaleProgress={setUpscaleProgress}
-                  setExtension={setExtension}
-                />
+                <>
+                  <select
+                    className={
+                      "form-select appearance-none border-none text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center"
+                    }
+                  >
+                    <option>2x Upscale Factor</option>
+                    <option>4x Upscale Factor</option>
+                    <option>8x Upscale Factor</option>
+                  </select>
+                  <RunComponent
+                    setLoading={setLoading}
+                    inputURI={inputURI}
+                    setOutputURI={setOutputURI}
+                    setTags={setTags}
+                    isInitialized={isInitialized}
+                    setUpscaleProgress={setUpscaleProgress}
+                    setExtension={setExtension}
+                  />
+                </>
               )}
             </div>
             {tags != null && (

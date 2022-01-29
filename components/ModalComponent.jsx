@@ -100,7 +100,7 @@ function ModalComponent({
               <span className="text-gray-700">Preset Images</span>
               <select
                 id="preset-select"
-                className="form-select rounded mt-1 block text-ellipsis w-full p-3 bg-blue text-white cursor-pointer"
+                className="form-select border-none rounded mt-1 block text-ellipsis w-full p-3 bg-blue text-white cursor-pointer"
                 onInput={async (inp) => {
                   const [name, url] = inp.target.value.split("|");
                   setPreviewURI(await getDataURIFromInput(url));
