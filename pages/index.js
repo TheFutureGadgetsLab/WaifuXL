@@ -34,6 +34,8 @@ export default function Main() {
   }
 
   useEffect(async () => {
+    setInputURI("./ozen.png");
+    setOutputURI("./ozen_2x.png");
     setEventListeners(
       setPreviewURI,
       setFileName,
@@ -42,8 +44,6 @@ export default function Main() {
     );
     await initializeONNX();
     setIsInitialized(true);
-    setInputURI("./ozen.png");
-    setOutputURI("./ozen_2x.png");
   }, []);
 
   useEffect(() => {
