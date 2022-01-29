@@ -88,7 +88,7 @@ export default function Main() {
         {/* Image display, title, navbar */}
         <main className="flex-1">
           <div className="flex flex-col items-center h-screen w-screen relative">
-            <NavbarComponent />
+            <NavbarComponent currentPage="index"/>
             <ScreenIcons
               setShowSidebar={setShowSidebar}
               showSidebar={showSidebar}

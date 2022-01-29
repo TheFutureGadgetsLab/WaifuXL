@@ -1,6 +1,6 @@
 import Router from "next/router";
 
-const NavbarComponent = () => {
+const NavbarComponent = ({currentPage}) => {
   return (
     <div className="">
       <header>
@@ -10,20 +10,20 @@ const NavbarComponent = () => {
               <div className="grow md:flex md:items-center hidden">
                 <a
                   href="/about"
-                  className="text-2xl font-semibold text-black cursor-pointer"
+                  className={`text-2xl font-semibold text-black cursor-pointer ${currentPage === "about" ? 'underline' : ''}`}
                 >
                   About
                 </a>
               </div>
-              <div className="grow text-3xl font-bold cursor-pointer text-pink">
-                <a href="/">WaifuXL</a>
+              <div className={`grow text-3xl font-bold cursor-pointer text-pink`}>
+                <a className={`${currentPage === "index" ? 'underline' : ''}`} href="/">WaifuXL</a>
               </div>
 
-              <div
-                className="grow md:flex md:items-center hidden"
-                onClick={() => Router.push("./donate")}
-              >
-                <a href="/donate" className="text-2xl font-semibold text-black cursor-pointer">
+              <div className="grow md:flex md:items-center hidden">
+                <a
+                  href="/donate"
+                  className={`text-2xl font-semibold text-black cursor-pointer ${currentPage === "donate" ? 'underline' : ''}`}
+                >
                   Donate
                 </a>
               </div>
