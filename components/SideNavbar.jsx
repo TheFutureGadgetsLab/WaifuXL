@@ -2,6 +2,7 @@ import Router from "next/router";
 
 const SideNavbar = ({
   showSidebar,
+  currentPage,
 }) => {
   return (
     <div
@@ -18,7 +19,7 @@ const SideNavbar = ({
                 className="md:hidden flex items-center space-x-2"
                 onClick={() => Router.push("./")}
               >
-                <span className="text-2xl font-semibold text-black cursor-pointer">
+                <span className={`text-2xl font-semibold text-black cursor-pointer ${currentPage === "index" ? 'underline' : ''}`}>
                   Home
                 </span>
               </div>
@@ -27,7 +28,7 @@ const SideNavbar = ({
                 className="md:hidden flex items-center space-x-2"
                 onClick={() => Router.push("./about")}
               >
-                <span className="text-2xl font-semibold text-black cursor-pointer">
+                <span className={`text-2xl font-semibold text-black cursor-pointer ${currentPage === "about" ? 'underline' : ''}`}>
                   About
                 </span>
               </div>
@@ -35,7 +36,7 @@ const SideNavbar = ({
                 className="md:hidden flex items-center space-x-2"
                 onClick={() => Router.push("./donate")}
               >
-                <span className="text-2xl font-semibold text-black cursor-pointer">
+                <span className={`text-2xl font-semibold text-black cursor-pointer ${currentPage === "donate" ? 'underline' : ''}`}>
                   Donate
                 </span>
               </div>
