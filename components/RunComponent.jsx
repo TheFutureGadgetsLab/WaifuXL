@@ -3,7 +3,8 @@ import { upScaleFromURI } from "../services/processingUtilities";
 
 const RunComponent = ({
   loading, setLoading, inputURI, setOutputURI, setTags,
-  isInitialized, initProgress, setUpscaleProgress, setExtension
+  isInitialized, initProgress, setUpscaleProgress, setExtension,
+  setUpscaleCount,
 }) => {
   const [shouldRun, setShouldRun] = useState(false);
 
@@ -12,6 +13,7 @@ const RunComponent = ({
       // Clear previous output
       setOutputURI(null);
       const result = await upScaleFromURI(inputURI, setLoading, setTags, setUpscaleProgress, setExtension);
+      setUpscaleCount(1);
       // If the models output is valid
       if (result) {
         //set the output
@@ -24,7 +26,7 @@ const RunComponent = ({
 
   return (
     <button
-      className={`hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg inline-flex items-center
+      className={`grow hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg inline-flex items-center
         ${(isInitialized && !loading) ? "bg-pink" : "bg-gray-300"}`}
       onClick={() => {
         setShouldRun(true);

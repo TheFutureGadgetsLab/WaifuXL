@@ -1,19 +1,9 @@
-import ModalComponent from "./ModalComponent";
 const InputComponent = ({
-  inputModalOpen,
   setInputModalOpen,
-  setInputURI,
-  setOutputURI,
-  inputURI,
-  previewURI,
-  setPreviewURI,
-  setFileName,
-  setTags,
-  setUpscaleProgress,
 }) => {
   return (
     <>
-      <button
+      <button id="choose-image-button"
         type="button"
         className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center"
         onClick={() => setInputModalOpen(true)}

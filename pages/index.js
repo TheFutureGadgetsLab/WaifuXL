@@ -21,6 +21,7 @@ export default function Main() {
   const [upscaleProgress, setUpscaleProgress] = useState(0);
   const [extension, setExtension] = useState("png");
   const [upscaleFactor, setUpscaleFactor] = useState(0);
+  const [upscaleCount, setUpscaleCount] = useState(0);
 
   var fileName = null;
   var lastFileName = null;
@@ -89,6 +90,7 @@ export default function Main() {
           setShowSidebar={setShowSidebar}
           tags={tags}
           initProgress={initProgress}
+          setUpscaleCount={setUpscaleCount}
         />
         {/* Image display, title, navbar */}
         <main className="flex-1">
@@ -99,6 +101,7 @@ export default function Main() {
               <TitleComponent
                 loading={loading}
                 upscaleProgress={upscaleProgress}
+                downloadReady={outputURI != null && upscaleCount > 0}
               />
             </div>
           </div>

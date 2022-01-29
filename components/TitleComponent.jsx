@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 
-const TitleComponent = ({ loading, upscaleProgress }) => {
+const TitleComponent = ({
+  loading, upscaleProgress, downloadReady
+}) => {
   const [loadingText, setLoadingText] = useState("");
   useEffect(async () => {
     const interval = setInterval(function () {
@@ -31,10 +33,10 @@ const TitleComponent = ({ loading, upscaleProgress }) => {
         )}
 
         <h1 id="title" className="absolute select-none bottom-4 lg:text-6xl md:text-4xl text-2xl font-bold mt-10">
-          {loading ? "Expanding" : "Expand"} your{" "}
+          { downloadReady ? "Download" : (loading ? "Expanding" : "Expand") } your{" "}
           <span className="text-pink">
             {"waifu"}
-            {loading && loadingText}
+            {loading ? loadingText : "!"}
           </span>
         </h1>
       </div>

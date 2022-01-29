@@ -28,6 +28,7 @@ const Sidebar = ({
   setShowSidebar,
   tags,
   initProgress,
+  setUpscaleCount,
 }) => {
   return (
     <div id="sidebar" className="w-80 flex flex-col fixed inset-y-0 z-20">
@@ -61,16 +62,7 @@ const Sidebar = ({
               <hr className="md:hidden" />
 
               <InputComponent
-                inputModalOpen={inputModalOpen}
                 setInputModalOpen={setInputModalOpen}
-                setInputURI={setInputURI}
-                setOutputURI={setOutputURI}
-                inputURI={inputURI}
-                previewURI={previewURI}
-                setPreviewURI={setPreviewURI}
-                setFileName={setFileName}
-                setTags={setTags}
-                setUpscaleProgress={setUpscaleProgress}
               />
               {outputURI != null ? (
                 <DownloadComponent
@@ -80,16 +72,8 @@ const Sidebar = ({
                   extension={extension}
                 />
               ) : (
-                <>
-                  <select
-                    className={
-                      "form-select appearance-none border-none text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center"
-                    }
-                  >
-                    <option>2x Upscale Factor</option>
-                    <option>4x Upscale Factor</option>
-                    <option>8x Upscale Factor</option>
-                  </select>
+                <div id="upscale-button-container"
+                  className="flex justify-between gap-2">
                   <RunComponent
                     loading={loading}
                     setLoading={setLoading}
@@ -100,8 +84,16 @@ const Sidebar = ({
                     setUpscaleProgress={setUpscaleProgress}
                     setExtension={setExtension}
                     initProgress={initProgress}
+                    setUpscaleCount={setUpscaleCount}
                   />
-                </>
+                  <select id="resolution-select"
+                    className="form-select appearance-none border-none text-white font-bold py-2 px-4
+                      rounded drop-shadow-lg bg-pink inline-flex items-center w-16">
+                    <option>2&#215;</option>
+                    <option>4&#215;</option>
+                    <option>8&#215;</option>
+                  </select>
+                </div>
               )}
             </div>
             {tags != null && (
