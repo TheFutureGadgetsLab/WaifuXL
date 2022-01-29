@@ -14,13 +14,14 @@ function sleep (time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
 
-export async function initializeONNX() {
+export async function initializeONNX(setProgress) {
     ort.env.wasm.numThreads = navigator.hardwareConcurrency / 2;
     ort.env.wasm.simd       = true;
     ort.env.wasm.proxy      = true;
 
-    const superBuffer = await fetchMyModel('./superRes.onnx');
-    const tagBuffer = await fetchMyModel('./tagger.onnx');
+    setProgress(0);
+    const superBuffer = await fetchMyModel('./superRes.onnx', setProgress, 0.0, 0.5);
+    const tagBuffer = await fetchMyModel('./tagger.onnx', setProgress, 0.5, 0.9);
 
     console.log("Initializing session");
     superSession = await ort.InferenceSession.create(superBuffer, {
@@ -38,9 +39,11 @@ export async function initializeONNX() {
         executionMode: 'parallel',
     });
 
+    setProgress(1);
+
     // Needed because WASM workers are created async, wait for them
     // to be ready
-    await sleep(1000);
+    await sleep(300);
 }
 
 function prepareImage(imageArray) {
@@ -94,10 +97,27 @@ export async function runTagger(imageArray) {
     return results;
 }
 
-async function fetchMyModel(filepathOrUri) {
-    // use fetch to read model file (browser) as ArrayBuffer
-    if (typeof fetch !== 'undefined') {
-        const response = await fetch(filepathOrUri);
-        return await response.arrayBuffer();
+async function fetchMyModel(filepathOrUri, setProgress, startProgress, endProgress) {
+    console.assert(typeof fetch !== "undefined");
+    const response = await fetch(filepathOrUri);
+    const reader = response.body.getReader();
+    const length = parseInt(response.headers.get("content-length"));
+    let data = new Uint8Array(length);
+    let received = 0;
+
+    // Loop through the response stream and extract data chunks
+    while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) {
+            setProgress(1);
+            break;
+        } else {
+            // Push values to the chunk array
+            data.set(value, received);
+            received += value.length;
+            setProgress(startProgress + (received / length) * (endProgress - startProgress));
+        }
     }
+    return data.buffer;
 }

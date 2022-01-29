@@ -3,7 +3,6 @@ import NavbarComponent from "../components/NavbarComponent";
 import TitleComponent from "../components/TitleComponent";
 import { useState, useEffect } from "react";
 import Sidebar from "../components/SidebarComponent";
-import ScreenIcons from "../components/ScreenIconsComponent";
 import ImageDisplay from "../components/ImageDisplayComponent";
 import { setEventListeners } from "../services/setEventListeners";
 import { upscaleIncrementProgress, upscaleEstFreq } from "../services/processingUtilities";
@@ -16,6 +15,7 @@ export default function Main() {
   const [inputModalOpen, setInputModalOpen] = useState(false);
   const [tags, setTags] = useState(null);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [initProgress, setInitProgress] = useState(0);
   const [showSidebar, setShowSidebar] = useState(true);
   const [upscaleIncIntervalID, setUpscaleIncIntervalID] = useState(null);
   const [upscaleProgress, setUpscaleProgress] = useState(0);
@@ -43,7 +43,7 @@ export default function Main() {
       setShowSidebar,
       setInputModalOpen
     );
-    await initializeONNX();
+    await initializeONNX(setInitProgress);
     setIsInitialized(true);
   }, []);
 
@@ -82,11 +82,13 @@ export default function Main() {
           fileName={fileName}
           extension={extension}
           setLoading={setLoading}
+          loading={loading}
           isInitialized={isInitialized}
           setExtension={setExtension}
           showSidebar={showSidebar}
           setShowSidebar={setShowSidebar}
           tags={tags}
+          initProgress={initProgress}
         />
         {/* Image display, title, navbar */}
         <main className="flex-1">

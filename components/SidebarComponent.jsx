@@ -21,11 +21,13 @@ const Sidebar = ({
   fileName,
   extension,
   setLoading,
+  loading,
   isInitialized,
   setExtension,
   showSidebar,
   setShowSidebar,
   tags,
+  initProgress,
 }) => {
   return (
     <div id="sidebar" className="w-80 flex flex-col fixed inset-y-0 z-20">
@@ -89,6 +91,7 @@ const Sidebar = ({
                     <option>8x Upscale Factor</option>
                   </select>
                   <RunComponent
+                    loading={loading}
                     setLoading={setLoading}
                     inputURI={inputURI}
                     setOutputURI={setOutputURI}
@@ -96,6 +99,7 @@ const Sidebar = ({
                     isInitialized={isInitialized}
                     setUpscaleProgress={setUpscaleProgress}
                     setExtension={setExtension}
+                    initProgress={initProgress}
                   />
                 </>
               )}
