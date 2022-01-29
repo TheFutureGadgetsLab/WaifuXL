@@ -10,7 +10,7 @@ export default function About() {
 
   return (
     <>
-      <SideNavbar showSidebar={showSidebar} />
+      <SideNavbar showSidebar={showSidebar} currentPage="about"/>
 
       <div
         className="flex flex-col items-center min-h-screen"
