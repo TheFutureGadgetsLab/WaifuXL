@@ -28,7 +28,9 @@ const Sidebar = ({
   setShowSidebar,
   tags,
   initProgress,
-  setUpscaleCount,
+  setUserHasRun,
+  upscaleFactor,
+  setUpscaleFactor,
 }) => {
   return (
     <div id="sidebar" className="w-80 flex flex-col fixed inset-y-0 z-20">
@@ -84,14 +86,18 @@ const Sidebar = ({
                     setUpscaleProgress={setUpscaleProgress}
                     setExtension={setExtension}
                     initProgress={initProgress}
-                    setUpscaleCount={setUpscaleCount}
+                    setUserHasRun={setUserHasRun}
+                    upscaleFactor={upscaleFactor}
                   />
                   <select id="resolution-select"
                     className="form-select appearance-none border-none text-white font-bold py-2 px-4
-                      rounded drop-shadow-lg bg-pink inline-flex items-center w-16">
-                    <option>2&#215;</option>
-                    <option>4&#215;</option>
-                    <option>8&#215;</option>
+                      rounded drop-shadow-lg bg-pink inline-flex items-center w-16"
+                    onInput={async (inp) => {
+                      setUpscaleFactor(parseInt(inp.target.value));
+                    }}>
+                    <option value="2">2&#215;</option>
+                    <option value="4">4&#215;</option>
+                    <option value="8">8&#215;</option>
                   </select>
                 </div>
               )}

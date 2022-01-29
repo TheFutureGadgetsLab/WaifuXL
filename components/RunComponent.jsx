@@ -4,7 +4,7 @@ import { upScaleFromURI } from "../services/processingUtilities";
 const RunComponent = ({
   loading, setLoading, inputURI, setOutputURI, setTags,
   isInitialized, initProgress, setUpscaleProgress, setExtension,
-  setUpscaleCount,
+  setUserHasRun, upscaleFactor,
 }) => {
   const [shouldRun, setShouldRun] = useState(false);
 
@@ -12,8 +12,9 @@ const RunComponent = ({
     if (shouldRun) {
       // Clear previous output
       setOutputURI(null);
-      const result = await upScaleFromURI(inputURI, setLoading, setTags, setUpscaleProgress, setExtension);
-      setUpscaleCount(1);
+      const result = await upScaleFromURI(
+        inputURI, setLoading, setTags, setUpscaleProgress, setExtension, upscaleFactor);
+      setUserHasRun(true);
       // If the models output is valid
       if (result) {
         //set the output

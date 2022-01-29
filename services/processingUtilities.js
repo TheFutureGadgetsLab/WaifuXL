@@ -4,6 +4,10 @@ import { getPixelsFromInput } from "./imageUtilities";
 import { getTagTime, runSuperRes, runTagger } from "./onnxBackend";
 import { doGif  } from "./gifUtilities";
 
+// Global parameters
+const chunkSize = 512;
+const pad = 4;
+
 // Global variables for progress estimation
 var imageNpixels = 0;
 var imgProgressStopAt = 1.0;
@@ -92,45 +96,70 @@ export function buildImageFromND(nd, height, width) {
   return canvas.toDataURL();
 }
 
-export async function upScaleSingleURI(inputData, setUpscaleProgress) {
-  const inArr = buildNdarrayFromImage(inputData);
-  const imgH = inArr.shape[2];
-  const imgW = inArr.shape[3];
+/**
+ * Upscales image pixel data using the super resolution model. The image is split
+ *   into chunks of size chunkSize to avoid running out of memory on the WASM side.
+ * 
+ * @param {ndarray} inputData Image data as pixels in a ndarray
+ * @param {Function} setUpscaleProgress Callback to set the progress of the super resolution
+ * @param {Number} repeatUpscale How many times to repeat the super resolution
+ * @returns Upscaled image as URI
+ */
+export async function upscale(inputData, setUpscaleProgress, repeatUpscale=1) {
+  let inArr = buildNdarrayFromImage(inputData);
+  let outArr;
+  let imgH = inArr.shape[2];
+  let imgW = inArr.shape[3];
+  let totalChunks = 0;
+  // Determine the total number of chunks in all upscaling steps
+  for (let s = 0; s < repeatUpscale; s += 1) {
+    totalChunks += Math.ceil(imgH / chunkSize) * Math.ceil(imgW / chunkSize);
+    imgW *= 2;
+    imgH *= 2;
+  }
+  console.debug(`Total chunks: ${totalChunks}, end image size: ${imgW}x${imgH}`);
 
-  const chunkSize = 512;
-  const pad = 4;
-  // Split the image in chunks and run super resolution on each chunk
-  const outArr = ndarray(new Uint8Array(3 * (imgH * 2) * (imgW * 2)), [1, 3, imgH * 2, imgW * 2]);
-  let chunkIdx = 0;
-  let nChunks = Math.ceil(imgH / chunkSize) * Math.ceil(imgW / chunkSize);
-  for (let i = 0; i < imgH; i += chunkSize) {
-    for (let j = 0; j < imgW; j += chunkSize) {
-      setImgProgressStopAt((chunkIdx + 1) / nChunks);
-      // Compute chunk bounds including padding
-      const iStart = Math.max(0, i - pad);
-      const inH = iStart + chunkSize + pad*2 > imgH ? imgH - iStart : chunkSize + pad*2;
-      const outH = Math.min(imgH, i + chunkSize) - i;
-      const jStart = Math.max(0, j - pad);
-      const inW = jStart + chunkSize + pad*2 > imgW ? imgW - jStart : chunkSize + pad*2;
-      const outW = Math.min(imgW, j + chunkSize) - j;
-      imageNpixels = inH * inW;
-      // Create sliced and copy
-      const inSlice = inArr.lo(0, 0, iStart, jStart).hi(1, 3, inH, inW);
-      const subArr = ndarray(new Uint8Array(inH * inW * 3), inSlice.shape);
-      ops.assign(subArr, inSlice);
-      // Run the super resolution model on the chunk, copy the result into the combined array
-      const chunkData = await runSuperRes(subArr);
-      const chunkArr = ndarray(chunkData.data, chunkData.dims);
-      const chunkSlice = chunkArr
-        .lo(0, 0, (i - iStart)*2, (j - jStart)*2)
-        .hi(1, 3, outH * 2, outW * 2);
-      const outSlice = outArr
-        .lo(0, 0, i*2, j*2)
-        .hi(1, 3, outH * 2, outW * 2);
-      ops.assign(outSlice, chunkSlice);
-      setUpscaleProgress((chunkIdx + 1) / nChunks);
-      chunkIdx++;
+  for (let s = 0; s < repeatUpscale; s += 1) {
+    imgH = inArr.shape[2];
+    imgW = inArr.shape[3];
+
+    // Split the image in chunks and run super resolution on each chunk
+    outArr = ndarray(new Uint8Array(3 * (imgH * 2) * (imgW * 2)), [1, 3, imgH * 2, imgW * 2]);
+    let chunkIdx = 0;
+    for (let i = 0; i < imgH; i += chunkSize) {
+      for (let j = 0; j < imgW; j += chunkSize) {
+        let progress = (chunkIdx + 1) / totalChunks;
+        setImgProgressStopAt(progress);
+
+        // Compute chunk bounds including padding
+        const iStart = Math.max(0, i - pad);
+        const inH = iStart + chunkSize + pad*2 > imgH ? imgH - iStart : chunkSize + pad*2;
+        const outH = Math.min(imgH, i + chunkSize) - i;
+        const jStart = Math.max(0, j - pad);
+        const inW = jStart + chunkSize + pad*2 > imgW ? imgW - jStart : chunkSize + pad*2;
+        const outW = Math.min(imgW, j + chunkSize) - j;
+        imageNpixels = inH * inW;
+
+        // Create sliced and copy
+        const inSlice = inArr.lo(0, 0, iStart, jStart).hi(1, 3, inH, inW);
+        const subArr = ndarray(new Uint8Array(inH * inW * 3), inSlice.shape);
+        ops.assign(subArr, inSlice);
+
+        // Run the super resolution model on the chunk, copy the result into the combined array
+        const chunkData = await runSuperRes(subArr);
+        const chunkArr = ndarray(chunkData.data, chunkData.dims);
+        const chunkSlice = chunkArr
+          .lo(0, 0, (i - iStart)*2, (j - jStart)*2)
+          .hi(1, 3, outH * 2, outW * 2);
+        const outSlice = outArr
+          .lo(0, 0, i*2, j*2)
+          .hi(1, 3, outH * 2, outW * 2);
+        ops.assign(outSlice, chunkSlice);
+        setUpscaleProgress(progress);
+        chunkIdx++;
+      }
     }
+    inArr = outArr;
   }
 
   // Reshape network output into a normal image
@@ -139,25 +168,26 @@ export async function upScaleSingleURI(inputData, setUpscaleProgress) {
   return outURI;
 }
 
-export async function upScaleFromURI(uri, setLoading, setTags, setUpscaleProgress, setExtension) {
+export async function upScaleFromURI(uri, setLoading, setTags, setUpscaleProgress, setExtension, upscaleFactor) {
   setLoading(true);
   let resultURI = null;
+  let repeatUpscale = Math.log2(upscaleFactor);
   if (uri.slice(0, 14) == "data:image/gif") {
     setExtension("gif")
     //is gif
-    resultURI = await doGif(uri, setTags, setUpscaleProgress);
+    resultURI = await doGif(uri, setTags, setUpscaleProgress, repeatUpscale);
   } else {
     //is image
     setExtension("png")
-    const inputData = await getPixelsFromInput(uri);
+    const pixelData = await getPixelsFromInput(uri);
 
-    const tagInput = buildNdarrayFromImage(inputData);
+    const tagInput = buildNdarrayFromImage(pixelData);
     const tagOutput = await runTagger(tagInput);
     const tags = await getTopTags(tagOutput);
     setTags(tags);
 
     console.debug("starting upscaling");
-    resultURI = await upScaleSingleURI(inputData, setUpscaleProgress);
+    resultURI = await upscale(pixelData, setUpscaleProgress, repeatUpscale);
   }
   setLoading(false);
   return resultURI;
