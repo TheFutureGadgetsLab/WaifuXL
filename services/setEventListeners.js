@@ -1,6 +1,6 @@
 import {
   getDataURIFromInput,
-  getDataURIFromFileUpload,
+  setDataURIFromFile,
 } from "../services/imageUtilities";
 
 export async function setEventListeners(
@@ -17,7 +17,7 @@ export async function setEventListeners(
         if (item.kind === "file") {
           let file = item.getAsFile();
           setFileName(file.name.split("/").at(-1).split(".")[0]);
-          getDataURIFromFileUpload(file, setPreviewURI);
+          setDataURIFromFile(file, setPreviewURI);
           return true;
         }
       }
@@ -72,6 +72,7 @@ export async function setEventListeners(
     if (success) {
       setShowSidebar(true);
       setInputModalOpen(true);
+      setFileName(e.dataTransfer.files[0].name.split("/").at(-1).split(".")[0]);
     }
   });
 }

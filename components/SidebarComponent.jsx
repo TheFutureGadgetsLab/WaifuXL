@@ -68,7 +68,6 @@ const Sidebar = ({
               />
               {outputURI != null ? (
                 <DownloadComponent
-                  inputURI={inputURI}
                   outputURI={outputURI}
                   fileName={fileName}
                   extension={extension}
@@ -94,6 +93,7 @@ const Sidebar = ({
                       rounded drop-shadow-lg bg-pink inline-flex items-center w-16"
                     onInput={async (inp) => {
                       setUpscaleFactor(parseInt(inp.target.value));
+                      setFileName(fileName);
                     }}>
                     <option value="2">2&#215;</option>
                     <option value="4">4&#215;</option>

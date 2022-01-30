@@ -6,7 +6,7 @@ import {
   getTopTags,
   setImgProgressStopAt,
 } from "./processingUtilities";
-import { getPixelsFromInput } from "./imageUtilities";
+import { getPixelDataFromURI } from "./imageUtilities";
 import { runTagger } from "./onnxBackend";
 
 async function frameAdd(frame, gif, height, width, delay) {
@@ -43,7 +43,7 @@ export async function doGif(inputURI, setTags, setUpscaleProgress, upscaleFactor
       height: results.shape[2] * 2,
     });
 
-    const inputData = await getPixelsFromInput(
+    const inputData = await getPixelDataFromURI(
       buildImageFromND(
         results.data.slice(0 * results.stride[0], 1 * results.stride[0]),
         results.shape[2],

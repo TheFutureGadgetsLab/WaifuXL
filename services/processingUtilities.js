@@ -1,6 +1,6 @@
 import ndarray from "ndarray";
 import ops from "ndarray-ops";
-import { getPixelsFromInput } from "./imageUtilities";
+import { getPixelDataFromURI } from "./imageUtilities";
 import { getTagTime, runSuperRes, runTagger } from "./onnxBackend";
 import { doGif  } from "./gifUtilities";
 
@@ -179,7 +179,7 @@ export async function upScaleFromURI(uri, setLoading, setTags, setUpscaleProgres
   } else {
     //is image
     setExtension("png")
-    const pixelData = await getPixelsFromInput(uri);
+    const pixelData = await getPixelDataFromURI(uri);
 
     const tagInput = buildNdarrayFromImage(pixelData);
     const tagOutput = await runTagger(tagInput);
@@ -199,7 +199,7 @@ export async function upScaleGifFrameFromURI(
   width
 ) {
   return new Promise(async (resolve, reject) => {
-    const inputData = await getPixelsFromInput(
+    const inputData = await getPixelDataFromURI(
       buildImageFromND(frameData, height, width)
     );
     const superResInput = buildNdarrayFromImage(inputData);

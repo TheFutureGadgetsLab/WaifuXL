@@ -22,17 +22,18 @@ export default function Main() {
   const [extension, setExtension] = useState("png");
   const [upscaleFactor, setUpscaleFactor] = useState(2);
   const [userHasRun, setUserHasRun] = useState(false);
+  const [fileName, _setFileName] = useState("example");
 
-  var fileName = null;
-  var lastFileName = null;
+  var lastFileName = fileName;
 
   function setFileName(name = null) {
     if (name == null) {
-      fileName = lastFileName;
+      name = lastFileName;
     } else {
-      fileName = name;
+      lastFileName = name;
     }
-    console.debug("set filename to", fileName);
+    _setFileName(`${name}_${upscaleFactor}x`);
+    console.debug("set filename to", name);
   }
 
   useEffect(async () => {

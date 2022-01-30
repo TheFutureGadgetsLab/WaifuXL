@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import {
   getDataURIFromInput,
-  getDataURIFromFileUpload,
-  checkDimensions,
+  setDataURIFromFile,
 } from "../services/imageUtilities";
 
 function ModalComponent({
@@ -85,7 +84,7 @@ function ModalComponent({
                 className="hidden"
                 onChange={(e) => {
                   if (e.target.files[0]) {
-                    getDataURIFromFileUpload(e.target.files[0], setPreviewURI);
+                    setDataURIFromFile(e.target.files[0], setPreviewURI);
                     setFileName(e.target.files[0].name.split(".")[0]);
                   }
                 }}
