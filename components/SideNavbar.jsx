@@ -17,11 +17,10 @@ const SideNavbar = ({
             <div className="pt-5 mt-10 mb-10 mx-8 space-y-2 grid grid-cols-1">
             <div
                 className="md:hidden flex items-center space-x-2"
-                onClick={() => Router.push("./")}
               >
-                <span className={`text-2xl font-semibold text-black cursor-pointer ${currentPage === "index" ? 'underline' : ''}`}>
+                <a href="/" className={`text-2xl font-semibold text-black cursor-pointer ${currentPage === "index" ? 'underline' : ''}`}>
                   Home
-                </span>
+                </a>
               </div>
 
               <div
