@@ -54,7 +54,7 @@ export default function Donate() {
             <button className="mt-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center w-max">
               <img
                 className="h-4 pr-2"
-                src="https://storage.ko-fi.com/cdn/cup-border.png"
+                src="/koficup.png"
               />
 
               <a
