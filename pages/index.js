@@ -6,7 +6,7 @@ import Sidebar from "../components/SidebarComponent";
 import ImageDisplay from "../components/ImageDisplayComponent";
 import { setEventListeners } from "../services/setEventListeners";
 import { upscaleIncrementProgress, upscaleEstFreq } from "../services/processingUtilities";
-
+import InProgress from "../components/inprogress.jsx";
 export default function Main() {
   const [inputURI, setInputURI] = useState("./ozen.png");
   const [outputURI, setOutputURI] = useState("./ozen_2x.png");
@@ -98,6 +98,7 @@ export default function Main() {
         {/* Image display, title, navbar */}
         <main className="flex-1">
           <div className="flex flex-col items-center h-screen w-screen relative">
+            <InProgress />
             <NavbarComponent currentPage="index" />
             <div className="h-full grow w-full">
               <ImageDisplay inputURI={inputURI} outputURI={outputURI} />
