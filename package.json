@@ -13,7 +13,7 @@
     "gifuct-js": "^2.1.2",
     "ndarray": "^1.0.19",
     "ndarray-ops": "^1.2.2",
-    "next": "latest",
+    "next": "^12.1.0",
     "onnxruntime-common": "^1.11.0-dev.20220124-3dfadf903",
     "onnxruntime-web": "^1.11.0-dev.20220129-baa176792",
     "pify": "^5.0.0",
