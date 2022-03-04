@@ -9,3 +9,9 @@ Later, when we have the full model trained.
 
 # Performance
 [ONNX Runtime](https://github.com/microsoft/onnxruntime) supports SIMD acceleration and multithreading, using a beefier computer will definitely speed things up!
+
+
+### Model opt note
+```
+python -m onnxruntime.tools.convert_onnx_models_to_ort --optimization_level all --save_optimized_onnx_model superRes.onnx
+```
