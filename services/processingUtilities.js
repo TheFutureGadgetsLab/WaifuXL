@@ -5,7 +5,7 @@ import { getTagTime, runSuperRes, runTagger } from "./onnxBackend";
 import { doGif  } from "./gifUtilities";
 
 // Global parameters
-const chunkSize = 512;
+const chunkSize = 1024;
 const pad = 4;
 
 // Global variables for progress estimation
