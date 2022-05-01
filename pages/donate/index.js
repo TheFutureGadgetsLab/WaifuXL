@@ -5,15 +5,14 @@ import { createRef, useEffect, useState } from "react";
 function Tooltip({ children, tooltipText, isHidden }) {
   const tipRef = createRef(null);
   return (
-    <div className="relative flex items-center mt-4">
-      {!isHidden && (
+    <div className="absolute right-full top-0 flex items-center transition-transform duration-200 ease-in-out"
+      style={{ transform: `scale(${isHidden ? "0" : "1"})` }}>
         <div
-          className={` absolute z-40 bg-black text-white px-4 py-2 rounded flex items-center transition-all duration-150`}
+          className={`z-40 bg-black text-white px-4 py-2 rounded flex items-center`}
           ref={tipRef}
         >
           {tooltipText}
         </div>
-      )}
       {children}
     </div>
   );
@@ -71,21 +70,19 @@ export default function Donate() {
             Donation Links
           </div>
           <div className="text-left flex flex-col flex-grow flex-wrap">
-            <br />
-            <button className="mt-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center w-max">
+            <button className="hover:bg-blue-700 text-black font-bold py-2 px-4 rounded inline-flex items-center w-max">
               <img className="h-4 pr-2" src="/koficup.png" />
 
               <a
                 className="font-mono"
                 href="https://ko-fi.com/thefuturegadgetslab/?hidefeed=true&widget=true&embed=true&preview=true"
               >
-                <span>Buy us a coffee on Ko-fi</span>
+                <span>Support us on Ko-fi</span>
               </a>
             </button>
-            <br />
-            <div className="grid grid-cols-2">
+            <div id="eth-container" className="relative">
               <button
-                className="mt-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center w-max"
+                className="hover:bg-blue-700 text-black relative font-bold py-2 px-4 rounded inline-flex items-center w-max"
                 onClick={async () => {
                   navigator.clipboard.writeText(
                     "0xDBF8321ba37D14eFc82BA1d9A416145EE039b78d"
@@ -102,13 +99,13 @@ export default function Donate() {
                     0xDBF8321ba37D14eFc82BA1d9A416145EE039b78d
                   </span>
                 </a>
+                <img className="h-5 pr-2 absolute left-full" src="./copy.svg" />
               </button>
               <Tooltip tooltipText={"Copied!"} isHidden={isHiddenETH}></Tooltip>
             </div>
-            <br />
-            <div className="grid grid-cols-2">
+            <div id=" btc-container" className="relative">
               <button
-                className="mt-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center w-max"
+                className="hover:bg-blue-700 text-black relative font-bold py-2 px-4 rounded inline-flex items-center w-max"
                 onClick={async () => {
                   navigator.clipboard.writeText(
                     "33NgbSU66P42afwF3nbvn7qsYy4iJ3rRbL"
@@ -124,13 +121,13 @@ export default function Donate() {
                     33NgbSU66P42afwF3nbvn7qsYy4iJ3rRbL
                   </span>
                 </a>
+                <img className="h-5 pr-2 absolute left-full" src="./copy.svg" />
               </button>
               <Tooltip tooltipText={"Copied!"} isHidden={isHiddenBTC}></Tooltip>
             </div>
-            <br />
-            <div className="grid grid-cols-2">
+            <div id="doge-container" className="relative">
               <button
-                className="mt-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center w-max"
+                className="hover:bg-blue-700 text-black relative font-bold py-2 px-4 rounded inline-flex items-center w-max"
                 onClick={async () => {
                   navigator.clipboard.writeText(
                     "D5Zx9Uz6CLvKKEcdGH4R1hBLqeYwGdaFbP"
@@ -146,16 +143,16 @@ export default function Donate() {
                     D5Zx9Uz6CLvKKEcdGH4R1hBLqeYwGdaFbP
                   </span>
                 </a>
+                <img className="h-5 pr-2 absolute left-full" src="./copy.svg" />
               </button>
               <Tooltip
                 tooltipText={"Copied!"}
                 isHidden={isHiddenDOGE}
               ></Tooltip>
             </div>
-            <br />
-            <div className="grid grid-cols-2">
+            <div id="lite-container" className="relative">
               <button
-                className="mt-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center w-max"
+                className="hover:bg-blue-700 text-black relative font-bold py-2 px-4 rounded inline-flex items-center w-max"
                 onClick={async () => {
                   navigator.clipboard.writeText(
                     "MMWSSsvzUB2nWrYQU9f9SkV4tNKbAfk8gf"
@@ -171,6 +168,7 @@ export default function Donate() {
                     MMWSSsvzUB2nWrYQU9f9SkV4tNKbAfk8gf
                   </span>
                 </a>
+                <img className="h-5 pr-2 absolute left-full" src="./copy.svg" />
               </button>
               <Tooltip
                 tooltipText={"Copied!"}
