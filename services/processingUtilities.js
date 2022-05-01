@@ -112,16 +112,9 @@ export async function upscale(inputData, repeatUpscale=1) {
   }
   const nChunksH = Math.ceil(inImgH / chunkSize);
   const nChunksW = Math.ceil(inImgW / chunkSize);
-  const chunkH = Math.ceil(inImgH / nChunksH);
-  const chunkW = Math.ceil(inImgW / nChunksW);
-  // console.log(`in image size: ${outImgW/2}x${outImgH/2}`);
-  // console.log(`chunk size: ${chunkW}x${chunkH}`);
-  // console.log(`image chunks: ${nChunksW}x${nChunksH}`);
-  // console.log(`total chunks: ${totalChunks}`);
-  // console.log(`out image size: ${outImgW}x${outImgH}`);
+  const chunkH = Math.floor(inImgH / nChunksH);
+  const chunkW = Math.floor(inImgW / nChunksW);
 
-  
-  // console.time('upscale total');
   for (let s = 0; s < repeatUpscale; s += 1) {
     outImgH = inArr.shape[2];
     outImgW = inArr.shape[3];
@@ -163,7 +156,6 @@ export async function upscale(inputData, repeatUpscale=1) {
     }
     inArr = outArr;
   }
-  // console.timeEnd('upscale total');
 
   // Reshape network output into a normal image
   const outImg = buildNdarrayFromImageOutput(outArr, outImgH * 2, outImgW * 2)
