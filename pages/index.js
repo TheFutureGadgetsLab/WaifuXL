@@ -1,4 +1,3 @@
-import { initializeONNX } from "../services/onnxBackend";
 import NavbarComponent from "../components/NavbarComponent";
 import TitleComponent from "../components/TitleComponent";
 import { useState, useEffect } from "react";
@@ -14,8 +13,6 @@ export default function Main() {
   const [loading, setLoading] = useState(false);
   const [inputModalOpen, setInputModalOpen] = useState(false);
   const [tags, setTags] = useState(null);
-  const [isInitialized, setIsInitialized] = useState(false);
-  const [initProgress, setInitProgress] = useState(0);
   const [showSidebar, setShowSidebar] = useState(true);
   const [extension, setExtension] = useState("png");
   const [upscaleFactor, setUpscaleFactor] = useState(2);
@@ -44,8 +41,6 @@ export default function Main() {
       setShowSidebar,
       setInputModalOpen
     );
-    await initializeONNX(setInitProgress);
-    setIsInitialized(true);
   }, []);
 
   return (
@@ -72,12 +67,10 @@ export default function Main() {
           extension={extension}
           setLoading={setLoading}
           loading={loading}
-          isInitialized={isInitialized}
           setExtension={setExtension}
           showSidebar={showSidebar}
           setShowSidebar={setShowSidebar}
           tags={tags}
-          initProgress={initProgress}
           setUserHasRun={setUserHasRun}
           upscaleFactor={upscaleFactor}
           setUpscaleFactor={setUpscaleFactor}

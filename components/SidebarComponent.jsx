@@ -21,12 +21,10 @@ const Sidebar = ({
   extension,
   setLoading,
   loading,
-  isInitialized,
   setExtension,
   showSidebar,
   setShowSidebar,
   tags,
-  initProgress,
   setUserHasRun,
   upscaleFactor,
   setUpscaleFactor,
@@ -80,9 +78,7 @@ const Sidebar = ({
                     inputURI={inputURI}
                     setOutputURI={setOutputURI}
                     setTags={setTags}
-                    isInitialized={isInitialized}
                     setExtension={setExtension}
-                    initProgress={initProgress}
                     setUserHasRun={setUserHasRun}
                     upscaleFactor={upscaleFactor}
                   />
