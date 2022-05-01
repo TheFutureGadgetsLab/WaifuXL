@@ -101,8 +101,8 @@ export async function upscale(inputData, repeatUpscale=1) {
   for (let s = 0; s < repeatUpscale; s += 1) {
     let inImgH = inArr.shape[2];
     let inImgW = inArr.shape[3];
-    let outImgH = (inImgH % 2) ? inImgH * 2 : (inImgH + 1) * 2;
-    let outImgW = (inImgW % 2) ? inImgW * 2 : (inImgW + 1) * 2;
+    let outImgH = inImgH * 2;
+    let outImgW = inImgW * 2;
     const nChunksH = Math.ceil(inImgH / chunkSize);
     const nChunksW = Math.ceil(inImgW / chunkSize);
     const chunkH = Math.floor(inImgH / nChunksH);
@@ -122,10 +122,10 @@ export async function upscale(inputData, repeatUpscale=1) {
         // Compute chunk bounds including padding
         const yStart = Math.max(0, y - pad);
         const inH = yStart + chunkH + pad*2 > inImgH ? inImgH - yStart : chunkH + pad*2;
-        const outH = 2 * (Math.min(inImgH + (inImgH % 2), y + chunkH) - y);
+        const outH = 2 * (Math.min(inImgH, y + chunkH) - y);
         const xStart = Math.max(0, x - pad);
         const inW = xStart + chunkW + pad*2 > inImgW ? inImgW - xStart : chunkW + pad*2;
-        const outW = 2 * (Math.min(inImgW + (inImgW % 2), x + chunkW) - x);
+        const outW = 2 * (Math.min(inImgW, x + chunkW) - x);
 
         // Create sliced and copy
         console.debug(`Chunk ${i}x${j}  (${xStart}, ${yStart})  (${inW}, ${inH}) -> (${outW}, ${outH})`);
