@@ -178,7 +178,12 @@ export async function upScaleFromURI(uri, setLoading, setTags, setExtension, ups
   if (uri.slice(0, 14) == "data:image/gif") {
     setExtension("gif");
     //is gif
-    resultURI = await doGif(uri, setTags, repeatUpscale);
+    let currentURI = uri;
+    for (let s = 0; s < repeatUpscale; s += 1) {
+      currentURI = await doGif(currentURI, setTags, repeatUpscale);
+    }
+
+    resultURI = currentURI;
   } else {
     //is image
     setExtension("png")
