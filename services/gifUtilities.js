@@ -23,7 +23,7 @@ async function frameAdd(frame, gif, height, width, delay) {
     };
   });
 }
-export async function doGif(inputURI, setTags, setUpscaleProgress, upscaleFactor) {
+export async function doGif(inputURI, setTags, upscaleFactor) {
   return new Promise(async (resolve, reject) => {
     const extractFrames = require("./gifExtract.js");
     const results = await extractFrames({
@@ -53,16 +53,12 @@ export async function doGif(inputURI, setTags, setUpscaleProgress, upscaleFactor
     const tagOutput = await runTagger(tagInput);
     const tags = await getTopTags(tagOutput);
     setTags(tags);
-    var i = 0;
-    setUpscaleProgress(0.0001);
     for (var j = 0; j < results.shape[0]; j++) {
       var currentND = results.data.slice(
         j * results.stride[0],
         (j + 1) * results.stride[0]
       );
       await frameAdd(currentND, gif, results.shape[2], results.shape[1], promisedGif[j].delay);
-      setUpscaleProgress((i + 1) / results.shape[0]);
-      i++;
     }
 
     gif.on("finished", function (blob) {

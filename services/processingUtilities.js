@@ -93,11 +93,10 @@ export function buildImageFromND(nd, height, width) {
  *   into chunks of size chunkSize to avoid running out of memory on the WASM side.
  * 
  * @param {ndarray} inputData Image data as pixels in a ndarray
- * @param {Function} setUpscaleProgress Callback to set the progress of the super resolution
  * @param {Number} repeatUpscale How many times to repeat the super resolution
  * @returns Upscaled image as URI
  */
-export async function upscale(inputData, setUpscaleProgress, repeatUpscale=1) {
+export async function upscale(inputData, repeatUpscale=1) {
   let inArr = buildNdarrayFromImage(inputData);
   let outArr;
   const inImgH = inArr.shape[2];
@@ -121,9 +120,6 @@ export async function upscale(inputData, setUpscaleProgress, repeatUpscale=1) {
   console.log(`total chunks: ${totalChunks}`);
   console.log(`out image size: ${outImgW}x${outImgH}`);
 
-  if (totalChunks > 1) {
-    setUpscaleProgress(0.0001);
-  }
   
   console.time('upscale total');
   for (let s = 0; s < repeatUpscale; s += 1) {
@@ -162,7 +158,6 @@ export async function upscale(inputData, setUpscaleProgress, repeatUpscale=1) {
           .lo(0, 0, y*2, x*2)
           .hi(1, 3, outH * 2, outW * 2);
         ops.assign(outSlice, chunkSlice);
-        setUpscaleProgress(progress);
         chunkIdx++;
       }
     }
@@ -176,14 +171,14 @@ export async function upscale(inputData, setUpscaleProgress, repeatUpscale=1) {
   return outURI;
 }
 
-export async function upScaleFromURI(uri, setLoading, setTags, setUpscaleProgress, setExtension, upscaleFactor) {
+export async function upScaleFromURI(uri, setLoading, setTags, setExtension, upscaleFactor) {
   setLoading(true);
   let resultURI = null;
   let repeatUpscale = Math.log2(upscaleFactor);
   if (uri.slice(0, 14) == "data:image/gif") {
     setExtension("gif");
     //is gif
-    resultURI = await doGif(uri, setTags, setUpscaleProgress, repeatUpscale);
+    resultURI = await doGif(uri, setTags, repeatUpscale);
   } else {
     //is image
     setExtension("png")
@@ -195,7 +190,7 @@ export async function upScaleFromURI(uri, setLoading, setTags, setUpscaleProgres
     setTags(tags);
 
     console.debug("starting upscaling");
-    resultURI = await upscale(pixelData, setUpscaleProgress, repeatUpscale);
+    resultURI = await upscale(pixelData, repeatUpscale);
   }
   setLoading(false);
   return resultURI;

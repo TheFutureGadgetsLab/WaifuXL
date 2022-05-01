@@ -16,7 +16,6 @@ const Sidebar = ({
   setPreviewURI,
   setFileName,
   setTags,
-  setUpscaleProgress,
   outputURI,
   fileName,
   extension,
@@ -82,7 +81,6 @@ const Sidebar = ({
                     setOutputURI={setOutputURI}
                     setTags={setTags}
                     isInitialized={isInitialized}
-                    setUpscaleProgress={setUpscaleProgress}
                     setExtension={setExtension}
                     initProgress={initProgress}
                     setUserHasRun={setUserHasRun}
@@ -118,12 +116,10 @@ const Sidebar = ({
           setInputModalOpen={setInputModalOpen}
           setInputURI={setInputURI}
           setOutputURI={setOutputURI}
-          inputURI={inputURI}
           previewURI={previewURI}
           setPreviewURI={setPreviewURI}
           setFileName={setFileName}
           setTags={setTags}
-          setUpscaleProgress={setUpscaleProgress}
         />
       )}
     </div>

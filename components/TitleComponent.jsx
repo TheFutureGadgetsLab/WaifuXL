@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 const TitleComponent = ({
-  loading, upscaleProgress, downloadReady
+  loading, downloadReady
 }) => {
   const [loadingText, setLoadingText] = useState("");
   useEffect(async () => {
@@ -19,20 +19,6 @@ const TitleComponent = ({
   return (
     <>
       <div className="flex flex-col items-center justify-center w-full text-center">
-        {loading && upscaleProgress > 0 && (
-          <div id="loading-bar" className="absolute bottom-24">
-            <div className=" bg-gray-200 h-1 w-60 md:w-96">
-              <div
-                className="bg-blue h-1 transition-all ease-in-out"
-                style={{
-                  width: `${upscaleProgress * 100}%`,
-                  transitionDuration: "4s"
-                }}
-              ></div>
-            </div>
-          </div>
-        )}
-
         <h1 id="title" className="absolute select-none bottom-4 lg:text-6xl md:text-4xl text-2xl font-bold mt-10">
           { downloadReady ? "Download" : (loading ? "Expanding" : "Expand") } your{" "}
           <span className="text-pink">

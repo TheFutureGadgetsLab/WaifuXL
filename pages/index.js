@@ -17,7 +17,6 @@ export default function Main() {
   const [isInitialized, setIsInitialized] = useState(false);
   const [initProgress, setInitProgress] = useState(0);
   const [showSidebar, setShowSidebar] = useState(true);
-  const [upscaleProgress, setUpscaleProgress] = useState(0);
   const [extension, setExtension] = useState("png");
   const [upscaleFactor, setUpscaleFactor] = useState(2);
   const [userHasRun, setUserHasRun] = useState(false);
@@ -68,7 +67,6 @@ export default function Main() {
           setPreviewURI={setPreviewURI}
           setFileName={setFileName}
           setTags={setTags}
-          setUpscaleProgress={setUpscaleProgress}
           outputURI={outputURI}
           fileName={fileName}
           extension={extension}
@@ -93,7 +91,6 @@ export default function Main() {
               <ImageDisplay inputURI={inputURI} outputURI={outputURI} />
               <TitleComponent
                 loading={loading}
-                upscaleProgress={upscaleProgress}
                 downloadReady={outputURI != null && userHasRun}
               />
             </div>

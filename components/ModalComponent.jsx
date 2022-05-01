@@ -8,12 +8,10 @@ function ModalComponent({
   setInputModalOpen,
   setInputURI,
   setOutputURI,
-  inputURI,
   previewURI,
   setPreviewURI,
   setFileName,
   setTags,
-  setUpscaleProgress,
 }) {
   const divRef = useRef(null);
   function focusDiv() {
@@ -170,7 +168,6 @@ function ModalComponent({
                   setOutputURI(null);
                   setTags(null);
                   setInputModalOpen(false);
-                  setUpscaleProgress(0);
                 }}
               >
                 Done
