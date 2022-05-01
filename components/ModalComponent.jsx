@@ -26,7 +26,8 @@ function ModalComponent({
   }, [divRef]);
 
   return (
-    <div id="modal-component-container"
+    <div
+      id="modal-component-container"
       className="absolute inset-0 overflow-y-auto w-screen h-screen m-0"
       aria-labelledby="modal-title"
       role="dialog"
@@ -38,7 +39,8 @@ function ModalComponent({
         setFileName();
       }}
     >
-      <div id="modal-bg"
+      <div
+        id="modal-bg"
         className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity w-screen h-screen"
         aria-hidden="true"
         onClick={(e) => {
@@ -46,13 +48,18 @@ function ModalComponent({
           setFileName();
         }}
       ></div>
-      <div id="modal-container"
-        className="flex items-center justify-center w-screen h-screen">
-        <div id="modal"
+      <div
+        id="modal-container"
+        className="flex items-center justify-center w-screen h-screen"
+      >
+        <div
+          id="modal"
           className="bg-white rounded-lg shadow-xl transform transition-all text-center
-            w-full h-full md:w-96 md:h-auto">
+            w-full h-full md:w-auto md:h-auto"
+        >
           <div>
-            <svg id="close-button"
+            <svg
+              id="close-button"
               xmlns="http://www.w3.org/2000/svg"
               height="24px"
               viewBox="0 0 24 24"
@@ -68,11 +75,8 @@ function ModalComponent({
               <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
             </svg>
           </div>
-          <span className="block text-gray-700 pt-3">
-            Click / tap preview below to choose file
-          </span>
           <label
-            className="flex flex-col items-center justify-center cursor-pointer h-96 m-3 bg-contain bg-origin-content p-4 bg-no-repeat bg-center"
+            className="flex flex-col items-center justify-center cursor-pointer mt-16 h-96 m-3 bg-contain bg-origin-content p-4 bg-no-repeat bg-center"
             style={{
               backgroundImage: `url(${previewURI})`,
               boxShadow: "inset 0px 0px 12px #00000050",
@@ -131,11 +135,34 @@ function ModalComponent({
               </select>
             </label>
             <div className="grid grid-cols-1">
-              <span className="text-gray-700"> &#10240;</span>
+              <button
+                id="upload-button"
+                type="button"
+                className="relative mt-7 rounded-md right-0 bottom-0 text-white shadow-sm px-4 py-1 
+                text-base font-medium h-12 focus:outline-none focus:ring-2 focus:ring-offset-2 
+                border-blue border-2 bg-blue hover:bg-blue hover:text-white disabled:bg-white disabled:text-gray-200 disabled:border-gray-200"
+              >
+                <label className="absolute left-0 top-0 w-full h-full cursor-pointer">
+                  <input
+                    type="file"
+                    className="hidden"
+                    onChange={(e) => {
+                      if (e.target.files[0]) {
+                        setDataURIFromFile(e.target.files[0], setPreviewURI);
+                        setFileName(e.target.files[0].name.split(".")[0]);
+                      }
+                    }}
+                  />
+                </label>
+                Upload
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1">
               <button
                 id="done-button"
                 type="button"
-                className="rounded-md right-0 bottom-0 text-blue shadow-sm px-4 py-1 
+                className="mt-7 rounded-md right-0 bottom-0 text-blue shadow-sm px-4 py-1 
                 text-base font-medium h-12 focus:outline-none focus:ring-2 focus:ring-offset-2 
                 border-blue border-2 bg-white hover:bg-blue hover:text-white disabled:bg-white disabled:text-gray-200 disabled:border-gray-200"
                 onClick={() => {
