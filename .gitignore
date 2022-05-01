@@ -37,3 +37,4 @@ yarn-error.log*
 data
 superRes
 **.wasm
+sw.js.map

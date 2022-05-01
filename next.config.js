@@ -12,7 +12,7 @@ const withPWA = require("next-pwa");
 
 module.exports = withPWA({
   assetPrefix: ".",
-  basePath: isProd ? "/WaifuXL" : "",
+  basePath: isProd ? "" : "",
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Important: return the modified config
     config.plugins.push(
