@@ -99,42 +99,36 @@ export function buildImageFromND(nd, height, width) {
 export async function upscale(inputData, repeatUpscale=1) {
   let inArr = buildNdarrayFromImage(inputData);
   let outArr;
-  const inImgH = inArr.shape[2];
-  const inImgW = inArr.shape[3];
-  let outImgH = inImgH;
-  let outImgW = inImgW;
-  let totalChunks = 0;
-  // Determine the total number of chunks in all upscaling steps
-  for (let s = 0; s < repeatUpscale; s += 1) {
-    totalChunks += Math.ceil(outImgH / chunkSize) * Math.ceil(outImgW / chunkSize);
-    outImgW *= 2;
-    outImgH *= 2;
-  }
-  const nChunksH = Math.ceil(inImgH / chunkSize);
-  const nChunksW = Math.ceil(inImgW / chunkSize);
-  const chunkH = Math.floor(inImgH / nChunksH);
-  const chunkW = Math.floor(inImgW / nChunksW);
+  let inImgH = inArr.shape[2];
+  let inImgW = inArr.shape[3];
+  let outImgH = (inImgH % 2) ? inImgH * 2 : (inImgH + 1) * 2;
+  let outImgW = (inImgW % 2) ? inImgW * 2 : (inImgW + 1) * 2;
+  const nChunksH = Math.ceil(inArr.shape[2] / chunkSize);
+  const nChunksW = Math.ceil(inArr.shape[3] / chunkSize);
+  const chunkH = Math.floor(inArr.shape[2] / nChunksH);
+  const chunkW = Math.floor(inArr.shape[3] / nChunksW);
 
   for (let s = 0; s < repeatUpscale; s += 1) {
-    outImgH = inArr.shape[2];
-    outImgW = inArr.shape[3];
+    inImgH = inArr.shape[2];
+    inImgW = inArr.shape[3];
+    // Out image size is padded by onnx
+    outImgH = (inImgH % 2) ? inImgH * 2 : (inImgH + 1) * 2;
+    outImgW = (inImgW % 2) ? inImgW * 2 : (inImgW + 1) * 2;
 
     // Split the image in chunks and run super resolution on each chunk
-    outArr = ndarray(new Uint8Array(3 * (outImgH * 2) * (outImgW * 2)), [1, 3, outImgH * 2, outImgW * 2]);
-    let chunkIdx = 0;
+    outArr = ndarray(new Uint8Array(3 * outImgH * outImgW), [1, 3, outImgH, outImgW]);
     for (let i = 0; i < nChunksH; i += 1) {
       for (let j = 0; j < nChunksW; j += 1) {
-        let progress = (chunkIdx + 1) / totalChunks;
         const x = j * chunkW;
         const y = i * chunkH;
 
         // Compute chunk bounds including padding
         const yStart = Math.max(0, y - pad);
-        const inH = yStart + chunkH + pad*2 > outImgH ? outImgH - yStart : chunkH + pad*2;
-        const outH = Math.min(outImgH, y + chunkH) - y;
+        const inH = yStart + chunkH + pad*2 > inImgH ? inImgH - yStart : chunkH + pad*2;
+        const outH = Math.min(inImgH, y + chunkH) - y;
         const xStart = Math.max(0, x - pad);
-        const inW = xStart + chunkW + pad*2 > outImgW ? outImgW - xStart : chunkW + pad*2;
-        const outW = Math.min(outImgW, x + chunkW) - x;
+        const inW = xStart + chunkW + pad*2 > inImgW ? inImgW - xStart : chunkW + pad*2;
+        const outW = Math.min(inImgW, x + chunkW) - x;
 
         // Create sliced and copy
         const inSlice = inArr.lo(0, 0, yStart, xStart).hi(1, 3, inH, inW);
@@ -151,15 +145,14 @@ export async function upscale(inputData, repeatUpscale=1) {
           .lo(0, 0, y*2, x*2)
           .hi(1, 3, outH * 2, outW * 2);
         ops.assign(outSlice, chunkSlice);
-        chunkIdx++;
       }
     }
     inArr = outArr;
   }
 
   // Reshape network output into a normal image
-  const outImg = buildNdarrayFromImageOutput(outArr, outImgH * 2, outImgW * 2)
-  const outURI = buildImageFromND(outImg, outImgH * 2, outImgW * 2);
+  const outImg = buildNdarrayFromImageOutput(outArr, outImgH, outImgW)
+  const outURI = buildImageFromND(outImg, outImgH, outImgW);
   return outURI;
 }
 
