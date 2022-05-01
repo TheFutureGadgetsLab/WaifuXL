@@ -78,7 +78,6 @@ export default function Main() {
         {/* Image display, title, navbar */}
         <main className="flex-1">
           <div className="flex flex-col items-center h-screen w-screen relative">
-            <InProgress />
             <NavbarComponent currentPage="index" />
             <div className="h-full grow w-full">
               <ImageDisplay inputURI={inputURI} outputURI={outputURI} />
