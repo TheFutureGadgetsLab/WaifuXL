@@ -113,13 +113,13 @@ export async function upscale(inputData, setUpscaleProgress, repeatUpscale=1) {
   }
   const nChunksH = Math.ceil(inImgH / chunkSize);
   const nChunksW = Math.ceil(inImgW / chunkSize);
-  const chunkH = inImgH / nChunksH;
-  const chunkW = inImgW / nChunksW;
-  console.debug(`in image size: ${outImgW/2}x${outImgH/2}`);
-  console.debug(`chunk size: ${chunkW}x${chunkH}`);
-  console.debug(`image chunks: ${nChunksW}x${nChunksH}`);
-  console.debug(`total chunks: ${totalChunks}`);
-  console.debug(`out image size: ${outImgW}x${outImgH}`);
+  const chunkH = Math.ceil(inImgH / nChunksH);
+  const chunkW = Math.ceil(inImgW / nChunksW);
+  console.log(`in image size: ${outImgW/2}x${outImgH/2}`);
+  console.log(`chunk size: ${chunkW}x${chunkH}`);
+  console.log(`image chunks: ${nChunksW}x${nChunksH}`);
+  console.log(`total chunks: ${totalChunks}`);
+  console.log(`out image size: ${outImgW}x${outImgH}`);
 
   if (totalChunks > 1) {
     setUpscaleProgress(0.0001);
