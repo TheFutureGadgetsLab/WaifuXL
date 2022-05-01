@@ -128,11 +128,10 @@ function ModalComponent({
               </select>
             </label>
             <div className="grid grid-cols-1">
-              <span className="text-gray-700"> &#10240;</span>
               <button
                 id="done-button"
                 type="button"
-                className="rounded-md right-0 bottom-0 text-blue shadow-sm px-4 py-1 
+                className="mt-7 rounded-md right-0 bottom-0 text-blue shadow-sm px-4 py-1 
                 text-base font-medium h-12 focus:outline-none focus:ring-2 focus:ring-offset-2 
                 border-blue border-2 bg-white hover:bg-blue hover:text-white disabled:bg-white disabled:text-gray-200 disabled:border-gray-200"
                 onClick={() => {
