@@ -8,16 +8,14 @@ function sleep (time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
 
-export async function initializeONNX(setProgress) {
+export async function initializeONNX() {
     ort.env.wasm.numThreads = navigator.hardwareConcurrency / 2;
     ort.env.wasm.simd       = true;
     ort.env.wasm.proxy      = true;
 
-    setProgress(0);
-    const superBuffer = await fetchMyModel('./superRes.onnx', setProgress, 0.0, 0.5);
-    const tagBuffer = await fetchMyModel('./tagger.onnx', setProgress, 0.5, 0.9);
+    const superBuffer = await fetchMyModel('./superRes.onnx');
+    const tagBuffer = await fetchMyModel('./tagger.onnx');
 
-    console.log("Initializing session");
     superSession = await ort.InferenceSession.create(superBuffer, {
         executionProviders: ["wasm"],
         graphOptimizationLevel: 'all',
@@ -33,7 +31,6 @@ export async function initializeONNX(setProgress) {
         executionMode: 'parallel',
     });
 
-    setProgress(1);
 
     // Needed because WASM workers are created async, wait for them
     // to be ready
@@ -53,8 +50,6 @@ export async function runSuperRes(imageArray) {
     let session = null;
     session = superSession;
 
-    console.log("Running super resolution");
-    console.time('model run');
     let results = undefined;
     try {
         const output = await session.run(feeds);
@@ -63,7 +58,6 @@ export async function runSuperRes(imageArray) {
         console.log("Failed to run super resolution");
         console.log(e);
     }    
-    console.timeEnd('model run');
     return results;
 }
 
@@ -73,8 +67,6 @@ export async function runTagger(imageArray) {
     let session = null;
     session = tagSession;
 
-    console.log("Running tagger session");
-    console.time('run_tagger')
     let timeStart = performance.now();
     let results = undefined;
     try {
@@ -84,12 +76,10 @@ export async function runTagger(imageArray) {
         console.error("Failed to run tagger");
         console.log(e)
     }
-    console.timeEnd('run_tagger')
-    console.log("Tagging done");
     return results;
 }
 
-async function fetchMyModel(filepathOrUri, setProgress, startProgress, endProgress) {
+async function fetchMyModel(filepathOrUri) {
     console.assert(typeof fetch !== "undefined");
     const response = await fetch(filepathOrUri);
     const reader = response.body.getReader();
@@ -102,13 +92,11 @@ async function fetchMyModel(filepathOrUri, setProgress, startProgress, endProgre
         const { done, value } = await reader.read();
 
         if (done) {
-            setProgress(1);
             break;
         } else {
             // Push values to the chunk array
             data.set(value, received);
             received += value.length;
-            setProgress(startProgress + (received / length) * (endProgress - startProgress));
         }
     }
     return data.buffer;

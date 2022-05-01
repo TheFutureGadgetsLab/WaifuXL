@@ -1,9 +1,30 @@
 import NavbarComponent from "../../components/NavbarComponent";
 import SideNavbar from "../../components/SideNavbar";
-import { useEffect, useState } from "react";
+import { createRef, useEffect, useState } from "react";
+
+function Tooltip({ children, tooltipText, isHidden }) {
+  const tipRef = createRef(null);
+  return (
+    <div className="relative flex items-center mt-4">
+      {!isHidden && (
+        <div
+          className={` absolute z-40 bg-black text-white px-4 py-2 rounded flex items-center transition-all duration-150`}
+          ref={tipRef}
+        >
+          {tooltipText}
+        </div>
+      )}
+      {children}
+    </div>
+  );
+}
 
 export default function Donate() {
   const [showSidebar, setShowSidebar] = useState(true);
+  const [isHiddenETH, setIsHiddenETH] = useState(true);
+  const [isHiddenBTC, setIsHiddenBTC] = useState(true);
+  const [isHiddenDOGE, setIsHiddenDOGE] = useState(true);
+  const [isHiddenLITE, setIsHiddenLITE] = useState(true);
 
   useEffect(() => {
     document.body.style.overflow = "auto";
@@ -45,17 +66,14 @@ export default function Donate() {
           </svg>
         </a>
         <main className="items-center justify-center lg:w-8/12 p-10 text-center">
-          <img src="./chibi_pablo.png" className="md:h-96 h-64 float-left"/>
+          <img src="./chibi_pablo.png" className="md:h-96 h-64 float-left" />
           <div className="md:text-left lg:mt-20 mt-5 lg:text-6xl text-2xl font-black">
             Donation Links
           </div>
           <div className="text-left flex flex-col flex-grow flex-wrap">
             <br />
             <button className="mt-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center w-max">
-              <img
-                className="h-4 pr-2"
-                src="/koficup.png"
-              />
+              <img className="h-4 pr-2" src="/koficup.png" />
 
               <a
                 className="font-mono"
@@ -65,54 +83,100 @@ export default function Donate() {
               </a>
             </button>
             <br />
-            <button className="mt-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center w-max">
-              <img className="h-6 pr-2" src="./ETH.svg" />
+            <div className="grid grid-cols-2">
+              <button
+                className="mt-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center w-max"
+                onClick={async () => {
+                  navigator.clipboard.writeText(
+                    "0xDBF8321ba37D14eFc82BA1d9A416145EE039b78d"
+                  );
+                  setIsHiddenETH(false);
+                  await new Promise((r) => setTimeout(r, 1000));
+                  setIsHiddenETH(true);
+                }}
+              >
+                <img className="h-6 pr-2" src="./ETH.svg" />
 
-              <a
-                className=""
-                href="https://ko-fi.com/thefuturegadgetslab/?hidefeed=true&widget=true&embed=true&preview=true"
-              >
-                <span className="font-mono">
-                  0xDBF8321ba37D14eFc82BA1d9A416145EE039b78d
-                </span>
-              </a>
-            </button>
+                <a className="">
+                  <span className="font-mono">
+                    0xDBF8321ba37D14eFc82BA1d9A416145EE039b78d
+                  </span>
+                </a>
+              </button>
+              <Tooltip tooltipText={"Copied!"} isHidden={isHiddenETH}></Tooltip>
+            </div>
             <br />
-            <button className="mt-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center w-max">
-              <img className="h-6 pr-2" src="./BTC.svg" />
-              <a
-                className=""
-                href="https://ko-fi.com/thefuturegadgetslab/?hidefeed=true&widget=true&embed=true&preview=true"
+            <div className="grid grid-cols-2">
+              <button
+                className="mt-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center w-max"
+                onClick={async () => {
+                  navigator.clipboard.writeText(
+                    "33NgbSU66P42afwF3nbvn7qsYy4iJ3rRbL"
+                  );
+                  setIsHiddenBTC(false);
+                  await new Promise((r) => setTimeout(r, 1000));
+                  setIsHiddenBTC(true);
+                }}
               >
-                <span className="font-mono">
-                  33NgbSU66P42afwF3nbvn7qsYy4iJ3rRbL
-                </span>
-              </a>
-            </button>
+                <img className="h-6 pr-2" src="./BTC.svg" />
+                <a className="">
+                  <span className="font-mono">
+                    33NgbSU66P42afwF3nbvn7qsYy4iJ3rRbL
+                  </span>
+                </a>
+              </button>
+              <Tooltip tooltipText={"Copied!"} isHidden={isHiddenBTC}></Tooltip>
+            </div>
             <br />
-            <button className="mt-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center w-max">
-              <img className="h-6 pr-2" src="./DOGE.svg" />
-              <a
-                className=""
-                href="https://ko-fi.com/thefuturegadgetslab/?hidefeed=true&widget=true&embed=true&preview=true"
+            <div className="grid grid-cols-2">
+              <button
+                className="mt-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center w-max"
+                onClick={async () => {
+                  navigator.clipboard.writeText(
+                    "D5Zx9Uz6CLvKKEcdGH4R1hBLqeYwGdaFbP"
+                  );
+                  setIsHiddenDOGE(false);
+                  await new Promise((r) => setTimeout(r, 1000));
+                  setIsHiddenDOGE(true);
+                }}
               >
-                <span className="font-mono">
-                  D5Zx9Uz6CLvKKEcdGH4R1hBLqeYwGdaFbP
-                </span>
-              </a>
-            </button>
+                <img className="h-6 pr-2" src="./DOGE.svg" />
+                <a className="">
+                  <span className="font-mono">
+                    D5Zx9Uz6CLvKKEcdGH4R1hBLqeYwGdaFbP
+                  </span>
+                </a>
+              </button>
+              <Tooltip
+                tooltipText={"Copied!"}
+                isHidden={isHiddenDOGE}
+              ></Tooltip>
+            </div>
             <br />
-            <button className="mt-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center w-max">
-              <img className="h-6 pr-2" src="./LTC.svg" />
-              <a
-                className=""
-                href="https://ko-fi.com/thefuturegadgetslab/?hidefeed=true&widget=true&embed=true&preview=true"
+            <div className="grid grid-cols-2">
+              <button
+                className="mt-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center w-max"
+                onClick={async () => {
+                  navigator.clipboard.writeText(
+                    "MMWSSsvzUB2nWrYQU9f9SkV4tNKbAfk8gf"
+                  );
+                  setIsHiddenLITE(false);
+                  await new Promise((r) => setTimeout(r, 1000));
+                  setIsHiddenLITE(true);
+                }}
               >
-                <span className="font-mono">
-                  MMWSSsvzUB2nWrYQU9f9SkV4tNKbAfk8gf
-                </span>
-              </a>
-            </button>
+                <img className="h-6 pr-2" src="./LTC.svg" />
+                <a className="">
+                  <span className="font-mono">
+                    MMWSSsvzUB2nWrYQU9f9SkV4tNKbAfk8gf
+                  </span>
+                </a>
+              </button>
+              <Tooltip
+                tooltipText={"Copied!"}
+                isHidden={isHiddenLITE}
+              ></Tooltip>
+            </div>
           </div>
         </main>
       </div>
