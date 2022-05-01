@@ -70,7 +70,6 @@ const TagComponent = ({ tags }) => {
   const [charPage, setCharPage] = useState(0);
 
   useEffect(async () => {
-    console.log(tags);
   }, []);
 
   return (

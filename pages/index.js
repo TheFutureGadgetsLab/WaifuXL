@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Sidebar from "../components/SidebarComponent";
 import ImageDisplay from "../components/ImageDisplayComponent";
 import { setEventListeners } from "../services/setEventListeners";
-import InProgress from "../components/inprogress.jsx";
 import default_tags from "../services/landing_tags";
 export default function Main() {
   const [inputURI, setInputURI] = useState("./ozen.png");
@@ -28,7 +27,6 @@ export default function Main() {
       lastFileName = name;
     }
     _setFileName(`${name}_${upscaleFactor}x`);
-    console.debug("set filename to", name);
   }
 
   useEffect(async () => {

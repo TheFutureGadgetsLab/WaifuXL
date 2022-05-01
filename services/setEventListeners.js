@@ -29,7 +29,6 @@ export async function setEventListeners(
   }
 
   document.addEventListener("paste", async (e) => {
-    console.debug(e);
     let success = false;
     if (e.clipboardData.getData("text/plain")) {
       let url = e.clipboardData.getData("text/plain");
@@ -65,7 +64,6 @@ export async function setEventListeners(
   });
 
   document.addEventListener("drop", async (e) => {
-    console.debug("drop event");
     e.preventDefault();
     e.stopPropagation();
     let success = handleInputFile(e.dataTransfer.items);

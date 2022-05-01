@@ -29,7 +29,6 @@ export async function doGif(inputURI, setTags, upscaleFactor) {
     const results = await extractFrames({
       input: inputURI,
     });
-    console.log(results)
     var promisedGif = await fetch(inputURI)
       .then((resp) => resp.arrayBuffer())
       .then((buff) => parseGIF(buff))
