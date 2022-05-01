@@ -210,18 +210,7 @@ export async function upScaleGifFrameFromURI(
     const inputData = await getPixelDataFromURI(
       buildImageFromND(frameData, height, width)
     );
-    const superResInput = buildNdarrayFromImage(inputData);
-    const superResOutput = await runSuperRes(superResInput);
-    const outputND = buildNdarrayFromImageOutput(
-      superResOutput,
-      superResOutput.dims[2],
-      superResOutput.dims[3]
-    );
-    const outputImage = buildImageFromND(
-      outputND,
-      superResOutput.dims[2],
-      superResOutput.dims[3]
-    );
+    const outputImage = await upscale(inputData)
     resolve(outputImage);
   });
 }
