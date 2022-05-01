@@ -7,6 +7,7 @@ import ImageDisplay from "../components/ImageDisplayComponent";
 import { setEventListeners } from "../services/setEventListeners";
 import { upscaleIncrementProgress, upscaleEstFreq } from "../services/processingUtilities";
 import InProgress from "../components/inprogress.jsx";
+import default_tags from "../services/landing_tags";
 export default function Main() {
   const [inputURI, setInputURI] = useState("./ozen.png");
   const [outputURI, setOutputURI] = useState("./ozen_2x.png");
@@ -39,6 +40,7 @@ export default function Main() {
   useEffect(async () => {
     setInputURI("./ozen.png");
     setOutputURI("./ozen_2x.png");
+    setTags(default_tags);
     setEventListeners(
       setPreviewURI,
       setFileName,
