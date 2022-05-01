@@ -10,7 +10,8 @@ const RunComponent = ({
   setExtension,
   setUserHasRun,
   upscaleFactor,
-  setModelLoading
+  setModelLoading,
+  setUpscaleFactor
 }) => {
   const [shouldRun, setShouldRun] = useState(false);
 
@@ -32,6 +33,7 @@ const RunComponent = ({
         setOutputURI(result);
         // Set should run to false
         setShouldRun(false);
+        setUpscaleFactor(2);
       }
     }
   }, [shouldRun]);
