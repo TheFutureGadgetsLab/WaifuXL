@@ -10,6 +10,8 @@ const RunComponent = ({
   setExtension,
   setUserHasRun,
   upscaleFactor,
+  setModelLoading,
+  setUpscaleFactor
 }) => {
   const [shouldRun, setShouldRun] = useState(false);
 
@@ -31,6 +33,7 @@ const RunComponent = ({
         setOutputURI(result);
         // Set should run to false
         setShouldRun(false);
+        setUpscaleFactor(2);
       }
     }
   }, [shouldRun]);
@@ -39,7 +42,9 @@ const RunComponent = ({
     <button
       className={`grow hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg inline-flex items-center bg-pink`}
       onClick={async () => {
+        setModelLoading(true);
         await initializeONNX();
+        setModelLoading(false);
         setShouldRun(true);
       }}
     >

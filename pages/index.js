@@ -17,6 +17,7 @@ export default function Main() {
   const [upscaleFactor, setUpscaleFactor] = useState(2);
   const [userHasRun, setUserHasRun] = useState(false);
   const [fileName, _setFileName] = useState("example");
+  const [modelLoading, setModelLoading] = useState(false);
 
   var lastFileName = fileName;
 
@@ -72,6 +73,8 @@ export default function Main() {
           setUserHasRun={setUserHasRun}
           upscaleFactor={upscaleFactor}
           setUpscaleFactor={setUpscaleFactor}
+          modelLoading={modelLoading}
+          setModelLoading={setModelLoading}
         />
         {/* Image display, title, navbar */}
         <main className="flex-1">
@@ -82,6 +85,7 @@ export default function Main() {
               <TitleComponent
                 loading={loading}
                 downloadReady={outputURI != null && userHasRun}
+                modelLoading={modelLoading}
               />
             </div>
           </div>

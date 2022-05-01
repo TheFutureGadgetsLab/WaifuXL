@@ -72,7 +72,7 @@ export default function About() {
           </div>
           <div className="lg:mt-20 mt-5 lg:text-6xl text-2xl">In Depth</div>
           <div className="mt-5 lg:text-lg text-sm text-left">
-            We send you neural networks to execute direclty in your browser
+            We send you neural networks to execute directly in your browser
             using the{" "}
             <a href="https://onnxruntime.ai/" className="text-pink underline">
               ONNX Runtime
