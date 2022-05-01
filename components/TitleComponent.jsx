@@ -19,13 +19,14 @@ const TitleComponent = ({
   return (
     <>
       <div className="flex flex-col items-center justify-center w-full text-center">
-        {loading && (
-          <div className="absolute bottom-24">
+        {loading && upscaleProgress > 0 && (
+          <div id="loading-bar" className="absolute bottom-24">
             <div className=" bg-gray-200 h-1 w-60 md:w-96">
               <div
-                className="bg-blue h-1 transition-all duration-1000 ease-linear"
+                className="bg-blue h-1 transition-all ease-in-out"
                 style={{
                   width: `${upscaleProgress * 100}%`,
+                  transitionDuration: "4s"
                 }}
               ></div>
             </div>

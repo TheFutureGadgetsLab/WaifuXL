@@ -4,7 +4,6 @@ import {
   upScaleGifFrameFromURI,
   buildNdarrayFromImage,
   getTopTags,
-  setImgProgressStopAt,
 } from "./processingUtilities";
 import { getPixelDataFromURI } from "./imageUtilities";
 import { runTagger } from "./onnxBackend";
@@ -55,9 +54,8 @@ export async function doGif(inputURI, setTags, setUpscaleProgress, upscaleFactor
     const tags = await getTopTags(tagOutput);
     setTags(tags);
     var i = 0;
-    setUpscaleProgress(0);
+    setUpscaleProgress(0.0001);
     for (var j = 0; j < results.shape[0]; j++) {
-      setImgProgressStopAt((i + 1) / results.shape[0]);
       var currentND = results.data.slice(
         j * results.stride[0],
         (j + 1) * results.stride[0]

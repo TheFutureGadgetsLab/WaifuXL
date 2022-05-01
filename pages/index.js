@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import Sidebar from "../components/SidebarComponent";
 import ImageDisplay from "../components/ImageDisplayComponent";
 import { setEventListeners } from "../services/setEventListeners";
-import { upscaleIncrementProgress, upscaleEstFreq } from "../services/processingUtilities";
 import InProgress from "../components/inprogress.jsx";
 import default_tags from "../services/landing_tags";
 export default function Main() {
@@ -18,7 +17,6 @@ export default function Main() {
   const [isInitialized, setIsInitialized] = useState(false);
   const [initProgress, setInitProgress] = useState(0);
   const [showSidebar, setShowSidebar] = useState(true);
-  const [upscaleIncIntervalID, setUpscaleIncIntervalID] = useState(null);
   const [upscaleProgress, setUpscaleProgress] = useState(0);
   const [extension, setExtension] = useState("png");
   const [upscaleFactor, setUpscaleFactor] = useState(2);
@@ -50,17 +48,6 @@ export default function Main() {
     await initializeONNX(setInitProgress);
     setIsInitialized(true);
   }, []);
-
-  useEffect(() => {
-    if (upscaleIncIntervalID != null) {
-      clearInterval(upscaleIncIntervalID);
-      setUpscaleIncIntervalID(null);
-    }
-    if (loading) {
-      setUpscaleIncIntervalID(setInterval(
-        upscaleIncrementProgress, upscaleEstFreq * 1000, upscaleProgress, setUpscaleProgress));
-    }
-  }, [loading, upscaleProgress]);
 
   return (
     <>

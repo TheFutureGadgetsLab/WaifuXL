@@ -5,15 +5,8 @@ import { getTagTime, runSuperRes, runTagger } from "./onnxBackend";
 import { doGif  } from "./gifUtilities";
 
 // Global parameters
-const chunkSize = 1024;
+const chunkSize = 512;
 const pad = 4;
-
-// Global variables for progress estimation
-var imageNpixels = 0;
-var imgProgressStopAt = 1.0;
-export function setImgProgressStopAt(v) {
-  imgProgressStopAt = Math.max(0, Math.min(1, v));
-}
 
 export function buildNdarrayFromImageOutput(data, height, width) {
     const inputArray = ndarray(data.data, data.dims || data.shape);
@@ -69,7 +62,6 @@ export function buildNdarrayFromImage(imageData) {
     height,
     width,
   ]);
-  imageNpixels = width * height;
   ops.assign(
     dataProcessedTensor.pick(0, 0, null, null),
     dataTensor.pick(null, null, 0)
@@ -108,40 +100,55 @@ export function buildImageFromND(nd, height, width) {
 export async function upscale(inputData, setUpscaleProgress, repeatUpscale=1) {
   let inArr = buildNdarrayFromImage(inputData);
   let outArr;
-  let imgH = inArr.shape[2];
-  let imgW = inArr.shape[3];
+  const inImgH = inArr.shape[2];
+  const inImgW = inArr.shape[3];
+  let outImgH = inImgH;
+  let outImgW = inImgW;
   let totalChunks = 0;
   // Determine the total number of chunks in all upscaling steps
   for (let s = 0; s < repeatUpscale; s += 1) {
-    totalChunks += Math.ceil(imgH / chunkSize) * Math.ceil(imgW / chunkSize);
-    imgW *= 2;
-    imgH *= 2;
+    totalChunks += Math.ceil(outImgH / chunkSize) * Math.ceil(outImgW / chunkSize);
+    outImgW *= 2;
+    outImgH *= 2;
   }
-  console.debug(`Total chunks: ${totalChunks}, end image size: ${imgW}x${imgH}`);
+  const nChunksH = Math.ceil(inImgH / chunkSize);
+  const nChunksW = Math.ceil(inImgW / chunkSize);
+  const chunkH = inImgH / nChunksH;
+  const chunkW = inImgW / nChunksW;
+  console.debug(`in image size: ${outImgW/2}x${outImgH/2}`);
+  console.debug(`chunk size: ${chunkW}x${chunkH}`);
+  console.debug(`image chunks: ${nChunksW}x${nChunksH}`);
+  console.debug(`total chunks: ${totalChunks}`);
+  console.debug(`out image size: ${outImgW}x${outImgH}`);
 
+  if (totalChunks > 1) {
+    setUpscaleProgress(0.0001);
+  }
+  
+  console.time('upscale total');
   for (let s = 0; s < repeatUpscale; s += 1) {
-    imgH = inArr.shape[2];
-    imgW = inArr.shape[3];
+    outImgH = inArr.shape[2];
+    outImgW = inArr.shape[3];
 
     // Split the image in chunks and run super resolution on each chunk
-    outArr = ndarray(new Uint8Array(3 * (imgH * 2) * (imgW * 2)), [1, 3, imgH * 2, imgW * 2]);
+    outArr = ndarray(new Uint8Array(3 * (outImgH * 2) * (outImgW * 2)), [1, 3, outImgH * 2, outImgW * 2]);
     let chunkIdx = 0;
-    for (let i = 0; i < imgH; i += chunkSize) {
-      for (let j = 0; j < imgW; j += chunkSize) {
+    for (let i = 0; i < nChunksH; i += 1) {
+      for (let j = 0; j < nChunksW; j += 1) {
         let progress = (chunkIdx + 1) / totalChunks;
-        setImgProgressStopAt(progress);
+        const x = j * chunkW;
+        const y = i * chunkH;
 
         // Compute chunk bounds including padding
-        const iStart = Math.max(0, i - pad);
-        const inH = iStart + chunkSize + pad*2 > imgH ? imgH - iStart : chunkSize + pad*2;
-        const outH = Math.min(imgH, i + chunkSize) - i;
-        const jStart = Math.max(0, j - pad);
-        const inW = jStart + chunkSize + pad*2 > imgW ? imgW - jStart : chunkSize + pad*2;
-        const outW = Math.min(imgW, j + chunkSize) - j;
-        imageNpixels = inH * inW;
+        const yStart = Math.max(0, y - pad);
+        const inH = yStart + chunkH + pad*2 > outImgH ? outImgH - yStart : chunkH + pad*2;
+        const outH = Math.min(outImgH, y + chunkH) - y;
+        const xStart = Math.max(0, x - pad);
+        const inW = xStart + chunkW + pad*2 > outImgW ? outImgW - xStart : chunkW + pad*2;
+        const outW = Math.min(outImgW, x + chunkW) - x;
 
         // Create sliced and copy
-        const inSlice = inArr.lo(0, 0, iStart, jStart).hi(1, 3, inH, inW);
+        const inSlice = inArr.lo(0, 0, yStart, xStart).hi(1, 3, inH, inW);
         const subArr = ndarray(new Uint8Array(inH * inW * 3), inSlice.shape);
         ops.assign(subArr, inSlice);
 
@@ -149,10 +156,10 @@ export async function upscale(inputData, setUpscaleProgress, repeatUpscale=1) {
         const chunkData = await runSuperRes(subArr);
         const chunkArr = ndarray(chunkData.data, chunkData.dims);
         const chunkSlice = chunkArr
-          .lo(0, 0, (i - iStart)*2, (j - jStart)*2)
+          .lo(0, 0, (y - yStart)*2, (x - xStart)*2)
           .hi(1, 3, outH * 2, outW * 2);
         const outSlice = outArr
-          .lo(0, 0, i*2, j*2)
+          .lo(0, 0, y*2, x*2)
           .hi(1, 3, outH * 2, outW * 2);
         ops.assign(outSlice, chunkSlice);
         setUpscaleProgress(progress);
@@ -161,10 +168,11 @@ export async function upscale(inputData, setUpscaleProgress, repeatUpscale=1) {
     }
     inArr = outArr;
   }
+  console.timeEnd('upscale total');
 
   // Reshape network output into a normal image
-  const outImg = buildNdarrayFromImageOutput(outArr, imgH * 2, imgW * 2)
-  const outURI = buildImageFromND(outImg, imgH * 2, imgW * 2);
+  const outImg = buildNdarrayFromImageOutput(outArr, outImgH * 2, outImgW * 2)
+  const outURI = buildImageFromND(outImg, outImgH * 2, outImgW * 2);
   return outURI;
 }
 
@@ -173,7 +181,7 @@ export async function upScaleFromURI(uri, setLoading, setTags, setUpscaleProgres
   let resultURI = null;
   let repeatUpscale = Math.log2(upscaleFactor);
   if (uri.slice(0, 14) == "data:image/gif") {
-    setExtension("gif")
+    setExtension("gif");
     //is gif
     resultURI = await doGif(uri, setTags, setUpscaleProgress, repeatUpscale);
   } else {
@@ -216,23 +224,4 @@ export async function upScaleGifFrameFromURI(
     );
     resolve(outputImage);
   });
-}
-
-// Progress estimation
-const baseTagTime = 40 / 1000;
-export const upscaleEstFreq = 0.3;
-const baseEstSecPerPixel = 0.000055;
-export function upscaleIncrementProgress(upscaleProgress, setUpscaleProgress)
-{
-  if (imageNpixels > 0) {
-    let speedFactor = baseTagTime / getTagTime();
-    if (typeof SharedArrayBuffer === "undefined") {
-      speedFactor *= 3;
-    }
-    let totalTimeEst = baseEstSecPerPixel * speedFactor * imageNpixels;
-    let progressToStop = Math.min(1, upscaleProgress / imgProgressStopAt);
-    let slowdownFactor = Math.max(0, 1 - Math.pow(progressToStop + 0.03, 8));
-    let estProgress = upscaleProgress + (upscaleEstFreq / totalTimeEst) * slowdownFactor;
-    setUpscaleProgress(Math.min(imgProgressStopAt, estProgress));
-  }
 }

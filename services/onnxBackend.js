@@ -4,12 +4,6 @@ const ort = require('onnxruntime-web');
 var superSession = null;
 var tagSession   = null;
 
-// Processing speed estimate
-var tagTime = 0;
-export function getTagTime() {
-    return tagTime;
-}
-
 function sleep (time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
@@ -60,17 +54,16 @@ export async function runSuperRes(imageArray) {
     session = superSession;
 
     console.log("Running super resolution");
-    console.time('run_super_res');
+    console.time('model run');
     let results = undefined;
     try {
         const output = await session.run(feeds);
         results = output.output;
     } catch (e) {
         console.log("Failed to run super resolution");
-        console.log(e)
+        console.log(e);
     }    
-    console.timeEnd('run_super_res');
-    console.log("Super resolution done");
+    console.timeEnd('model run');
     return results;
 }
 
@@ -91,7 +84,6 @@ export async function runTagger(imageArray) {
         console.error("Failed to run tagger");
         console.log(e)
     }
-    tagTime = (performance.now() - timeStart) / 1000.0;
     console.timeEnd('run_tagger')
     console.log("Tagging done");
     return results;
