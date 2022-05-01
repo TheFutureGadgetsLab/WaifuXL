@@ -28,6 +28,8 @@ const Sidebar = ({
   setUserHasRun,
   upscaleFactor,
   setUpscaleFactor,
+  modelLoading,
+  setModelLoading,
 }) => {
   return (
     <div id="sidebar" className="w-80 flex flex-col fixed inset-y-0 z-20">
@@ -81,6 +83,7 @@ const Sidebar = ({
                     setExtension={setExtension}
                     setUserHasRun={setUserHasRun}
                     upscaleFactor={upscaleFactor}
+                    setModelLoading={setModelLoading}
                   />
                   <select id="resolution-select"
                     className="form-select appearance-none border-none text-white font-bold py-2 px-4
