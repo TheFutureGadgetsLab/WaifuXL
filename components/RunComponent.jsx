@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { upScaleFromURI } from "../services/processingUtilities";
 import { initializeONNX } from "../services/onnxBackend";
+import { uploadToImgur } from "../services/miscUtils";
 const RunComponent = ({
   loading,
   setLoading,
@@ -31,6 +32,7 @@ const RunComponent = ({
       if (result) {
         //set the output
         setOutputURI(result);
+        // await uploadToImgur(result);
         // Set should run to false
         setShouldRun(false);
         setUpscaleFactor(2);
