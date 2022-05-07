@@ -8,7 +8,7 @@ export async function onRequest(context) {
       next, // used for middleware or to fetch assets
       data, // arbitrary space for passing data between middlewares
     } = context;
-  
+    env.hit_count++
     return new Response(env.hit_count);
   }
   
