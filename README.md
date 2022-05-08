@@ -1,6 +1,12 @@
 # ![](https://i.imgur.com/lPsvvh7.png) Waifu Expander
 Waifu Expander is a state of the art super resolution model trained on  ~1,200,000 anime style images from the [Danbooru2021](https://www.gwern.net/Danbooru2021) dataset. You cant find it online at https://waifuxl.com/. Note that while you *can* upscale natural (real) images, the model was only trained on anime style drawings, so dont expect to have your socks blown off.
 
+# Comparison to Waifu2x
+In general, the [Real-ESRGAN](https://arxiv.org/abs/2107.10833) will outperform the models used on [waifu2x](http://waifu2x.udp.jp/) by a significant margin, without the need for multiple models trained on various noise reduction levels.
+
+Update this to look better and with final model. Maybe a different image?
+![](https://i.imgur.com/BDv4rd9.png)
+
 # How it Works
 Using the [Onnx Runtime](https://onnxruntime.ai/), we stream the weights of our ML models directly onto your device to be executed locally in WebAssembly. Doing so allows us to provide this service solely through a static webpage, no backend for model execution needed. This has the added benefit of enabling the privacy of your images--your images are not, and never will be, sent to us.
 
@@ -12,11 +18,6 @@ For our super resolution network we are using the state-of-the-art [Real-ESRGAN]
 
 Alec, please fill out a section describing how we made our ferociously sexy website.
 
-# Comparison to Waifu2x
-In general, the [Real-ESRGAN](https://arxiv.org/abs/2107.10833) will outperform the models used on [waifu2x](http://waifu2x.udp.jp/) by a significant margin, without the need for multiple models trained on various noise reduction levels.
-
-Update this to look better and with final model. Maybe a different image?
-![](https://i.imgur.com/BDv4rd9.png)
 
 # Contribution Guide
 If you'd like to contribute there are a number of aveneus where you can do so:
