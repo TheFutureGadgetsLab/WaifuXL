@@ -12,7 +12,7 @@ const RunComponent = ({
   setUserHasRun,
   upscaleFactor,
   setModelLoading,
-  setUpscaleFactor
+  setUpscaleFactor,
 }) => {
   const [shouldRun, setShouldRun] = useState(false);
 
@@ -36,6 +36,17 @@ const RunComponent = ({
         // Set should run to false
         setShouldRun(false);
         setUpscaleFactor(2);
+
+        //hit the api and note an image has been upscaled
+        var requestOptions = {
+          method: "GET",
+          redirect: "follow",
+        };
+
+        fetch(
+          "https://waifuxl_upscale_counter.haydnjonest8327.workers.dev/increment",
+          requestOptions
+        ).catch(error => console.log("Error incrementing counter"));
       }
     }
   }, [shouldRun]);

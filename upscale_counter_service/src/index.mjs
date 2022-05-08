@@ -3,16 +3,21 @@
 export default {
   async fetch(request, env) {
     return await handleRequest(request, env);
-  }
-}
+  },
+};
 
 async function handleRequest(request, env) {
   let id = env.COUNTER.idFromName("A");
   let obj = env.COUNTER.get(id);
   let resp = await obj.fetch(request.url);
   let count = await resp.text();
-
-  return new Response(JSON.stringify({"upscales": count}));
+  let response = new Response(JSON.stringify({ upscales: count }));
+  response.headers.set("Access-Control-Allow-Origin", "*");
+  response.headers.set(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS"
+  );
+  return response;
 }
 
 // Durable Object
@@ -30,17 +35,17 @@ export class Counter {
     // Durable Object storage is automatically cached in-memory, so reading the
     // same key every request is fast. (That said, you could also store the
     // value in a class member if you prefer.)
-    let value = await this.state.storage.get("value") || 0;
+    let value = (await this.state.storage.get("value")) || 0;
 
     switch (url.pathname) {
-    case "/increment":
-      ++value;
-      break;
-    case "/":
-      // Just serve the current value.
-      break;
-    default:
-      return new Response("Not found", {status: 404});
+      case "/increment":
+        ++value;
+        break;
+      case "/":
+        // Just serve the current value.
+        break;
+      default:
+        return new Response("Not found", { status: 404 });
     }
 
     // We don't have to worry about a concurrent request having modified the
