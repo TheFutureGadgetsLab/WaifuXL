@@ -11,7 +11,7 @@ async function handleRequest(request, env) {
   let obj = env.COUNTER.get(id);
   let resp = await obj.fetch(request.url);
   let count = await resp.text();
-  let response = new Response(JSON.stringify({ upscales: count }));
+  let response = new Response(count);
   response.headers.set("Access-Control-Allow-Origin", "*");
   response.headers.set(
     "Access-Control-Allow-Methods",
@@ -44,6 +44,15 @@ export class Counter {
       case "/":
         // Just serve the current value.
         break;
+      case "/badge":
+        return new Response(
+          JSON.stringify({
+            schemaVersion: 1,
+            label: "Images Upscaled",
+            message: value.toString(),
+            color: "orange",
+          })
+        );
       default:
         return new Response("Not found", { status: 404 });
     }
