@@ -13,28 +13,34 @@ export async function initializeONNX() {
     ort.env.wasm.simd       = true;
     ort.env.wasm.proxy      = true;
 
-    const superBuffer = await fetchMyModel('./superRes.onnx');
-    const tagBuffer = await fetchMyModel('./tagger.onnx');
+    if (typeof fetch !== 'undefined') {
+        const superResponse = await fetch('./superRes.onnx');
+        const tagResponse = await fetch('./tagger.onnx');
+        const superBuffer = await superResponse.arrayBuffer();
+        const tagBuffer = await tagResponse.arrayBuffer();
+        superSession = await ort.InferenceSession.create(superBuffer, {
+            executionProviders: ["wasm"],
+            graphOptimizationLevel: 'all',
+            enableCpuMemArena: true,
+            enableMemPattern: true,
+            executionMode: 'parallel',
+        });
+        tagSession = await ort.InferenceSession.create(tagBuffer, {
+            executionProviders: ["wasm"],
+            graphOptimizationLevel: 'all',
+            enableCpuMemArena: true,
+            enableMemPattern: true,
+            executionMode: 'parallel',
+        });
+    
+    
+        // Needed because WASM workers are created async, wait for them
+        // to be ready
+        await sleep(300);
+    
+    }
 
-    superSession = await ort.InferenceSession.create(superBuffer, {
-        executionProviders: ["wasm"],
-        graphOptimizationLevel: 'all',
-        enableCpuMemArena: true,
-        enableMemPattern: true,
-        executionMode: 'parallel',
-    });
-    tagSession = await ort.InferenceSession.create(tagBuffer, {
-        executionProviders: ["wasm"],
-        graphOptimizationLevel: 'all',
-        enableCpuMemArena: true,
-        enableMemPattern: true,
-        executionMode: 'parallel',
-    });
 
-
-    // Needed because WASM workers are created async, wait for them
-    // to be ready
-    await sleep(300);
 }
 
 function prepareImage(imageArray) {
