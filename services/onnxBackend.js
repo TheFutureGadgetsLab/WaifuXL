@@ -8,6 +8,16 @@ function sleep (time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
 
+function str2ab(str) {
+    var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
+    var bufView = new Uint16Array(buf);
+    for (var i=0, strLen=str.length; i<strLen; i++) {
+      bufView[i] = str.charCodeAt(i);
+    }
+    return buf;
+}
+  
+
 export async function initializeONNX() {
     ort.env.wasm.numThreads = navigator.hardwareConcurrency / 2;
     ort.env.wasm.simd       = true;
@@ -16,8 +26,10 @@ export async function initializeONNX() {
     if (typeof fetch !== 'undefined') {
         const superResponse = await fetch('./superRes.onnx');
         const tagResponse = await fetch('./tagger.onnx');
+        console.log("Fetched successfuly")
         const superBuffer = await superResponse.arrayBuffer();
         const tagBuffer = await tagResponse.arrayBuffer();
+        console.log("Converted to array buffer successfully");
         superSession = await ort.InferenceSession.create(superBuffer, {
             executionProviders: ["wasm"],
             graphOptimizationLevel: 'all',
