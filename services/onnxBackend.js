@@ -17,6 +17,11 @@ function str2ab(str) {
     return buf;
 }
   
+function copy(src)  {
+    var dst = new ArrayBuffer(src.byteLength);
+    new Uint8Array(dst).set(new Uint8Array(src));
+    return dst;
+}
 
 export async function initializeONNX() {
     ort.env.wasm.numThreads = navigator.hardwareConcurrency / 2;
@@ -27,8 +32,10 @@ export async function initializeONNX() {
         const superResponse = await fetch('./superRes.onnx');
         const tagResponse = await fetch('./tagger.onnx');
         console.log("Fetched successfuly")
-        const superBuffer = await superResponse.arrayBuffer();
-        const tagBuffer = await tagResponse.arrayBuffer();
+        let superBuffer = await superResponse.arrayBuffer();
+        let tagBuffer = await tagResponse.arrayBuffer();
+        superBuffer = copy(superBuffer);
+        tagBuffer = copy(tagBuffer);
         console.log("Converted to array buffer successfully");
         superSession = await ort.InferenceSession.create(superBuffer, {
             executionProviders: ["wasm"],
