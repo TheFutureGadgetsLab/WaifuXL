@@ -51,8 +51,10 @@ export async function initializeONNX() {
         await sleep(300);
     
     }
-
-
+    else {
+        console.log("No fetch")
+    }
+    
 }
 
 function prepareImage(imageArray) {
