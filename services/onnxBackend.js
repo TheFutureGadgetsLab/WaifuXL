@@ -29,22 +29,22 @@ export async function initializeONNX() {
     ort.env.wasm.proxy      = true;
 
     if (typeof fetch !== 'undefined') {
-        const superResponse = await fetch('./superRes.onnx');
-        const tagResponse = await fetch('./tagger.onnx');
-        console.log("Fetched successfuly")
-        let superBuffer = await superResponse.arrayBuffer();
-        let tagBuffer = await tagResponse.arrayBuffer();
-        superBuffer = copy(superBuffer);
-        tagBuffer = copy(tagBuffer);
-        console.log("Converted to array buffer successfully");
-        superSession = await ort.InferenceSession.create(superBuffer, {
+        // const superResponse = await fetch('./superRes.onnx');
+        // const tagResponse = await fetch('./tagger.onnx');
+        // console.log("Fetched successfuly")
+        // let superBuffer = await superResponse.data;
+        // let tagBuffer = await tagResponse.data;
+        // superBuffer = copy(superBuffer);
+        // tagBuffer = copy(tagBuffer);
+        // console.log("Converted to array buffer successfully");
+        superSession = await ort.InferenceSession.create("./superRes.onnx", {
             executionProviders: ["wasm"],
             graphOptimizationLevel: 'all',
             enableCpuMemArena: true,
             enableMemPattern: true,
             executionMode: 'parallel',
         });
-        tagSession = await ort.InferenceSession.create(tagBuffer, {
+        tagSession = await ort.InferenceSession.create('./tagger.onnx', {
             executionProviders: ["wasm"],
             graphOptimizationLevel: 'all',
             enableCpuMemArena: true,
