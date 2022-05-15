@@ -35,7 +35,7 @@ export default function Donate() {
 
       <div
         className="flex flex-col items-center min-h-screen"
-        style={{ backgroundImage: `url("bg.svg")`, backgroundSize: "cover" }}
+        style={{ backgroundImage: `url("images/bg.svg")`, backgroundSize: "cover" }}
       >
         <NavbarComponent currentPage="donate" />
         <svg
@@ -65,13 +65,13 @@ export default function Donate() {
           </svg>
         </a>
         <main className="items-center justify-center lg:w-8/12 p-10 text-center">
-          <img src="./chibi_pablo.png" className="md:h-96 h-64 float-left" />
+          <img src="./images/chibi_pablo.png" className="md:h-96 h-64 float-left" />
           <div className="md:text-left lg:mt-20 mt-5 lg:text-6xl text-2xl font-black">
             Donation Links
           </div>
           <div className="text-left flex flex-col flex-grow flex-wrap">
             <button className="hover:bg-blue-700 text-black font-bold py-2 px-4 rounded inline-flex items-center w-max">
-              <img className="h-4 pr-2" src="/koficup.png" />
+              <img className="h-4 pr-2" src="/images/koficup.png" />
 
               <a
                 className="font-mono"
@@ -92,14 +92,14 @@ export default function Donate() {
                   setIsHiddenETH(true);
                 }}
               >
-                <img className="h-6 pr-2" src="./ETH.svg" />
+                <img className="h-6 pr-2" src="./images/ETH.svg" />
 
                 <a className="">
                   <span className="font-mono">
                     0xDBF8321ba37D14eFc82BA1d9A416145EE039b78d
                   </span>
                 </a>
-                <img className="h-5 pr-2 absolute left-full" src="./copy.svg" />
+                <img className="h-5 pr-2 absolute left-full" src="./images/copy.svg" />
               </button>
               <Tooltip tooltipText={"Copied!"} isHidden={isHiddenETH}></Tooltip>
             </div>
@@ -115,13 +115,13 @@ export default function Donate() {
                   setIsHiddenBTC(true);
                 }}
               >
-                <img className="h-6 pr-2" src="./BTC.svg" />
+                <img className="h-6 pr-2" src="./images/BTC.svg" />
                 <a className="">
                   <span className="font-mono">
                     33NgbSU66P42afwF3nbvn7qsYy4iJ3rRbL
                   </span>
                 </a>
-                <img className="h-5 pr-2 absolute left-full" src="./copy.svg" />
+                <img className="h-5 pr-2 absolute left-full" src="./images/copy.svg" />
               </button>
               <Tooltip tooltipText={"Copied!"} isHidden={isHiddenBTC}></Tooltip>
             </div>
@@ -137,13 +137,13 @@ export default function Donate() {
                   setIsHiddenDOGE(true);
                 }}
               >
-                <img className="h-6 pr-2" src="./DOGE.svg" />
+                <img className="h-6 pr-2" src="./images/DOGE.svg" />
                 <a className="">
                   <span className="font-mono">
                     D5Zx9Uz6CLvKKEcdGH4R1hBLqeYwGdaFbP
                   </span>
                 </a>
-                <img className="h-5 pr-2 absolute left-full" src="./copy.svg" />
+                <img className="h-5 pr-2 absolute left-full" src="./images/copy.svg" />
               </button>
               <Tooltip
                 tooltipText={"Copied!"}
@@ -162,13 +162,13 @@ export default function Donate() {
                   setIsHiddenLITE(true);
                 }}
               >
-                <img className="h-6 pr-2" src="./LTC.svg" />
+                <img className="h-6 pr-2" src="./images/LTC.svg" />
                 <a className="">
                   <span className="font-mono">
                     MMWSSsvzUB2nWrYQU9f9SkV4tNKbAfk8gf
                   </span>
                 </a>
-                <img className="h-5 pr-2 absolute left-full" src="./copy.svg" />
+                <img className="h-5 pr-2 absolute left-full" src="./images/copy.svg" />
               </button>
               <Tooltip
                 tooltipText={"Copied!"}
