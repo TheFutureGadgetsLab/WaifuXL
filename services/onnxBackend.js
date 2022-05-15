@@ -32,11 +32,11 @@ export async function initializeONNX() {
         const superResponse = await fetch('./superRes.onnx');
         const tagResponse = await fetch('./tagger.onnx');
         console.log("Fetched successfuly")
-        let superBuffer = await superResponse.arrayBuffer();
-        let tagBuffer = await tagResponse.arrayBuffer();
-        superBuffer = copy(superBuffer);
-        tagBuffer = copy(tagBuffer);
-        console.log("Converted to array buffer successfully");
+        let superBuffer = await superResponse.data();
+        let tagBuffer = await tagResponse.data();
+        // superBuffer = copy(superBuffer);
+        // tagBuffer = copy(tagBuffer);
+        // console.log("Converted to array buffer successfully");
         superSession = await ort.InferenceSession.create(superBuffer, {
             executionProviders: ["wasm"],
             graphOptimizationLevel: 'all',
@@ -44,7 +44,7 @@ export async function initializeONNX() {
             enableMemPattern: true,
             executionMode: 'parallel',
         });
-        tagSession = await ort.InferenceSession.create(tagBuffer, {
+        tagSession = await ort.InferenceSession.create(superBuffer, {
             executionProviders: ["wasm"],
             graphOptimizationLevel: 'all',
             enableCpuMemArena: true,
