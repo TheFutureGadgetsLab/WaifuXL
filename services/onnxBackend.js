@@ -110,29 +110,14 @@ export async function runTagger(imageArray) {
 }
 
 async function fetchMyModel(filepathOrUri) {
-    // console.assert(typeof fetch !== "undefined");
-    // const response = await fetch(filepathOrUri);
-    // const reader = response.body.getReader();
-    // const length = parseInt(response.headers.get("content-length"));
-    // let data = new Uint8Array(length);
-    // let received = 0;
+    const response = await fetch(filepathOrUri);
+    const buf = await response.arrayBuffer();
 
-    // // Loop through the response stream and extract data chunks
-    // while (true) {
-    //     const { done, value } = await reader.read();
-
-    //     if (done) {
-    //         break;
-    //     } else {
-    //         // Push values to the chunk array
-    //         data.set(value, received);
-    //         received += value.length;
-    //     }
-    // }
-    // return data.buffer;
-    if (typeof fetch !== 'undefined') {
-        const response = await fetch(filepathOrUri);
-        const buf = new Uint8Array(await response.arrayBuffer());
-        return buf;
+    // Create Uint8Array of same size as array buffer
+    // Fill
+    var bufView = new Uint8Array(buf);
+    for (var i=0, strLen=bufView.length; i<strLen; i++) {
+        bufView[i] = bufView[i] & 0xFF;
     }
+    return bufView;
 }
