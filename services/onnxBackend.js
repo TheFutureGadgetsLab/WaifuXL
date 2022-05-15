@@ -29,11 +29,13 @@ export async function initializeONNX() {
     ort.env.wasm.proxy      = true;
 
     if (typeof fetch !== 'undefined') {
-        // const superResponse = await fetch('./models/superRes.onnx');
-        // const tagResponse = await fetch('./models/tagger.onnx');
+        const superResponse = await fetch('./models/superRes.onnx');
+        const tagResponse = await fetch('./models/tagger.onnx');
+
         // console.log("Fetched successfuly")
-        // let superBuffer = await superResponse.data;
-        // let tagBuffer = await tagResponse.data;
+        let superBuffer = await superResponse.arrayBuffer();
+        let tagBuffer = await tagResponse.arrayBuffer();
+        const testing = new Uint8Array(superBuffer);
         // superBuffer = copy(superBuffer);
         // tagBuffer = copy(tagBuffer);
         // console.log("Converted to array buffer successfully");
