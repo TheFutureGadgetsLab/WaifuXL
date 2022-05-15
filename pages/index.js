@@ -6,9 +6,9 @@ import ImageDisplay from "../components/ImageDisplayComponent";
 import { setEventListeners } from "../services/setEventListeners";
 import default_tags from "../services/landing_tags";
 export default function Main() {
-  const [inputURI, setInputURI] = useState("./ozen.png");
-  const [outputURI, setOutputURI] = useState("./ozen_2x.png");
-  const [previewURI, setPreviewURI] = useState("/ozen.png");
+  const [inputURI, setInputURI] = useState("./images/ozen.png");
+  const [outputURI, setOutputURI] = useState("./images/ozen_2x.png");
+  const [previewURI, setPreviewURI] = useState("/images/ozen.png");
   const [loading, setLoading] = useState(false);
   const [inputModalOpen, setInputModalOpen] = useState(false);
   const [tags, setTags] = useState(null);
@@ -31,8 +31,8 @@ export default function Main() {
   }
 
   useEffect(async () => {
-    setInputURI("./ozen.png");
-    setOutputURI("./ozen_2x.png");
+    setInputURI("./images/ozen.png");
+    setOutputURI("./images/ozen_2x.png");
     setTags(default_tags);
     setEventListeners(
       setPreviewURI,
@@ -46,7 +46,7 @@ export default function Main() {
     <>
       <div
         style={{
-          backgroundImage: `url("bg.svg")`,
+          backgroundImage: `url("images/bg.svg")`,
           backgroundSize: "cover",
           backgroundPositionX: "right",
         }}

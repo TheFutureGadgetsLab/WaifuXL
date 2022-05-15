@@ -14,7 +14,7 @@ export default function About() {
 
       <div
         className="flex flex-col items-center min-h-screen"
-        style={{ backgroundImage: `url("bg.svg")`, backgroundSize: "cover" }}
+        style={{ backgroundImage: `url("images/bg.svg")`, backgroundSize: "cover" }}
       >
         <NavbarComponent currentPage="about"/>
         <svg
