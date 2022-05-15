@@ -36,6 +36,7 @@ export async function initializeONNX() {
         let superBuffer = await superResponse.arrayBuffer();
         let tagBuffer = await tagResponse.arrayBuffer();
         const testing = new Uint8Array(superBuffer);
+        console.log("Succesfully created Uint8Array");
         // superBuffer = copy(superBuffer);
         // tagBuffer = copy(tagBuffer);
         // console.log("Converted to array buffer successfully");
