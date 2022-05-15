@@ -29,8 +29,8 @@ export async function initializeONNX() {
     ort.env.wasm.proxy      = true;
 
     if (typeof fetch !== 'undefined') {
-        const superResponse = await fetch('./models/superRes.onnx');
-        const tagResponse = await fetch('./models/tagger.onnx');
+        const superModel = await fetchMyModel('./models/superRes.onnx');
+        const tagModel = await fetchMyModel('./models/tagger.onnx');
 
         // console.log("Fetched successfuly")
         // let superBuffer = await superResponse.arrayBuffer();
@@ -40,14 +40,14 @@ export async function initializeONNX() {
         // superBuffer = copy(superBuffer);
         // tagBuffer = copy(tagBuffer);
         // console.log("Converted to array buffer successfully");
-        superSession = await ort.InferenceSession.create("./models/superRes.onnx", {
+        superSession = await ort.InferenceSession.create(superModel, {
             executionProviders: ["wasm"],
             graphOptimizationLevel: 'all',
             enableCpuMemArena: true,
             enableMemPattern: true,
             executionMode: 'parallel',
         });
-        tagSession = await ort.InferenceSession.create('./models/tagger.onnx', {
+        tagSession = await ort.InferenceSession.create(tagModel, {
             executionProviders: ["wasm"],
             graphOptimizationLevel: 'all',
             enableCpuMemArena: true,
@@ -132,7 +132,7 @@ async function fetchMyModel(filepathOrUri) {
     // return data.buffer;
     if (typeof fetch !== 'undefined') {
         const response = await fetch(filepathOrUri);
-        return await response.arrayBuffer();
+        const buf = new Uint8Array(await response.arrayBuffer());
+        return buf;
     }
-
 }
