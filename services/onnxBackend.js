@@ -33,10 +33,10 @@ export async function initializeONNX() {
         const tagResponse = await fetch('./models/tagger.onnx');
 
         // console.log("Fetched successfuly")
-        let superBuffer = await superResponse.arrayBuffer();
-        let tagBuffer = await tagResponse.arrayBuffer();
-        const testing = new Uint8Array(superBuffer);
-        console.log("Succesfully created Uint8Array");
+        // let superBuffer = await superResponse.arrayBuffer();
+        // let tagBuffer = await tagResponse.arrayBuffer();
+        // const testing = new Uint8Array(superBuffer);
+        // console.log("Succesfully created Uint8Array");
         // superBuffer = copy(superBuffer);
         // tagBuffer = copy(tagBuffer);
         // console.log("Converted to array buffer successfully");
