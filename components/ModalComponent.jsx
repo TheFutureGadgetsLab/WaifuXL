@@ -1,23 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import {
   getDataURIFromInput,
-  getDataURIFromFileUpload,
-  checkDimensions,
+  setDataURIFromFile,
 } from "../services/imageUtilities";
 
 function ModalComponent({
   setInputModalOpen,
   setInputURI,
   setOutputURI,
-  inputURI,
   previewURI,
   setPreviewURI,
   setFileName,
   setTags,
-  setUpscaleProgress,
 }) {
   const divRef = useRef(null);
-  const [showWarning, setShowWarning] = useState(false);
   function focusDiv() {
     divRef.current.focus();
   }
@@ -27,13 +23,10 @@ function ModalComponent({
     focusDiv();
   }, [divRef]);
 
-  useEffect(async () => {
-    setShowWarning(await checkDimensions(previewURI));
-  }, [previewURI]);
-
   return (
     <div
-      className="fixed inset-0 overflow-y-auto z-20"
+      id="modal-component-container"
+      className="absolute inset-0 overflow-y-auto w-screen h-screen m-0"
       aria-labelledby="modal-title"
       role="dialog"
       aria-modal="true"
@@ -44,26 +37,27 @@ function ModalComponent({
         setFileName();
       }}
     >
-      <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div
+        id="modal-bg"
+        className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity w-screen h-screen"
+        aria-hidden="true"
+        onClick={(e) => {
+          setInputModalOpen(false);
+          setFileName();
+        }}
+      ></div>
+      <div
+        id="modal-container"
+        className="flex items-center justify-center w-screen h-screen"
+      >
         <div
-          className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-          aria-hidden="true"
-          onClick={(e) => {
-            setInputModalOpen(false);
-            setFileName();
-          }}
-        ></div>
-
-        <span
-          className="hidden sm:inline-block sm:align-middle sm:h-screen"
-          aria-hidden="true"
+          id="modal"
+          className="bg-white rounded-lg shadow-xl transform transition-all text-center
+            w-full h-full md:w-auto md:h-auto"
         >
-          &#8203;
-        </span>
-
-        <div className="inline-block align-bottom bg-white rounded-lg shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-          <div className="">
+          <div>
             <svg
+              id="close-button"
               xmlns="http://www.w3.org/2000/svg"
               height="24px"
               viewBox="0 0 24 24"
@@ -79,11 +73,8 @@ function ModalComponent({
               <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
             </svg>
           </div>
-          <span className="block text-gray-700 pt-3">
-            Click preview to open file dialogue
-          </span>
           <label
-            className="flex flex-col items-center justify-center cursor-pointer h-96 m-3 bg-contain bg-origin-content p-4 bg-no-repeat bg-center"
+            className="flex flex-col items-center justify-center cursor-pointer mt-16 h-96 m-3 bg-contain bg-origin-content p-4 bg-no-repeat bg-center"
             style={{
               backgroundImage: `url(${previewURI})`,
               boxShadow: "inset 0px 0px 12px #00000050",
@@ -95,38 +86,29 @@ function ModalComponent({
                 className="hidden"
                 onChange={(e) => {
                   if (e.target.files[0]) {
-                    getDataURIFromFileUpload(e.target.files[0], setPreviewURI);
+                    setDataURIFromFile(e.target.files[0], setPreviewURI);
                     setFileName(e.target.files[0].name.split(".")[0]);
-                    setOutputURI(null);  
                   }
                 }}
               />
             </label>
           </label>
-          {showWarning ? (
-            <span className="text-red-500 text-sm font-bold">Warning: Image is too large <br/> Max dimension: 950 x 950</span>
-          ) : (
-            <span className="text-sm">&#10240;<br/>&#10240;</span>
-          )}
           <div
             id="preset-menu"
-            className="mt-10 p-3 flex justify-between relative"
+            className="mt-10 p-3 flex justify-between relative gap-4"
           >
             <label>
               <span className="text-gray-700">Preset Images</span>
               <select
                 id="preset-select"
-                className="form-select rounded mt-1 block w-full p-3 bg-blue text-white cursor-pointer"
+                className="form-select border-none rounded mt-1 block text-ellipsis w-full p-3 bg-blue text-white cursor-pointer"
                 onInput={async (inp) => {
                   const [name, url] = inp.target.value.split("|");
                   setPreviewURI(await getDataURIFromInput(url));
                   setFileName(`example_${name}`);
-                  setOutputURI(null);
                 }}
               >
-                <option>
-                  Select a Preset
-                </option>
+                <option>Select a Preset</option>
                 <option value="ozen|https://i.imgur.com/Sf6sfPj.png">
                   Ozen "The Immovable"
                 </option>
@@ -150,24 +132,47 @@ function ModalComponent({
                 </option>
               </select>
             </label>
+            <div className="grid grid-cols-1">
+              <button
+                id="upload-button"
+                type="button"
+                className="relative mt-7 rounded-md right-0 bottom-0 text-white shadow-sm px-4 py-1 
+                text-base font-medium h-12 focus:outline-none focus:ring-2 focus:ring-offset-2 
+                border-blue border-2 bg-blue hover:bg-blue hover:text-white disabled:bg-white disabled:text-gray-200 disabled:border-gray-200"
+              >
+                <label className="absolute left-0 top-0 w-full h-full cursor-pointer">
+                  <input
+                    type="file"
+                    className="hidden"
+                    onChange={(e) => {
+                      if (e.target.files[0]) {
+                        setDataURIFromFile(e.target.files[0], setPreviewURI);
+                        setFileName(e.target.files[0].name.split(".")[0]);
+                      }
+                    }}
+                  />
+                </label>
+                Upload
+              </button>
+            </div>
 
-            <button
-              id="done-button"
-              type="button"
-              className="rounded-md absolute m-3 right-0 bottom-0 text-blue shadow-sm px-4 py-1 
+            <div className="grid grid-cols-1">
+              <button
+                id="done-button"
+                type="button"
+                className="mt-7 rounded-md right-0 bottom-0 text-blue shadow-sm px-4 py-1 
                 text-base font-medium h-12 focus:outline-none focus:ring-2 focus:ring-offset-2 
                 border-blue border-2 bg-white hover:bg-blue hover:text-white disabled:bg-white disabled:text-gray-200 disabled:border-gray-200"
-              disabled={showWarning}
-              onClick={() => {
-                setInputURI(previewURI);
-                setOutputURI(null);
-                setTags(null);
-                setInputModalOpen(false);
-                setUpscaleProgress(null);
-              }}
-            >
-              Done
-            </button>
+                onClick={() => {
+                  setInputURI(previewURI);
+                  setOutputURI(null);
+                  setTags(null);
+                  setInputModalOpen(false);
+                }}
+              >
+                Done
+              </button>
+            </div>
           </div>
         </div>
       </div>

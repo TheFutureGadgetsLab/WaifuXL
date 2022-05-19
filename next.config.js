@@ -8,10 +8,11 @@ const nextConfig = {
 
 const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
+const withPWA = require("next-pwa");
 
-module.exports = {
+module.exports = withPWA({
   assetPrefix: ".",
-  basePath: isProd ? "/WaifuXL" : "",
+  basePath: isProd ? "" : "",
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Important: return the modified config
     config.plugins.push(
@@ -31,4 +32,9 @@ module.exports = {
 
     return config;
   },
-};
+  pwa: {
+    dest: "public",
+    register: true,
+    skipWaiting: true,
+  },
+});

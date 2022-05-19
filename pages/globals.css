@@ -17,3 +17,13 @@
         transform: translateX(0);
     }
 }
+
+@keyframes scalein {
+    from {
+        transform: scale(0.0);
+    }
+
+    to {
+        transform: scale(1.0);
+    }
+}

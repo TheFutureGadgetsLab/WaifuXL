@@ -1,31 +1,65 @@
 import { useEffect, useState } from "react";
 import { upScaleFromURI } from "../services/processingUtilities";
-
-const RunComponent = ({ setLoading, inputURI, setOutputURI, setTags, isInitialized, setUpscaleProgress, setExtension }) => {
+import { initializeONNX } from "../services/onnxBackend";
+import { uploadToImgur } from "../services/miscUtils";
+const RunComponent = ({
+  loading,
+  setLoading,
+  inputURI,
+  setOutputURI,
+  setTags,
+  setExtension,
+  setUserHasRun,
+  upscaleFactor,
+  setModelLoading,
+  setUpscaleFactor,
+}) => {
   const [shouldRun, setShouldRun] = useState(false);
 
   useEffect(async () => {
     if (shouldRun) {
       // Clear previous output
       setOutputURI(null);
-      const result = await upScaleFromURI(inputURI, setLoading, setTags, setUpscaleProgress, setExtension);
+      const result = await upScaleFromURI(
+        inputURI,
+        setLoading,
+        setTags,
+        setExtension,
+        upscaleFactor
+      );
+      setUserHasRun(true);
       // If the models output is valid
       if (result) {
         //set the output
         setOutputURI(result);
+        // await uploadToImgur(result);
         // Set should run to false
         setShouldRun(false);
+        setUpscaleFactor(2);
+
+        //hit the api and note an image has been upscaled
+        var requestOptions = {
+          method: "GET",
+          redirect: "follow",
+        };
+
+        fetch(
+          "https://waifuxl_upscale_counter.haydnjonest8327.workers.dev/increment",
+          requestOptions
+        ).catch(error => console.log("Error incrementing counter"));
       }
     }
   }, [shouldRun]);
 
   return (
     <button
-      className={`hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg ${isInitialized ? "bg-pink" : "bg-gray-200"} inline-flex items-center`}
-      onClick={() => {
+      className={`grow hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg inline-flex items-center bg-pink`}
+      onClick={async () => {
+        setModelLoading(true);
+        await initializeONNX();
+        setModelLoading(false);
         setShouldRun(true);
       }}
-      disabled={!isInitialized}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -38,7 +72,12 @@ const RunComponent = ({ setLoading, inputURI, setOutputURI, setTags, isInitializ
         <path d="M0 0h24v24H0V0z" fill="none" />
         <path d="M19 12h-2v3h-3v2h5v-5zM7 9h3V7H5v5h2V9zm14-6H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16.01H3V4.99h18v14.02z" />
       </svg>
-      <span> Upscale </span>
+
+      {loading ? ( // Button text
+        <span> Upscaling... </span>
+      ) : (
+        <span> Upscale </span>
+      )}
     </button>
   );
 };

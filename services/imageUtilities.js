@@ -1,19 +1,15 @@
-function isValidHttpUrl(string) {
-  let url;
+import { isValidHttpUrl } from "./miscUtils";
 
-  try {
-    url = new URL(string);
-  } catch (_) {
-    return false;
-  }
-
-  return url.protocol === "http:" || url.protocol === "https:";
-}
-
-export function getPixelsFromInput(input) {
+/**
+ * Given a URI, return the raw pixels from that
+ * 
+ * @param {string} inputURI the URI 
+ * @returns The pixels in this image
+ */
+function getPixelDataFromURI(inputURI) {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    img.src = input;
+    img.src = inputURI;
     img.crossOrigin = "Anonymous";
     var results = null;
     img.onload = function () {
@@ -27,7 +23,13 @@ export function getPixelsFromInput(input) {
   });
 }
 
-export function getDataURIFromInput(input) {
+/**
+ * Given some input, return the data URI from that.
+ * 
+ * @param {string} input Either data URI or URL
+ * @returns data URI
+ */
+function getDataURIFromInput(input) {
   return new Promise(async (resolve, reject) => {
     if (isValidHttpUrl(input)) {
       let blob = await fetch(input).then((r) => r.blob());
@@ -37,9 +39,7 @@ export function getDataURIFromInput(input) {
         reader.readAsDataURL(blob);
       });
       resolve(dataUrl);
-    }
-    //TODO: Implement gif functionality here
-     else {
+    } else {
       const img = new Image();
       img.src = input;
       img.crossOrigin = "Anonymous";
@@ -56,45 +56,37 @@ export function getDataURIFromInput(input) {
   });
 }
 
-export function downloadImage(postFix, inputURI, downloadURI, extension, fileName = null) {
+/**
+ * Download image to user's computer
+ * 
+ * @param {string} imgURI Image data URI / URL
+ * @param {string} extension File extension
+ * @param {string} fileName File name
+ */
+function downloadImage(imgURI, fileName, extension) {
   let link = document.createElement("a");
-  let urlParts = inputURI.split(/[\.\/]/i);
-  var imgName = fileName || urlParts[urlParts.length - 2];
-  if (imgName.length > 20) {
-    imgName = imgName.substring(0, 20);
-  }
-  link.download = `${imgName}_${postFix}.${extension}`;
-  link.href = downloadURI;
+  link.download = `${fileName}.${extension}`;
+  link.href = imgURI;
   link.click();
 }
 
-export function getDataURIFromFileUpload(uploaded, setDataURI) {
-  const file = uploaded;
+/**
+ * Get data URI from image, passing it to a callback  
+ * 
+ * @param {File} fileObj File object from file upload or paste event
+ * @param {Function} setDataURI Callback to set data URI from file
+ */
+function setDataURIFromFile(fileObj, setDataURI) {
   const fr = new FileReader();
   fr.onload = function () {
     setDataURI(fr.result);
   };
-  fr.readAsDataURL(file);
+  fr.readAsDataURL(fileObj);
 }
 
-export function checkDimensions(uri) {
-  return new Promise(async (resolve, reject) => {
-    {
-      const img = new Image();
-      img.src = uri;
-      img.crossOrigin = "Anonymous";
-      img.onload = function () {
-        const canvas = document.createElement("canvas");
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const context = canvas.getContext("2d");
-        context.drawImage(img, 0, 0);
-        if (canvas.width > 950 || canvas.height > 950) {
-          resolve(true);
-        } else {
-          resolve(false);
-        }
-      };
-    }
-  });
+export {
+  getPixelDataFromURI,
+  getDataURIFromInput,
+  downloadImage,
+  setDataURIFromFile,
 }
