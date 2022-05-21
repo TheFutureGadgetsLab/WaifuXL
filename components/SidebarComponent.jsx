@@ -62,7 +62,6 @@ const Sidebar = ({
                 </span>
               </div>
               <hr className="md:hidden" />
-
               <InputComponent
                 setInputModalOpen={setInputModalOpen}
               />
