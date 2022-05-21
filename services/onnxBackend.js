@@ -31,6 +31,7 @@ export async function initializeONNX() {
         const superModel = await fetchMyModel('./models/superRes.onnx');
         const tagModel = await fetchMyModel('./models/tagger.onnx');
         const ua = usr(navigator.userAgent);
+        console.log(ua);
         if (ua.browser.name == "Safari") {
             ort.env.wasm.numThreads = 1
         } else {
