@@ -1,10 +1,6 @@
-/
+/*
   Cross-Origin-Embedder-Policy: require-corp
   Cross-Origin-Opener-Policy: same-origin
-
-/safari
-  Cross-Origin-Embedder-Policy: unsafe-none
-  Cross-Origin-Opener-Policy: unsafe-none
 
 https://:waifuxl.pages.dev/*
   X-Robots-Tag: noindex
