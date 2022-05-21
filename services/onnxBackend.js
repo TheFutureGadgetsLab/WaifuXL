@@ -32,7 +32,7 @@ export async function initializeONNX() {
         const tagModel = await fetchMyModel('./models/tagger.onnx');
         const ua = usr(navigator.userAgent);
         console.log(ua);
-        if (ua.browser.name == "Safari") {
+        if (ua.engine.name == "WebKit") {
             ort.env.wasm.numThreads = 1
         } else {
             ort.env.wasm.numThreads = navigator.hardwareConcurrency / 2;
