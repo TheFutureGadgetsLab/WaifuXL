@@ -38,3 +38,5 @@ data
 superRes
 **.wasm
 sw.js.map
+
+package-lock.json
