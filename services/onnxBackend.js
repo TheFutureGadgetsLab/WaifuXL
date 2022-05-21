@@ -1,5 +1,5 @@
 const ort = require('onnxruntime-web');
-
+const usr = require('ua-parser-js');
 // Cached session state
 var superSession = null;
 var tagSession   = null;
@@ -24,22 +24,18 @@ function copy(src)  {
 }
 
 export async function initializeONNX() {
-    ort.env.wasm.numThreads = navigator.hardwareConcurrency / 2;
     ort.env.wasm.simd       = true;
     ort.env.wasm.proxy      = true;
 
     if (typeof fetch !== 'undefined') {
         const superModel = await fetchMyModel('./models/superRes.onnx');
         const tagModel = await fetchMyModel('./models/tagger.onnx');
-
-        // console.log("Fetched successfuly")
-        // let superBuffer = await superResponse.arrayBuffer();
-        // let tagBuffer = await tagResponse.arrayBuffer();
-        // const testing = new Uint8Array(superBuffer);
-        // console.log("Succesfully created Uint8Array");
-        // superBuffer = copy(superBuffer);
-        // tagBuffer = copy(tagBuffer);
-        // console.log("Converted to array buffer successfully");
+        const ua = usr(navigator.userAgent);
+        if (ua.browser.name == "Safari") {
+            ort.env.wasm.numThreads = 1
+        } else {
+            ort.env.wasm.numThreads = navigator.hardwareConcurrency / 2;
+        }
         superSession = await ort.InferenceSession.create(superModel, {
             executionProviders: ["wasm"],
             graphOptimizationLevel: 'all',
