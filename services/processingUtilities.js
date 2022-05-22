@@ -113,6 +113,8 @@ export async function upscale(inputData, repeatUpscale=1) {
     console.debug(`Number of chunks: ${nChunksH}x${nChunksW}`);
 
     // Split the image in chunks and run super resolution on each chunk
+    // Time execution
+    console.time("Upscaling");
     let outArr = ndarray(new Uint8Array(3 * outImgH * outImgW), [1, 3, outImgH, outImgW]);
     for (let i = 0; i < nChunksH; i += 1) {
       for (let j = 0; j < nChunksW; j += 1) {
@@ -148,6 +150,7 @@ export async function upscale(inputData, repeatUpscale=1) {
     inArr = outArr;
 
     if (s == repeatUpscale - 1) {
+      console.timeEnd("Upscaling");
       // Reshape network output into a normal image
       const outImg = buildNdarrayFromImageOutput(outArr, outImgH, outImgW)
       const outURI = buildImageFromND(outImg, outImgH, outImgW);

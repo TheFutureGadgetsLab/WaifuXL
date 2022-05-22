@@ -8,21 +8,6 @@ function sleep (time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
 
-function str2ab(str) {
-    var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
-    var bufView = new Uint16Array(buf);
-    for (var i=0, strLen=str.length; i<strLen; i++) {
-      bufView[i] = str.charCodeAt(i);
-    }
-    return buf;
-}
-  
-function copy(src)  {
-    var dst = new ArrayBuffer(src.byteLength);
-    new Uint8Array(dst).set(new Uint8Array(src));
-    return dst;
-}
-
 export async function initializeONNX() {
     ort.env.wasm.simd       = true;
     ort.env.wasm.proxy      = true;
@@ -30,12 +15,12 @@ export async function initializeONNX() {
     if (typeof fetch !== 'undefined') {
         const superModel = await fetchMyModel('./models/superRes.onnx');
         const tagModel = await fetchMyModel('./models/tagger.onnx');
+
         const ua = usr(navigator.userAgent);
-        console.log(ua);
         if (ua.engine.name == "WebKit") {
             ort.env.wasm.numThreads = 1
         } else {
-            ort.env.wasm.numThreads = navigator.hardwareConcurrency / 2;
+            ort.env.wasm.numThreads = min(navigator.hardwareConcurrency / 2, 16);
         }
         superSession = await ort.InferenceSession.create(superModel, {
             executionProviders: ["wasm"],
@@ -94,7 +79,6 @@ export async function runTagger(imageArray) {
     let session = null;
     session = tagSession;
 
-    let timeStart = performance.now();
     let results = undefined;
     try {
         const output = await session.run(feeds);
@@ -108,13 +92,5 @@ export async function runTagger(imageArray) {
 
 async function fetchMyModel(filepathOrUri) {
     const response = await fetch(filepathOrUri);
-    const buf = await response.arrayBuffer();
-
-    // Create Uint8Array of same size as array buffer
-    // Fill
-    var bufView = new Uint8Array(buf);
-    for (var i=0, strLen=bufView.length; i<strLen; i++) {
-        bufView[i] = bufView[i] & 0xFF;
-    }
-    return bufView;
+    return await response.arrayBuffer();
 }
