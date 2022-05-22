@@ -59,19 +59,13 @@ export async function initializeONNX(setProgress) {
   ort.env.wasm.simd = true;
   ort.env.wasm.proxy = true;
 
-  // const ua = usr(navigator.userAgent);
-  // if (ua.engine.name == "WebKit") {
-  //   ort.env.wasm.numThreads = 1;
-  // } else {
-  //   ort.env.wasm.numThreads = Math.min(navigator.hardwareConcurrency / 2, 16);
-  // }
-
-  try {
-    await downloadModel(setProgress);
-  } catch (error) {
+  const ua = usr(navigator.userAgent);
+  if (ua.engine.name == "WebKit") {
     ort.env.wasm.numThreads = 1;
-    await downloadModel(setProgress);
+  } else {
+    ort.env.wasm.numThreads = Math.min(navigator.hardwareConcurrency / 2, 16);
   }
+  await downloadModel(setProgress);
 
   // Needed because WASM workers are created async, wait for them
   // to be ready
