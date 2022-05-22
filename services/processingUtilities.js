@@ -1,7 +1,7 @@
 import ndarray from "ndarray";
 import ops from "ndarray-ops";
 import { getPixelDataFromURI } from "./imageUtilities";
-import { getTagTime, runSuperRes, runTagger } from "./onnxBackend";
+import { runSuperRes, runTagger } from "./onnxBackend";
 import { doGif  } from "./gifUtilities";
 
 // Global parameters

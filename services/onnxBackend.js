@@ -1,5 +1,6 @@
 const ort = require('onnxruntime-web');
 const usr = require('ua-parser-js');
+
 // Cached session state
 var superSession = null;
 var tagSession   = null;
@@ -9,44 +10,34 @@ function sleep (time) {
 }
 
 export async function initializeONNX() {
-    ort.env.wasm.simd       = true;
-    ort.env.wasm.proxy      = true;
+    ort.env.wasm.simd  = true;
+    ort.env.wasm.proxy = true;
 
-    if (typeof fetch !== 'undefined') {
-        const superModel = await fetchMyModel('./models/superRes.onnx');
-        const tagModel = await fetchMyModel('./models/tagger.onnx');
+    const ua = usr(navigator.userAgent);
+    if (ua.engine.name == "WebKit") {
+        ort.env.wasm.numThreads = 1
+    } else {
+        ort.env.wasm.numThreads = Math.min(navigator.hardwareConcurrency / 2, 16);
+    }
 
-        const ua = usr(navigator.userAgent);
-        if (ua.engine.name == "WebKit") {
-            ort.env.wasm.numThreads = 1
-        } else {
-            ort.env.wasm.numThreads = Math.min(navigator.hardwareConcurrency / 2, 16);
-        }
-        superSession = await ort.InferenceSession.create(superModel, {
-            executionProviders: ["wasm"],
-            graphOptimizationLevel: 'all',
-            enableCpuMemArena: true,
-            enableMemPattern: true,
-            executionMode: 'parallel',
-        });
-        tagSession = await ort.InferenceSession.create(tagModel, {
-            executionProviders: ["wasm"],
-            graphOptimizationLevel: 'all',
-            enableCpuMemArena: true,
-            enableMemPattern: true,
-            executionMode: 'parallel',
-        });
+    superSession = await ort.InferenceSession.create('./models/superRes.onnx', {
+        executionProviders: ["wasm"],
+        graphOptimizationLevel: 'all',
+        enableCpuMemArena: true,
+        enableMemPattern: true,
+        executionMode: 'parallel',
+    });
+    tagSession = await ort.InferenceSession.create('./models/tagger.onnx', {
+        executionProviders: ["wasm"],
+        graphOptimizationLevel: 'all',
+        enableCpuMemArena: true,
+        enableMemPattern: true,
+        executionMode: 'parallel',
+    });
     
-    
-        // Needed because WASM workers are created async, wait for them
-        // to be ready
-        await sleep(300);
-    
-    }
-    else {
-        console.log("No fetch")
-    }
-    
+    // Needed because WASM workers are created async, wait for them
+    // to be ready
+    await sleep(300);
 }
 
 function prepareImage(imageArray) {
@@ -88,9 +79,4 @@ export async function runTagger(imageArray) {
         console.log(e)
     }
     return results;
-}
-
-async function fetchMyModel(filepathOrUri) {
-    const response = await fetch(filepathOrUri);
-    return await response.arrayBuffer();
 }
