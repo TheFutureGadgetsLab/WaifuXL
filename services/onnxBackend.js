@@ -9,7 +9,53 @@ function sleep(time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
 
-export async function initializeONNX() {
+async function fetchMyModel(filepathOrUri, setProgress, startProgress, endProgress) {
+  console.assert(typeof fetch !== "undefined");
+  const response = await fetch(filepathOrUri);
+  const reader = response.body.getReader();
+  const length = parseInt(response.headers.get("content-length"));
+  let data = new Uint8Array(length);
+  let received = 0;
+
+  // Loop through the response stream and extract data chunks
+  while (true) {
+      const { done, value } = await reader.read();
+
+      if (done) {
+          setProgress(1);
+          break;
+      } else {
+          // Push values to the chunk array
+          data.set(value, received);
+          received += value.length;
+          setProgress(startProgress + (received / length) * (endProgress - startProgress));
+      }
+  }
+  return data.buffer;
+}
+
+async function downloadModel(setProgress) {
+  setProgress(0);
+  const superResBuf = await fetchMyModel('./models/superRes.onnx', setProgress, 0.0, 0.5);
+  const taggerBuf = await fetchMyModel('./models/tagger.onnx', setProgress, 0.5, 0.9);
+  superSession = await ort.InferenceSession.create(superResBuf, {
+    executionProviders: ["wasm"],
+    graphOptimizationLevel: "all",
+    enableCpuMemArena: true,
+    enableMemPattern: true,
+    executionMode: "sequential", // Inter-op sequential
+  });
+  tagSession = await ort.InferenceSession.create(taggerBuf, {
+    executionProviders: ["wasm"],
+    graphOptimizationLevel: "all",
+    enableCpuMemArena: true,
+    enableMemPattern: true,
+    executionMode: "sequential", // Inter-op sequential
+  });
+  setProgress(1);
+}
+
+export async function initializeONNX(setProgress) {
   ort.env.wasm.simd = true;
   ort.env.wasm.proxy = true;
 
@@ -19,45 +65,12 @@ export async function initializeONNX() {
   } else {
     ort.env.wasm.numThreads = Math.min(navigator.hardwareConcurrency / 2, 16);
   }
+
   try {
-    superSession = await ort.InferenceSession.create(
-        "./models/superRes.onnx",
-        {
-          executionProviders: ["wasm"],
-          graphOptimizationLevel: "all",
-          enableCpuMemArena: true,
-          enableMemPattern: true,
-          executionMode: "sequential", // Inter-op sequential
-        }
-      );
-      tagSession = await ort.InferenceSession.create("./models/tagger.onnx", {
-        executionProviders: ["wasm"],
-        graphOptimizationLevel: "all",
-        enableCpuMemArena: true,
-        enableMemPattern: true,
-        executionMode: "sequential", // Inter-op sequential
-      });
-          
+    await downloadModel(setProgress);
   } catch (error) {
     ort.env.wasm.numThreads = 1;
-    superSession = await ort.InferenceSession.create(
-        "./models/superRes.onnx",
-        {
-          executionProviders: ["wasm"],
-          graphOptimizationLevel: "all",
-          enableCpuMemArena: true,
-          enableMemPattern: true,
-          executionMode: "sequential", // Inter-op sequential
-        }
-      );
-      tagSession = await ort.InferenceSession.create("./models/tagger.onnx", {
-        executionProviders: ["wasm"],
-        graphOptimizationLevel: "all",
-        enableCpuMemArena: true,
-        enableMemPattern: true,
-        executionMode: "sequential", // Inter-op sequential
-      });
-      
+    await downloadModel(setProgress);
   }
 
   // Needed because WASM workers are created async, wait for them

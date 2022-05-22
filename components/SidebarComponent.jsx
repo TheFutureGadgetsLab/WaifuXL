@@ -87,6 +87,7 @@ const Sidebar = ({
                     setModelLoading={setModelLoading}
                     setUpscaleFactor={setUpscaleFactor}
                     setErrorMessage={setErrorMessage}
+                    modelLoading={modelLoading}
                   />
                   <select id="resolution-select"
                     className="form-select appearance-none border-none text-white font-bold py-2 px-4
