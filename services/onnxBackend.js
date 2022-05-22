@@ -25,14 +25,14 @@ export async function initializeONNX() {
         graphOptimizationLevel: 'all',
         enableCpuMemArena: true,
         enableMemPattern: true,
-        executionMode: 'parallel',
+        executionMode: 'sequential', // Inter-op sequential
     });
     tagSession = await ort.InferenceSession.create('./models/tagger.onnx', {
         executionProviders: ["wasm"],
         graphOptimizationLevel: 'all',
         enableCpuMemArena: true,
         enableMemPattern: true,
-        executionMode: 'parallel',
+        executionMode: 'sequential', // Inter-op sequential
     });
     
     // Needed because WASM workers are created async, wait for them
