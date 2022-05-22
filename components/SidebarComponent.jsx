@@ -30,6 +30,7 @@ const Sidebar = ({
   setUpscaleFactor,
   modelLoading,
   setModelLoading,
+  setErrorMessage,
 }) => {
   return (
     <div id="sidebar" className="w-80 flex flex-col fixed inset-y-0 z-20"
@@ -62,7 +63,6 @@ const Sidebar = ({
                 </span>
               </div>
               <hr className="md:hidden" />
-
               <InputComponent
                 setInputModalOpen={setInputModalOpen}
               />
@@ -86,6 +86,8 @@ const Sidebar = ({
                     upscaleFactor={upscaleFactor}
                     setModelLoading={setModelLoading}
                     setUpscaleFactor={setUpscaleFactor}
+                    setErrorMessage={setErrorMessage}
+                    modelLoading={modelLoading}
                   />
                   <select id="resolution-select"
                     className="form-select appearance-none border-none text-white font-bold py-2 px-4
