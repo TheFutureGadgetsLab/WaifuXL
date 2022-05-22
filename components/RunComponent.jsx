@@ -62,7 +62,7 @@ const RunComponent = ({
 
   return (
     <button
-      className={`grow hover:bg-blue-700 text-white font-bold py-2 px-4 rounded
+      className={`grow hover:bg-blue-700 text-white font-bold py-2 px-4 rounded relative
         drop-shadow-lg inline-flex items-center ${(!modelLoading && !loading) ? "bg-pink" : "bg-gray-300"}`}
       onClick={async () => {
         setModelLoading(true);
