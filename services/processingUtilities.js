@@ -49,6 +49,8 @@ export async function getTopTags(data) {
     i[1],
   ]);
   const rating = topK(flattened, 3, 4000, 4003).map((i) => [tags[i[0]], i[1]]);
+  
+  console.log({topDesc, topChars, rating});
 
   return { topDesc, topChars, rating };
 }

@@ -41,9 +41,9 @@ function useWindowSize() {
 }
 
 export default function Main() {
-  const [inputURI, setInputURI] = useState("./images/ozen.png");
-  const [outputURI, setOutputURI] = useState("./images/ozen_2x.png");
-  const [previewURI, setPreviewURI] = useState("/images/ozen.png");
+  const [inputURI, setInputURI] = useState("./images/senjougahara.png");
+  const [outputURI, setOutputURI] = useState("./images/senjougahara_2x.png");
+  const [previewURI, setPreviewURI] = useState("/images/senjougahara.png");
   const [loading, setLoading] = useState(false);
   const [inputModalOpen, setInputModalOpen] = useState(false);
   const [tags, setTags] = useState(null);
@@ -73,8 +73,8 @@ export default function Main() {
   }
 
   useEffect(async () => {
-    setInputURI("./images/ozen.png");
-    setOutputURI("./images/ozen_2x.png");
+    setInputURI("./images/senjougahara.png");
+    setOutputURI("./images/senjougahara_2x.png");
     setTags(default_tags);
     setEventListeners(
       setPreviewURI,
