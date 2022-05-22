@@ -14,8 +14,8 @@ const ImageDisplay = ({ outputURI, inputURI, mobile }) => {
           src={inputURI}
           className="h-5/6"
           style={{
-            width: "auto",
-            height: mobile ? "70vw" : "70vh",
+            width: mobile ? "70vw" : "auto",
+            height: mobile ? "auto" : "70vh",
             // height: "auto",
           }}
         />
@@ -26,8 +26,8 @@ const ImageDisplay = ({ outputURI, inputURI, mobile }) => {
           itemOne={<ReactCompareSliderImage src={inputURI} alt="Image one" />}
           itemTwo={<ReactCompareSliderImage src={outputURI} alt="Image two" />}
           style={{
-            height: mobile ? "70vw" : "70vh",
-            width: "auto",
+            width: mobile ? "70vw" : "auto",
+            height: mobile ? "auto" : "70vh",
           }}
         />
       )}
