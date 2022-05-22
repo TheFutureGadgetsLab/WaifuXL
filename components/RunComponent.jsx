@@ -13,6 +13,7 @@ const RunComponent = ({
   upscaleFactor,
   setModelLoading,
   setUpscaleFactor,
+  setErrorMessage,
 }) => {
   const [shouldRun, setShouldRun] = useState(false);
 
@@ -20,33 +21,39 @@ const RunComponent = ({
     if (shouldRun) {
       // Clear previous output
       setOutputURI(null);
-      const result = await upScaleFromURI(
-        inputURI,
-        setLoading,
-        setTags,
-        setExtension,
-        upscaleFactor
-      );
-      setUserHasRun(true);
-      // If the models output is valid
-      if (result) {
-        //set the output
-        setOutputURI(result);
-        // await uploadToImgur(result);
-        // Set should run to false
+      try {
+        const result = await upScaleFromURI(
+          inputURI,
+          setLoading,
+          setTags,
+          setExtension,
+          upscaleFactor
+        );
+        setUserHasRun(true);
+        // If the models output is valid
+        if (result) {
+          //set the output
+          setOutputURI(result);
+          // await uploadToImgur(result);
+          // Set should run to false
+          setShouldRun(false);
+          setUpscaleFactor(2);
+
+          //hit the api and note an image has been upscaled
+          var requestOptions = {
+            method: "GET",
+            redirect: "follow",
+          };
+
+          fetch(
+            "https://waifuxl_upscale_counter.haydnjonest8327.workers.dev/increment",
+            requestOptions
+          ).catch((error) => console.log("Error incrementing counter"));
+        }
+      } catch (error) {
         setShouldRun(false);
         setUpscaleFactor(2);
-
-        //hit the api and note an image has been upscaled
-        var requestOptions = {
-          method: "GET",
-          redirect: "follow",
-        };
-
-        fetch(
-          "https://waifuxl_upscale_counter.haydnjonest8327.workers.dev/increment",
-          requestOptions
-        ).catch(error => console.log("Error incrementing counter"));
+        setErrorMessage("Model failed to run.");
       }
     }
   }, [shouldRun]);
@@ -56,9 +63,13 @@ const RunComponent = ({
       className={`grow hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg inline-flex items-center bg-pink`}
       onClick={async () => {
         setModelLoading(true);
-        await initializeONNX();
-        setModelLoading(false);
-        setShouldRun(true);
+        try {
+          await initializeONNX();
+          setModelLoading(false);
+          setShouldRun(true);
+        } catch (error) {
+          setErrorMessage("Could not load model.");
+        }
       }}
     >
       <svg

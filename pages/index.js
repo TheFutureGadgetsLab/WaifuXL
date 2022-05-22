@@ -5,6 +5,7 @@ import Sidebar from "../components/SidebarComponent";
 import ImageDisplay from "../components/ImageDisplayComponent";
 import { setEventListeners } from "../services/setEventListeners";
 import AnnouncementComponent from "../components/Announcement";
+import Error from "../components/ErrorComponent";
 import default_tags from "../services/landing_tags";
 
 function useWindowSize() {
@@ -54,7 +55,7 @@ export default function Main() {
   const [fileName, _setFileName] = useState("example");
   const [modelLoading, setModelLoading] = useState(false);
   const [mobile, setMobile] = useState(false);
-
+  const [errorMessage, setErrorMessage] = useState(null);
   const size = useWindowSize();
 
   useEffect(() => {
@@ -86,6 +87,7 @@ export default function Main() {
 
   return (
     <>
+      {errorMessage ? <Error errorMessage={errorMessage} /> : <></>}
       <div
         style={{
           backgroundImage: `url("images/bg.svg")`,
@@ -117,6 +119,7 @@ export default function Main() {
           setUpscaleFactor={setUpscaleFactor}
           modelLoading={modelLoading}
           setModelLoading={setModelLoading}
+          setErrorMessage={setErrorMessage}
         />
         {/* Image display, title, navbar */}
         <main className="flex-1">
