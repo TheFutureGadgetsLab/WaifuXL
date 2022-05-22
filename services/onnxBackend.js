@@ -67,10 +67,14 @@ export async function initializeONNX(setProgress) {
   // }
 
   try {
+    console.log("Trying multi-thread model.")
     await downloadModel(setProgress);
   } catch (error) {
+    console.log("Multi-thread model failed.")
     ort.env.wasm.numThreads = 1;
+    console.log("Trying single-thread model.")
     await downloadModel(setProgress);
+    console.log("Succeededf with single-thread model.")
   }
 
   // Needed because WASM workers are created async, wait for them
