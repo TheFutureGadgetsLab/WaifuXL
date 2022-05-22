@@ -68,6 +68,7 @@ export async function initializeONNX(setProgress) {
 
   try {
     console.log("Trying multi-thread model.")
+    ort.env.wasm.numThreads = Math.min(navigator.hardwareConcurrency / 2, 16);
     await downloadModel(setProgress);
   } catch (error) {
     console.log("Multi-thread model failed.")
