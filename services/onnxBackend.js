@@ -13,12 +13,13 @@ export async function initializeONNX() {
   ort.env.wasm.simd = true;
   ort.env.wasm.proxy = true;
 
-  const ua = usr(navigator.userAgent);
-  if (ua.engine.name == "WebKit") {
-    ort.env.wasm.numThreads = 1;
-  } else {
-    ort.env.wasm.numThreads = Math.min(navigator.hardwareConcurrency / 2, 16);
-  }
+  // const ua = usr(navigator.userAgent);
+  // if (ua.engine.name == "WebKit") {
+  //   ort.env.wasm.numThreads = 1;
+  // } else {
+  //   ort.env.wasm.numThreads = Math.min(navigator.hardwareConcurrency / 2, 16);
+  // }
+
   try {
     superSession = await ort.InferenceSession.create(
         "./models/superRes.onnx",
