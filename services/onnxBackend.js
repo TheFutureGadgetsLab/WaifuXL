@@ -59,26 +59,13 @@ export async function initializeONNX(setProgress) {
   ort.env.wasm.simd = true;
   ort.env.wasm.proxy = true;
 
-  // const ua = usr(navigator.userAgent);
-  // if (ua.engine.name == "WebKit") {
-  //   ort.env.wasm.numThreads = 1;
-  // } else {
-  //   ort.env.wasm.numThreads = Math.min(navigator.hardwareConcurrency / 2, 16);
-  // }
-
-  try {
-    ort.env.wasm.numThreads = Math.min(navigator.hardwareConcurrency / 2, 16);
-    console.log("Trying multi-thread model.")
-    console.log("Number of threads: " + ort.env.wasm.numThreads);
-    await downloadModel(setProgress).catch((e) => {throw "Couldn't initialize multi thread model"});
-  } catch (error) {
+  const ua = usr(navigator.userAgent);
+  if (ua.engine.name == "WebKit") {
     ort.env.wasm.numThreads = 1;
-    console.log("Multi-thread model failed.")
-    console.log("Trying single-thread model.")
-    console.log("Number of threads: " + ort.env.wasm.numThreads);
-    await downloadModel(setProgress);
-    console.log("Succeededf with single-thread model.")
+  } else {
+    ort.env.wasm.numThreads = Math.min(navigator.hardwareConcurrency / 2, 16);
   }
+  await downloadModel(setProgress);
 
   // Needed because WASM workers are created async, wait for them
   // to be ready
