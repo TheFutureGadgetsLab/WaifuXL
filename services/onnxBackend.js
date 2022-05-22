@@ -20,7 +20,7 @@ export async function initializeONNX() {
         if (ua.engine.name == "WebKit") {
             ort.env.wasm.numThreads = 1
         } else {
-            ort.env.wasm.numThreads = min(navigator.hardwareConcurrency / 2, 16);
+            ort.env.wasm.numThreads = Math.min(navigator.hardwareConcurrency / 2, 16);
         }
         superSession = await ort.InferenceSession.create(superModel, {
             executionProviders: ["wasm"],
