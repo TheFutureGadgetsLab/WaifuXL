@@ -10,13 +10,16 @@ export default function About() {
 
   return (
     <>
-      <SideNavbar showSidebar={showSidebar} currentPage="about"/>
+      <SideNavbar showSidebar={showSidebar} currentPage="about" />
 
       <div
         className="flex flex-col items-center min-h-screen"
-        style={{ backgroundImage: `url("images/bg.svg")`, backgroundSize: "cover" }}
+        style={{
+          backgroundImage: `url("images/bg.svg")`,
+          backgroundSize: "cover",
+        }}
       >
-        <NavbarComponent currentPage="about"/>
+        <NavbarComponent currentPage="about" />
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="32px"
@@ -72,6 +75,13 @@ export default function About() {
           </div>
           <div className="lg:mt-20 mt-5 lg:text-6xl text-2xl">In Depth</div>
           <div className="mt-5 lg:text-lg text-sm text-left">
+            <div className="text-center">
+            Check out the full write-up {" "}
+            <a className="text-pink underline" href="https://haydn.fgl.dev/posts/the-launch-of-waifuxl/">
+              here
+            </a>!
+            </div>
+            <br/>
             We send you neural networks to execute directly in your browser
             using the{" "}
             <a href="https://onnxruntime.ai/" className="text-pink underline">
