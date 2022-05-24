@@ -7,7 +7,6 @@ WaifuXL is a state of the art super resolution model trained on  ~1,200,000 anim
 # Comparison to Waifu2x
 In general, the [Real-ESRGAN](https://arxiv.org/abs/2107.10833) will outperform the models used on [waifu2x](http://waifu2x.udp.jp/) by a significant margin, without the need for multiple models trained on various noise reduction levels.
 
-Update this to look better and with final model. Maybe a different image?
 ![](https://i.imgur.com/BDv4rd9.png)
 
 # How it Works
@@ -17,14 +16,9 @@ Using the [Onnx Runtime](https://onnxruntime.ai/), we stream the weights of our 
 For our super resolution network we are using the state-of-the-art [Real-ESRGAN](https://arxiv.org/abs/2107.10833) and for our image tagging network we are using a [MobileNetV3](https://arxiv.org/abs/1905.02244). Both were trained on a subset of [Danbooru2021](https://www.gwern.net/Danbooru2021).
 
 ## Site
-[Onnx Runtime](https://onnxruntime.ai/) is multithreaded and supports SIMD instructions--while upscaling on a phone or a laptop is suprisingly quick, using a beefier computer will bring noticable benefits. We're hosted on [Cloudflare Pages](https://pages.cloudflare.com/) which provides unlimited bandwidth.
-
-Alec, please fill out a section describing how we made our ferociously sexy site.
-
+[Onnx Runtime](https://onnxruntime.ai/) is multithreaded and supports SIMD instructions--while upscaling on a phone or a laptop is suprisingly quick, using a beefier computer will bring noticable benefits. We're hosted on [Cloudflare Pages](https://pages.cloudflare.com/) which provides unlimited bandwidth. The site is written in React with Next.js and TailwindCSS. 
 
 # Contribution Guide
-If you'd like to contribute there are a number of aveneus where you can do so:
-
 ## Code / Site
 We're definitely open to code contributions, whether it be code cleanup, new features, or bugfixes. Simply open a discussion so we all can collaborate and discuss the merit of your ideas!
 
