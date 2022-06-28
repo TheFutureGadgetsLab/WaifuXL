@@ -6,7 +6,7 @@ import { doGif  } from "./gifUtilities";
 
 // Global parameters
 const chunkSize = 512;
-const pad = 4;
+const pad = 32;
 
 export function buildNdarrayFromImageOutput(data, height, width) {
     const inputArray = ndarray(data.data, data.dims || data.shape);
