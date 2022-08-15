@@ -3,6 +3,7 @@ import {
   getDataURIFromInput,
   setDataURIFromFile,
 } from "../services/imageUtilities";
+import { CloseSVG } from "./SVGComponents";
 
 function ModalComponent({
   setInputModalOpen,
@@ -56,22 +57,11 @@ function ModalComponent({
             w-full h-full md:w-auto md:h-auto"
         >
           <div>
-            <svg
-              id="close-button"
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 0 24 24"
-              width="24px"
-              fill="#000000"
-              className="mt-3 mr-3 float-right cursor-pointer"
-              onClick={(e) => {
+            <CloseSVG onClick={(e) => {
                 setInputModalOpen(false);
                 setFileName();
-              }}
-            >
-              <path d="M0 0h24v24H0V0z" fill="none" />
-              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-            </svg>
+              }
+            }/>
           </div>
           <label
             className="flex flex-col items-center justify-center cursor-pointer mt-16 h-96 m-3 bg-contain bg-origin-content p-4 bg-no-repeat bg-center"

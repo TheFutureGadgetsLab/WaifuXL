@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { LeftArrowSVG, RighArrowSVG } from "./SVGComponents";
 import Tooltip from "./TooltipComponent";
 
 function titleCase(str) {
@@ -80,33 +81,11 @@ const TagComponent = ({ tags }) => {
       >
         <span className="col-span-4">Tags</span>
         {tagPage > 0 ? (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="24px"
-            viewBox="0 0 24 24"
-            width="24px"
-            fill="#000000"
-            className="mt-1 cursor-pointer"
-            onClick={(e) => setTagPage(tagPage - 1)}
-          >
-            <path d="M0 0h24v24H0V0z" fill="none" />
-            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
-          </svg>
+          <LeftArrowSVG onClick={() => setTagPage(tagPage - 1)} />
         ) : (
           <span></span>
         )}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          height="24px"
-          viewBox="0 0 24 24"
-          width="24px"
-          fill="#000000"
-          className="mt-1 cursor-pointer"
-          onClick={(e) => setTagPage(tagPage + 1)}
-        >
-          <path d="M0 0h24v24H0V0z" fill="none" />
-          <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z" />
-        </svg>
+        <RighArrowSVG onClick={() => setTagPage(tagPage + 1)} />
       </div>
       {tags.topDesc
         .slice(10 * tagPage, 10 * (tagPage + 1))
@@ -117,33 +96,11 @@ const TagComponent = ({ tags }) => {
       >
         <span className="col-span-4">Characters</span>
         {charPage > 0 ? (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="24px"
-            viewBox="0 0 24 24"
-            width="24px"
-            fill="#000000"
-            className="mt-1 cursor-pointer"
-            onClick={(e) => setCharPage(charPage - 1)}
-          >
-            <path d="M0 0h24v24H0V0z" fill="none" />
-            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
-          </svg>
+          <LeftArrowSVG onClick={() => setCharPage(charPage - 1)} />
         ) : (
           <span></span>
         )}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          height="24px"
-          viewBox="0 0 24 24"
-          width="24px"
-          fill="#000000"
-          className="mt-1 cursor-pointer"
-          onClick={(e) => setCharPage(charPage + 1)}
-        >
-          <path d="M0 0h24v24H0V0z" fill="none" />
-          <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z" />
-        </svg>
+        <RighArrowSVG onClick={() => setCharPage(charPage + 1)} />
       </div>
       {tags.topChars
         .slice(10 * charPage, 10 * (charPage + 1))
