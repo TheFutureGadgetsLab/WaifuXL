@@ -37,5 +37,4 @@ module.exports = withPWA({
     register: true,
     skipWaiting: true,
   },
-  experimental: { esmExternals: false }
 });
