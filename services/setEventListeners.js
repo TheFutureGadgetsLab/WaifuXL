@@ -9,6 +9,7 @@ export async function setEventListeners(
   setShowSidebar,
   setInputModalOpen
 ) {
+
   document.body.style.overflow = "hidden";
   function handleInputFile(items) {
     try {

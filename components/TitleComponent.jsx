@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 
-const TitleComponent = ({ loading, downloadReady, modelLoading, mobile }) => {
+const TitleComponent = ({ useAppStateStore }) => {
   const [loadingText, setLoadingText] = useState("");
+
+  const loading = useAppStateStore((state) => state.loading);
+  const downloadReady = useAppStateStore((state) => state.downloadReady);
+  const modelLoading = useAppStateStore((state) => state.modelLoading);
+
   useEffect(async () => {
     const interval = setInterval(function () {
       loadingText == ""

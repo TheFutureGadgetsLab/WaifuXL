@@ -2,11 +2,14 @@ import {
   ReactCompareSlider,
   ReactCompareSliderImage,
 } from "react-compare-slider";
-import {useEffect, useState} from 'react';
 
 
 
-const ImageDisplay = ({ outputURI, inputURI, mobile }) => {
+const ImageDisplay = ({ useImageStore, useAppStateStore }) => {
+  const mobile = useAppStateStore((state) => state.mobile);
+  const outputURI = useImageStore((state) => state.outputURI);
+  const inputURI = useImageStore((state) => state.inputURI);
+
   return (
     <div className={`${mobile ? 'h-2/3' : 'h-5/6' } items-center flex justify-center w-full drop-shadow-md overflow-hidden`}>
       {outputURI == null ? (
@@ -16,7 +19,6 @@ const ImageDisplay = ({ outputURI, inputURI, mobile }) => {
           style={{
             width: mobile ? "70vw" : "auto",
             height: mobile ? "auto" : "70vh",
-            // height: "auto",
           }}
         />
       ) : (

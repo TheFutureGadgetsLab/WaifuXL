@@ -7,6 +7,7 @@ import { setEventListeners } from "../services/setEventListeners";
 import AnnouncementComponent from "../components/Announcement";
 import Error from "../components/ErrorComponent";
 import default_tags from "../services/landing_tags";
+import create from 'zustand'
 
 function useWindowSize() {
   // Initialize state with undefined width/height so server and client renders match
@@ -42,41 +43,60 @@ function useWindowSize() {
 }
 
 export default function Main() {
-  const [inputURI, setInputURI] = useState("./images/senjougahara.png");
-  const [outputURI, setOutputURI] = useState("./images/senjougahara_2x.png");
-  const [previewURI, setPreviewURI] = useState("/images/senjougahara.png");
-  const [loading, setLoading] = useState(false);
-  const [inputModalOpen, setInputModalOpen] = useState(false);
-  const [tags, setTags] = useState(null);
-  const [showSidebar, setShowSidebar] = useState(true);
-  const [extension, setExtension] = useState("png");
-  const [upscaleFactor, setUpscaleFactor] = useState(2);
-  const [userHasRun, setUserHasRun] = useState(false);
-  const [fileName, _setFileName] = useState("example");
-  const [modelLoading, setModelLoading] = useState(false);
-  const [mobile, setMobile] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const useImageStore = create((set) => ({
+    inputURI: "./images/senjougahara.png",
+    outputURI: "./images/senjougahara_2x.png",
+    previewURI: "./images/senjougahara.png",
+    tags: default_tags,
+    fileName: "example",
+    extension: "png",
+    upscaleFactor: 2,
+
+    setInputURI: (uri) => set((state) => ({ inputURI: uri})),
+    setOutputURI: (uri) => set((state) => ({ outputURI: uri})),
+    setPreviewURI: (uri) => set((state) => ({ previewURI: uri})),
+    setTags: (newTags) => set((state) => ({ tags: newTags})),
+    setFileName: (newFilename) => set((state) => ({ fileName: newFilename})),
+    setExtension: (newExt) => set((state) => ({ extension: newExt})),
+    setUpscaleFactor: (newFactor) => set((state) => ({upscaleFactor: newFactor}))
+  }));
+
+  const useAppStateStore = create((set) => ({
+    loading: false,
+    inputModalOpen: false,
+    showSidebar: true,
+    userHasRun: false,
+    modelLoading: false,
+    mobile: false,
+    errorMessage: null,
+    shouldRun: false,
+    modelLoadProg: 0,
+
+    setLoading: (newLoading) => set((state) => ({ loading: newLoading })),
+    setInputModalOpen: (newInputModalOpen) => set((state) => ({ inputModalOpen: newInputModalOpen })),
+    setShowSidebar: () => set((state) => ({ showSidebar: !state.showSidebar })),
+    setUserHasRun: (newUserHasRun) => set((state) => ({ userHasRun: newUserHasRun })),
+    setModelLoading: () => set((state) => ({ modelLoading: !state.modelLoading })),
+    setMobile: () => set((state) => ({ mobile: !state.mobile })),
+    setErrorMessage: (newError) => set((state) => ({ errorMessage: newError})),
+    setShouldRun: (newShouldRun) => set((state) => ({ shouldRun: newShouldRun })),
+    setModelLoadProg: (newProg) => set((state) => ({ modelLoadProg: newProg }))
+  }));
+  
+
   const size = useWindowSize();
 
+  const setPreviewURI = useImageStore((state) => state.setPreviewURI);
+  const setFileName = useImageStore((state) => state.setFileName);
+  const setShowSidebar = useAppStateStore((state) => state.setShowSidebar);
+  const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen);
+
+  const setMobile = useAppStateStore((state) => state.setMobile);
   useEffect(() => {
     setMobile(size.width / size.height < 1.0);
   }, [size]);
 
-  var lastFileName = fileName;
-
-  function setFileName(name = null) {
-    if (name == null) {
-      name = lastFileName;
-    } else {
-      lastFileName = name;
-    }
-    _setFileName(`${name}_${upscaleFactor}x`);
-  }
-
   useEffect(async () => {
-    setInputURI("./images/senjougahara.png");
-    setOutputURI("./images/senjougahara_2x.png");
-    setTags(default_tags);
     setEventListeners(
       setPreviewURI,
       setFileName,
@@ -87,7 +107,7 @@ export default function Main() {
 
   return (
     <>
-      {errorMessage ? <Error errorMessage={errorMessage} /> : <></>}
+      {useAppStateStore((state) => state.errorMessage) ? <Error errorMessage={useAppStateStore((state) => state.errorMessage)} /> : <></>}
       <div
         style={{
           backgroundImage: `url("images/bg.svg")`,
@@ -96,30 +116,8 @@ export default function Main() {
         }}
       >
         <Sidebar
-          inputModalOpen={inputModalOpen}
-          setInputModalOpen={setInputModalOpen}
-          setInputURI={setInputURI}
-          setOutputURI={setOutputURI}
-          inputURI={inputURI}
-          previewURI={previewURI}
-          setPreviewURI={setPreviewURI}
-          setFileName={setFileName}
-          setTags={setTags}
-          outputURI={outputURI}
-          fileName={fileName}
-          extension={extension}
-          setLoading={setLoading}
-          loading={loading}
-          setExtension={setExtension}
-          showSidebar={showSidebar}
-          setShowSidebar={setShowSidebar}
-          tags={tags}
-          setUserHasRun={setUserHasRun}
-          upscaleFactor={upscaleFactor}
-          setUpscaleFactor={setUpscaleFactor}
-          modelLoading={modelLoading}
-          setModelLoading={setModelLoading}
-          setErrorMessage={setErrorMessage}
+          useAppStateStore={useAppStateStore}
+          useImageStore={useImageStore}
         />
         {/* Image display, title, navbar */}
         <main className="flex-1">
@@ -127,7 +125,7 @@ export default function Main() {
             announcement={
               "Safari performance will be worse than other browsers. If possible use a non-webkit based browser."
             }
-            mobile={mobile}
+            mobile={useAppStateStore((state) => state.mobile)}
           />
 
           <div className="flex flex-col items-center h-screen w-screen relative">
@@ -135,15 +133,11 @@ export default function Main() {
 
             <div className={`h-3/4 grow w-full`}>
               <ImageDisplay
-                inputURI={inputURI}
-                outputURI={outputURI}
-                mobile={mobile}
+                useImageStore={useImageStore}
+                useAppStateStore={useAppStateStore}
               />
               <TitleComponent
-                loading={loading}
-                downloadReady={outputURI != null && userHasRun}
-                modelLoading={modelLoading}
-                mobile={mobile}
+                useAppStateStore={useAppStateStore}
               />
             </div>
           </div>

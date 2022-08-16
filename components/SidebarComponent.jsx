@@ -7,31 +7,17 @@ import ScreenIcons from "./ScreenIconsComponent";
 import ModalComponent from "./ModalComponent";
 
 const Sidebar = ({
-  inputModalOpen,
-  setInputModalOpen,
-  setInputURI,
-  setOutputURI,
-  inputURI,
-  previewURI,
-  setPreviewURI,
-  setFileName,
-  setTags,
-  outputURI,
-  fileName,
-  extension,
-  setLoading,
-  loading,
-  setExtension,
-  showSidebar,
-  setShowSidebar,
-  tags,
-  setUserHasRun,
-  upscaleFactor,
-  setUpscaleFactor,
-  modelLoading,
-  setModelLoading,
-  setErrorMessage,
+  useAppStateStore,
+  useImageStore
 }) => {
+  const showSidebar = useAppStateStore((state) => state.showSidebar);
+  const outputURI = useImageStore((state) => state.outputURI);
+  const fileName = useImageStore((state) => state.fileName);
+  const tags = useImageStore((state) => state.tags);
+  const inputModalOpen = useAppStateStore((state) => state.inputModalOpen);
+
+  const setUpscaleFactor = useImageStore((state) => state.setUpscaleFactor);
+  const setFileName = useImageStore((state) => state.setFileName);
   return (
     <div id="sidebar" className="w-80 flex flex-col fixed inset-y-0 z-20"
       style={{pointerEvents: showSidebar ? "" : "none"}}>
@@ -40,8 +26,7 @@ const Sidebar = ({
         style={{ left: `${showSidebar ? 0 : -100}%` }}
       >
         <ScreenIcons
-          setShowSidebar={setShowSidebar}
-          showSidebar={showSidebar}
+          useAppStateStore={useAppStateStore}
         />
         <div className="flex-1 flex flex-col overflow-y-auto">
           <div className="">
@@ -64,30 +49,18 @@ const Sidebar = ({
               </div>
               <hr className="md:hidden" />
               <InputComponent
-                setInputModalOpen={setInputModalOpen}
+                useAppStateStore={useAppStateStore}
               />
               {outputURI != null ? (
                 <DownloadComponent
-                  outputURI={outputURI}
-                  fileName={fileName}
-                  extension={extension}
+                  useImageStore={useImageStore}
                 />
               ) : (
                 <div id="upscale-button-container"
                   className="flex justify-between gap-2">
                   <RunComponent
-                    loading={loading}
-                    setLoading={setLoading}
-                    inputURI={inputURI}
-                    setOutputURI={setOutputURI}
-                    setTags={setTags}
-                    setExtension={setExtension}
-                    setUserHasRun={setUserHasRun}
-                    upscaleFactor={upscaleFactor}
-                    setModelLoading={setModelLoading}
-                    setUpscaleFactor={setUpscaleFactor}
-                    setErrorMessage={setErrorMessage}
-                    modelLoading={modelLoading}
+                    useImageStore={useImageStore}
+                    useAppStateStore={useAppStateStore}
                   />
                   <select id="resolution-select"
                     className="form-select appearance-none border-none text-white font-bold py-2 px-4
@@ -116,13 +89,8 @@ const Sidebar = ({
       </div>
       {inputModalOpen && (
         <ModalComponent
-          setInputModalOpen={setInputModalOpen}
-          setInputURI={setInputURI}
-          setOutputURI={setOutputURI}
-          previewURI={previewURI}
-          setPreviewURI={setPreviewURI}
-          setFileName={setFileName}
-          setTags={setTags}
+          useImageStore={useImageStore}
+          useAppStateStore={useAppStateStore}
         />
       )}
     </div>

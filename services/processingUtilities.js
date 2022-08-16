@@ -159,10 +159,19 @@ export async function upscale(inputData, repeatUpscale=1) {
   }
 }
 
-export async function upScaleFromURI(uri, setLoading, setTags, setExtension, upscaleFactor) {
+export async function upScaleFromURI(setLoading, setExtension, setTags, uri, upscaleFactor) {
+  console.log("Upscaling!");
+  // const setLoading = useAppStateStore((state) => state.setLoading);
+  // const setExtension = useImageStore((state) => state.setExtension);
+  // const setTags = useImageStore((state) => state.setTags);
+  // const uri = useImageStore((state) => state.inputURI);
+  // const upscaleFactor = useImageStore((state) => state.upscaleFactor);
+  console.log("AHHHHH");
+  console.log(setLoading);
   setLoading(true);
   let resultURI = null;
   let repeatUpscale = Math.log2(upscaleFactor);
+  console.log(repeatUpscale);
   if (uri.slice(0, 14) == "data:image/gif") {
     setExtension("gif");
     //is gif
@@ -185,6 +194,7 @@ export async function upScaleFromURI(uri, setLoading, setTags, setExtension, ups
     resultURI = await upscale(pixelData, repeatUpscale);
   }
   setLoading(false);
+  console.log(resultURI);
   return resultURI;
 }
 

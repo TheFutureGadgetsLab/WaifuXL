@@ -6,21 +6,24 @@ import {
 import { CloseSVG } from "./SVGComponents";
 
 function ModalComponent({
-  setInputModalOpen,
-  setInputURI,
-  setOutputURI,
-  previewURI,
-  setPreviewURI,
-  setFileName,
-  setTags,
+  useImageStore,
+  useAppStateStore
 }) {
+  const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen);
+  const setInputURI = useImageStore((state) => state.setInputURI);
+  const setOutputURI = useImageStore((state) => state.setOutputURI);
+  const setPreviewURI = useImageStore((state) => state.setPreviewURI);
+  const setFileName = useImageStore((state) => state.setFileName);
+  const setTags = useImageStore((state) => state.setTags);
+  
+  const previewURI = useImageStore((state) => state.previewURI);
+
   const divRef = useRef(null);
   function focusDiv() {
     divRef.current.focus();
   }
 
   useEffect(async () => {
-    // Update the document title using the browser API
     focusDiv();
   }, [divRef]);
 
@@ -100,7 +103,7 @@ function ModalComponent({
               >
                 <option>Select a Preset</option>
                 <option value="ozen|https://i.imgur.com/Sf6sfPj.png">
-                  Ozen "The Immovable"
+                  Ozen
                 </option>
                 <option value="eat|https://c.tenor.com/rnhV3fu39f8AAAAM/eating-anime.gif">
                   Eating (GIF)

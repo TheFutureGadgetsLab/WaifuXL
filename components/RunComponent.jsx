@@ -1,43 +1,50 @@
 import { useEffect, useState } from "react";
 import { upScaleFromURI } from "../services/processingUtilities";
 import { initializeONNX } from "../services/onnxBackend";
-import { uploadToImgur } from "../services/miscUtils";
 import { UpscaleSVG } from "./SVGComponents";
 const RunComponent = ({
-  loading,
-  setLoading,
-  inputURI,
-  setOutputURI,
-  setTags,
-  setExtension,
-  setUserHasRun,
-  upscaleFactor,
-  setModelLoading,
-  modelLoading,
-  setUpscaleFactor,
-  setErrorMessage,
+  useImageStore,
+  useAppStateStore
 }) => {
-  const [shouldRun, setShouldRun] = useState(false);
-  const [modelLoadProg, setModelLoadProg] = useState(0);
+  const setOutputURI = useImageStore((state) => state.setOutputURI);
+  const setUserHasRun = useAppStateStore((state) => state.setUserHasRun);
+  const setShouldRun = useAppStateStore((state) => state.setShouldRun);
+  const setUpscaleFactor = useImageStore((state) => state.setUpscaleFactor);
+  const setErrorMessage = useAppStateStore((state) => state.setErrorMessage);
+  const setModelLoading = useAppStateStore((state) => state.setModelLoading);
+  const setModelLoadProg = useAppStateStore((state) => state.setModelLoadProg);
+
+  const shouldRun = useAppStateStore((state) => state.shouldRun);
+  const modelLoading = useAppStateStore((state) => state.modelLoading);
+  const loading = useAppStateStore((state) => state.loading);
+  const modelLoadProg = useAppStateStore((state) => state.modelLoadProg);
+  
+  const setLoading = useAppStateStore((state) => state.setLoading);
+  const setExtension = useImageStore((state) => state.setExtension);
+  const setTags = useImageStore((state) => state.setTags);
+  const uri = useImageStore((state) => state.inputURI);
+  const upscaleFactor = useImageStore((state) => state.upscaleFactor);
 
   useEffect(async () => {
     if (shouldRun) {
+      console.log("Triggered!");
       // Clear previous output
+
       setOutputURI(null);
       try {
         const result = await upScaleFromURI(
-          inputURI,
           setLoading,
-          setTags,
           setExtension,
+          setTags,
+          uri,
           upscaleFactor
         );
+          
         setUserHasRun(true);
         // If the models output is valid
         if (result) {
           //set the output
           setOutputURI(result);
-          // await uploadToImgur(result);
           // Set should run to false
           setShouldRun(false);
           setUpscaleFactor(2);
@@ -54,6 +61,8 @@ const RunComponent = ({
           ).catch((error) => console.log("Error incrementing counter"));
         }
       } catch (error) {
+        console.log(error);
+        console.log("Bork");
         setShouldRun(false);
         setUpscaleFactor(2);
         setErrorMessage("Model failed to run.");

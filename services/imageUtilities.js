@@ -63,10 +63,10 @@ function getDataURIFromInput(input) {
  * @param {string} extension File extension
  * @param {string} fileName File name
  */
-function downloadImage(imgURI, fileName, extension) {
+function downloadImage(fileName, extension, outputURI) {
   let link = document.createElement("a");
   link.download = `${fileName}.${extension}`;
-  link.href = imgURI;
+  link.href = outputURI;
   link.click();
 }
 
