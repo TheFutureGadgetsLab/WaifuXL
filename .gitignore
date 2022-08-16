@@ -44,3 +44,5 @@ package-lock.json
 sw.js
 workbox-*.js
 workbox-*.js.map
+
+/out/
