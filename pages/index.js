@@ -44,9 +44,9 @@ function useWindowSize() {
 
 export default function Main() {
   const useImageStore = create((set) => ({
-    inputURI: "./images/senjougahara.png",
-    outputURI: "./images/senjougahara_2x.png",
-    previewURI: "./images/senjougahara.png",
+    inputURI: "./images/senjougahara.webp",
+    outputURI: "./images/senjougahara_2x.webp",
+    previewURI: "./images/senjougahara.webp",
     tags: default_tags,
     fileName: "example",
     extension: "png",

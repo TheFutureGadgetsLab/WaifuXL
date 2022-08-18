@@ -22,7 +22,7 @@ export default function Donate() {
         <HamSVG onClick={() => setShowSidebar(!showSidebar)} className="md:hidden absolute left-5 top-4 z-40 cursor-pointer" />
         <GitHubSVG className="absolute right-5 top-4 z-40" />
         <main className="items-center justify-center lg:w-8/12 p-10 text-center">
-          <img src="./images/chibi_pablo.png" className="md:h-96 h-64 float-left" />
+          <img src="./images/chibi_pablo.webp" className="md:h-96 h-64 float-left" />
           <div className="md:text-left lg:mt-20 mt-5 lg:text-6xl text-2xl font-black">
             Donation Links
           </div>
@@ -84,7 +84,7 @@ function CryptoComponent({addr, imgPath}) {
 function KofiComponent() {
   return (
     <button className="hover:bg-blue-700 text-black font-bold py-2 px-4 rounded inline-flex items-center w-max">
-      <img className="h-4 pr-2" src="/images/koficup.png" />
+      <img className="h-4 pr-2" src="/images/koficup.webp" />
 
       <a
         className="font-mono"
