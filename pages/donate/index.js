@@ -3,32 +3,12 @@ import SideNavbar from "../../components/SideNavbar";
 import { createRef, useEffect, useState } from "react";
 import { GitHubSVG, HamSVG } from "../../components/SVGComponents";
 
-function Tooltip({ children, tooltipText, isHidden }) {
-  const tipRef = createRef(null);
-  return (
-    <div className="absolute right-full top-0 flex items-center transition-transform duration-200 ease-in-out"
-      style={{ transform: `scale(${isHidden ? "0" : "1"})` }}>
-        <div
-          className={`z-40 bg-black text-white px-4 py-2 rounded flex items-center`}
-          ref={tipRef}
-        >
-          {tooltipText}
-        </div>
-      {children}
-    </div>
-  );
-}
-
 export default function Donate() {
-  const [showSidebar, setShowSidebar] = useState(true);
-  const [isHiddenETH, setIsHiddenETH] = useState(true);
-  const [isHiddenBTC, setIsHiddenBTC] = useState(true);
-  const [isHiddenDOGE, setIsHiddenDOGE] = useState(true);
-  const [isHiddenLITE, setIsHiddenLITE] = useState(true);
-
   useEffect(() => {
     document.body.style.overflow = "auto";
   }, []);
+
+  const [showSidebar, setShowSidebar] = useState(true);
 
   return (
     <>
@@ -47,114 +27,72 @@ export default function Donate() {
             Donation Links
           </div>
           <div className="text-left flex flex-col flex-grow flex-wrap">
-            <button className="hover:bg-blue-700 text-black font-bold py-2 px-4 rounded inline-flex items-center w-max">
-              <img className="h-4 pr-2" src="/images/koficup.png" />
-
-              <a
-                className="font-mono"
-                href="https://ko-fi.com/thefuturegadgetslab/?hidefeed=true&widget=true&embed=true&preview=true"
-              >
-                <span>Support us on Ko-fi</span>
-              </a>
-            </button>
-            <div id="eth-container" className="relative">
-              <button
-                className="hover:bg-blue-700 text-black relative font-bold py-2 px-4 rounded inline-flex items-center w-max"
-                onClick={async () => {
-                  navigator.clipboard.writeText(
-                    "0xDBF8321ba37D14eFc82BA1d9A416145EE039b78d"
-                  );
-                  setIsHiddenETH(false);
-                  await new Promise((r) => setTimeout(r, 1000));
-                  setIsHiddenETH(true);
-                }}
-              >
-                <img className="h-6 pr-2" src="./images/ETH.svg" />
-
-                <a className="">
-                  <span className="font-mono">
-                    0xDBF8321ba37D14eFc82BA1d9A416145EE039b78d
-                  </span>
-                </a>
-                <img className="h-5 pr-2 absolute left-full" src="./images/copy.svg" />
-              </button>
-              <Tooltip tooltipText={"Copied!"} isHidden={isHiddenETH}></Tooltip>
-            </div>
-            <div id=" btc-container" className="relative">
-              <button
-                className="hover:bg-blue-700 text-black relative font-bold py-2 px-4 rounded inline-flex items-center w-max"
-                onClick={async () => {
-                  navigator.clipboard.writeText(
-                    "33NgbSU66P42afwF3nbvn7qsYy4iJ3rRbL"
-                  );
-                  setIsHiddenBTC(false);
-                  await new Promise((r) => setTimeout(r, 1000));
-                  setIsHiddenBTC(true);
-                }}
-              >
-                <img className="h-6 pr-2" src="./images/BTC.svg" />
-                <a className="">
-                  <span className="font-mono">
-                    33NgbSU66P42afwF3nbvn7qsYy4iJ3rRbL
-                  </span>
-                </a>
-                <img className="h-5 pr-2 absolute left-full" src="./images/copy.svg" />
-              </button>
-              <Tooltip tooltipText={"Copied!"} isHidden={isHiddenBTC}></Tooltip>
-            </div>
-            <div id="doge-container" className="relative">
-              <button
-                className="hover:bg-blue-700 text-black relative font-bold py-2 px-4 rounded inline-flex items-center w-max"
-                onClick={async () => {
-                  navigator.clipboard.writeText(
-                    "D5Zx9Uz6CLvKKEcdGH4R1hBLqeYwGdaFbP"
-                  );
-                  setIsHiddenDOGE(false);
-                  await new Promise((r) => setTimeout(r, 1000));
-                  setIsHiddenDOGE(true);
-                }}
-              >
-                <img className="h-6 pr-2" src="./images/DOGE.svg" />
-                <a className="">
-                  <span className="font-mono">
-                    D5Zx9Uz6CLvKKEcdGH4R1hBLqeYwGdaFbP
-                  </span>
-                </a>
-                <img className="h-5 pr-2 absolute left-full" src="./images/copy.svg" />
-              </button>
-              <Tooltip
-                tooltipText={"Copied!"}
-                isHidden={isHiddenDOGE}
-              ></Tooltip>
-            </div>
-            <div id="lite-container" className="relative">
-              <button
-                className="hover:bg-blue-700 text-black relative font-bold py-2 px-4 rounded inline-flex items-center w-max"
-                onClick={async () => {
-                  navigator.clipboard.writeText(
-                    "MMWSSsvzUB2nWrYQU9f9SkV4tNKbAfk8gf"
-                  );
-                  setIsHiddenLITE(false);
-                  await new Promise((r) => setTimeout(r, 1000));
-                  setIsHiddenLITE(true);
-                }}
-              >
-                <img className="h-6 pr-2" src="./images/LTC.svg" />
-                <a className="">
-                  <span className="font-mono">
-                    MMWSSsvzUB2nWrYQU9f9SkV4tNKbAfk8gf
-                  </span>
-                </a>
-                <img className="h-5 pr-2 absolute left-full" src="./images/copy.svg" />
-              </button>
-              <Tooltip
-                tooltipText={"Copied!"}
-                isHidden={isHiddenLITE}
-              ></Tooltip>
-            </div>
+            <KofiComponent />
+            <CryptoComponent addr="0xDBF8321ba37D14eFc82BA1d9A416145EE039b78d" imgPath="./images/ETH.svg" />
+            <CryptoComponent addr="33NgbSU66P42afwF3nbvn7qsYy4iJ3rRbL" imgPath="./images/BTC.svg" />
+            <CryptoComponent addr="D5Zx9Uz6CLvKKEcdGH4R1hBLqeYwGdaFbP" imgPath="./images/DOGE.svg" />
+            <CryptoComponent addr="MMWSSsvzUB2nWrYQU9f9SkV4tNKbAfk8gf" imgPath="./images/LTC.svg" />
           </div>
         </main>
       </div>
     </>
   );
+}
+
+function Tooltip({ children, tooltipText, isHidden }) {
+  const tipRef = createRef(null);
+  return (
+    <div className="absolute right-full top-0 flex items-center transition-transform duration-200 ease-in-out"
+      style={{ transform: `scale(${isHidden ? "0" : "1"})` }}>
+        <div
+          className={`z-40 bg-black text-white px-4 py-2 rounded flex items-center`}
+          ref={tipRef}
+        >
+          {tooltipText}
+        </div>
+      {children}
+    </div>
+  );
+}
+
+function CryptoComponent({addr, imgPath}) {
+  const [isHidden, setIsHidden] = useState(true);
+  return (
+    <div id="eth-container" className="relative">
+      <button
+        className="hover:bg-blue-700 text-black relative font-bold py-2 px-4 rounded inline-flex items-center w-max"
+        onClick={async () => {
+          navigator.clipboard.writeText(addr);
+          setIsHidden(false);
+          await new Promise((r) => setTimeout(r, 1000));
+          setIsHidden(true);
+        }}
+      >
+        <img className="h-6 pr-2" src={imgPath} />
+        <a className="">
+          <span className="font-mono">
+            {addr}
+          </span>
+        </a>
+        <img className="h-5 pr-2 absolute left-full" src="./images/copy.svg" />
+      </button>
+      <Tooltip tooltipText={"Copied!"} isHidden={isHidden}></Tooltip>
+    </div>
+  );
+}
+
+function KofiComponent() {
+  return (
+    <button className="hover:bg-blue-700 text-black font-bold py-2 px-4 rounded inline-flex items-center w-max">
+      <img className="h-4 pr-2" src="/images/koficup.png" />
+
+      <a
+        className="font-mono"
+        href="https://ko-fi.com/thefuturegadgetslab/?hidefeed=true&widget=true&embed=true&preview=true"
+        target="_blank"
+      >
+        <span>Support us on Ko-fi</span>
+      </a>
+    </button>
+  )
 }
