@@ -7,7 +7,7 @@ const TitleComponent = ({ useAppStateStore }) => {
   const downloadReady = useAppStateStore((state) => state.downloadReady);
   const modelLoading = useAppStateStore((state) => state.modelLoading);
 
-  useEffect(async () => {
+  useEffect(() => {
     const interval = setInterval(function () {
       loadingText == ""
         ? setLoadingText(".")

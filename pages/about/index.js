@@ -39,7 +39,7 @@ export default function About() {
           </div>
           <div className="lg:mt-20 mt-5 lg:text-6xl text-2xl">About Us</div>
           <div className="mt-5 lg:text-lg text-sm text-left">
-            Hi, we’re the{" "}
+            Hi, we're the{" "}
             <span className="text-blue font-bold">Future Gadgets Lab</span>! We
             make a lot of random stuff, check out our organization{" "}
             <a
@@ -64,7 +64,7 @@ export default function About() {
             <a href="https://onnxruntime.ai/" className="text-pink underline">
               ONNX Runtime
             </a>
-            . For the upscaling model we’re using the{" "}
+            . For the upscaling model we're using the{" "}
             <a
               href="https://arxiv.org/abs/2107.10833"
               className="text-pink underline"
@@ -78,7 +78,7 @@ export default function About() {
             >
               MobileNetV3
             </a>
-            . On the web side we’re using{" "}
+            . On the web side we're using{" "}
             <a className="text-pink underline" href="https://reactjs.org/">
               React
             </a>
@@ -90,7 +90,7 @@ export default function About() {
             <a className="text-pink underline" href="https://tailwindcss.com/">
               TailwindCSS
             </a>
-            . We’re hosted on{" "}
+            . We're hosted on{" "}
             <a
               className="text-pink underline"
               href="https://pages.cloudflare.com/"

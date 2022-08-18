@@ -23,7 +23,7 @@ function ModalComponent({
     divRef.current.focus();
   }
 
-  useEffect(async () => {
+  useEffect(() => {
     focusDiv();
   }, [divRef]);
 
