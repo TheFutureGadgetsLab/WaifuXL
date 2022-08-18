@@ -96,7 +96,7 @@ export default function Main() {
     setMobile(size.width / size.height < 1.0);
   }, [size]);
 
-  useEffect(async () => {
+  useEffect(() => {
     setEventListeners(
       setPreviewURI,
       setFileName,

@@ -3,7 +3,7 @@ import {
   setDataURIFromFile,
 } from "../services/imageUtilities";
 
-export async function setEventListeners(
+export function setEventListeners(
   setPreviewURI,
   setFileName,
   setShowSidebar,
