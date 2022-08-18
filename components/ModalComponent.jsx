@@ -1,31 +1,25 @@
-import { useEffect, useRef, useState } from "react";
-import {
-  getDataURIFromInput,
-  setDataURIFromFile,
-} from "../services/imageUtilities";
-import { CloseSVG } from "./SVGComponents";
+import { useEffect, useRef, useState } from 'react'
+import { getDataURIFromInput, setDataURIFromFile } from '../services/imageUtilities'
+import { CloseSVG } from './SVGComponents'
 
-function ModalComponent({
-  useImageStore,
-  useAppStateStore
-}) {
-  const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen);
-  const setInputURI = useImageStore((state) => state.setInputURI);
-  const setOutputURI = useImageStore((state) => state.setOutputURI);
-  const setPreviewURI = useImageStore((state) => state.setPreviewURI);
-  const setFileName = useImageStore((state) => state.setFileName);
-  const setTags = useImageStore((state) => state.setTags);
-  
-  const previewURI = useImageStore((state) => state.previewURI);
+function ModalComponent({ useImageStore, useAppStateStore }) {
+  const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen)
+  const setInputURI = useImageStore((state) => state.setInputURI)
+  const setOutputURI = useImageStore((state) => state.setOutputURI)
+  const setPreviewURI = useImageStore((state) => state.setPreviewURI)
+  const setFileName = useImageStore((state) => state.setFileName)
+  const setTags = useImageStore((state) => state.setTags)
 
-  const divRef = useRef(null);
+  const previewURI = useImageStore((state) => state.previewURI)
+
+  const divRef = useRef(null)
   function focusDiv() {
-    divRef.current.focus();
+    divRef.current.focus()
   }
 
   useEffect(() => {
-    focusDiv();
-  }, [divRef]);
+    focusDiv()
+  }, [divRef])
 
   return (
     <div
@@ -37,8 +31,8 @@ function ModalComponent({
       tabIndex="-1"
       ref={divRef}
       onKeyDown={(e) => {
-        setInputModalOpen(e.key != "Escape");
-        setFileName();
+        setInputModalOpen(e.key != 'Escape')
+        setFileName()
       }}
     >
       <div
@@ -46,31 +40,29 @@ function ModalComponent({
         className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity w-screen h-screen"
         aria-hidden="true"
         onClick={(e) => {
-          setInputModalOpen(false);
-          setFileName();
+          setInputModalOpen(false)
+          setFileName()
         }}
       ></div>
-      <div
-        id="modal-container"
-        className="flex items-center justify-center w-screen h-screen"
-      >
+      <div id="modal-container" className="flex items-center justify-center w-screen h-screen">
         <div
           id="modal"
           className="bg-white rounded-lg shadow-xl transform transition-all text-center
             w-full h-full md:w-auto md:h-auto"
         >
           <div>
-            <CloseSVG onClick={(e) => {
-                setInputModalOpen(false);
-                setFileName();
-              }
-            }/>
+            <CloseSVG
+              onClick={(e) => {
+                setInputModalOpen(false)
+                setFileName()
+              }}
+            />
           </div>
           <label
             className="flex flex-col items-center justify-center cursor-pointer mt-16 h-96 m-3 bg-contain bg-origin-content p-4 bg-no-repeat bg-center"
             style={{
               backgroundImage: `url(${previewURI})`,
-              boxShadow: "inset 0px 0px 12px #00000050",
+              boxShadow: 'inset 0px 0px 12px #00000050',
             }}
           >
             <label className="flex items-center px-4 py-6 tracking-wide cursor-pointer">
@@ -79,50 +71,33 @@ function ModalComponent({
                 className="hidden"
                 onChange={(e) => {
                   if (e.target.files[0]) {
-                    setDataURIFromFile(e.target.files[0], setPreviewURI);
-                    setFileName(e.target.files[0].name.split(".")[0]);
+                    setDataURIFromFile(e.target.files[0], setPreviewURI)
+                    setFileName(e.target.files[0].name.split('.')[0])
                   }
                 }}
               />
             </label>
           </label>
-          <div
-            id="preset-menu"
-            className="mt-10 p-3 flex justify-between relative gap-4"
-          >
+          <div id="preset-menu" className="mt-10 p-3 flex justify-between relative gap-4">
             <label>
               <span className="text-gray-700">Preset Images</span>
               <select
                 id="preset-select"
                 className="form-select border-none rounded mt-1 block text-ellipsis w-full p-3 bg-blue text-white cursor-pointer"
                 onInput={async (inp) => {
-                  const [name, url] = inp.target.value.split("|");
-                  setPreviewURI(await getDataURIFromInput(url));
-                  setFileName(`example_${name}`);
+                  const [name, url] = inp.target.value.split('|')
+                  setPreviewURI(await getDataURIFromInput(url))
+                  setFileName(`example_${name}`)
                 }}
               >
                 <option>Select a Preset</option>
-                <option value="ozen|https://i.imgur.com/Sf6sfPj.png">
-                  Ozen
-                </option>
-                <option value="eat|https://c.tenor.com/rnhV3fu39f8AAAAM/eating-anime.gif">
-                  Eating (GIF)
-                </option>
-                <option value="senjougahara|https://i.imgur.com/cMX8YcK.jpg">
-                  Hitagi Senjougahara
-                </option>
-                <option value="moomin|https://i.imgur.com/9I91yMq.png">
-                  Moomin
-                </option>
-                <option value="megumin|https://i.imgur.com/BKBt6bC.png">
-                  Megumin
-                </option>
-                <option value="aqua|https://i.imgur.com/yhIwVjZ.jpeg">
-                  Aqua
-                </option>
-                <option value="natsumi|https://i.imgur.com/yIIl7Z1.png">
-                  Kurobe Natsumi
-                </option>
+                <option value="ozen|https://i.imgur.com/Sf6sfPj.png">Ozen</option>
+                <option value="eat|https://c.tenor.com/rnhV3fu39f8AAAAM/eating-anime.gif">Eating (GIF)</option>
+                <option value="senjougahara|https://i.imgur.com/cMX8YcK.jpg">Hitagi Senjougahara</option>
+                <option value="moomin|https://i.imgur.com/9I91yMq.png">Moomin</option>
+                <option value="megumin|https://i.imgur.com/BKBt6bC.png">Megumin</option>
+                <option value="aqua|https://i.imgur.com/yhIwVjZ.jpeg">Aqua</option>
+                <option value="natsumi|https://i.imgur.com/yIIl7Z1.png">Kurobe Natsumi</option>
               </select>
             </label>
             <div className="grid grid-cols-1">
@@ -139,8 +114,8 @@ function ModalComponent({
                     className="hidden"
                     onChange={(e) => {
                       if (e.target.files[0]) {
-                        setDataURIFromFile(e.target.files[0], setPreviewURI);
-                        setFileName(e.target.files[0].name.split(".")[0]);
+                        setDataURIFromFile(e.target.files[0], setPreviewURI)
+                        setFileName(e.target.files[0].name.split('.')[0])
                       }
                     }}
                   />
@@ -157,10 +132,10 @@ function ModalComponent({
                 text-base font-medium h-12 focus:outline-none focus:ring-2 focus:ring-offset-2 
                 border-blue border-2 bg-white hover:bg-blue hover:text-white disabled:bg-white disabled:text-gray-200 disabled:border-gray-200"
                 onClick={() => {
-                  setInputURI(previewURI);
-                  setOutputURI(null);
-                  setTags(null);
-                  setInputModalOpen(false);
+                  setInputURI(previewURI)
+                  setOutputURI(null)
+                  setTags(null)
+                  setInputModalOpen(false)
                 }}
               >
                 Done
@@ -170,7 +145,7 @@ function ModalComponent({
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default ModalComponent;
+export default ModalComponent

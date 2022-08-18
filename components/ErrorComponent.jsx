@@ -1,4 +1,4 @@
-import { ErrorSVG } from "./SVGComponents";
+import { ErrorSVG } from './SVGComponents'
 
 export default function Error({ errorMessage }) {
   return (
@@ -11,12 +11,9 @@ export default function Error({ errorMessage }) {
           </div>
           <div className="ml-3">
             <h3 className="text-sm font-medium text-red-800">
-              An unexpected error has occurred.<b> Please refresh the page.</b>{" "}
-              If the problem persists, please submit an issue{" "}
-              <a
-                className="text-blue underline"
-                href="https://github.com/TheFutureGadgetsLab/WaifuXL/issues"
-              >
+              An unexpected error has occurred.<b> Please refresh the page.</b> If the problem persists, please submit
+              an issue{' '}
+              <a className="text-blue underline" href="https://github.com/TheFutureGadgetsLab/WaifuXL/issues">
                 here
               </a>
               .
@@ -30,5 +27,5 @@ export default function Error({ errorMessage }) {
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -1,41 +1,38 @@
-import Router from "next/router";
+import Router from 'next/router'
 
-const SideNavbar = ({
-  showSidebar,
-  currentPage,
-}) => {
+const SideNavbar = ({ showSidebar, currentPage }) => {
   return (
-    <div
-      id="sidebar"
-      className={`md:hidden w-80 flex flex-col fixed inset-y-0 ${
-        showSidebar ? "" : "hidden"
-      }`}
-    >
+    <div id="sidebar" className={`md:hidden w-80 flex flex-col fixed inset-y-0 ${showSidebar ? '' : 'hidden'}`}>
       <div className="flex-1 flex flex-col min-h-0 bg-gray-100">
         <div className="flex-1 flex flex-col overflow-y-auto">
           <div className="">
             <div className="pt-5 mt-10 mb-10 mx-8 space-y-2 grid grid-cols-1">
-            <div
-                className="md:hidden flex items-center space-x-2"
-              >
-                <a href="/" className={`text-2xl font-semibold text-black cursor-pointer ${currentPage === "index" ? 'underline' : ''}`}>
+              <div className="md:hidden flex items-center space-x-2">
+                <a
+                  href="/"
+                  className={`text-2xl font-semibold text-black cursor-pointer ${
+                    currentPage === 'index' ? 'underline' : ''
+                  }`}
+                >
                   Home
                 </a>
               </div>
 
-              <div
-                className="md:hidden flex items-center space-x-2"
-                onClick={() => Router.push("./about")}
-              >
-                <span className={`text-2xl font-semibold text-black cursor-pointer ${currentPage === "about" ? 'underline' : ''}`}>
+              <div className="md:hidden flex items-center space-x-2" onClick={() => Router.push('./about')}>
+                <span
+                  className={`text-2xl font-semibold text-black cursor-pointer ${
+                    currentPage === 'about' ? 'underline' : ''
+                  }`}
+                >
                   About
                 </span>
               </div>
-              <div
-                className="md:hidden flex items-center space-x-2"
-                onClick={() => Router.push("./donate")}
-              >
-                <span className={`text-2xl font-semibold text-black cursor-pointer ${currentPage === "donate" ? 'underline' : ''}`}>
+              <div className="md:hidden flex items-center space-x-2" onClick={() => Router.push('./donate')}>
+                <span
+                  className={`text-2xl font-semibold text-black cursor-pointer ${
+                    currentPage === 'donate' ? 'underline' : ''
+                  }`}
+                >
                   Donate
                 </span>
               </div>
@@ -44,7 +41,7 @@ const SideNavbar = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SideNavbar;
+export default SideNavbar

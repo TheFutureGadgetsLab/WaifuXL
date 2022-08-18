@@ -1,12 +1,12 @@
-import NavbarComponent from "../components/NavbarComponent";
-import TitleComponent from "../components/TitleComponent";
-import { useState, useEffect } from "react";
-import Sidebar from "../components/SidebarComponent";
-import ImageDisplay from "../components/ImageDisplayComponent";
-import { setEventListeners } from "../services/setEventListeners";
-import AnnouncementComponent from "../components/Announcement";
-import Error from "../components/ErrorComponent";
-import default_tags from "../services/landing_tags";
+import NavbarComponent from '../components/NavbarComponent'
+import TitleComponent from '../components/TitleComponent'
+import { useState, useEffect } from 'react'
+import Sidebar from '../components/SidebarComponent'
+import ImageDisplay from '../components/ImageDisplayComponent'
+import { setEventListeners } from '../services/setEventListeners'
+import AnnouncementComponent from '../components/Announcement'
+import Error from '../components/ErrorComponent'
+import default_tags from '../services/landing_tags'
 import create from 'zustand'
 
 function useWindowSize() {
@@ -15,51 +15,51 @@ function useWindowSize() {
   const [windowSize, setWindowSize] = useState({
     width: undefined,
     height: undefined,
-  });
+  })
 
   useEffect(() => {
     // only execute all the code below in client side
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       // Handler to call on window resize
       function handleResize() {
         // Set window width/height to state
         setWindowSize({
           width: window.innerWidth,
           height: window.innerHeight,
-        });
+        })
       }
 
       // Add event listener
-      window.addEventListener("resize", handleResize);
+      window.addEventListener('resize', handleResize)
 
       // Call handler right away so state gets updated with initial window size
-      handleResize();
+      handleResize()
 
       // Remove event listener on cleanup
-      return () => window.removeEventListener("resize", handleResize);
+      return () => window.removeEventListener('resize', handleResize)
     }
-  }, []); // Empty array ensures that effect is only run on mount
-  return windowSize;
+  }, []) // Empty array ensures that effect is only run on mount
+  return windowSize
 }
 
 export default function Main() {
   const useImageStore = create((set) => ({
-    inputURI: "./images/senjougahara.webp",
-    outputURI: "./images/senjougahara_2x.webp",
-    previewURI: "./images/senjougahara.webp",
+    inputURI: './images/senjougahara.webp',
+    outputURI: './images/senjougahara_2x.webp',
+    previewURI: './images/senjougahara.webp',
     tags: default_tags,
-    fileName: "example",
-    extension: "png",
+    fileName: 'example',
+    extension: 'png',
     upscaleFactor: 2,
 
-    setInputURI: (uri) => set((state) => ({ inputURI: uri})),
-    setOutputURI: (uri) => set((state) => ({ outputURI: uri})),
-    setPreviewURI: (uri) => set((state) => ({ previewURI: uri})),
-    setTags: (newTags) => set((state) => ({ tags: newTags})),
-    setFileName: (newFilename) => set((state) => ({ fileName: newFilename})),
-    setExtension: (newExt) => set((state) => ({ extension: newExt})),
-    setUpscaleFactor: (newFactor) => set((state) => ({upscaleFactor: newFactor}))
-  }));
+    setInputURI: (uri) => set((state) => ({ inputURI: uri })),
+    setOutputURI: (uri) => set((state) => ({ outputURI: uri })),
+    setPreviewURI: (uri) => set((state) => ({ previewURI: uri })),
+    setTags: (newTags) => set((state) => ({ tags: newTags })),
+    setFileName: (newFilename) => set((state) => ({ fileName: newFilename })),
+    setExtension: (newExt) => set((state) => ({ extension: newExt })),
+    setUpscaleFactor: (newFactor) => set((state) => ({ upscaleFactor: newFactor })),
+  }))
 
   const useAppStateStore = create((set) => ({
     loading: false,
@@ -78,52 +78,47 @@ export default function Main() {
     setUserHasRun: (newUserHasRun) => set((state) => ({ userHasRun: newUserHasRun })),
     setModelLoading: () => set((state) => ({ modelLoading: !state.modelLoading })),
     setMobile: () => set((state) => ({ mobile: !state.mobile })),
-    setErrorMessage: (newError) => set((state) => ({ errorMessage: newError})),
+    setErrorMessage: (newError) => set((state) => ({ errorMessage: newError })),
     setShouldRun: (newShouldRun) => set((state) => ({ shouldRun: newShouldRun })),
-    setModelLoadProg: (newProg) => set((state) => ({ modelLoadProg: newProg }))
-  }));
-  
+    setModelLoadProg: (newProg) => set((state) => ({ modelLoadProg: newProg })),
+  }))
 
-  const size = useWindowSize();
+  const size = useWindowSize()
 
-  const setPreviewURI = useImageStore((state) => state.setPreviewURI);
-  const setFileName = useImageStore((state) => state.setFileName);
-  const setShowSidebar = useAppStateStore((state) => state.setShowSidebar);
-  const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen);
+  const setPreviewURI = useImageStore((state) => state.setPreviewURI)
+  const setFileName = useImageStore((state) => state.setFileName)
+  const setShowSidebar = useAppStateStore((state) => state.setShowSidebar)
+  const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen)
 
-  const setMobile = useAppStateStore((state) => state.setMobile);
+  const setMobile = useAppStateStore((state) => state.setMobile)
   useEffect(() => {
-    setMobile(size.width / size.height < 1.0);
-  }, [size]);
+    setMobile(size.width / size.height < 1.0)
+  }, [size])
 
   useEffect(() => {
-    setEventListeners(
-      setPreviewURI,
-      setFileName,
-      setShowSidebar,
-      setInputModalOpen
-    );
-  }, []);
+    setEventListeners(setPreviewURI, setFileName, setShowSidebar, setInputModalOpen)
+  }, [])
 
   return (
     <>
-      {useAppStateStore((state) => state.errorMessage) ? <Error errorMessage={useAppStateStore((state) => state.errorMessage)} /> : <></>}
+      {useAppStateStore((state) => state.errorMessage) ? (
+        <Error errorMessage={useAppStateStore((state) => state.errorMessage)} />
+      ) : (
+        <></>
+      )}
       <div
         style={{
           backgroundImage: `url("images/bg.svg")`,
-          backgroundSize: "cover",
-          backgroundPositionX: "right",
+          backgroundSize: 'cover',
+          backgroundPositionX: 'right',
         }}
       >
-        <Sidebar
-          useAppStateStore={useAppStateStore}
-          useImageStore={useImageStore}
-        />
+        <Sidebar useAppStateStore={useAppStateStore} useImageStore={useImageStore} />
         {/* Image display, title, navbar */}
         <main className="flex-1">
           <AnnouncementComponent
             announcement={
-              "Safari performance will be worse than other browsers. If possible use a non-webkit based browser."
+              'Safari performance will be worse than other browsers. If possible use a non-webkit based browser.'
             }
             mobile={useAppStateStore((state) => state.mobile)}
           />
@@ -132,17 +127,12 @@ export default function Main() {
             <NavbarComponent currentPage="index" />
 
             <div className={`h-3/4 grow w-full`}>
-              <ImageDisplay
-                useImageStore={useImageStore}
-                useAppStateStore={useAppStateStore}
-              />
-              <TitleComponent
-                useAppStateStore={useAppStateStore}
-              />
+              <ImageDisplay useImageStore={useImageStore} useAppStateStore={useAppStateStore} />
+              <TitleComponent useAppStateStore={useAppStateStore} />
             </div>
           </div>
         </main>
       </div>
     </>
-  );
+  )
 }

@@ -1,20 +1,17 @@
-import { downloadImage } from "../services/imageUtilities";
-import { DownloadSVG } from "./SVGComponents";
+import { downloadImage } from '../services/imageUtilities'
+import { DownloadSVG } from './SVGComponents'
 
 const DownloadComponent = ({ useImageStore }) => {
-  const [fileName, extension, outputURI] = useImageStore((state) => 
-  [state.fileName, state.extension, state.outputURI]
-);
+  const [fileName, extension, outputURI] = useImageStore((state) => [state.fileName, state.extension, state.outputURI])
 
   return (
     <button
       className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center"
       onClick={() => downloadImage(fileName, extension, outputURI)}
     >
-      <DownloadSVG />{" "}
-      <span>Download Upscaled</span>
+      <DownloadSVG /> <span>Download Upscaled</span>
     </button>
-  );
-};
+  )
+}
 
-export default DownloadComponent;
+export default DownloadComponent

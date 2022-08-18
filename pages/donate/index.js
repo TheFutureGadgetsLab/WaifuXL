@@ -1,14 +1,14 @@
-import NavbarComponent from "../../components/NavbarComponent";
-import SideNavbar from "../../components/SideNavbar";
-import { createRef, useEffect, useState } from "react";
-import { GitHubSVG, HamSVG } from "../../components/SVGComponents";
+import NavbarComponent from '../../components/NavbarComponent'
+import SideNavbar from '../../components/SideNavbar'
+import { createRef, useEffect, useState } from 'react'
+import { GitHubSVG, HamSVG } from '../../components/SVGComponents'
 
 export default function Donate() {
   useEffect(() => {
-    document.body.style.overflow = "auto";
-  }, []);
+    document.body.style.overflow = 'auto'
+  }, [])
 
-  const [showSidebar, setShowSidebar] = useState(true);
+  const [showSidebar, setShowSidebar] = useState(true)
 
   return (
     <>
@@ -16,16 +16,17 @@ export default function Donate() {
 
       <div
         className="flex flex-col items-center min-h-screen"
-        style={{ backgroundImage: `url("images/bg.svg")`, backgroundSize: "cover" }}
+        style={{ backgroundImage: `url("images/bg.svg")`, backgroundSize: 'cover' }}
       >
         <NavbarComponent currentPage="donate" />
-        <HamSVG onClick={() => setShowSidebar(!showSidebar)} className="md:hidden absolute left-5 top-4 z-40 cursor-pointer" />
+        <HamSVG
+          onClick={() => setShowSidebar(!showSidebar)}
+          className="md:hidden absolute left-5 top-4 z-40 cursor-pointer"
+        />
         <GitHubSVG className="absolute right-5 top-4 z-40" />
         <main className="items-center justify-center lg:w-8/12 p-10 text-center">
           <img src="./images/chibi_pablo.webp" className="md:h-96 h-64 float-left" />
-          <div className="md:text-left lg:mt-20 mt-5 lg:text-6xl text-2xl font-black">
-            Donation Links
-          </div>
+          <div className="md:text-left lg:mt-20 mt-5 lg:text-6xl text-2xl font-black">Donation Links</div>
           <div className="text-left flex flex-col flex-grow flex-wrap">
             <KofiComponent />
             <CryptoComponent addr="0xDBF8321ba37D14eFc82BA1d9A416145EE039b78d" imgPath="./images/ETH.svg" />
@@ -36,49 +37,46 @@ export default function Donate() {
         </main>
       </div>
     </>
-  );
+  )
 }
 
 function Tooltip({ children, tooltipText, isHidden }) {
-  const tipRef = createRef(null);
+  const tipRef = createRef(null)
   return (
-    <div className="absolute right-full top-0 flex items-center transition-transform duration-200 ease-in-out"
-      style={{ transform: `scale(${isHidden ? "0" : "1"})` }}>
-        <div
-          className={`z-40 bg-black text-white px-4 py-2 rounded flex items-center`}
-          ref={tipRef}
-        >
-          {tooltipText}
-        </div>
+    <div
+      className="absolute right-full top-0 flex items-center transition-transform duration-200 ease-in-out"
+      style={{ transform: `scale(${isHidden ? '0' : '1'})` }}
+    >
+      <div className={`z-40 bg-black text-white px-4 py-2 rounded flex items-center`} ref={tipRef}>
+        {tooltipText}
+      </div>
       {children}
     </div>
-  );
+  )
 }
 
-function CryptoComponent({addr, imgPath}) {
-  const [isHidden, setIsHidden] = useState(true);
+function CryptoComponent({ addr, imgPath }) {
+  const [isHidden, setIsHidden] = useState(true)
   return (
     <div id="eth-container" className="relative">
       <button
         className="hover:bg-blue-700 text-black relative font-bold py-2 px-4 rounded inline-flex items-center w-max"
         onClick={async () => {
-          navigator.clipboard.writeText(addr);
-          setIsHidden(false);
-          await new Promise((r) => setTimeout(r, 1000));
-          setIsHidden(true);
+          navigator.clipboard.writeText(addr)
+          setIsHidden(false)
+          await new Promise((r) => setTimeout(r, 1000))
+          setIsHidden(true)
         }}
       >
         <img className="h-6 pr-2" src={imgPath} />
         <a className="">
-          <span className="font-mono">
-            {addr}
-          </span>
+          <span className="font-mono">{addr}</span>
         </a>
         <img className="h-5 pr-2 absolute left-full" src="./images/copy.svg" />
       </button>
-      <Tooltip tooltipText={"Copied!"} isHidden={isHidden}></Tooltip>
+      <Tooltip tooltipText={'Copied!'} isHidden={isHidden}></Tooltip>
     </div>
-  );
+  )
 }
 
 function KofiComponent() {

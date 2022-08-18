@@ -4,26 +4,26 @@
 @import 'tailwindcss/utilities';
 
 #sidebar {
-    animation-duration: 0.25s;
-    animation-name: slidein;
+  animation-duration: 0.25s;
+  animation-name: slidein;
 }
-  
-@keyframes slidein {
-    from {
-        transform: translateX(-600px);
-    }
 
-    to {
-        transform: translateX(0);
-    }
+@keyframes slidein {
+  from {
+    transform: translateX(-600px);
+  }
+
+  to {
+    transform: translateX(0);
+  }
 }
 
 @keyframes scalein {
-    from {
-        transform: scale(0.0);
-    }
+  from {
+    transform: scale(0);
+  }
 
-    to {
-        transform: scale(1.0);
-    }
+  to {
+    transform: scale(1);
+  }
 }

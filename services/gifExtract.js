@@ -3,17 +3,12 @@
 const pify = require('pify')
 const getPixels = pify(require('get-pixels'))
 
-const supportedFormats = new Set([
-  'gif'
-])
+const supportedFormats = new Set(['gif'])
 
 module.exports = async (opts) => {
-  const {
-    input,
-    coalesce = true
-  } = opts
+  const { input, coalesce = true } = opts
 
-  const format = undefined;
+  const format = undefined
 
   if (format && !supportedFormats.has(format)) {
     throw new Error(`invalid output format "${format}"`)
@@ -24,12 +19,7 @@ module.exports = async (opts) => {
 
   if (shape.length === 4) {
     // animated gif with multiple frames
-    const [
-      frames,
-      width,
-      height,
-      channels
-    ] = shape
+    const [frames, width, height, channels] = shape
 
     const numPixelsInFrame = width * height
 
@@ -51,7 +41,7 @@ module.exports = async (opts) => {
         }
       }
     }
-  } 
+  }
 
   return results
 }
