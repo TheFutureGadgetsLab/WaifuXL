@@ -199,7 +199,7 @@ async function imageToNdarray(imageURI) {
   }
   // Wait for image to load
   while (img == "") {
-    await sleep(100)
+    await sleep(0.1)
   }
 
   return img
