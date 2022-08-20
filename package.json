@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@tailwindcss/forms": "^0.5.2",
-    "get-pixels": "3.3.3",
+    "get-pixels": "^3.3.3",
     "gifuct-js": "^2.1.2",
     "ndarray": "^1.0.19",
     "ndarray-ops": "^1.2.2",

@@ -3,6 +3,7 @@ import ops from 'ndarray-ops'
 import { getPixelDataFromURI } from './imageUtilities'
 import { runSuperRes, runTagger } from './onnxBackend'
 import { doGif } from './gifUtilities'
+var getPixels = require("get-pixels")
 
 // Global parameters
 const chunkSize = 512
@@ -75,11 +76,10 @@ export function buildImageFromND(nd, height, width) {
  * @param {Number} upscaleFactor How many times to repeat the super resolution
  * @returns Upscaled image as URI
  */
-export async function upscale(inputData, upscaleFactor) {
-  let inArr = buildNdarrayFromImage(inputData)
+export async function upscale(imageArray, upscaleFactor) {
   for (let s = 0; s < upscaleFactor; s += 1) {
-    let inImgH = inArr.shape[2]
-    let inImgW = inArr.shape[3]
+    let inImgH = imageArray.shape[2]
+    let inImgW = imageArray.shape[3]
     let outImgH = inImgH * 2
     let outImgW = inImgW * 2
     const nChunksH = Math.ceil(inImgH / chunkSize)
@@ -110,7 +110,7 @@ export async function upscale(inputData, upscaleFactor) {
 
         // Create sliced and copy
         console.debug(`Chunk ${i}x${j}  (${xStart}, ${yStart})  (${inW}, ${inH}) -> (${outW}, ${outH})`)
-        const inSlice = inArr.lo(0, 0, yStart, xStart).hi(1, 3, inH, inW)
+        const inSlice = imageArray.lo(0, 0, yStart, xStart).hi(1, 3, inH, inW)
         const subArr = ndarray(new Uint8Array(inH * inW * 3), inSlice.shape)
         ops.assign(subArr, inSlice)
 
@@ -122,7 +122,7 @@ export async function upscale(inputData, upscaleFactor) {
         ops.assign(outSlice, chunkSlice)
       }
     }
-    inArr = outArr
+    imageArray = outArr
 
     if (s == upscaleFactor - 1) {
       console.timeEnd('Upscaling')
@@ -136,6 +136,7 @@ export async function upscale(inputData, upscaleFactor) {
 
 export async function upScaleFromURI(setLoading, extension, setTags, uri, upscaleFactor) {
   setLoading(true)
+
   let resultURI = null
   if (extension == 'gif') {
     let currentURI = uri
@@ -145,14 +146,12 @@ export async function upScaleFromURI(setLoading, extension, setTags, uri, upscal
 
     resultURI = currentURI
   } else {
-    const pixelData = await getPixelDataFromURI(uri)
-
-    const tagInput = buildNdarrayFromImage(pixelData)
-    const tagOutput = await runTagger(tagInput)
+    const imageArray = await imageToNdarray(uri)
+    const tagOutput = await runTagger(imageArray)
     const tags = await getTopTags(tagOutput)
     setTags(tags)
 
-    resultURI = await upscale(pixelData, upscaleFactor)
+    resultURI = await upscale(imageArray, upscaleFactor)
   }
   setLoading(false)
   return resultURI
@@ -164,4 +163,44 @@ export async function upScaleGifFrameFromURI(frameData, height, width) {
     const outputImage = await upscale(inputData)
     resolve(outputImage)
   })
+}
+
+/**
+ * Given a URI, return an ndarray of the pixel data.
+ *  - If the URI is an image, return shape is [1, 3, height, width]
+ *  - If the URI is a gif, return shape is [frames, 3, height, width]
+ *    - THIS IS NOT WORKING YET, BUT WE CAN GET THE PIXEL DATA FROM THIS
+ * @param {string} inputURI the URI
+ * @returns The pixels in this image
+ */
+async function imageToNdarray(imageURI) {
+  var img = "";
+  getPixels(imageURI, function(err, pixels) {
+    if(err) {
+      console.log("Bad image path");
+      return
+    }
+
+    // Transpose from [W, H, 4] to [H, W, 4]
+    pixels = pixels.transpose(1, 0)
+    let height = pixels.shape[0];
+    let width = pixels.shape[1];
+    
+    // [H, W, 4] -> [1, 3, H, W]
+    img = ndarray(new Uint8Array(width * height * 3), [1, 3, height, width])
+    ops.assign(img.pick(0, 0, null, null), pixels.pick(null, null, 0))
+    ops.assign(img.pick(0, 1, null, null), pixels.pick(null, null, 1))
+    ops.assign(img.pick(0, 2, null, null), pixels.pick(null, null, 2))
+  });
+
+  // Define sleep function
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  // Wait for image to load
+  while (img == "") {
+    await sleep(100)
+  }
+
+  return img
 }

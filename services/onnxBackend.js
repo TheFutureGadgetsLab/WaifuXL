@@ -75,7 +75,7 @@ export async function initializeONNX(setProgress) {
 function prepareImage(imageArray) {
   const height = imageArray.shape[2]
   const width = imageArray.shape[3]
-  const tensor = new ort.Tensor('uint8', imageArray.data, [1, 3, height, width])
+  const tensor = new ort.Tensor('uint8', imageArray.data.slice(), [1, 3, height, width])
   return { input: tensor }
 }
 
