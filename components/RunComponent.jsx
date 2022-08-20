@@ -24,9 +24,6 @@ const RunComponent = ({ useImageStore, useAppStateStore }) => {
 
   useEffect(() => {
     if (shouldRun) {
-      // Clear previous output
-
-      setOutputURI(null)
       // Async call to upscaleFromURI
       const asyncFn = async () => {
         try {

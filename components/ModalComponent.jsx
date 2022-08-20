@@ -6,7 +6,6 @@ function ModalComponent({ useImageStore, useAppStateStore }) {
   const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen)
   const setInputURI = useImageStore((state) => state.setInputURI)
   const inputURI = useImageStore((state) => state.inputURI)
-  const setOutputURI = useImageStore((state) => state.setOutputURI)
   const setFileName = useImageStore((state) => state.setFileName)
   const setTags = useImageStore((state) => state.setTags)
 
@@ -131,7 +130,6 @@ function ModalComponent({ useImageStore, useAppStateStore }) {
                 border-blue border-2 bg-white hover:bg-blue hover:text-white disabled:bg-white disabled:text-gray-200 disabled:border-gray-200"
                 onClick={() => {
                   setInputURI(inputURI)
-                  setOutputURI(null)
                   setTags(null)
                   setInputModalOpen(false)
                 }}

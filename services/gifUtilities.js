@@ -14,7 +14,7 @@ async function frameAdd(frame, gif, height, width, delay) {
     }
   })
 }
-export async function doGif(inputURI, setTags, upscaleFactor) {
+export async function doGif(inputURI, setTags) {
   return new Promise(async (resolve, reject) => {
     const extractFrames = require('./gifExtract.js')
     const results = await extractFrames({

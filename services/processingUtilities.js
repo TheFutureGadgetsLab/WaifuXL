@@ -72,12 +72,12 @@ export function buildImageFromND(nd, height, width) {
  *   into chunks of size chunkSize to avoid running out of memory on the WASM side.
  *
  * @param {ndarray} inputData Image data as pixels in a ndarray
- * @param {Number} repeatUpscale How many times to repeat the super resolution
+ * @param {Number} upscaleFactor How many times to repeat the super resolution
  * @returns Upscaled image as URI
  */
-export async function upscale(inputData, repeatUpscale = 1) {
+export async function upscale(inputData, upscaleFactor) {
   let inArr = buildNdarrayFromImage(inputData)
-  for (let s = 0; s < repeatUpscale; s += 1) {
+  for (let s = 0; s < upscaleFactor; s += 1) {
     let inImgH = inArr.shape[2]
     let inImgW = inArr.shape[3]
     let outImgH = inImgH * 2
@@ -124,7 +124,7 @@ export async function upscale(inputData, repeatUpscale = 1) {
     }
     inArr = outArr
 
-    if (s == repeatUpscale - 1) {
+    if (s == upscaleFactor - 1) {
       console.timeEnd('Upscaling')
       // Reshape network output into a normal image
       const outImg = buildNdarrayFromImageOutput(outArr, outImgH, outImgW)
@@ -137,13 +137,12 @@ export async function upscale(inputData, repeatUpscale = 1) {
 export async function upScaleFromURI(setLoading, setExtension, setTags, uri, upscaleFactor) {
   setLoading(true)
   let resultURI = null
-  let repeatUpscale = Math.log2(upscaleFactor)
   if (uri.slice(0, 14) == 'data:image/gif') {
     setExtension('gif')
     //is gif
     let currentURI = uri
-    for (let s = 0; s < repeatUpscale; s += 1) {
-      currentURI = await doGif(currentURI, setTags, repeatUpscale)
+    for (let s = 0; s < upscaleFactor; s += 1) {
+      currentURI = await doGif(currentURI, setTags)
     }
 
     resultURI = currentURI
@@ -157,7 +156,7 @@ export async function upScaleFromURI(setLoading, setExtension, setTags, uri, ups
     const tags = await getTopTags(tagOutput)
     setTags(tags)
 
-    resultURI = await upscale(pixelData, repeatUpscale)
+    resultURI = await upscale(pixelData, upscaleFactor)
   }
   setLoading(false)
   return resultURI
