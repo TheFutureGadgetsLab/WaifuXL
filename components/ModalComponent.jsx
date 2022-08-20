@@ -5,12 +5,10 @@ import { CloseSVG } from './SVGComponents'
 function ModalComponent({ useImageStore, useAppStateStore }) {
   const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen)
   const setInputURI = useImageStore((state) => state.setInputURI)
+  const inputURI = useImageStore((state) => state.inputURI)
   const setOutputURI = useImageStore((state) => state.setOutputURI)
-  const setPreviewURI = useImageStore((state) => state.setPreviewURI)
   const setFileName = useImageStore((state) => state.setFileName)
   const setTags = useImageStore((state) => state.setTags)
-
-  const previewURI = useImageStore((state) => state.previewURI)
 
   const divRef = useRef(null)
   function focusDiv() {
@@ -61,7 +59,7 @@ function ModalComponent({ useImageStore, useAppStateStore }) {
           <label
             className="flex flex-col items-center justify-center cursor-pointer mt-16 h-96 m-3 bg-contain bg-origin-content p-4 bg-no-repeat bg-center"
             style={{
-              backgroundImage: `url(${previewURI})`,
+              backgroundImage: `url(${inputURI})`,
               boxShadow: 'inset 0px 0px 12px #00000050',
             }}
           >
@@ -71,7 +69,7 @@ function ModalComponent({ useImageStore, useAppStateStore }) {
                 className="hidden"
                 onChange={(e) => {
                   if (e.target.files[0]) {
-                    setDataURIFromFile(e.target.files[0], setPreviewURI)
+                    setDataURIFromFile(e.target.files[0], setInputURI)
                     setFileName(e.target.files[0].name.split('.')[0])
                   }
                 }}
@@ -86,7 +84,7 @@ function ModalComponent({ useImageStore, useAppStateStore }) {
                 className="form-select border-none rounded mt-1 block text-ellipsis w-full p-3 bg-blue text-white cursor-pointer"
                 onInput={async (inp) => {
                   const [name, url] = inp.target.value.split('|')
-                  setPreviewURI(await getDataURIFromInput(url))
+                  setInputURI(await getDataURIFromInput(url))
                   setFileName(`example_${name}`)
                 }}
               >
@@ -114,7 +112,7 @@ function ModalComponent({ useImageStore, useAppStateStore }) {
                     className="hidden"
                     onChange={(e) => {
                       if (e.target.files[0]) {
-                        setDataURIFromFile(e.target.files[0], setPreviewURI)
+                        setDataURIFromFile(e.target.files[0], setInputURI)
                         setFileName(e.target.files[0].name.split('.')[0])
                       }
                     }}
@@ -132,7 +130,7 @@ function ModalComponent({ useImageStore, useAppStateStore }) {
                 text-base font-medium h-12 focus:outline-none focus:ring-2 focus:ring-offset-2 
                 border-blue border-2 bg-white hover:bg-blue hover:text-white disabled:bg-white disabled:text-gray-200 disabled:border-gray-200"
                 onClick={() => {
-                  setInputURI(previewURI)
+                  setInputURI(inputURI)
                   setOutputURI(null)
                   setTags(null)
                   setInputModalOpen(false)

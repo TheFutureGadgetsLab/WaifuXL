@@ -46,19 +46,21 @@ export default function Main() {
   const useImageStore = create((set) => ({
     inputURI: './images/senjougahara.webp',
     outputURI: './images/senjougahara_2x.webp',
-    previewURI: './images/senjougahara.webp',
     tags: default_tags,
     fileName: 'example',
     extension: 'png',
     upscaleFactor: 2,
 
-    setInputURI: (uri) => set((state) => ({ inputURI: uri })),
-    setOutputURI: (uri) => set((state) => ({ outputURI: uri })),
-    setPreviewURI: (uri) => set((state) => ({ previewURI: uri })),
-    setTags: (newTags) => set((state) => ({ tags: newTags })),
-    setFileName: (newFilename) => set((state) => ({ fileName: newFilename })),
-    setExtension: (newExt) => set((state) => ({ extension: newExt })),
-    setUpscaleFactor: (newFactor) => set((state) => ({ upscaleFactor: newFactor })),
+    setInputURI: (uri) => {
+      set(() => ({ inputURI: uri }))
+      set(() => ({ outputURI: null }))
+    },
+
+    setOutputURI: (uri) => set(() => ({ outputURI: uri })),
+    setTags: (newTags) => set(() => ({ tags: newTags })),
+    setFileName: (newFilename) => set(() => ({ fileName: newFilename })),
+    setExtension: (newExt) => set(() => ({ extension: newExt })),
+    setUpscaleFactor: (newFactor) => set(() => ({ upscaleFactor: newFactor })),
   }))
 
   const useAppStateStore = create((set) => ({
@@ -85,7 +87,7 @@ export default function Main() {
 
   const size = useWindowSize()
 
-  const setPreviewURI = useImageStore((state) => state.setPreviewURI)
+  const setInputURI = useImageStore((state) => state.setInputURI)
   const setFileName = useImageStore((state) => state.setFileName)
   const setShowSidebar = useAppStateStore((state) => state.setShowSidebar)
   const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen)
@@ -96,7 +98,7 @@ export default function Main() {
   }, [size])
 
   useEffect(() => {
-    setEventListeners(setPreviewURI, setFileName, setShowSidebar, setInputModalOpen)
+    setEventListeners(setInputURI, setFileName, setShowSidebar, setInputModalOpen)
   }, [])
 
   return (
