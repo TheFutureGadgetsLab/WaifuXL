@@ -134,12 +134,10 @@ export async function upscale(inputData, upscaleFactor) {
   }
 }
 
-export async function upScaleFromURI(setLoading, setExtension, setTags, uri, upscaleFactor) {
+export async function upScaleFromURI(setLoading, extension, setTags, uri, upscaleFactor) {
   setLoading(true)
   let resultURI = null
-  if (uri.slice(0, 14) == 'data:image/gif') {
-    setExtension('gif')
-    //is gif
+  if (extension == 'gif') {
     let currentURI = uri
     for (let s = 0; s < upscaleFactor; s += 1) {
       currentURI = await doGif(currentURI, setTags)
@@ -147,8 +145,6 @@ export async function upScaleFromURI(setLoading, setExtension, setTags, uri, ups
 
     resultURI = currentURI
   } else {
-    //is image
-    setExtension('png')
     const pixelData = await getPixelDataFromURI(uri)
 
     const tagInput = buildNdarrayFromImage(pixelData)

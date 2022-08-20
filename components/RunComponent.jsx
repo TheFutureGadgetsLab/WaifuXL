@@ -17,9 +17,9 @@ const RunComponent = ({ useImageStore, useAppStateStore }) => {
   const modelLoadProg = useAppStateStore((state) => state.modelLoadProg)
 
   const setLoading = useAppStateStore((state) => state.setLoading)
-  const setExtension = useImageStore((state) => state.setExtension)
   const setTags = useImageStore((state) => state.setTags)
   const uri = useImageStore((state) => state.inputURI)
+  const extension = useImageStore((state) => state.extension)
   const upscaleFactor = useImageStore((state) => state.upscaleFactor)
 
   useEffect(() => {
@@ -27,24 +27,22 @@ const RunComponent = ({ useImageStore, useAppStateStore }) => {
       // Async call to upscaleFromURI
       const asyncFn = async () => {
         try {
-          const result = await upScaleFromURI(setLoading, setExtension, setTags, uri, upscaleFactor)
+          const result = await upScaleFromURI(setLoading, extension, setTags, uri, upscaleFactor)
           setUserHasRun(true)
           // If the models output is valid
           if (result) {
-            //set the output
+            // Set the output and increment the counter
             setOutputURI(result)
-            // Set should run to false
-            setShouldRun(false)
-            setUpscaleFactor(2)
             incrementCounter()
           }
         } catch (error) {
           console.log(error)
-          setShouldRun(false)
-          setUpscaleFactor(2)
           setErrorMessage('Model failed to run.')
           return
         }
+
+        setShouldRun(false)
+        setUpscaleFactor(2)
       }
       asyncFn()
     }

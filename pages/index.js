@@ -54,13 +54,18 @@ export default function Main() {
     setInputURI: (uri) => {
       set(() => ({ inputURI: uri }))
       set(() => ({ outputURI: null }))
+
+      if (uri.slice(0, 14) == 'data:image/gif') {
+        set(() => ({ extension: 'gif' }))
+      } else {
+        set(() => ({ extension: 'png' }))
+      }
     },
     setUpscaleFactor: (newFactor) => set(() => ({ upscaleFactor: Math.log2(newFactor) })),
 
     setOutputURI: (uri) => set(() => ({ outputURI: uri })),
     setTags: (newTags) => set(() => ({ tags: newTags })),
     setFileName: (newFilename) => set(() => ({ fileName: newFilename })),
-    setExtension: (newExt) => set(() => ({ extension: newExt })),
   }))
 
   const useAppStateStore = create((set) => ({
