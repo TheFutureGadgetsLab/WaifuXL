@@ -1,13 +1,11 @@
 import ndarray from 'ndarray'
 import ops from 'ndarray-ops'
 import { getPixelDataFromURI } from './imageUtilities'
-import { runSuperRes, runTagger } from './onnxBackend'
+import { runTagger } from './onnxBackend'
 import { doGif } from './gifUtilities'
-var getPixels = require("get-pixels")
-
-// Global parameters
-const chunkSize = 512
-const pad = 32
+import { getTopTags } from './inference/tagging'
+import { imageToNdarray } from './inference/utils'
+import { multiUpscale } from './inference/upscaling'
 
 export function buildNdarrayFromImageOutput(data, height, width) {
   const inputArray = ndarray(data.data, data.dims || data.shape)
@@ -16,35 +14,6 @@ export function buildNdarrayFromImageOutput(data, height, width) {
   ops.assign(dataTensor.pick(null, null, 1), inputArray.pick(0, 1, null, null))
   ops.assign(dataTensor.pick(null, null, 2), inputArray.pick(0, 2, null, null))
   return dataTensor.data
-}
-
-export async function loadTags() {
-  const tags = await fetch('./tags.json')
-  const tagsJson = await tags.json()
-  const tagsArray = tagsJson.map((tag) => tag[1])
-  return tagsArray
-}
-
-// find indices of top k values in ndarray
-export function topK(ndarray, k, startIndex, stopIndex) {
-  const values = ndarray.data.slice(startIndex, stopIndex)
-  const indices = [...Array(values.length).keys()]
-  indices.sort((a, b) => values[b] - values[a])
-
-  // zip indices and values into an array of tuples
-  const tuples = indices.map((i) => [i + startIndex, values[i]])
-  return tuples.slice(0, k)
-}
-
-export async function getTopTags(data) {
-  const tags = await loadTags()
-  const flattened = ndarray(data.data, data.dims)
-
-  const topDesc = topK(flattened, 2000, 0, 2000).map((i) => [tags[i[0]], i[1]])
-  const topChars = topK(flattened, 2000, 2000, 4000).map((i) => [tags[i[0]], i[1]])
-  const rating = topK(flattened, 3, 4000, 4003).map((i) => [tags[i[0]], i[1]])
-
-  return { topDesc, topChars, rating }
 }
 
 export function buildNdarrayFromImage(imageData) {
@@ -68,72 +37,6 @@ export function buildImageFromND(nd, height, width) {
   return canvas.toDataURL()
 }
 
-/**
- * Upscales image pixel data using the super resolution model. The image is split
- *   into chunks of size chunkSize to avoid running out of memory on the WASM side.
- *
- * @param {ndarray} inputData Image data as pixels in a ndarray
- * @param {Number} upscaleFactor How many times to repeat the super resolution
- * @returns Upscaled image as URI
- */
-export async function upscale(imageArray, upscaleFactor) {
-  for (let s = 0; s < upscaleFactor; s += 1) {
-    let inImgH = imageArray.shape[2]
-    let inImgW = imageArray.shape[3]
-    let outImgH = inImgH * 2
-    let outImgW = inImgW * 2
-    const nChunksH = Math.ceil(inImgH / chunkSize)
-    const nChunksW = Math.ceil(inImgW / chunkSize)
-    const chunkH = Math.floor(inImgH / nChunksH)
-    const chunkW = Math.floor(inImgW / nChunksW)
-
-    console.debug(`Upscaling ${inImgH}x${inImgW} -> ${outImgH}x${outImgW}`)
-    console.debug(`Chunk size: ${chunkH}x${chunkW}`)
-    console.debug(`Number of chunks: ${nChunksH}x${nChunksW}`)
-
-    // Split the image in chunks and run super resolution on each chunk
-    // Time execution
-    console.time('Upscaling')
-    let outArr = ndarray(new Uint8Array(3 * outImgH * outImgW), [1, 3, outImgH, outImgW])
-    for (let i = 0; i < nChunksH; i += 1) {
-      for (let j = 0; j < nChunksW; j += 1) {
-        const x = j * chunkW
-        const y = i * chunkH
-
-        // Compute chunk bounds including padding
-        const yStart = Math.max(0, y - pad)
-        const inH = yStart + chunkH + pad * 2 > inImgH ? inImgH - yStart : chunkH + pad * 2
-        const outH = 2 * (Math.min(inImgH, y + chunkH) - y)
-        const xStart = Math.max(0, x - pad)
-        const inW = xStart + chunkW + pad * 2 > inImgW ? inImgW - xStart : chunkW + pad * 2
-        const outW = 2 * (Math.min(inImgW, x + chunkW) - x)
-
-        // Create sliced and copy
-        console.debug(`Chunk ${i}x${j}  (${xStart}, ${yStart})  (${inW}, ${inH}) -> (${outW}, ${outH})`)
-        const inSlice = imageArray.lo(0, 0, yStart, xStart).hi(1, 3, inH, inW)
-        const subArr = ndarray(new Uint8Array(inH * inW * 3), inSlice.shape)
-        ops.assign(subArr, inSlice)
-
-        // Run the super resolution model on the chunk, copy the result into the combined array
-        const chunkData = await runSuperRes(subArr)
-        const chunkArr = ndarray(chunkData.data, chunkData.dims)
-        const chunkSlice = chunkArr.lo(0, 0, (y - yStart) * 2, (x - xStart) * 2).hi(1, 3, outH, outW)
-        const outSlice = outArr.lo(0, 0, y * 2, x * 2).hi(1, 3, outH, outW)
-        ops.assign(outSlice, chunkSlice)
-      }
-    }
-    imageArray = outArr
-
-    if (s == upscaleFactor - 1) {
-      console.timeEnd('Upscaling')
-      // Reshape network output into a normal image
-      const outImg = buildNdarrayFromImageOutput(outArr, outImgH, outImgW)
-      const outURI = buildImageFromND(outImg, outImgH, outImgW)
-      return outURI
-    }
-  }
-}
-
 export async function upScaleFromURI(setLoading, extension, setTags, uri, upscaleFactor) {
   setLoading(true)
 
@@ -151,7 +54,7 @@ export async function upScaleFromURI(setLoading, extension, setTags, uri, upscal
     const tags = await getTopTags(tagOutput)
     setTags(tags)
 
-    resultURI = await upscale(imageArray, upscaleFactor)
+    resultURI = await multiUpscale(imageArray, upscaleFactor)
   }
   setLoading(false)
   return resultURI
@@ -160,47 +63,7 @@ export async function upScaleFromURI(setLoading, extension, setTags, uri, upscal
 export async function upScaleGifFrameFromURI(frameData, height, width) {
   return new Promise(async (resolve, reject) => {
     const inputData = await getPixelDataFromURI(buildImageFromND(frameData, height, width))
-    const outputImage = await upscale(inputData)
+    const outputImage = await multiUpscale(inputData, 1)
     resolve(outputImage)
   })
-}
-
-/**
- * Given a URI, return an ndarray of the pixel data.
- *  - If the URI is an image, return shape is [1, 3, height, width]
- *  - If the URI is a gif, return shape is [frames, 3, height, width]
- *    - THIS IS NOT WORKING YET, BUT WE CAN GET THE PIXEL DATA FROM THIS
- * @param {string} inputURI the URI
- * @returns The pixels in this image
- */
-async function imageToNdarray(imageURI) {
-  var img = "";
-  getPixels(imageURI, function(err, pixels) {
-    if(err) {
-      console.log("Bad image path");
-      return
-    }
-
-    // Transpose from [W, H, 4] to [H, W, 4]
-    pixels = pixels.transpose(1, 0)
-    let height = pixels.shape[0];
-    let width = pixels.shape[1];
-    
-    // [H, W, 4] -> [1, 3, H, W]
-    img = ndarray(new Uint8Array(width * height * 3), [1, 3, height, width])
-    ops.assign(img.pick(0, 0, null, null), pixels.pick(null, null, 0))
-    ops.assign(img.pick(0, 1, null, null), pixels.pick(null, null, 1))
-    ops.assign(img.pick(0, 2, null, null), pixels.pick(null, null, 2))
-  });
-
-  // Define sleep function
-  function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-  // Wait for image to load
-  while (img == "") {
-    await sleep(0.1)
-  }
-
-  return img
 }

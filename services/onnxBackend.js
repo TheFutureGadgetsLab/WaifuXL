@@ -1,13 +1,11 @@
+import { sleep } from './inference/utils'
+
 const ort = require('onnxruntime-web')
 const usr = require('ua-parser-js')
 
 // Cached session state
 var superSession = null
 var tagSession = null
-
-function sleep(time) {
-  return new Promise((resolve) => setTimeout(resolve, time))
-}
 
 async function fetchMyModel(filepathOrUri, setProgress, startProgress, endProgress) {
   console.assert(typeof fetch !== 'undefined')
