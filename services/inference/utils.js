@@ -1,5 +1,6 @@
 import ndarray from 'ndarray'
 import ops from 'ndarray-ops'
+const ort = require('onnxruntime-web')
 var getPixels = require('get-pixels')
 
 /**
@@ -45,4 +46,16 @@ export async function imageToNdarray(imageURI) {
  */
 export function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+/**
+ * Converts an ndarray of pixels ([1, 3, height, width]) to an ORT tensor ([1, 3, height, width])
+ * @param {ndarray} imageArray
+ * @returns {ort.Tensor} ORT Tensor
+ */
+export function prepareImage(imageArray) {
+  const height = imageArray.shape[2]
+  const width = imageArray.shape[3]
+  const tensor = new ort.Tensor('uint8', imageArray.data.slice(), [1, 3, height, width])
+  return { input: tensor }
 }

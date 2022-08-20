@@ -1,5 +1,6 @@
 import { parseGIF, decompressFrames } from 'gifuct-js'
-import { buildImageFromND, upScaleGifFrameFromURI, buildNdarrayFromImage, getTopTags } from './processingUtilities'
+import { buildImageFromND, upScaleGifFrameFromURI, buildNdarrayFromImage } from './processingUtilities'
+import { getTopTags } from './inference/tagging'
 import { getPixelDataFromURI } from './imageUtilities'
 import { runTagger } from './onnxBackend'
 

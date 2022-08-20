@@ -1,4 +1,4 @@
-import { sleep } from './inference/utils'
+import { prepareImage, sleep } from './inference/utils'
 
 const ort = require('onnxruntime-web')
 const usr = require('ua-parser-js')
@@ -68,13 +68,6 @@ export async function initializeONNX(setProgress) {
   // Needed because WASM workers are created async, wait for them
   // to be ready
   await sleep(300)
-}
-
-function prepareImage(imageArray) {
-  const height = imageArray.shape[2]
-  const width = imageArray.shape[3]
-  const tensor = new ort.Tensor('uint8', imageArray.data.slice(), [1, 3, height, width])
-  return { input: tensor }
 }
 
 export async function runSuperRes(imageArray) {

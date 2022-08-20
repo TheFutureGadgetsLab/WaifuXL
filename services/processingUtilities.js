@@ -1,6 +1,5 @@
 import ndarray from 'ndarray'
 import ops from 'ndarray-ops'
-import { getPixelDataFromURI } from './imageUtilities'
 import { runTagger } from './onnxBackend'
 import { doGif } from './gifUtilities'
 import { getTopTags } from './inference/tagging'
@@ -62,8 +61,17 @@ export async function upScaleFromURI(setLoading, extension, setTags, uri, upscal
 
 export async function upScaleGifFrameFromURI(frameData, height, width) {
   return new Promise(async (resolve, reject) => {
-    const inputData = await getPixelDataFromURI(buildImageFromND(frameData, height, width))
+    const inputData = gifFlatArrayToNDArray(frameData, height, width)
     const outputImage = await multiUpscale(inputData, 1)
     resolve(outputImage)
   })
+}
+
+function gifFlatArrayToNDArray(frameData, height, width) {
+  const alphaArray = ndarray(new Uint8Array(frameData), [height, width, 4])
+  const noAlphaArray = ndarray(new Uint8Array(height * width * 3), [1, 3, height, width])
+  ops.assign(noAlphaArray.pick(0, 0, null, null), alphaArray.pick(null, null, 0))
+  ops.assign(noAlphaArray.pick(0, 1, null, null), alphaArray.pick(null, null, 1))
+  ops.assign(noAlphaArray.pick(0, 2, null, null), alphaArray.pick(null, null, 2))
+  return noAlphaArray
 }
