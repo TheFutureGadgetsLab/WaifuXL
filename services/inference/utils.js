@@ -4,7 +4,8 @@ import { initializeTagger } from './tagging'
 import { initializeSuperRes } from './upscaling'
 const ort = require('onnxruntime-web')
 const usr = require('ua-parser-js')
-var getPixels = require('get-pixels')
+const pify = require('pify')
+const getPixels = pify(require('get-pixels'))
 
 /**
  * Given a URI, return an ndarray of the pixel data.
@@ -15,30 +16,18 @@ var getPixels = require('get-pixels')
  * @returns The pixels in this image
  */
 export async function imageToNdarray(imageURI) {
-  var img = ''
-  getPixels(imageURI, function (err, pixels) {
-    if (err) {
-      console.log('Bad image path')
-      return
-    }
+  var pixels = await getPixels(imageURI)
 
-    // Transpose from [W, H, 4] to [H, W, 4]
-    pixels = pixels.transpose(1, 0)
-    let height = pixels.shape[0]
-    let width = pixels.shape[1]
+  // Transpose [W, H, C] -> [H, W, C]
+  pixels = pixels.transpose(1, 0)
+  let height = pixels.shape[0]
+  let width = pixels.shape[1]
 
-    // [H, W, 4] -> [1, 3, H, W]
-    let outImg = ndarray(new Uint8Array(width * height * 3), [1, 3, height, width])
-    ops.assign(outImg.pick(0, 0, null, null), pixels.pick(null, null, 0))
-    ops.assign(outImg.pick(0, 1, null, null), pixels.pick(null, null, 1))
-    ops.assign(outImg.pick(0, 2, null, null), pixels.pick(null, null, 2))
-    img = outImg
-  })
-
-  // Wait for image to load
-  while (img == '') {
-    await sleep(0.1)
-  }
+  // [H, W, 4] -> [1, 3, H, W]
+  let img = ndarray(new Uint8Array(width * height * 3), [1, 3, height, width])
+  ops.assign(img.pick(0, 0, null, null), pixels.pick(null, null, 0))
+  ops.assign(img.pick(0, 1, null, null), pixels.pick(null, null, 1))
+  ops.assign(img.pick(0, 2, null, null), pixels.pick(null, null, 2))
 
   return img
 }
