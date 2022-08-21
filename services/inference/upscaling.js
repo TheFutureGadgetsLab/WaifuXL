@@ -1,7 +1,40 @@
 import ndarray from 'ndarray'
 import ops from 'ndarray-ops'
-import { runSuperRes } from '../onnxBackend'
 import { buildImageFromND, buildNdarrayFromImageOutput } from '../processingUtilities'
+import { fetchModel, prepareImage } from './utils'
+const ort = require('onnxruntime-web')
+
+var superSession = null
+
+export async function runSuperRes(imageArray) {
+  const feeds = prepareImage(imageArray)
+
+  let sr = undefined
+  try {
+    const output = await superSession.run(feeds)
+    sr = output.output
+  } catch (e) {
+    console.log('Failed to run super resolution')
+    console.log(e)
+  }
+  return sr
+}
+
+export async function initializeSuperRes(setProgress) {
+  console.debug('Initializing super resolution')
+  if (superSession !== null) {
+    return
+  }
+
+  const superBuf = await fetchModel('./models/superRes.onnx', setProgress, 0.5, 0.9)
+  superSession = await ort.InferenceSession.create(superBuf, {
+    executionProviders: ['wasm'],
+    graphOptimizationLevel: 'all',
+    enableCpuMemArena: true,
+    enableMemPattern: true,
+    executionMode: 'sequential', // Inter-op sequential
+  })
+}
 
 /**
  * Upscales image pixel data using the super resolution model. The image is split
@@ -61,7 +94,7 @@ async function upscaleFrame(imageArray) {
       const outW = 2 * (Math.min(inImgW, x + chunkW) - x)
 
       // Create sliced and copy
-      console.debug(`Chunk ${i}x${j}  (${xStart}, ${yStart})  (${inW}, ${inH}) -> (${outW}, ${outH})`)
+      console.debug(`Chunk ${i}x${j}  (${yStart}, ${xStart})  (${inH}, ${inW}) -> (${outH}, ${outW})`)
       const inSlice = imageArray.lo(0, 0, yStart, xStart).hi(1, 3, inH, inW)
       const subArr = ndarray(new Uint8Array(inH * inW * 3), inSlice.shape)
       ops.assign(subArr, inSlice)

@@ -1,6 +1,9 @@
 import ndarray from 'ndarray'
 import ops from 'ndarray-ops'
+import { initializeTagger } from './tagging'
+import { initializeSuperRes } from './upscaling'
 const ort = require('onnxruntime-web')
+const usr = require('ua-parser-js')
 var getPixels = require('get-pixels')
 
 /**
@@ -58,4 +61,49 @@ export function prepareImage(imageArray) {
   const width = imageArray.shape[3]
   const tensor = new ort.Tensor('uint8', imageArray.data.slice(), [1, 3, height, width])
   return { input: tensor }
+}
+
+export async function fetchModel(filepathOrUri, setProgress, startProgress, endProgress) {
+  const response = await fetch(filepathOrUri)
+  const reader = response.body.getReader()
+  const length = parseInt(response.headers.get('content-length'))
+  let data = new Uint8Array(length)
+  let received = 0
+
+  // Loop through the response stream and extract data chunks
+  while (true) {
+    const { done, value } = await reader.read()
+
+    if (done) {
+      setProgress(1)
+      break
+    } else {
+      // Push values to the chunk array
+      data.set(value, received)
+      received += value.length
+      setProgress(startProgress + (received / length) * (endProgress - startProgress))
+    }
+  }
+  return data.buffer
+}
+
+export async function initializeONNX(setProgress) {
+  ort.env.wasm.simd = true
+  ort.env.wasm.proxy = true
+
+  const ua = usr(navigator.userAgent)
+  if (ua.engine.name == 'WebKit') {
+    ort.env.wasm.numThreads = 1
+  } else {
+    ort.env.wasm.numThreads = Math.min(navigator.hardwareConcurrency / 2, 16)
+  }
+
+  setProgress(0)
+  await initializeTagger(setProgress)
+  await initializeSuperRes(setProgress)
+  setProgress(1)
+
+  // Needed because WASM workers are created async, wait for them
+  // to be ready
+  await sleep(300)
 }

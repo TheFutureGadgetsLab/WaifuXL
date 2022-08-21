@@ -1,8 +1,7 @@
 import ndarray from 'ndarray'
 import ops from 'ndarray-ops'
-import { runTagger } from './onnxBackend'
 import { doGif } from './gifUtilities'
-import { getTopTags } from './inference/tagging'
+import { runTagger } from './inference/tagging'
 import { imageToNdarray } from './inference/utils'
 import { multiUpscale } from './inference/upscaling'
 
@@ -49,8 +48,7 @@ export async function upScaleFromURI(setLoading, extension, setTags, uri, upscal
     resultURI = currentURI
   } else {
     const imageArray = await imageToNdarray(uri)
-    const tagOutput = await runTagger(imageArray)
-    const tags = await getTopTags(tagOutput)
+    const tags = await runTagger(imageArray)
     setTags(tags)
 
     resultURI = await multiUpscale(imageArray, upscaleFactor)

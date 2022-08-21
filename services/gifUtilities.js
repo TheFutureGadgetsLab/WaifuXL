@@ -1,8 +1,7 @@
 import { parseGIF, decompressFrames } from 'gifuct-js'
 import { buildImageFromND, upScaleGifFrameFromURI, buildNdarrayFromImage } from './processingUtilities'
-import { getTopTags } from './inference/tagging'
+import { runTagger } from './inference/tagging'
 import { getPixelDataFromURI } from './imageUtilities'
-import { runTagger } from './onnxBackend'
 
 async function frameAdd(frame, gif, height, width, delay) {
   return new Promise(async (resolve, reject) => {
@@ -42,8 +41,7 @@ export async function doGif(inputURI, setTags) {
       ),
     )
     const tagInput = buildNdarrayFromImage(inputData)
-    const tagOutput = await runTagger(tagInput)
-    const tags = await getTopTags(tagOutput)
+    const tags = await runTagger(tagInput)
     setTags(tags)
     for (var j = 0; j < results.shape[0]; j++) {
       var currentND = results.data.slice(j * results.stride[0], (j + 1) * results.stride[0])

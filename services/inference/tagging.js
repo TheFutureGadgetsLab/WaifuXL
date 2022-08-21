@@ -1,6 +1,40 @@
 import ndarray from 'ndarray'
+import { fetchModel, prepareImage } from './utils'
+const ort = require('onnxruntime-web')
 
-export async function getTopTags(data) {
+var taggerSession = null
+
+export async function runTagger(imageArray) {
+  const feeds = prepareImage(imageArray)
+
+  let tags = undefined
+  try {
+    const output = await taggerSession.run(feeds)
+    tags = getTopTags(output.output)
+  } catch (e) {
+    console.error('Failed to run tagger')
+    console.log(e)
+  }
+
+  return tags
+}
+
+export async function initializeTagger(setProgress) {
+  if (taggerSession !== null) {
+    return
+  }
+
+  const taggerBuf = await fetchModel('./models/tagger.onnx', setProgress, 0.5, 0.9)
+  taggerSession = await ort.InferenceSession.create(taggerBuf, {
+    executionProviders: ['wasm'],
+    graphOptimizationLevel: 'all',
+    enableCpuMemArena: true,
+    enableMemPattern: true,
+    executionMode: 'sequential', // Inter-op sequential
+  })
+}
+
+async function getTopTags(data) {
   const tags = await loadTags()
   const flattened = ndarray(data.data, data.dims)
 
