@@ -28,10 +28,11 @@ export async function imageToNdarray(imageURI) {
     let width = pixels.shape[1]
 
     // [H, W, 4] -> [1, 3, H, W]
-    img = ndarray(new Uint8Array(width * height * 3), [1, 3, height, width])
-    ops.assign(img.pick(0, 0, null, null), pixels.pick(null, null, 0))
-    ops.assign(img.pick(0, 1, null, null), pixels.pick(null, null, 1))
-    ops.assign(img.pick(0, 2, null, null), pixels.pick(null, null, 2))
+    let outImg = ndarray(new Uint8Array(width * height * 3), [1, 3, height, width])
+    ops.assign(outImg.pick(0, 0, null, null), pixels.pick(null, null, 0))
+    ops.assign(outImg.pick(0, 1, null, null), pixels.pick(null, null, 1))
+    ops.assign(outImg.pick(0, 2, null, null), pixels.pick(null, null, 2))
+    img = outImg
   })
 
   // Wait for image to load
