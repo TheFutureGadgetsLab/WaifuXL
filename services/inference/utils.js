@@ -8,10 +8,8 @@ const pify = require('pify')
 const getPixels = pify(require('get-pixels'))
 
 /**
- * Given a URI, return an ndarray of the pixel data.
- *  - If the URI is an image, return shape is [1, 3, height, width]
- *  - If the URI is a gif, return shape is [frames, 3, height, width]
- *    - THIS IS NOT WORKING YET, BUT WE CAN GET THE PIXEL DATA FROM THIS
+ * Given a URI, return an ndarray of the image pixel data.
+ *  - Return shape is [1, 3, height, width]
  * @param {string} inputURI the URI
  * @returns The pixels in this image
  */
@@ -30,6 +28,55 @@ export async function imageToNdarray(imageURI) {
   ops.assign(img.pick(0, 2, null, null), pixels.pick(null, null, 2))
 
   return img
+}
+
+/**
+ * Given a URI, return an ndarray of the gif pixel data.
+ *  - Return shape is [1, frames, 3, height, width]
+ * @param {string} inputURI the URI
+ * @returns The pixels in this gif
+ */
+export async function gifToNdarray(gifURI, coalesce = true) {
+  let results = await getPixels(gifURI)
+  const { shape } = results
+
+  if (shape.length === 4) {
+    // animated gif with multiple frames
+    const [frames, width, height, channels] = shape
+
+    const numPixelsInFrame = width * height
+
+    for (let i = 0; i < frames; ++i) {
+      if (i > 0 && coalesce) {
+        const currIndex = results.index(i, 0, 0, 0)
+        const prevIndex = results.index(i - 1, 0, 0, 0)
+
+        for (let j = 0; j < numPixelsInFrame; ++j) {
+          const curr = currIndex + j * channels
+
+          if (results.data[curr + channels - 1] === 0) {
+            const prev = prevIndex + j * channels
+
+            for (let k = 0; k < channels; ++k) {
+              results.data[curr + k] = results.data[prev + k]
+            }
+          }
+        }
+      }
+    }
+  }
+
+  results = results.transpose(0, 2, 1, 3)
+  const N = results.shape[0]
+  const H = results.shape[1]
+  const W = results.shape[2]
+  let gif = ndarray(new Uint8Array(1 * N * 3 * H * W), [1, N, 3, H, W])
+  for (let i = 0; i < N; ++i) {
+    ops.assign(gif.pick(0, i, 0, null, null), results.pick(i, null, null, 0))
+    ops.assign(gif.pick(0, i, 1, null, null), results.pick(i, null, null, 1))
+    ops.assign(gif.pick(0, i, 2, null, null), results.pick(i, null, null, 2))
+  }
+  return gif
 }
 
 /**

@@ -1,12 +1,14 @@
 import { parseGIF, decompressFrames } from 'gifuct-js'
-import { buildImageFromND, upScaleGifFrameFromURI, buildNdarrayFromImage } from './processingUtilities'
 import { runTagger } from './inference/tagging'
-import { getPixelDataFromURI } from './imageUtilities'
+import { gifToNdarray } from './inference/utils'
+import { multiUpscale } from './inference/upscaling'
+import ndarray from 'ndarray'
+import ops from 'ndarray-ops'
 
-async function frameAdd(frame, gif, height, width, delay) {
+async function frameAdd(frame, gif, delay) {
   return new Promise(async (resolve, reject) => {
     const img = new Image()
-    img.src = await upScaleGifFrameFromURI(frame, height, width)
+    img.src = await multiUpscale(frame, 1)
     img.crossOrigin = 'Anonymous'
     img.onload = function () {
       gif.addFrame(img, { delay: delay })
@@ -16,36 +18,30 @@ async function frameAdd(frame, gif, height, width, delay) {
 }
 
 export async function doGif(inputURI, setTags) {
+  const allFrames = await gifToNdarray(inputURI)
+  const [ign, N, C, H, W] = allFrames.shape
+
+  var promisedGif = await fetch(inputURI)
+    .then((resp) => resp.arrayBuffer())
+    .then((buff) => parseGIF(buff))
+    .then((gif) => decompressFrames(gif, true))
+
+  const tagInput = sliceFrame(allFrames, 0)
+  const tags = await runTagger(tagInput)
+  setTags(tags)
+
   return new Promise(async (resolve, reject) => {
-    const extractFrames = require('./gifExtract.js')
-    const results = await extractFrames({
-      input: inputURI,
-    })
-    var promisedGif = await fetch(inputURI)
-      .then((resp) => resp.arrayBuffer())
-      .then((buff) => parseGIF(buff))
-      .then((gif) => decompressFrames(gif, true))
     var GIF = require('./gif.js')
     var gif = new GIF({
       workers: 2,
       quality: 1,
-      width: results.shape[1] * 2,
-      height: results.shape[2] * 2,
+      width: W * 2,
+      height: H * 2,
     })
 
-    const inputData = await getPixelDataFromURI(
-      buildImageFromND(
-        results.data.slice(0 * results.stride[0], 1 * results.stride[0]),
-        results.shape[2],
-        results.shape[1],
-      ),
-    )
-    const tagInput = buildNdarrayFromImage(inputData)
-    const tags = await runTagger(tagInput)
-    setTags(tags)
-    for (var j = 0; j < results.shape[0]; j++) {
-      var currentND = results.data.slice(j * results.stride[0], (j + 1) * results.stride[0])
-      await frameAdd(currentND, gif, results.shape[2], results.shape[1], promisedGif[j].delay)
+    for (var i = 0; i < N; i++) {
+      const newND = sliceFrame(allFrames, i)
+      await frameAdd(newND, gif, promisedGif[i].delay)
     }
 
     gif.on('finished', function (blob) {
@@ -58,4 +54,12 @@ export async function doGif(inputURI, setTags) {
 
     await gif.render()
   })
+}
+
+function sliceFrame(allFrames, frameIndex) {
+  const [ign, N, C, H, W] = allFrames.shape
+
+  let outFrame = ndarray(new Uint8Array(1 * C * H * W), [1, C, H, W])
+  ops.assign(outFrame, allFrames.pick(null, frameIndex, null, null, null))
+  return outFrame
 }

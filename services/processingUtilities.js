@@ -14,16 +14,6 @@ export function buildNdarrayFromImageOutput(data, height, width) {
   return dataTensor.data
 }
 
-export function buildNdarrayFromImage(imageData) {
-  const { data, width, height } = imageData
-  const dataTensor = ndarray(new Uint8Array(data), [height, width, 4])
-  const dataProcessedTensor = ndarray(new Uint8Array(width * height * 3), [1, 3, height, width])
-  ops.assign(dataProcessedTensor.pick(0, 0, null, null), dataTensor.pick(null, null, 0))
-  ops.assign(dataProcessedTensor.pick(0, 1, null, null), dataTensor.pick(null, null, 1))
-  ops.assign(dataProcessedTensor.pick(0, 2, null, null), dataTensor.pick(null, null, 2))
-  return dataProcessedTensor
-}
-
 export function buildImageFromND(nd, height, width) {
   const canvas = document.createElement('canvas')
   canvas.width = width
@@ -55,21 +45,4 @@ export async function upScaleFromURI(setLoading, extension, setTags, uri, upscal
   }
   setLoading(false)
   return resultURI
-}
-
-export async function upScaleGifFrameFromURI(frameData, height, width) {
-  return new Promise(async (resolve, reject) => {
-    const inputData = gifFlatArrayToNDArray(frameData, height, width)
-    const outputImage = await multiUpscale(inputData, 1)
-    resolve(outputImage)
-  })
-}
-
-function gifFlatArrayToNDArray(frameData, height, width) {
-  const alphaArray = ndarray(new Uint8Array(frameData), [height, width, 4])
-  const noAlphaArray = ndarray(new Uint8Array(height * width * 3), [1, 3, height, width])
-  ops.assign(noAlphaArray.pick(0, 0, null, null), alphaArray.pick(null, null, 0))
-  ops.assign(noAlphaArray.pick(0, 1, null, null), alphaArray.pick(null, null, 1))
-  ops.assign(noAlphaArray.pick(0, 2, null, null), alphaArray.pick(null, null, 2))
-  return noAlphaArray
 }
