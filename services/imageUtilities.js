@@ -1,29 +1,6 @@
 import { isValidHttpUrl } from './miscUtils'
 
 /**
- * Given a URI, return the raw pixels from that
- *
- * @param {string} inputURI the URI
- * @returns The pixels in this image
- */
-function getPixelDataFromURI(inputURI) {
-  return new Promise((resolve, reject) => {
-    const img = new Image()
-    img.src = inputURI
-    img.crossOrigin = 'Anonymous'
-    var results = null
-    img.onload = function () {
-      const canvas = document.createElement('canvas')
-      canvas.width = img.width
-      canvas.height = img.height
-      const context = canvas.getContext('2d')
-      context.drawImage(img, 0, 0)
-      resolve(context.getImageData(0, 0, img.width, img.height))
-    }
-  })
-}
-
-/**
  * Given some input, return the data URI from that.
  *
  * @param {string} input Either data URI or URL
@@ -84,4 +61,4 @@ function setDataURIFromFile(fileObj, setDataURI) {
   fr.readAsDataURL(fileObj)
 }
 
-export { getPixelDataFromURI, getDataURIFromInput, downloadImage, setDataURIFromFile }
+export { getDataURIFromInput, downloadImage, setDataURIFromFile }
