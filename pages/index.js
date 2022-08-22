@@ -81,7 +81,7 @@ export default function Main() {
 
     setLoading: (newLoading) => set((state) => ({ loading: newLoading })),
     setInputModalOpen: (newInputModalOpen) => set((state) => ({ inputModalOpen: newInputModalOpen })),
-    setShowSidebar: () => set((state) => ({ showSidebar: !state.showSidebar })),
+    setShowSidebar: (newShowSidebar) => set((state) => ({ showSidebar: newShowSidebar })),
     setUserHasRun: (newUserHasRun) => set((state) => ({ userHasRun: newUserHasRun })),
     setModelLoading: () => set((state) => ({ modelLoading: !state.modelLoading })),
     setMobile: () => set((state) => ({ mobile: !state.mobile })),
@@ -102,9 +102,7 @@ export default function Main() {
     setMobile(size.width / size.height < 1.0)
   }, [size])
 
-  useEffect(() => {
-    setEventListeners(setInputURI, setFileName, setShowSidebar, setInputModalOpen)
-  }, [])
+  setEventListeners(setInputURI, setFileName, setShowSidebar, setInputModalOpen)
 
   return (
     <>

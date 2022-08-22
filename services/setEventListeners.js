@@ -1,7 +1,6 @@
 import { getDataURIFromInput, setDataURIFromFile } from '../services/imageUtilities'
 
-export function setEventListeners(setInputURI, setFileName, setShowSidebar, setInputModalOpen) {
-  document.body.style.overflow = 'hidden'
+export async function setEventListeners(setInputURI, setFileName, setShowSidebar, setInputModalOpen) {
   function handleInputFile(items) {
     try {
       for (let index in items) {
@@ -24,7 +23,7 @@ export function setEventListeners(setInputURI, setFileName, setShowSidebar, setI
     let success = false
     if (e.clipboardData.getData('text/plain')) {
       let url = e.clipboardData.getData('text/plain')
-      setInputURI(await getDataURIFromInput(url))
+      setInputURI(await getDataURIFromInput(url));
       setFileName(url.split('/').at(-1).split('.')[0])
       success = true
     } else {
@@ -58,9 +57,9 @@ export function setEventListeners(setInputURI, setFileName, setShowSidebar, setI
     e.stopPropagation()
     let success = handleInputFile(e.dataTransfer.items)
     if (success) {
-      setShowSidebar(true)
-      setInputModalOpen(true)
-      setFileName(e.dataTransfer.files[0].name.split('/').at(-1).split('.')[0])
+      setShowSidebar(true);
+      setInputModalOpen(true);
+      setFileName(e.dataTransfer.files[0].name.split('/').at(-1).split('.')[0]);
     }
   })
 }
