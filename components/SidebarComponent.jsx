@@ -16,10 +16,7 @@ const Sidebar = ({ useAppStateStore, useImageStore }) => {
   const setUpscaleFactor = useImageStore((state) => state.setUpscaleFactor)
   const setFileName = useImageStore((state) => state.setFileName)
   return (
-    <div
-      id="sidebar"
-      className="w-80 flex flex-col fixed inset-y-0 z-20"
-    >
+    <div id="sidebar" className="w-80 flex flex-col fixed inset-y-0 z-20">
       <div
         className="relative flex-1 flex flex-col min-h-0 bg-gray-100 transition-all"
         style={{ left: `${showSidebar ? 0 : -100}%` }}

@@ -70,13 +70,21 @@ const TagComponent = ({ tags }) => {
       <div className="text-xl font-bold grid grid-cols-6 pb-3" style={{ textShadow: 'white 0px 2px 4px' }}>
         <span className="col-span-4">Tags</span>
         {tagPage > 0 ? <LeftArrowSVG onClick={() => setTagPage(tagPage - 1)} /> : <span></span>}
-        {tagPage < ((tags.topDesc.length / 10) - 1) ? <RighArrowSVG onClick={() => setTagPage(tagPage + 1)}/> : <span></span>}
+        {tagPage < tags.topDesc.length / 10 - 1 ? (
+          <RighArrowSVG onClick={() => setTagPage(tagPage + 1)} />
+        ) : (
+          <span></span>
+        )}
       </div>
       {tags.topDesc.slice(10 * tagPage, 10 * (tagPage + 1)).map((x) => buildTagLine(x))}
       <div className="text-xl font-bold grid grid-cols-6 pt-10 pb-3" style={{ textShadow: 'white 0px 2px 4px' }}>
         <span className="col-span-4">Characters</span>
         {charPage > 0 ? <LeftArrowSVG onClick={() => setCharPage(charPage - 1)} /> : <span></span>}
-        {charPage < ((tags.topChars.length / 10) - 1) ? <RighArrowSVG onClick={() => setCharPage(charPage + 1)} /> : <span></span>}
+        {charPage < tags.topChars.length / 10 - 1 ? (
+          <RighArrowSVG onClick={() => setCharPage(charPage + 1)} />
+        ) : (
+          <span></span>
+        )}
       </div>
       {tags.topChars.slice(10 * charPage, 10 * (charPage + 1)).map((x) => buildTagLine(x))}
       <div className="text-xl font-bold pt-10 pb-3" style={{ textShadow: 'white 0px 2px 4px' }}>

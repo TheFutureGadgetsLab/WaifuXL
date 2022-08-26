@@ -4,7 +4,7 @@ import { initializeTagger } from './tagging'
 import { initializeSuperRes } from './upscaling'
 const ort = require('onnxruntime-web')
 const usr = require('ua-parser-js')
-const pify = require('pify')
+import pify from 'pify'
 const getPixels = pify(require('get-pixels'))
 
 /**

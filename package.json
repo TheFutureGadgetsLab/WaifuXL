@@ -18,7 +18,7 @@
     "next-pwa": "^5.6.0",
     "onnxruntime-common": "1.12.1",
     "onnxruntime-web": "1.12.1",
-    "pify": "^5.0.0",
+    "pify": "^6.0.0",
     "react": "^18.2.0",
     "react-compare-slider": "2.2.0",
     "react-dom": "^18.2.0",
