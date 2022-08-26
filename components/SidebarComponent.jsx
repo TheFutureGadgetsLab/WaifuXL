@@ -11,7 +11,6 @@ const Sidebar = ({ useAppStateStore, useImageStore }) => {
   const outputURI = useImageStore((state) => state.outputURI)
   const fileName = useImageStore((state) => state.fileName)
   const tags = useImageStore((state) => state.tags)
-  const inputModalOpen = useAppStateStore((state) => state.inputModalOpen)
 
   const setUpscaleFactor = useImageStore((state) => state.setUpscaleFactor)
   const setFileName = useImageStore((state) => state.setFileName)
@@ -65,7 +64,6 @@ const Sidebar = ({ useAppStateStore, useImageStore }) => {
           </div>
         </div>
       </div>
-      {inputModalOpen && <ModalComponent useImageStore={useImageStore} useAppStateStore={useAppStateStore} />}
     </div>
   )
 }

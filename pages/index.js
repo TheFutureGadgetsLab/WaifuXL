@@ -1,20 +1,19 @@
 import NavbarComponent from '../components/NavbarComponent'
 import TitleComponent from '../components/TitleComponent'
-import { useState, useEffect } from 'react'
 import Sidebar from '../components/SidebarComponent'
 import ImageDisplay from '../components/ImageDisplayComponent'
 import AnnouncementComponent from '../components/Announcement'
 import Error from '../components/ErrorComponent'
-import default_tags from '../services/landing_tags'
-import create from 'zustand'
+import ModalComponent from '../components/ModalComponent'
 import { dropListener, pasteListener, preventDefault } from '../services/eventListeners'
+import { useState, useEffect } from 'react'
+import { useImageStore, useAppStateStore } from '../services/useState'
 
 function useWindowSize() {
   const [windowSize, setWindowSize] = useState({
     width: undefined,
     height: undefined,
   })
-
   useEffect(() => {
     // only execute all the code below in client side
     if (typeof window !== 'undefined') {
@@ -41,62 +40,13 @@ function useWindowSize() {
 }
 
 export default function Main() {
-  const useImageStore = create((set) => ({
-    inputURI: './images/senjougahara.webp',
-    outputURI: './images/senjougahara_2x.webp',
-    tags: default_tags,
-    fileName: 'example',
-    extension: 'png',
-    upscaleFactor: 1,
-
-    setInputURI: (uri) => {
-      set(() => ({ inputURI: uri }))
-      set(() => ({ outputURI: null }))
-
-      if (uri.slice(0, 14) == 'data:image/gif') {
-        set(() => ({ extension: 'gif' }))
-      } else {
-        set(() => ({ extension: 'png' }))
-      }
-    },
-    setUpscaleFactor: (newFactor) => set(() => ({ upscaleFactor: Math.log2(newFactor) })),
-
-    setOutputURI: (uri) => set(() => ({ outputURI: uri })),
-    setTags: (newTags) => set(() => ({ tags: newTags })),
-    setFileName: (newFilename) => set(() => ({ fileName: newFilename })),
-  }))
-
-  const useAppStateStore = create((set) => ({
-    loading: false,
-    inputModalOpen: false,
-    showSidebar: true,
-    userHasRun: false,
-    modelLoading: false,
-    mobile: false,
-    errorMessage: null,
-    shouldRun: false,
-    modelLoadProg: 0,
-
-    setLoading: (newLoading) => set((state) => ({ loading: newLoading })),
-    setInputModalOpen: (newInputModalOpen) => {
-      set((state) => ({ inputModalOpen: newInputModalOpen }))
-    },
-    setShowSidebar: (newShowSidebar) => set((state) => ({ showSidebar: newShowSidebar })),
-    setUserHasRun: (newUserHasRun) => set((state) => ({ userHasRun: newUserHasRun })),
-    setModelLoading: () => set((state) => ({ modelLoading: !state.modelLoading })),
-    setMobile: () => set((state) => ({ mobile: !state.mobile })),
-    setErrorMessage: (newError) => set((state) => ({ errorMessage: newError })),
-    setShouldRun: (newShouldRun) => set((state) => ({ shouldRun: newShouldRun })),
-    setModelLoadProg: (newProg) => set((state) => ({ modelLoadProg: newProg })),
-  }))
-
   const size = useWindowSize()
 
   const setInputURI = useImageStore((state) => state.setInputURI)
   const setFileName = useImageStore((state) => state.setFileName)
   const setShowSidebar = useAppStateStore((state) => state.setShowSidebar)
   const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen)
-
+  const inputModalOpen = useAppStateStore((state) => state.inputModalOpen)
   const setMobile = useAppStateStore((state) => state.setMobile)
   useEffect(() => {
     setMobile(size.width / size.height < 1.0)
@@ -131,6 +81,11 @@ export default function Main() {
         }}
       >
         <Sidebar useAppStateStore={useAppStateStore} useImageStore={useImageStore} />
+        {inputModalOpen && (
+          <div className="w-80 flex flex-col fixed inset-y-0 z-20">
+            <ModalComponent useImageStore={useImageStore} useAppStateStore={useAppStateStore} />
+          </div>
+        )}
         {/* Image display, title, navbar */}
         <main className="flex-1">
           <AnnouncementComponent
