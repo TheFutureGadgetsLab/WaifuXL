@@ -61,11 +61,10 @@ function CryptoComponent({ addr, imgPath }) {
     <div id="eth-container" className="relative">
       <button
         className="hover:bg-blue-700 text-black relative font-bold py-2 px-4 rounded inline-flex items-center w-max"
-        onClick={async () => {
+        onClick={() => {
           navigator.clipboard.writeText(addr)
           setIsHidden(false)
-          await new Promise((r) => setTimeout(r, 1000))
-          setIsHidden(true)
+          new Promise((r) => setTimeout(r, 1000)).then(() => {setIsHidden(true)})
         }}
       >
         <img className="h-6 pr-2" src={imgPath} />

@@ -1,7 +1,6 @@
 import { getDataURIFromInput, setDataURIFromFile } from '../services/imageUtilities'
 
-async function handleInputFile(items, setFileName, setInputURI) {
-  console.log('In handle input file')
+function handleInputFile(items, setFileName, setInputURI) {
   try {
     for (let index in items) {
       let item = items[index]
@@ -21,7 +20,6 @@ async function handleInputFile(items, setFileName, setInputURI) {
 
 const pasteListener = (e, setInputURI, setFileName, setShowSidebar, setInputModalOpen) => {
   if (e.clipboardData.getData('text/plain')) {
-    console.log('Fir')
     let url = e.clipboardData.getData('text/plain')
     console.log(url)
     getDataURIFromInput(url).then((u) => {
@@ -30,30 +28,25 @@ const pasteListener = (e, setInputURI, setFileName, setShowSidebar, setInputModa
     setFileName(url.split('/').at(-1).split('.')[0])
     success = true
   } else {
-    console.log('Sec')
-    handleInputFile((e.clipboardData || e.originalEvent.clipboardData).items, setFileName, setInputURI).then(
-      (success) => {
-        if (success) {
-          console.log('Succesful...')
-          setShowSidebar(true)
-          setInputModalOpen(true)
-        }
-      },
-    )
+    const success = handleInputFile((e.clipboardData || e.originalEvent.clipboardData).items, setFileName, setInputURI)
+    if (success) {
+      console.log('Succesful...')
+      setShowSidebar(true)
+      setInputModalOpen(true)
+    }
   }
 }
 
 const dropListener = (e, setFileName, setInputURI, setShowSidebar, setInputModalOpen) => {
   e.preventDefault()
   e.stopPropagation()
-  handleInputFile(e.dataTransfer.items, setFileName, setInputURI).then((success) => {
-    if (success) {
-      console.log('Succesful drag')
-      setShowSidebar(true)
-      setInputModalOpen(true)
-      setFileName(e.dataTransfer.files[0].name.split('/').at(-1).split('.')[0])
-    }
-  })
+  const success = handleInputFile(e.dataTransfer.items, setFileName, setInputURI)
+  if (success) {
+    console.log('Succesful drag')
+    setShowSidebar(true)
+    setInputModalOpen(true)
+    setFileName(e.dataTransfer.files[0].name.split('/').at(-1).split('.')[0])
+  }
 }
 
 const preventDefault = (e) => {

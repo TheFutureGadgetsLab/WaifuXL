@@ -26,10 +26,8 @@ const RunComponent = () => {
 
   useEffect(() => {
     if (shouldRun) {
-      // Async call to upscaleFromURI
-      const asyncFn = async () => {
-        try {
-          const result = await upScaleFromURI(setLoading, extension, setTags, uri, upscaleFactor)
+      try {
+        upScaleFromURI(setLoading, extension, setTags, uri, upscaleFactor).then((result) => {
           setUserHasRun(true)
           // If the models output is valid
           if (result) {
@@ -37,16 +35,15 @@ const RunComponent = () => {
             setOutputURI(result)
             incrementCounter()
           }
-        } catch (error) {
-          console.log(error)
-          setErrorMessage('Model failed to run.')
-          return
-        }
-
-        setShouldRun(false)
-        setUpscaleFactor(2)
+        })
+      } catch (error) {
+        console.log(error)
+        setErrorMessage('Model failed to run.')
+        return
       }
-      asyncFn()
+
+      setShouldRun(false)
+      setUpscaleFactor(2)
     }
   }, [shouldRun])
 
@@ -54,12 +51,13 @@ const RunComponent = () => {
     <button
       className={`grow hover:bg-blue-700 text-white font-bold py-2 px-4 rounded relative
         drop-shadow-lg inline-flex items-center ${!modelLoading && !loading ? 'bg-pink' : 'bg-gray-300'}`}
-      onClick={async () => {
+      onClick={() => {
         setModelLoading(true)
         try {
-          await initializeONNX(setModelLoadProg)
-          setModelLoading(false)
-          setShouldRun(true)
+          initializeONNX(setModelLoadProg).then(() => {
+            setModelLoading(false)
+            setShouldRun(true)  
+          })
         } catch (error) {
           setErrorMessage('Could not load model.')
         }
