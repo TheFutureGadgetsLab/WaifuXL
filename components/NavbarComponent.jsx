@@ -1,5 +1,3 @@
-import Router from 'next/router'
-
 const NavbarComponent = ({ currentPage }) => {
   return (
     <div className="">

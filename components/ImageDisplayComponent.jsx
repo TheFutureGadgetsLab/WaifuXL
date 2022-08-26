@@ -1,6 +1,7 @@
 import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider'
+import { useImageStore, useAppStateStore } from '../services/useState'
 
-const ImageDisplay = ({ useImageStore, useAppStateStore }) => {
+const ImageDisplay = () => {
   const mobile = useAppStateStore((state) => state.mobile)
   const outputURI = useImageStore((state) => state.outputURI)
   const inputURI = useImageStore((state) => state.inputURI)

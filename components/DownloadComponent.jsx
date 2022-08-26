@@ -1,7 +1,8 @@
 import { downloadImage } from '../services/imageUtilities'
 import { DownloadSVG } from './SVGComponents'
+import { useImageStore } from '../services/useState'
 
-const DownloadComponent = ({ useImageStore }) => {
+const DownloadComponent = () => {
   const [fileName, extension, outputURI] = useImageStore((state) => [state.fileName, state.extension, state.outputURI])
 
   return (

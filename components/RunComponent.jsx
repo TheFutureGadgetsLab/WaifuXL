@@ -2,7 +2,9 @@ import { useEffect } from 'react'
 import { upScaleFromURI } from '../services/processingUtilities'
 import { initializeONNX } from '../services/inference/utils'
 import { UpscaleSVG } from './SVGComponents'
-const RunComponent = ({ useImageStore, useAppStateStore }) => {
+import { useImageStore, useAppStateStore } from '../services/useState'
+
+const RunComponent = () => {
   const setOutputURI = useImageStore((state) => state.setOutputURI)
   const setUserHasRun = useAppStateStore((state) => state.setUserHasRun)
   const setShouldRun = useAppStateStore((state) => state.setShouldRun)

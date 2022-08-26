@@ -1,6 +1,7 @@
 import { GitHubSVG, HamSVG } from './SVGComponents'
+import { useAppStateStore } from '../services/useState'
 
-const ScreenIcons = ({ useAppStateStore }) => {
+const ScreenIcons = () => {
   const setShowSidebar = useAppStateStore((state) => state.setShowSidebar)
   const showSidebar = useAppStateStore((state) => state.showSidebar)
   return (

@@ -1,6 +1,7 @@
 import { UploadSVG } from './SVGComponents'
+import { useAppStateStore } from '../services/useState'
 
-const InputComponent = ({ useAppStateStore }) => {
+const InputComponent = () => {
   const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen)
   return (
     <>

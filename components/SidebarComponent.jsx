@@ -4,8 +4,9 @@ import InputComponent from './InputComponent'
 import TagComponent from './TagComponent'
 import Router from 'next/router'
 import ScreenIcons from './ScreenIconsComponent'
+import { useImageStore, useAppStateStore } from '../services/useState'
 
-const Sidebar = ({ useAppStateStore, useImageStore }) => {
+const Sidebar = () => {
   const showSidebar = useAppStateStore((state) => state.showSidebar)
   const outputURI = useImageStore((state) => state.outputURI)
   const fileName = useImageStore((state) => state.fileName)
@@ -19,7 +20,7 @@ const Sidebar = ({ useAppStateStore, useImageStore }) => {
         className="relative flex-1 flex flex-col min-h-0 bg-gray-100 transition-all"
         style={{ left: `${showSidebar ? 0 : -100}%` }}
       >
-        <ScreenIcons useAppStateStore={useAppStateStore} />
+        <ScreenIcons />
         <div className="flex-1 flex flex-col overflow-y-auto">
           <div className="">
             <div className="pt-5 mt-10 mb-10 mx-8 grid grid-cols-1 space-y-2">
@@ -30,12 +31,12 @@ const Sidebar = ({ useAppStateStore, useImageStore }) => {
                 <span className="text-2xl font-semibold text-black cursor-pointer">Donate</span>
               </div>
               <hr className="md:hidden" />
-              <InputComponent useAppStateStore={useAppStateStore} />
+              <InputComponent />
               {outputURI != null ? (
-                <DownloadComponent useImageStore={useImageStore} />
+                <DownloadComponent />
               ) : (
                 <div id="upscale-button-container" className="flex justify-between gap-2">
-                  <RunComponent useImageStore={useImageStore} useAppStateStore={useAppStateStore} />
+                  <RunComponent />
                   <select
                     id="resolution-select"
                     className="form-select appearance-none border-none text-white font-bold py-2 px-4
