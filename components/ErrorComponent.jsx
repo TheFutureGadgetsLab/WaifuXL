@@ -1,6 +1,9 @@
 import { ErrorSVG } from './SVGComponents'
+import { useAppStateStore } from '../services/useState'
 
-export default function Error({ errorMessage }) {
+export default function Error() {
+  const errorMessage = useAppStateStore((state) => state.errorMessage)
+
   return (
     <>
       {errorMessage && (
