@@ -23,7 +23,7 @@
     "react-compare-slider": "2.2.0",
     "react-dom": "^18.2.0",
     "ua-parser-js": "^1.0.2",
-    "zustand": "^4.0.0"
+    "zustand": "^4.1.1"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.8",
