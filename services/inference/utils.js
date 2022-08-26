@@ -2,7 +2,7 @@ import ndarray from 'ndarray'
 import ops from 'ndarray-ops'
 import { initializeTagger } from './tagging'
 import { initializeSuperRes } from './upscaling'
-const ort = require('onnxruntime-web')
+import * as ort from 'onnxruntime-web'
 const usr = require('ua-parser-js')
 import pify from 'pify'
 const getPixels = pify(require('get-pixels'))

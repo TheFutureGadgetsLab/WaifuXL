@@ -1,6 +1,6 @@
 import ndarray from 'ndarray'
 import { fetchModel, prepareImage } from './utils'
-const ort = require('onnxruntime-web')
+import * as ort from 'onnxruntime-web'
 
 var taggerSession = null
 

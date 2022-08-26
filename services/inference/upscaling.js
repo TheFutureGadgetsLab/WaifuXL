@@ -2,7 +2,7 @@ import ndarray from 'ndarray'
 import ops from 'ndarray-ops'
 import { buildImageFromND, buildNdarrayFromImageOutput } from '../processingUtilities'
 import { fetchModel, prepareImage } from './utils'
-const ort = require('onnxruntime-web')
+import * as ort from 'onnxruntime-web'
 
 var superSession = null
 

@@ -2,6 +2,7 @@ import NavbarComponent from '../../components/NavbarComponent'
 import SideNavbar from '../../components/SideNavbar'
 import { createRef, useEffect, useState } from 'react'
 import { GitHubSVG, HamSVG } from '../../components/SVGComponents'
+import { sleep } from '../../services/inference/utils'
 
 export default function Donate() {
   useEffect(() => {
@@ -64,7 +65,7 @@ function CryptoComponent({ addr, imgPath }) {
         onClick={() => {
           navigator.clipboard.writeText(addr)
           setIsHidden(false)
-          new Promise((r) => setTimeout(r, 1000)).then(() => {setIsHidden(true)})
+          sleep(1000).then(() => setIsHidden(true))
         }}
       >
         <img className="h-6 pr-2" src={imgPath} />

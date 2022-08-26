@@ -61,7 +61,7 @@ function buildTagLine(x) {
   )
 }
 
-const TagComponent = ({tags}) => {
+const TagComponent = ({ tags }) => {
   const [tagPage, setTagPage] = useState(0)
   const [charPage, setCharPage] = useState(0)
 

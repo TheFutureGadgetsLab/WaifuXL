@@ -56,7 +56,7 @@ const RunComponent = () => {
         try {
           initializeONNX(setModelLoadProg).then(() => {
             setModelLoading(false)
-            setShouldRun(true)  
+            setShouldRun(true)
           })
         } catch (error) {
           setErrorMessage('Could not load model.')
