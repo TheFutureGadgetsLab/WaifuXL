@@ -4,7 +4,6 @@ import InputComponent from './InputComponent'
 import TagComponent from './TagComponent'
 import Router from 'next/router'
 import ScreenIcons from './ScreenIconsComponent'
-import ModalComponent from './ModalComponent'
 
 const Sidebar = ({ useAppStateStore, useImageStore }) => {
   const showSidebar = useAppStateStore((state) => state.showSidebar)
