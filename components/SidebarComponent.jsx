@@ -41,7 +41,7 @@ const Sidebar = () => {
                     id="resolution-select"
                     className="form-select appearance-none border-none text-white font-bold py-2 px-4
                       rounded drop-shadow-lg bg-pink inline-flex items-center w-16"
-                    onInput={async (inp) => {
+                    onInput={(inp) => {
                       setUpscaleFactor(parseInt(inp.target.value))
                       setFileName(fileName)
                     }}
