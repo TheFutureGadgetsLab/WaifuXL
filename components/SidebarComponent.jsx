@@ -106,7 +106,7 @@ function GitHashComponent() {
       <div className="text-xs">
         Built from commit{' '}
         <a
-          href={`https://github.com/TheFutureGadgetsLab/WaifuXL/commit/${__LONG_HASH__}`}
+          href={`https://github.com/TheFutureGadgetsLab/WaifuXL/tree/${__LONG_HASH__}`}
           className="text-pink underline"
           target="_blank"
           rel="noreferrer"
