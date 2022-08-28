@@ -18,7 +18,11 @@ export default function Error() {
                 <h3 className="text-sm font-medium text-red-800">
                   An unexpected error has occurred.<b> Please refresh the page.</b> If the problem persists, please
                   submit an issue{' '}
-                  <a className="text-blue underline" href="https://github.com/TheFutureGadgetsLab/WaifuXL/issues">
+                  <a
+                    className="text-blue underline"
+                    href="https://github.com/TheFutureGadgetsLab/WaifuXL/issues"
+                    target="_blank"
+                  >
                     here
                   </a>
                   .

@@ -41,7 +41,7 @@ export default function About() {
           <div className="mt-5 lg:text-lg text-sm text-left">
             Hi, we're the <span className="text-blue font-bold">Future Gadgets Lab</span>! We make a lot of random
             stuff, check out our organization{' '}
-            <a className="text-pink underline" href="https://github.com/TheFutureGadgetsLab">
+            <a className="text-pink underline" href="https://github.com/TheFutureGadgetsLab" target="_blank">
               here
             </a>
             .
@@ -50,38 +50,42 @@ export default function About() {
           <div className="mt-5 lg:text-lg text-sm text-left">
             <div className="text-center">
               Check out the full write-up{' '}
-              <a className="text-pink underline" href="https://haydn.fgl.dev/posts/the-launch-of-waifuxl/">
+              <a
+                className="text-pink underline"
+                href="https://haydn.fgl.dev/posts/the-launch-of-waifuxl/"
+                target="_blank"
+              >
                 here
               </a>
               !
             </div>
             <br />
             We send you neural networks to execute directly in your browser using the{' '}
-            <a href="https://onnxruntime.ai/" className="text-pink underline">
+            <a href="https://onnxruntime.ai/" className="text-pink underline" target="_blank">
               ONNX Runtime
             </a>
             . For the upscaling model we're using the{' '}
-            <a href="https://arxiv.org/abs/2107.10833" className="text-pink underline">
+            <a href="https://arxiv.org/abs/2107.10833" className="text-pink underline" target="_blank">
               SOTA Real-ESRGAN
             </a>
             . Our tagger is a{' '}
-            <a href="https://arxiv.org/abs/1905.02244" className="text-pink underline">
+            <a href="https://arxiv.org/abs/1905.02244" className="text-pink underline" target="_blank">
               MobileNetV3
             </a>
             . On the web side we're using{' '}
-            <a className="text-pink underline" href="https://reactjs.org/">
+            <a className="text-pink underline" href="https://reactjs.org/" target="_blank">
               React
             </a>
             ,{' '}
-            <a className="text-pink underline" href="https://nextjs.org/">
+            <a className="text-pink underline" href="https://nextjs.org/" target="_blank">
               Next.js
             </a>
             , and{' '}
-            <a className="text-pink underline" href="https://tailwindcss.com/">
+            <a className="text-pink underline" href="https://tailwindcss.com/" target="_blank">
               TailwindCSS
             </a>
             . We're hosted on{' '}
-            <a className="text-pink underline" href="https://pages.cloudflare.com/">
+            <a className="text-pink underline" href="https://pages.cloudflare.com/" target="_blank">
               cloudflare pages
             </a>
             , which generously provides unlimited bandwith.

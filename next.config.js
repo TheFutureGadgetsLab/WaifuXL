@@ -1,5 +1,6 @@
 const CopyPlugin = require("copy-webpack-plugin");
 const path = require("path");
+const webpack = require("webpack");
 
 const withPWA = require('next-pwa')({
   dest: 'public',
@@ -7,6 +8,10 @@ const withPWA = require('next-pwa')({
   skipWaiting: true,
   disable: process.env.NODE_ENV === 'development', // Disable PWA in development
 })
+
+// get git info from command line
+let shortHash = require('child_process').execSync('git rev-parse --short HEAD').toString().trim();
+let longHash = require('child_process').execSync('git rev-parse HEAD').toString().trim();
 
 module.exports = withPWA({
   reactStrictMode: true,
@@ -24,6 +29,11 @@ module.exports = withPWA({
         ],
       })
     );
+
+    config.plugins.push(new webpack.DefinePlugin({
+      __SHORT_HASH__: JSON.stringify(shortHash),
+      __LONG_HASH__: JSON.stringify(longHash)
+    }));
 
     return config;
   },

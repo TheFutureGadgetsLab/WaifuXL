@@ -36,6 +36,7 @@ const Sidebar = () => {
             )}
           </div>
         </div>
+        <GitHashComponent />
       </div>
     </div>
   )
@@ -96,6 +97,23 @@ const InputComponent = () => {
         <UploadSVG /> <span>Choose Image/GIF</span>
       </button>
     </>
+  )
+}
+
+function GitHashComponent() {
+  return (
+    <div className="flex justify-center items-center absolute bottom-0 w-full h-4 text-center text-grey">
+      <div className="text-xs">
+        Built from commit{' '}
+        <a
+          href={`https://github.com/TheFutureGadgetsLab/WaifuXL/commit/${__LONG_HASH__}`}
+          className="text-pink underline"
+          target="_blank"
+        >
+          {__SHORT_HASH__}
+        </a>
+      </div>
+    </div>
   )
 }
 
