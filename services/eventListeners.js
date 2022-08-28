@@ -2,10 +2,10 @@ import { getDataURIFromInput, setDataURIFromFile } from '../services/imageUtilit
 
 function handleInputFile(items, setFileName, setInputURI) {
   try {
-    for (let index in items) {
-      let item = items[index]
+    for (const index in items) {
+      const item = items[index]
       if (item.kind === 'file') {
-        let file = item.getAsFile()
+        const file = item.getAsFile()
         setFileName(file.name.split('/').at(-1).split('.')[0])
         setDataURIFromFile(file, setInputURI)
         return true
@@ -20,7 +20,7 @@ function handleInputFile(items, setFileName, setInputURI) {
 
 const pasteListener = (e, setInputURI, setFileName, setShowSidebar, setInputModalOpen) => {
   if (e.clipboardData.getData('text/plain')) {
-    let url = e.clipboardData.getData('text/plain')
+    const url = e.clipboardData.getData('text/plain')
     console.log(url)
     getDataURIFromInput(url).then((u) => {
       setInputURI(u)

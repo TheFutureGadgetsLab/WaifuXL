@@ -22,6 +22,7 @@ export default function Error() {
                     className="text-blue underline"
                     href="https://github.com/TheFutureGadgetsLab/WaifuXL/issues"
                     target="_blank"
+                    rel="noreferrer"
                   >
                     here
                   </a>

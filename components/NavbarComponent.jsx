@@ -15,7 +15,7 @@ const NavbarComponent = ({ currentPage }) => {
                   About
                 </a>
               </div>
-              <div className={`grow text-3xl font-bold cursor-pointer text-pink`}>
+              <div className="grow text-3xl font-bold cursor-pointer text-pink">
                 <a className={`${currentPage === 'index' ? 'underline' : ''}`} href="/">
                   WaifuXL
                 </a>

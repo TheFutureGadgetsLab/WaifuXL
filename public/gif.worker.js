@@ -3,18 +3,18 @@
   function s(o, u) {
     if (!n[o]) {
       if (!t[o]) {
-        var a = typeof require == 'function' && require
+        const a = typeof require === 'function' && require
         if (!u && a) return a(o, !0)
         if (i) return i(o, !0)
-        var f = new Error("Cannot find module '" + o + "'")
+        const f = new Error("Cannot find module '" + o + "'")
         throw ((f.code = 'MODULE_NOT_FOUND'), f)
       }
-      var l = (n[o] = { exports: {} })
+      const l = (n[o] = { exports: {} })
       t[o][0].call(
         l.exports,
         function (e) {
-          var n = t[o][1][e]
-          return s(n ? n : e)
+          const n = t[o][1][e]
+          return s(n || e)
         },
         l,
         l.exports,
@@ -26,15 +26,15 @@
     }
     return n[o].exports
   }
-  var i = typeof require == 'function' && require
-  for (var o = 0; o < r.length; o++) s(r[o])
+  var i = typeof require === 'function' && require
+  for (let o = 0; o < r.length; o++) s(r[o])
   return s
 })(
   {
     1: [
       function (require, module, exports) {
-        var NeuQuant = require('./TypedNeuQuant.js')
-        var LZWEncoder = require('./LZWEncoder.js')
+        const NeuQuant = require('./TypedNeuQuant.js')
+        const LZWEncoder = require('./LZWEncoder.js')
         function ByteArray() {
           this.page = -1
           this.pages = []
@@ -42,15 +42,15 @@
         }
         ByteArray.pageSize = 4096
         ByteArray.charMap = {}
-        for (var i = 0; i < 256; i++) ByteArray.charMap[i] = String.fromCharCode(i)
+        for (let i = 0; i < 256; i++) ByteArray.charMap[i] = String.fromCharCode(i)
         ByteArray.prototype.newPage = function () {
           this.pages[++this.page] = new Uint8Array(ByteArray.pageSize)
           this.cursor = 0
         }
         ByteArray.prototype.getData = function () {
-          var rv = ''
-          for (var p = 0; p < this.pages.length; p++) {
-            for (var i = 0; i < ByteArray.pageSize; i++) {
+          let rv = ''
+          for (let p = 0; p < this.pages.length; p++) {
+            for (let i = 0; i < ByteArray.pageSize; i++) {
               rv += ByteArray.charMap[this.pages[p][i]]
             }
           }
@@ -61,10 +61,10 @@
           this.pages[this.page][this.cursor++] = val
         }
         ByteArray.prototype.writeUTFBytes = function (string) {
-          for (var l = string.length, i = 0; i < l; i++) this.writeByte(string.charCodeAt(i))
+          for (let l = string.length, i = 0; i < l; i++) this.writeByte(string.charCodeAt(i))
         }
         ByteArray.prototype.writeBytes = function (array, offset, length) {
-          for (var l = length || array.length, i = offset || 0; i < l; i++) this.writeByte(array[i])
+          for (let l = length || array.length, i = offset || 0; i < l; i++) this.writeByte(array[i])
         }
         function GIFEncoder(width, height) {
           this.width = ~~width
@@ -161,17 +161,17 @@
           }
         }
         GIFEncoder.prototype.indexPixels = function (imgq) {
-          var nPix = this.pixels.length / 3
+          const nPix = this.pixels.length / 3
           this.indexedPixels = new Uint8Array(nPix)
-          var k = 0
-          for (var j = 0; j < nPix; j++) {
-            var index = this.findClosestRGB(this.pixels[k++] & 255, this.pixels[k++] & 255, this.pixels[k++] & 255)
+          let k = 0
+          for (let j = 0; j < nPix; j++) {
+            const index = this.findClosestRGB(this.pixels[k++] & 255, this.pixels[k++] & 255, this.pixels[k++] & 255)
             this.usedEntry[index] = true
             this.indexedPixels[j] = index
           }
         }
         GIFEncoder.prototype.ditherPixels = function (kernel, serpentine) {
-          var kernels = {
+          const kernels = {
             FalseFloydSteinberg: [
               [3 / 8, 1, 0],
               [3 / 8, 0, 1],
@@ -209,44 +209,44 @@
           if (!kernel || !kernels[kernel]) {
             throw 'Unknown dithering kernel: ' + kernel
           }
-          var ds = kernels[kernel]
-          var index = 0,
-            height = this.height,
-            width = this.width,
-            data = this.pixels
-          var direction = serpentine ? -1 : 1
+          const ds = kernels[kernel]
+          let index = 0
+          const height = this.height
+          const width = this.width
+          const data = this.pixels
+          let direction = serpentine ? -1 : 1
           this.indexedPixels = new Uint8Array(this.pixels.length / 3)
-          for (var y = 0; y < height; y++) {
+          for (let y = 0; y < height; y++) {
             if (serpentine) direction = direction * -1
             for (
-              var x = direction == 1 ? 0 : width - 1, xend = direction == 1 ? width : 0;
+              let x = direction == 1 ? 0 : width - 1, xend = direction == 1 ? width : 0;
               x !== xend;
               x += direction
             ) {
               index = y * width + x
-              var idx = index * 3
-              var r1 = data[idx]
-              var g1 = data[idx + 1]
-              var b1 = data[idx + 2]
+              let idx = index * 3
+              const r1 = data[idx]
+              const g1 = data[idx + 1]
+              const b1 = data[idx + 2]
               idx = this.findClosestRGB(r1, g1, b1)
               this.usedEntry[idx] = true
               this.indexedPixels[index] = idx
               idx *= 3
-              var r2 = this.colorTab[idx]
-              var g2 = this.colorTab[idx + 1]
-              var b2 = this.colorTab[idx + 2]
-              var er = r1 - r2
-              var eg = g1 - g2
-              var eb = b1 - b2
+              const r2 = this.colorTab[idx]
+              const g2 = this.colorTab[idx + 1]
+              const b2 = this.colorTab[idx + 2]
+              const er = r1 - r2
+              const eg = g1 - g2
+              const eb = b1 - b2
               for (
-                var i = direction == 1 ? 0 : ds.length - 1, end = direction == 1 ? ds.length : 0;
+                let i = direction == 1 ? 0 : ds.length - 1, end = direction == 1 ? ds.length : 0;
                 i !== end;
                 i += direction
               ) {
-                var x1 = ds[i][1]
-                var y1 = ds[i][2]
+                const x1 = ds[i][1]
+                const y1 = ds[i][2]
                 if (x1 + x >= 0 && x1 + x < width && y1 + y >= 0 && y1 + y < height) {
-                  var d = ds[i][0]
+                  const d = ds[i][0]
                   idx = index + x1 + y1 * width
                   idx *= 3
                   data[idx] = Math.max(0, Math.min(255, data[idx] + er * d))
@@ -265,15 +265,15 @@
           if (this.neuQuant && !used) {
             return this.neuQuant.lookupRGB(r, g, b)
           }
-          var c = b | (g << 8) | (r << 16)
-          var minpos = 0
-          var dmin = 256 * 256 * 256
-          var len = this.colorTab.length
-          for (var i = 0, index = 0; i < len; index++) {
-            var dr = r - (this.colorTab[i++] & 255)
-            var dg = g - (this.colorTab[i++] & 255)
-            var db = b - (this.colorTab[i++] & 255)
-            var d = dr * dr + dg * dg + db * db
+          const c = b | (g << 8) | (r << 16)
+          let minpos = 0
+          let dmin = 256 * 256 * 256
+          const len = this.colorTab.length
+          for (let i = 0, index = 0; i < len; index++) {
+            const dr = r - (this.colorTab[i++] & 255)
+            const dg = g - (this.colorTab[i++] & 255)
+            const db = b - (this.colorTab[i++] & 255)
+            const d = dr * dr + dg * dg + db * db
             if ((!used || this.usedEntry[index]) && d < dmin) {
               dmin = d
               minpos = index
@@ -282,14 +282,14 @@
           return minpos
         }
         GIFEncoder.prototype.getImagePixels = function () {
-          var w = this.width
-          var h = this.height
+          const w = this.width
+          const h = this.height
           this.pixels = new Uint8Array(w * h * 3)
-          var data = this.image
-          var srcPos = 0
-          var count = 0
-          for (var i = 0; i < h; i++) {
-            for (var j = 0; j < w; j++) {
+          const data = this.image
+          let srcPos = 0
+          let count = 0
+          for (let i = 0; i < h; i++) {
+            for (let j = 0; j < w; j++) {
               this.pixels[count++] = data[srcPos++]
               this.pixels[count++] = data[srcPos++]
               this.pixels[count++] = data[srcPos++]
@@ -301,7 +301,7 @@
           this.out.writeByte(33)
           this.out.writeByte(249)
           this.out.writeByte(4)
-          var transp, disp
+          let transp, disp
           if (this.transparent === null) {
             transp = 0
             disp = 0
@@ -349,15 +349,15 @@
         }
         GIFEncoder.prototype.writePalette = function () {
           this.out.writeBytes(this.colorTab)
-          var n = 3 * 256 - this.colorTab.length
-          for (var i = 0; i < n; i++) this.out.writeByte(0)
+          const n = 3 * 256 - this.colorTab.length
+          for (let i = 0; i < n; i++) this.out.writeByte(0)
         }
         GIFEncoder.prototype.writeShort = function (pValue) {
           this.out.writeByte(pValue & 255)
           this.out.writeByte((pValue >> 8) & 255)
         }
         GIFEncoder.prototype.writePixels = function () {
-          var enc = new LZWEncoder(this.width, this.height, this.indexedPixels, this.colorDepth)
+          const enc = new LZWEncoder(this.width, this.height, this.indexedPixels, this.colorDepth)
           enc.encode(this.out)
         }
         GIFEncoder.prototype.stream = function () {
@@ -369,22 +369,22 @@
     ],
     2: [
       function (require, module, exports) {
-        var EOF = -1
-        var BITS = 12
-        var HSIZE = 5003
-        var masks = [0, 1, 3, 7, 15, 31, 63, 127, 255, 511, 1023, 2047, 4095, 8191, 16383, 32767, 65535]
+        const EOF = -1
+        const BITS = 12
+        const HSIZE = 5003
+        const masks = [0, 1, 3, 7, 15, 31, 63, 127, 255, 511, 1023, 2047, 4095, 8191, 16383, 32767, 65535]
         function LZWEncoder(width, height, pixels, colorDepth) {
-          var initCodeSize = Math.max(2, colorDepth)
-          var accum = new Uint8Array(256)
-          var htab = new Int32Array(HSIZE)
-          var codetab = new Int32Array(HSIZE)
-          var cur_accum,
-            cur_bits = 0
-          var a_count
-          var free_ent = 0
-          var maxcode
-          var clear_flg = false
-          var g_init_bits, ClearCode, EOFCode
+          const initCodeSize = Math.max(2, colorDepth)
+          const accum = new Uint8Array(256)
+          const htab = new Int32Array(HSIZE)
+          const codetab = new Int32Array(HSIZE)
+          let cur_accum
+          let cur_bits = 0
+          let a_count
+          let free_ent = 0
+          let maxcode
+          let clear_flg = false
+          let g_init_bits, ClearCode, EOFCode
           function char_out(c, outs) {
             accum[a_count++] = c
             if (a_count >= 254) flush_char(outs)
@@ -396,10 +396,10 @@
             output(ClearCode, outs)
           }
           function cl_hash(hsize) {
-            for (var i = 0; i < hsize; ++i) htab[i] = -1
+            for (let i = 0; i < hsize; ++i) htab[i] = -1
           }
           function compress(init_bits, outs) {
-            var fcode, c, i, ent, disp, hsize_reg, hshift
+            let fcode, c, i, ent, disp, hsize_reg, hshift
             g_init_bits = init_bits
             clear_flg = false
             n_bits = g_init_bits
@@ -464,7 +464,7 @@
           function nextPixel() {
             if (remaining === 0) return EOF
             --remaining
-            var pix = pixels[curPixel++]
+            const pix = pixels[curPixel++]
             return pix & 255
           }
           function output(code, outs) {
@@ -504,47 +504,47 @@
     ],
     3: [
       function (require, module, exports) {
-        var ncycles = 100
-        var netsize = 256
-        var maxnetpos = netsize - 1
-        var netbiasshift = 4
-        var intbiasshift = 16
-        var intbias = 1 << intbiasshift
-        var gammashift = 10
-        var gamma = 1 << gammashift
-        var betashift = 10
-        var beta = intbias >> betashift
-        var betagamma = intbias << (gammashift - betashift)
-        var initrad = netsize >> 3
-        var radiusbiasshift = 6
-        var radiusbias = 1 << radiusbiasshift
-        var initradius = initrad * radiusbias
-        var radiusdec = 30
-        var alphabiasshift = 10
-        var initalpha = 1 << alphabiasshift
-        var alphadec
-        var radbiasshift = 8
-        var radbias = 1 << radbiasshift
-        var alpharadbshift = alphabiasshift + radbiasshift
-        var alpharadbias = 1 << alpharadbshift
-        var prime1 = 499
-        var prime2 = 491
-        var prime3 = 487
-        var prime4 = 503
-        var minpicturebytes = 3 * prime4
+        const ncycles = 100
+        const netsize = 256
+        const maxnetpos = netsize - 1
+        const netbiasshift = 4
+        const intbiasshift = 16
+        const intbias = 1 << intbiasshift
+        const gammashift = 10
+        const gamma = 1 << gammashift
+        const betashift = 10
+        const beta = intbias >> betashift
+        const betagamma = intbias << (gammashift - betashift)
+        const initrad = netsize >> 3
+        const radiusbiasshift = 6
+        const radiusbias = 1 << radiusbiasshift
+        const initradius = initrad * radiusbias
+        const radiusdec = 30
+        const alphabiasshift = 10
+        const initalpha = 1 << alphabiasshift
+        let alphadec
+        const radbiasshift = 8
+        const radbias = 1 << radbiasshift
+        const alpharadbshift = alphabiasshift + radbiasshift
+        const alpharadbias = 1 << alpharadbshift
+        const prime1 = 499
+        const prime2 = 491
+        const prime3 = 487
+        const prime4 = 503
+        const minpicturebytes = 3 * prime4
         function NeuQuant(pixels, samplefac) {
-          var network
-          var netindex
-          var bias
-          var freq
-          var radpower
+          let network
+          let netindex
+          let bias
+          let freq
+          let radpower
           function init() {
             network = []
             netindex = new Int32Array(256)
             bias = new Int32Array(netsize)
             freq = new Int32Array(netsize)
             radpower = new Int32Array(netsize >> 3)
-            var i, v
+            let i, v
             for (i = 0; i < netsize; i++) {
               v = (i << (netbiasshift + 8)) / netsize
               network[i] = new Float64Array([v, v, v, 0])
@@ -553,7 +553,7 @@
             }
           }
           function unbiasnet() {
-            for (var i = 0; i < netsize; i++) {
+            for (let i = 0; i < netsize; i++) {
               network[i][0] >>= netbiasshift
               network[i][1] >>= netbiasshift
               network[i][2] >>= netbiasshift
@@ -566,12 +566,12 @@
             network[i][2] -= (alpha * (network[i][2] - r)) / initalpha
           }
           function alterneigh(radius, i, b, g, r) {
-            var lo = Math.abs(i - radius)
-            var hi = Math.min(i + radius, netsize)
-            var j = i + 1
-            var k = i - 1
-            var m = 1
-            var p, a
+            const lo = Math.abs(i - radius)
+            const hi = Math.min(i + radius, netsize)
+            let j = i + 1
+            let k = i - 1
+            let m = 1
+            let p, a
             while (j < hi || k > lo) {
               a = radpower[m++]
               if (j < hi) {
@@ -589,11 +589,11 @@
             }
           }
           function contest(b, g, r) {
-            var bestd = ~(1 << 31)
-            var bestbiasd = bestd
-            var bestpos = -1
-            var bestbiaspos = bestpos
-            var i, n, dist, biasdist, betafreq
+            let bestd = ~(1 << 31)
+            let bestbiasd = bestd
+            let bestpos = -1
+            let bestbiaspos = bestpos
+            let i, n, dist, biasdist, betafreq
             for (i = 0; i < netsize; i++) {
               n = network[i]
               dist = Math.abs(n[0] - b) + Math.abs(n[1] - g) + Math.abs(n[2] - r)
@@ -615,14 +615,14 @@
             return bestbiaspos
           }
           function inxbuild() {
-            var i,
-              j,
-              p,
-              q,
-              smallpos,
-              smallval,
-              previouscol = 0,
-              startpos = 0
+            let i
+            let j
+            let p
+            let q
+            let smallpos
+            let smallval
+            let previouscol = 0
+            let startpos = 0
             for (i = 0; i < netsize; i++) {
               p = network[i]
               smallpos = i
@@ -660,11 +660,11 @@
             for (j = previouscol + 1; j < 256; j++) netindex[j] = maxnetpos
           }
           function inxsearch(b, g, r) {
-            var a, p, dist
-            var bestd = 1e3
-            var best = -1
-            var i = netindex[g]
-            var j = i - 1
+            let a, p, dist
+            let bestd = 1e3
+            let best = -1
+            let i = netindex[g]
+            let j = i - 1
             while (i < netsize || j >= 0) {
               if (i < netsize) {
                 p = network[i]
@@ -712,17 +712,17 @@
             return best
           }
           function learn() {
-            var i
-            var lengthcount = pixels.length
-            var alphadec = 30 + (samplefac - 1) / 3
-            var samplepixels = lengthcount / (3 * samplefac)
-            var delta = ~~(samplepixels / ncycles)
-            var alpha = initalpha
-            var radius = initradius
-            var rad = radius >> radiusbiasshift
+            let i
+            const lengthcount = pixels.length
+            const alphadec = 30 + (samplefac - 1) / 3
+            const samplepixels = lengthcount / (3 * samplefac)
+            let delta = ~~(samplepixels / ncycles)
+            let alpha = initalpha
+            let radius = initradius
+            let rad = radius >> radiusbiasshift
             if (rad <= 1) rad = 0
             for (i = 0; i < rad; i++) radpower[i] = alpha * (((rad * rad - i * i) * radbias) / (rad * rad))
-            var step
+            let step
             if (lengthcount < minpicturebytes) {
               samplefac = 1
               step = 3
@@ -735,8 +735,8 @@
             } else {
               step = 3 * prime4
             }
-            var b, g, r, j
-            var pix = 0
+            let b, g, r, j
+            let pix = 0
             i = 0
             while (i < samplepixels) {
               b = (pixels[pix] & 255) << netbiasshift
@@ -766,12 +766,12 @@
           }
           this.buildColormap = buildColormap
           function getColormap() {
-            var map = []
-            var index = []
-            for (var i = 0; i < netsize; i++) index[network[i][3]] = i
-            var k = 0
-            for (var l = 0; l < netsize; l++) {
-              var j = index[l]
+            const map = []
+            const index = []
+            for (let i = 0; i < netsize; i++) index[network[i][3]] = i
+            let k = 0
+            for (let l = 0; l < netsize; l++) {
+              const j = index[l]
               map[k++] = network[j][0]
               map[k++] = network[j][1]
               map[k++] = network[j][2]
@@ -787,10 +787,10 @@
     ],
     4: [
       function (require, module, exports) {
-        var GIFEncoder, renderFrame
+        let GIFEncoder, renderFrame
         GIFEncoder = require('./GIFEncoder.js')
         renderFrame = function (frame) {
-          var encoder, page, stream, transfer
+          let encoder, page, stream, transfer
           encoder = new GIFEncoder(frame.width, frame.height)
           if (frame.index === 0) {
             encoder.writeHeader()
@@ -816,7 +816,7 @@
           frame.pageSize = stream.constructor.pageSize
           if (frame.canTransfer) {
             transfer = (function () {
-              var i, len, ref, results
+              let i, len, ref, results
               ref = frame.data
               results = []
               for (i = 0, len = ref.length; i < len; i++) {
@@ -840,4 +840,4 @@
   {},
   [4],
 )
-//# sourceMappingURL=gif.worker.js.map
+// # sourceMappingURL=gif.worker.js.map

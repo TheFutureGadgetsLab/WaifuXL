@@ -17,7 +17,7 @@ export default function About() {
       <div
         className="flex flex-col items-center min-h-screen"
         style={{
-          backgroundImage: `url("images/bg.svg")`,
+          backgroundImage: 'url("images/bg.svg")',
           backgroundSize: 'cover',
         }}
       >
@@ -41,7 +41,12 @@ export default function About() {
           <div className="mt-5 lg:text-lg text-sm text-left">
             Hi, we're the <span className="text-blue font-bold">Future Gadgets Lab</span>! We make a lot of random
             stuff, check out our organization{' '}
-            <a className="text-pink underline" href="https://github.com/TheFutureGadgetsLab" target="_blank">
+            <a
+              className="text-pink underline"
+              href="https://github.com/TheFutureGadgetsLab"
+              target="_blank"
+              rel="noreferrer"
+            >
               here
             </a>
             .
@@ -54,6 +59,7 @@ export default function About() {
                 className="text-pink underline"
                 href="https://haydn.fgl.dev/posts/the-launch-of-waifuxl/"
                 target="_blank"
+                rel="noreferrer"
               >
                 here
               </a>
@@ -61,31 +67,31 @@ export default function About() {
             </div>
             <br />
             We send you neural networks to execute directly in your browser using the{' '}
-            <a href="https://onnxruntime.ai/" className="text-pink underline" target="_blank">
+            <a href="https://onnxruntime.ai/" className="text-pink underline" target="_blank" rel="noreferrer">
               ONNX Runtime
             </a>
             . For the upscaling model we're using the{' '}
-            <a href="https://arxiv.org/abs/2107.10833" className="text-pink underline" target="_blank">
+            <a href="https://arxiv.org/abs/2107.10833" className="text-pink underline" target="_blank" rel="noreferrer">
               SOTA Real-ESRGAN
             </a>
             . Our tagger is a{' '}
-            <a href="https://arxiv.org/abs/1905.02244" className="text-pink underline" target="_blank">
+            <a href="https://arxiv.org/abs/1905.02244" className="text-pink underline" target="_blank" rel="noreferrer">
               MobileNetV3
             </a>
             . On the web side we're using{' '}
-            <a className="text-pink underline" href="https://reactjs.org/" target="_blank">
+            <a className="text-pink underline" href="https://reactjs.org/" target="_blank" rel="noreferrer">
               React
             </a>
             ,{' '}
-            <a className="text-pink underline" href="https://nextjs.org/" target="_blank">
+            <a className="text-pink underline" href="https://nextjs.org/" target="_blank" rel="noreferrer">
               Next.js
             </a>
             , and{' '}
-            <a className="text-pink underline" href="https://tailwindcss.com/" target="_blank">
+            <a className="text-pink underline" href="https://tailwindcss.com/" target="_blank" rel="noreferrer">
               TailwindCSS
             </a>
             . We're hosted on{' '}
-            <a className="text-pink underline" href="https://pages.cloudflare.com/" target="_blank">
+            <a className="text-pink underline" href="https://pages.cloudflare.com/" target="_blank" rel="noreferrer">
               cloudflare pages
             </a>
             , which generously provides unlimited bandwith.

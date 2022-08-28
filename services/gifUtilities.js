@@ -11,7 +11,7 @@ async function frameAdd(frame, gif, delay) {
     img.src = await multiUpscale(frame, 1)
     img.crossOrigin = 'Anonymous'
     img.onload = function () {
-      gif.addFrame(img, { delay: delay })
+      gif.addFrame(img, { delay })
       resolve('Worked')
     }
   })
@@ -21,7 +21,7 @@ export async function doGif(inputURI, setTags) {
   const allFrames = await gifToNdarray(inputURI)
   const [ign, N, C, H, W] = allFrames.shape
 
-  var promisedGif = await fetch(inputURI)
+  const promisedGif = await fetch(inputURI)
     .then((resp) => resp.arrayBuffer())
     .then((buff) => parseGIF(buff))
     .then((gif) => decompressFrames(gif, true))
@@ -31,15 +31,15 @@ export async function doGif(inputURI, setTags) {
   setTags(tags)
 
   return new Promise(async (resolve, reject) => {
-    var GIF = require('./gif.js')
-    var gif = new GIF({
+    const GIF = require('./gif.js')
+    const gif = new GIF({
       workers: 2,
       quality: 1,
       width: W * 2,
       height: H * 2,
     })
 
-    for (var i = 0; i < N; i++) {
+    for (let i = 0; i < N; i++) {
       const newND = sliceFrame(allFrames, i)
       await frameAdd(newND, gif, promisedGif[i].delay)
     }
@@ -59,7 +59,7 @@ export async function doGif(inputURI, setTags) {
 function sliceFrame(allFrames, frameIndex) {
   const [ign, N, C, H, W] = allFrames.shape
 
-  let outFrame = ndarray(new Uint8Array(1 * C * H * W), [1, C, H, W])
+  const outFrame = ndarray(new Uint8Array(1 * C * H * W), [1, C, H, W])
   ops.assign(outFrame, allFrames.pick(null, frameIndex, null, null, null))
   return outFrame
 }

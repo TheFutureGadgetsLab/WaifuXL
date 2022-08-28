@@ -42,7 +42,7 @@ function ModalComponent() {
                 setInputModalOpen(false)
                 setFileName()
               }}
-            ></div>
+            />
             <div id="modal-container" className="flex items-center justify-center w-screen h-screen">
               <div
                 id="modal"
@@ -109,8 +109,8 @@ function UploadButtonComponent() {
       <button
         id="upload-button"
         type="button"
-        className="relative mt-7 rounded-md right-0 bottom-0 text-white shadow-sm px-4 py-1 
-text-base font-medium h-12 focus:outline-none focus:ring-2 focus:ring-offset-2 
+        className="relative mt-7 rounded-md right-0 bottom-0 text-white shadow-sm px-4 py-1
+text-base font-medium h-12 focus:outline-none focus:ring-2 focus:ring-offset-2
 border-blue border-2 bg-blue hover:bg-blue hover:text-white disabled:bg-white disabled:text-gray-200 disabled:border-gray-200"
       >
         <label className="absolute left-0 top-0 w-full h-full cursor-pointer">
@@ -142,8 +142,8 @@ function DoneButtonComponent() {
       <button
         id="done-button"
         type="button"
-        className="mt-7 rounded-md right-0 bottom-0 text-blue shadow-sm px-4 py-1 
-text-base font-medium h-12 focus:outline-none focus:ring-2 focus:ring-offset-2 
+        className="mt-7 rounded-md right-0 bottom-0 text-blue shadow-sm px-4 py-1
+text-base font-medium h-12 focus:outline-none focus:ring-2 focus:ring-offset-2
 border-blue border-2 bg-white hover:bg-blue hover:text-white disabled:bg-white disabled:text-gray-200 disabled:border-gray-200"
         onClick={() => {
           setInputURI(inputURI)

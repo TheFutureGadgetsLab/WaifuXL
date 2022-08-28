@@ -68,7 +68,7 @@ const RunComponent = () => {
           id="upscale-button-bg"
           className="bg-litepink absolute h-full left-0 rounded duration-300"
           style={{ width: `${modelLoadProg * 100}%`, zIndex: -1, transitionProperty: 'width' }}
-        ></div>
+        />
       )}
 
       <UpscaleSVG />
@@ -85,8 +85,8 @@ const RunComponent = () => {
 }
 
 function incrementCounter() {
-  //hit the api and note an image has been upscaled
-  var requestOptions = {
+  // hit the api and note an image has been upscaled
+  const requestOptions = {
     method: 'GET',
     redirect: 'follow',
   }

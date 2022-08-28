@@ -109,6 +109,7 @@ function GitHashComponent() {
           href={`https://github.com/TheFutureGadgetsLab/WaifuXL/commit/${__LONG_HASH__}`}
           className="text-pink underline"
           target="_blank"
+          rel="noreferrer"
         >
           {__SHORT_HASH__}
         </a>

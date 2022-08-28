@@ -9,9 +9,9 @@ import { isValidHttpUrl } from './miscUtils'
 function getDataURIFromInput(input) {
   return new Promise(async (resolve, reject) => {
     if (isValidHttpUrl(input)) {
-      let blob = await fetch(input).then((r) => r.blob())
-      let dataUrl = await new Promise((resolve) => {
-        let reader = new FileReader()
+      const blob = await fetch(input).then((r) => r.blob())
+      const dataUrl = await new Promise((resolve) => {
+        const reader = new FileReader()
         reader.onload = () => resolve(reader.result)
         reader.readAsDataURL(blob)
       })
@@ -20,7 +20,7 @@ function getDataURIFromInput(input) {
       const img = new Image()
       img.src = input
       img.crossOrigin = 'Anonymous'
-      var results = null
+      const results = null
       img.onload = function () {
         const canvas = document.createElement('canvas')
         canvas.width = img.width
@@ -41,7 +41,7 @@ function getDataURIFromInput(input) {
  * @param {string} fileName File name
  */
 function downloadImage(fileName, extension, outputURI) {
-  let link = document.createElement('a')
+  const link = document.createElement('a')
   link.download = `${fileName}.${extension}`
   link.href = outputURI
   link.click()

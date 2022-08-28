@@ -43,7 +43,7 @@ function buildTagLine(x) {
   return (
     <div className="grid grid-cols-2 font-mono h-4" key={x[0]}>
       <span className="">
-        <Tooltip tooltipText={cleanString(x[0])} isHidden={isHidden}></Tooltip>
+        <Tooltip tooltipText={cleanString(x[0])} isHidden={isHidden} />
         <span onMouseEnter={(e) => handleMouseEnter()} onMouseLeave={(e) => handleMouseLeave()}>
           {truncateString(x[0])}
         </span>
@@ -55,7 +55,7 @@ function buildTagLine(x) {
         <div
           className="bg-blue font-medium p-0.5 leading-none rounded-full"
           style={{ width: `${Math.round(x[1] * 100)}%`, height: '1rem' }}
-        ></div>
+        />
       </div>
     </div>
   )
@@ -69,21 +69,17 @@ const TagComponent = ({ tags }) => {
     <>
       <div className="text-xl font-bold grid grid-cols-6 pb-3" style={{ textShadow: 'white 0px 2px 4px' }}>
         <span className="col-span-4">Tags</span>
-        {tagPage > 0 ? <LeftArrowSVG onClick={() => setTagPage(tagPage - 1)} /> : <span></span>}
-        {tagPage < tags.topDesc.length / 10 - 1 ? (
-          <RighArrowSVG onClick={() => setTagPage(tagPage + 1)} />
-        ) : (
-          <span></span>
-        )}
+        {tagPage > 0 ? <LeftArrowSVG onClick={() => setTagPage(tagPage - 1)} /> : <span />}
+        {tagPage < tags.topDesc.length / 10 - 1 ? <RighArrowSVG onClick={() => setTagPage(tagPage + 1)} /> : <span />}
       </div>
       {tags.topDesc.slice(10 * tagPage, 10 * (tagPage + 1)).map((x) => buildTagLine(x))}
       <div className="text-xl font-bold grid grid-cols-6 pt-10 pb-3" style={{ textShadow: 'white 0px 2px 4px' }}>
         <span className="col-span-4">Characters</span>
-        {charPage > 0 ? <LeftArrowSVG onClick={() => setCharPage(charPage - 1)} /> : <span></span>}
+        {charPage > 0 ? <LeftArrowSVG onClick={() => setCharPage(charPage - 1)} /> : <span />}
         {charPage < tags.topChars.length / 10 - 1 ? (
           <RighArrowSVG onClick={() => setCharPage(charPage + 1)} />
         ) : (
-          <span></span>
+          <span />
         )}
       </div>
       {tags.topChars.slice(10 * charPage, 10 * (charPage + 1)).map((x) => buildTagLine(x))}

@@ -4,12 +4,12 @@ import { buildImageFromND, buildNdarrayFromImageOutput } from '../processingUtil
 import { fetchModel, prepareImage } from './utils'
 import * as ort from 'onnxruntime-web'
 
-var superSession = null
+let superSession = null
 
 export async function runSuperRes(imageArray) {
   const feeds = prepareImage(imageArray)
 
-  let sr = undefined
+  let sr
   try {
     const output = await superSession.run(feeds)
     sr = output.output
@@ -53,8 +53,8 @@ export async function multiUpscale(imageArray, upscaleFactor) {
   console.timeEnd('Upscaling')
 
   // Reshape network output into a normal image
-  let outImgH = outArr.shape[2]
-  let outImgW = outArr.shape[3]
+  const outImgH = outArr.shape[2]
+  const outImgW = outArr.shape[3]
   const outImg = buildNdarrayFromImageOutput(outArr, outImgH, outImgW)
   const outURI = buildImageFromND(outImg, outImgH, outImgW)
   return outURI
@@ -64,10 +64,10 @@ async function upscaleFrame(imageArray) {
   const CHUNK_SIZE = 512
   const PAD_SIZE = 32
 
-  let inImgH = imageArray.shape[2]
-  let inImgW = imageArray.shape[3]
-  let outImgH = inImgH * 2
-  let outImgW = inImgW * 2
+  const inImgH = imageArray.shape[2]
+  const inImgW = imageArray.shape[3]
+  const outImgH = inImgH * 2
+  const outImgW = inImgW * 2
   const nChunksH = Math.ceil(inImgH / CHUNK_SIZE)
   const nChunksW = Math.ceil(inImgW / CHUNK_SIZE)
   const chunkH = Math.floor(inImgH / nChunksH)
@@ -79,7 +79,7 @@ async function upscaleFrame(imageArray) {
 
   // Split the image in chunks and run super resolution on each chunk
   // Time execution
-  let outArr = ndarray(new Uint8Array(3 * outImgH * outImgW), [1, 3, outImgH, outImgW])
+  const outArr = ndarray(new Uint8Array(3 * outImgH * outImgW), [1, 3, outImgH, outImgW])
   for (let i = 0; i < nChunksH; i += 1) {
     for (let j = 0; j < nChunksW; j += 1) {
       const x = j * chunkW

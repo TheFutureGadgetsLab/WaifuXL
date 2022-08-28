@@ -17,7 +17,7 @@ export default function Donate() {
 
       <div
         className="flex flex-col items-center min-h-screen"
-        style={{ backgroundImage: `url("images/bg.svg")`, backgroundSize: 'cover' }}
+        style={{ backgroundImage: 'url("images/bg.svg")', backgroundSize: 'cover' }}
       >
         <NavbarComponent currentPage="donate" />
         <HamSVG
@@ -48,7 +48,7 @@ function Tooltip({ children, tooltipText, isHidden }) {
       className="absolute right-full top-0 flex items-center transition-transform duration-200 ease-in-out"
       style={{ transform: `scale(${isHidden ? '0' : '1'})` }}
     >
-      <div className={`z-40 bg-black text-white px-4 py-2 rounded flex items-center`} ref={tipRef}>
+      <div className="z-40 bg-black text-white px-4 py-2 rounded flex items-center" ref={tipRef}>
         {tooltipText}
       </div>
       {children}
@@ -74,7 +74,7 @@ function CryptoComponent({ addr, imgPath }) {
         </a>
         <img className="h-5 pr-2 absolute left-full" src="./images/copy.svg" />
       </button>
-      <Tooltip tooltipText={'Copied!'} isHidden={isHidden}></Tooltip>
+      <Tooltip tooltipText="Copied!" isHidden={isHidden} />
     </div>
   )
 }
@@ -88,6 +88,7 @@ function KofiComponent() {
         className="font-mono"
         href="https://ko-fi.com/thefuturegadgetslab/?hidefeed=true&widget=true&embed=true&preview=true"
         target="_blank"
+        rel="noreferrer"
       >
         <span>Support us on Ko-fi</span>
       </a>

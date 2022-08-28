@@ -2,12 +2,12 @@ import ndarray from 'ndarray'
 import { fetchModel, prepareImage } from './utils'
 import * as ort from 'onnxruntime-web'
 
-var taggerSession = null
+let taggerSession = null
 
 export async function runTagger(imageArray) {
   const feeds = prepareImage(imageArray)
 
-  let tags = undefined
+  let tags
   try {
     const output = await taggerSession.run(feeds)
     tags = getTopTags(output.output)

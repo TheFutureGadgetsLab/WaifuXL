@@ -3,8 +3,8 @@ import ops from 'ndarray-ops'
 import { initializeTagger } from './tagging'
 import { initializeSuperRes } from './upscaling'
 import * as ort from 'onnxruntime-web'
-const usr = require('ua-parser-js')
 import pify from 'pify'
+const usr = require('ua-parser-js')
 const getPixels = pify(require('get-pixels'))
 
 /**
@@ -14,15 +14,15 @@ const getPixels = pify(require('get-pixels'))
  * @returns The pixels in this image
  */
 export async function imageToNdarray(imageURI) {
-  var pixels = await getPixels(imageURI)
+  let pixels = await getPixels(imageURI)
 
   // Transpose [W, H, C] -> [H, W, C]
   pixels = pixels.transpose(1, 0)
-  let height = pixels.shape[0]
-  let width = pixels.shape[1]
+  const height = pixels.shape[0]
+  const width = pixels.shape[1]
 
   // [H, W, 4] -> [1, 3, H, W]
-  let img = ndarray(new Uint8Array(width * height * 3), [1, 3, height, width])
+  const img = ndarray(new Uint8Array(width * height * 3), [1, 3, height, width])
   ops.assign(img.pick(0, 0, null, null), pixels.pick(null, null, 0))
   ops.assign(img.pick(0, 1, null, null), pixels.pick(null, null, 1))
   ops.assign(img.pick(0, 2, null, null), pixels.pick(null, null, 2))
@@ -70,7 +70,7 @@ export async function gifToNdarray(gifURI, coalesce = true) {
   const N = results.shape[0]
   const H = results.shape[1]
   const W = results.shape[2]
-  let gif = ndarray(new Uint8Array(1 * N * 3 * H * W), [1, N, 3, H, W])
+  const gif = ndarray(new Uint8Array(1 * N * 3 * H * W), [1, N, 3, H, W])
   for (let i = 0; i < N; ++i) {
     ops.assign(gif.pick(0, i, 0, null, null), results.pick(i, null, null, 0))
     ops.assign(gif.pick(0, i, 1, null, null), results.pick(i, null, null, 1))
@@ -104,7 +104,7 @@ export async function fetchModel(filepathOrUri, setProgress, startProgress, endP
   const response = await fetch(filepathOrUri)
   const reader = response.body.getReader()
   const length = parseInt(response.headers.get('content-length'))
-  let data = new Uint8Array(length)
+  const data = new Uint8Array(length)
   let received = 0
 
   // Loop through the response stream and extract data chunks

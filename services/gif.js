@@ -5,7 +5,7 @@
   } else if (typeof define === 'function' && define.amd) {
     define([], f)
   } else {
-    var g
+    let g
     if (typeof window !== 'undefined') {
       g = window
     } else if (typeof global !== 'undefined') {
@@ -18,23 +18,23 @@
     g.GIF = f()
   }
 })(function () {
-  var define, module, exports
+  let define, module, exports
   return (function e(t, n, r) {
     function s(o, u) {
       if (!n[o]) {
         if (!t[o]) {
-          var a = typeof require == 'function' && require
+          const a = typeof require === 'function' && require
           if (!u && a) return a(o, !0)
           if (i) return i(o, !0)
-          var f = new Error("Cannot find module '" + o + "'")
+          const f = new Error("Cannot find module '" + o + "'")
           throw ((f.code = 'MODULE_NOT_FOUND'), f)
         }
-        var l = (n[o] = { exports: {} })
+        const l = (n[o] = { exports: {} })
         t[o][0].call(
           l.exports,
           function (e) {
-            var n = t[o][1][e]
-            return s(n ? n : e)
+            const n = t[o][1][e]
+            return s(n || e)
           },
           l,
           l.exports,
@@ -46,8 +46,8 @@
       }
       return n[o].exports
     }
-    var i = typeof require == 'function' && require
-    for (var o = 0; o < r.length; o++) s(r[o])
+    var i = typeof require === 'function' && require
+    for (let o = 0; o < r.length; o++) s(r[o])
     return s
   })(
     {
@@ -68,7 +68,7 @@
             return this
           }
           EventEmitter.prototype.emit = function (type) {
-            var er, handler, len, args, i, listeners
+            let er, handler, len, args, i, listeners
             if (!this._events) this._events = {}
             if (type === 'error') {
               if (!this._events.error || (isObject(this._events.error) && !this._events.error.length)) {
@@ -76,7 +76,7 @@
                 if (er instanceof Error) {
                   throw er
                 } else {
-                  var err = new Error('Uncaught, unspecified "error" event. (' + er + ')')
+                  const err = new Error('Uncaught, unspecified "error" event. (' + er + ')')
                   err.context = er
                   throw err
                 }
@@ -108,11 +108,12 @@
             return true
           }
           EventEmitter.prototype.addListener = function (type, listener) {
-            var m
+            let m
             if (!isFunction(listener)) throw TypeError('listener must be a function')
             if (!this._events) this._events = {}
-            if (this._events.newListener)
+            if (this._events.newListener) {
               this.emit('newListener', type, isFunction(listener.listener) ? listener.listener : listener)
+            }
             if (!this._events[type]) this._events[type] = listener
             else if (isObject(this._events[type])) this._events[type].push(listener)
             else this._events[type] = [this._events[type], listener]
@@ -140,7 +141,7 @@
           EventEmitter.prototype.on = EventEmitter.prototype.addListener
           EventEmitter.prototype.once = function (type, listener) {
             if (!isFunction(listener)) throw TypeError('listener must be a function')
-            var fired = false
+            let fired = false
             function g() {
               this.removeListener(type, g)
               if (!fired) {
@@ -153,7 +154,7 @@
             return this
           }
           EventEmitter.prototype.removeListener = function (type, listener) {
-            var list, position, length, i
+            let list, position, length, i
             if (!isFunction(listener)) throw TypeError('listener must be a function')
             if (!this._events || !this._events[type]) return this
             list = this._events[type]
@@ -181,7 +182,7 @@
             return this
           }
           EventEmitter.prototype.removeAllListeners = function (type) {
-            var key, listeners
+            let key, listeners
             if (!this._events) return this
             if (!this._events.removeListener) {
               if (arguments.length === 0) this._events = {}
@@ -207,7 +208,7 @@
             return this
           }
           EventEmitter.prototype.listeners = function (type) {
-            var ret
+            let ret
             if (!this._events || !this._events[type]) ret = []
             else if (isFunction(this._events[type])) ret = [this._events[type]]
             else ret = this._events[type].slice()
@@ -215,7 +216,7 @@
           }
           EventEmitter.prototype.listenerCount = function (type) {
             if (this._events) {
-              var evlistener = this._events[type]
+              const evlistener = this._events[type]
               if (isFunction(evlistener)) return 1
               else if (evlistener) return evlistener.length
             }
@@ -241,7 +242,7 @@
       ],
       2: [
         function (require, module, exports) {
-          var UA, browser, mode, platform, ua
+          let UA, browser, mode, platform, ua
           ua = 'chrome'
           platform = 'linux'
           UA = ua.match(
@@ -266,35 +267,35 @@
       ],
       3: [
         function (require, module, exports) {
-          var EventEmitter,
-            GIF,
-            browser,
-            extend = function (child, parent) {
-              for (var key in parent) {
-                if (hasProp.call(parent, key)) child[key] = parent[key]
+          let EventEmitter
+          let GIF
+          let browser
+          const extend = function (child, parent) {
+            for (const key in parent) {
+              if (hasProp.call(parent, key)) child[key] = parent[key]
+            }
+            function ctor() {
+              this.constructor = child
+            }
+            ctor.prototype = parent.prototype
+            child.prototype = new ctor()
+            child.__super__ = parent.prototype
+            return child
+          }
+          var hasProp = {}.hasOwnProperty
+          const indexOf =
+            [].indexOf ||
+            function (item) {
+              for (let i = 0, l = this.length; i < l; i++) {
+                if (i in this && this[i] === item) return i
               }
-              function ctor() {
-                this.constructor = child
-              }
-              ctor.prototype = parent.prototype
-              child.prototype = new ctor()
-              child.__super__ = parent.prototype
-              return child
-            },
-            hasProp = {}.hasOwnProperty,
-            indexOf =
-              [].indexOf ||
-              function (item) {
-                for (var i = 0, l = this.length; i < l; i++) {
-                  if (i in this && this[i] === item) return i
-                }
-                return -1
-              },
-            slice = [].slice
+              return -1
+            }
+          const slice = [].slice
           EventEmitter = require('events').EventEmitter
           browser = require('./browser.coffee')
           GIF = (function (superClass) {
-            var defaults, frameDefaults
+            let defaults, frameDefaults
             extend(GIF, superClass)
             defaults = {
               workerScript: 'gif.worker.js',
@@ -310,7 +311,7 @@
             }
             frameDefaults = { delay: 500, copy: false }
             function GIF(options) {
-              var base, key, value
+              let base, key, value
               this.running = false
               this.options = {}
               this.frames = []
@@ -331,7 +332,7 @@
               }
             }
             GIF.prototype.setOptions = function (options) {
-              var key, results, value
+              let key, results, value
               results = []
               for (key in options) {
                 if (!hasProp.call(options, key)) continue
@@ -341,7 +342,7 @@
               return results
             }
             GIF.prototype.addFrame = function (image, options) {
-              var frame, key
+              let frame, key
               if (options == null) {
                 options = {}
               }
@@ -383,7 +384,7 @@
               return this.frames.push(frame)
             }
             GIF.prototype.render = function () {
-              var i, j, numWorkers, ref
+              let i, j, numWorkers, ref
               if (this.running) {
                 throw new Error('Already running')
               }
@@ -394,9 +395,9 @@
               this.nextFrame = 0
               this.finishedFrames = 0
               this.imageParts = function () {
-                var j, ref, results
+                let j, ref, results
                 results = []
-                for (i = j = 0, ref = this.frames.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+                for (i = j = 0, ref = this.frames.length; ref >= 0 ? j < ref : j > ref; i = ref >= 0 ? ++j : --j) {
                   results.push(null)
                 }
                 return results
@@ -405,7 +406,7 @@
               if (this.options.globalPalette === true) {
                 this.renderNextFrame()
               } else {
-                for (i = j = 0, ref = numWorkers; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+                for (i = j = 0, ref = numWorkers; ref >= 0 ? j < ref : j > ref; i = ref >= 0 ? ++j : --j) {
                   this.renderNextFrame()
                 }
               }
@@ -413,7 +414,7 @@
               return this.emit('progress', 0)
             }
             GIF.prototype.abort = function () {
-              var worker
+              let worker
               while (true) {
                 worker = this.activeWorkers.shift()
                 if (worker == null) {
@@ -426,12 +427,12 @@
               return this.emit('abort')
             }
             GIF.prototype.spawnWorkers = function () {
-              var j, numWorkers, ref, results
+              let j, numWorkers, ref, results
               numWorkers = Math.min(this.options.workers, this.frames.length)
               ;(function () {
                 results = []
                 for (
-                  var j = (ref = this.freeWorkers.length);
+                  let j = (ref = this.freeWorkers.length);
                   ref <= numWorkers ? j < numWorkers : j > numWorkers;
                   ref <= numWorkers ? j++ : j--
                 ) {
@@ -443,7 +444,7 @@
                 .forEach(
                   (function (_this) {
                     return function (i) {
-                      var worker
+                      let worker
                       _this.log('spawning worker ' + i)
                       worker = new Worker(_this.options.workerScript)
                       worker.onmessage = function (event) {
@@ -458,7 +459,7 @@
               return numWorkers
             }
             GIF.prototype.frameFinished = function (frame) {
-              var i, j, ref
+              let i, j, ref
               this.log('frame ' + frame.index + ' finished - ' + this.activeWorkers.length + ' active')
               this.finishedFrames++
               this.emit('progress', this.finishedFrames / this.frames.length)
@@ -469,8 +470,8 @@
                 if (this.frames.length > 2) {
                   for (
                     i = j = 1, ref = this.freeWorkers.length;
-                    1 <= ref ? j < ref : j > ref;
-                    i = 1 <= ref ? ++j : --j
+                    ref >= 1 ? j < ref : j > ref;
+                    i = ref >= 1 ? ++j : --j
                   ) {
                     this.renderNextFrame()
                   }
@@ -483,7 +484,7 @@
               }
             }
             GIF.prototype.finishRendering = function () {
-              var data, frame, i, image, j, k, l, len, len1, len2, len3, offset, page, ref, ref1, ref2
+              let data, frame, i, image, j, k, l, len, len1, len2, len3, offset, page, ref, ref1, ref2
               len = 0
               ref = this.imageParts
               for (j = 0, len1 = ref.length; j < len1; j++) {
@@ -512,7 +513,7 @@
               return this.emit('finished', image, data)
             }
             GIF.prototype.renderNextFrame = function () {
-              var frame, task, worker
+              let frame, task, worker
               if (this.freeWorkers.length === 0) {
                 throw new Error('No free workers')
               }
@@ -530,7 +531,7 @@
               return ctx.getImageData(0, 0, this.options.width, this.options.height).data
             }
             GIF.prototype.getImageData = function (image) {
-              var ctx
+              let ctx
               if (this._canvas == null) {
                 this._canvas = document.createElement('canvas')
                 this._canvas.width = this.options.width
@@ -543,10 +544,10 @@
               return this.getContextData(ctx)
             }
             GIF.prototype.getTask = function (frame) {
-              var index, task
+              let index, task
               index = this.frames.indexOf(frame)
               task = {
-                index: index,
+                index,
                 last: index === this.frames.length - 1,
                 delay: frame.delay,
                 transparent: frame.transparent,
@@ -570,8 +571,8 @@
               return task
             }
             GIF.prototype.log = function () {
-              var args
-              args = 1 <= arguments.length ? slice.call(arguments, 0) : []
+              let args
+              args = arguments.length >= 1 ? slice.call(arguments, 0) : []
               if (!this.options.debug) {
                 return
               }
@@ -588,4 +589,4 @@
     [3],
   )(3)
 })
-//# sourceMappingURL=gif.js.map
+// # sourceMappingURL=gif.js.map

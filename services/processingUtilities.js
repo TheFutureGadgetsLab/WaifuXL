@@ -19,7 +19,7 @@ export function buildImageFromND(nd, height, width) {
   canvas.width = width
   canvas.height = height
   const context = canvas.getContext('2d')
-  var data = context.createImageData(width, height)
+  const data = context.createImageData(width, height)
   data.data.set(nd)
   context.putImageData(data, 0, 0)
   return canvas.toDataURL()

@@ -22,7 +22,7 @@ export default function Main() {
       <Error />
       <div
         style={{
-          backgroundImage: `url("images/bg.svg")`,
+          backgroundImage: 'url("images/bg.svg")',
           backgroundSize: 'cover',
           backgroundPositionX: 'right',
         }}
@@ -30,11 +30,7 @@ export default function Main() {
         <Sidebar />
         <ModalComponent />
         <main className="flex-1">
-          <AnnouncementComponent
-            announcement={
-              'Safari performance will be worse than other browsers. If possible use a non-webkit based browser.'
-            }
-          />
+          <AnnouncementComponent announcement="Safari performance will be worse than other browsers. If possible use a non-webkit based browser." />
           <div className="flex flex-col items-center h-screen w-screen relative">
             <NavbarComponent currentPage="index" />
             <div className="h-3/4 grow w-full">

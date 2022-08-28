@@ -24,14 +24,14 @@ const TitleComponent = () => {
     <>
       <div className="flex flex-col items-center justify-center w-full text-center">
         {modelLoading ? (
-          <h1 id="title" className={`select-none absolute bottom-20 lg:text-6xl md:text-4xl text-2xl font-bold mt-10`}>
+          <h1 id="title" className="select-none absolute bottom-20 lg:text-6xl md:text-4xl text-2xl font-bold mt-10">
             Preparing to <span className="text-pink">run{loadingText}</span>
           </h1>
         ) : (
-          <h1 id="title" className={`select-none absolute bottom-20 lg:text-6xl md:text-4xl text-2xl font-bold mt-10`}>
+          <h1 id="title" className="select-none absolute bottom-20 lg:text-6xl md:text-4xl text-2xl font-bold mt-10">
             {downloadReady ? 'Download' : loading ? 'Expanding' : 'Expand'} your{' '}
             <span className="text-pink">
-              {'waifu'}
+              waifu
               {loading ? loadingText : '!'}
             </span>
           </h1>
