@@ -24,7 +24,7 @@ module.exports = {
       yellow: colors.amber
     },
     backgroundSize: {
-      'auto': '70vh',
+      'auto': '42vh',
     },
     extend: {
       backgroundImage: {
