@@ -23,6 +23,9 @@ module.exports = {
       red: colors.rose,
       yellow: colors.amber
     },
+    backgroundSize: {
+      'auto': '70vh',
+    },
     extend: {
       backgroundImage: {
         'kizuna': "url('/images/bg.svg')",
