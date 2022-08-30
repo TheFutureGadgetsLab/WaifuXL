@@ -15,10 +15,7 @@ export default function Donate() {
     <>
       <SideNavbar showSidebar={showSidebar} currentPage="donate" />
 
-      <div
-        className="flex flex-col items-center min-h-screen"
-        style={{ backgroundImage: 'url("images/bg.svg")', backgroundSize: 'cover' }}
-      >
+      <div className="flex flex-col items-center min-h-screen bg-kizuna bg-no-repeat bg-right-bottom bg-fixed bg-auto">
         <NavbarComponent currentPage="donate" />
         <HamSVG
           onClick={() => setShowSidebar(!showSidebar)}

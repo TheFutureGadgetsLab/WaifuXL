@@ -14,13 +14,7 @@ export default function About() {
     <>
       <SideNavbar showSidebar={showSidebar} currentPage="about" />
 
-      <div
-        className="flex flex-col items-center min-h-screen"
-        style={{
-          backgroundImage: 'url("images/bg.svg")',
-          backgroundSize: 'cover',
-        }}
-      >
+      <div className="flex flex-col items-center min-h-screen bg-kizuna bg-no-repeat bg-right-bottom bg-fixed bg-auto">
         <NavbarComponent currentPage="about" />
         <HamSVG
           onClick={() => setShowSidebar(!showSidebar)}

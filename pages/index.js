@@ -20,13 +20,7 @@ export default function Main() {
   return (
     <>
       <Error />
-      <div
-        style={{
-          backgroundImage: 'url("images/bg.svg")',
-          backgroundSize: 'cover',
-          backgroundPositionX: 'right',
-        }}
-      >
+      <div className="bg-kizuna bg-no-repeat bg-right-bottom bg-fixed bg-auto">
         <Sidebar />
         <ModalComponent />
         <main className="flex-1">

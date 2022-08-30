@@ -22,6 +22,11 @@ module.exports = {
       indigo: colors.indigo,
       red: colors.rose,
       yellow: colors.amber
+    },
+    extend: {
+      backgroundImage: {
+        'kizuna': "url('/images/bg.svg')",
+      },
     }
   },
   variants: {
