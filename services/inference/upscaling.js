@@ -107,7 +107,6 @@ async function upscaleFrame(imageArray) {
       ops.assign(outSlice, chunkSlice)
     }
   }
-  imageArray = outArr
 
   return outArr
 }
