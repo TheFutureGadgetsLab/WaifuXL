@@ -8,6 +8,7 @@ import ModalComponent from '../components/ModalComponent'
 import { useAppStateStore } from '../services/useState'
 import { useWindowSize } from '../services/windowUtilities'
 import { useEffect } from 'react'
+import { KizunaBG } from '../components/SVGComponents'
 
 export default function Main() {
   const size = useWindowSize()
@@ -19,21 +20,20 @@ export default function Main() {
 
   return (
     <>
+      <KizunaBG />
       <Error />
-      <div className="bg-kizuna bg-no-repeat bg-right-bottom bg-fixed bg-auto">
-        <Sidebar />
-        <ModalComponent />
-        <main className="flex-1">
-          <AnnouncementComponent announcement="Safari performance will be worse than other browsers. If possible use a non-webkit based browser." />
-          <div className="flex flex-col items-center h-screen w-screen relative">
-            <NavbarComponent currentPage="index" />
-            <div className="h-3/4 grow w-full">
-              <ImageDisplay />
-              <TitleComponent />
-            </div>
+      <Sidebar />
+      <ModalComponent />
+      <AnnouncementComponent announcement="Safari performance will be worse than other browsers. If possible use a non-webkit based browser." />
+      <main className="flex-1">
+        <div className="flex flex-col items-center h-screen w-screen relative">
+          <NavbarComponent currentPage="index" />
+          <div className="h-3/4 grow w-full">
+            <ImageDisplay />
+            <TitleComponent />
           </div>
-        </main>
-      </div>
+        </div>
+      </main>
     </>
   )
 }

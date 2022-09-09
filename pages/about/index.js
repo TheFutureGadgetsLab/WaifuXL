@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import NavbarComponent from '../../components/NavbarComponent'
 import SideNavbar from '../../components/SideNavbar'
-import { HamSVG, GitHubSVG } from '../../components/SVGComponents'
+import { HamSVG, GitHubSVG, KizunaBG } from '../../components/SVGComponents'
 
 export default function About() {
   const [showSidebar, setShowSidebar] = useState(true)
@@ -12,9 +12,9 @@ export default function About() {
 
   return (
     <>
+      <KizunaBG />
       <SideNavbar showSidebar={showSidebar} currentPage="about" />
-
-      <div className="flex flex-col items-center min-h-screen bg-kizuna bg-no-repeat bg-right-bottom bg-fixed bg-auto">
+      <div className="flex flex-col items-center min-h-screen">
         <NavbarComponent currentPage="about" />
         <HamSVG
           onClick={() => setShowSidebar(!showSidebar)}

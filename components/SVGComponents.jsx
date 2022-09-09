@@ -1,3 +1,6 @@
+import Kizuna from '../public/images/bg.svg'
+import Image from 'next/future/image'
+
 export function LeftArrowSVG({ onClick }) {
   return (
     <svg
@@ -140,4 +143,9 @@ export function GitHubSVG({ className }) {
       </svg>
     </a>
   )
+}
+
+export function KizunaBG() {
+  const css = { width: 'auto', height: '95vh' }
+  return <Image src={Kizuna} className="absolute right-0 bottom-0" style={css} priority />
 }

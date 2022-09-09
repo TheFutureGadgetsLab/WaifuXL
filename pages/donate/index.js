@@ -1,7 +1,7 @@
 import NavbarComponent from '../../components/NavbarComponent'
 import SideNavbar from '../../components/SideNavbar'
 import { createRef, useEffect, useState } from 'react'
-import { GitHubSVG, HamSVG } from '../../components/SVGComponents'
+import { GitHubSVG, HamSVG, KizunaBG } from '../../components/SVGComponents'
 import { sleep } from '../../services/inference/utils'
 
 export default function Donate() {
@@ -13,9 +13,9 @@ export default function Donate() {
 
   return (
     <>
+      <KizunaBG />
       <SideNavbar showSidebar={showSidebar} currentPage="donate" />
-
-      <div className="flex flex-col items-center min-h-screen bg-kizuna bg-no-repeat bg-right-bottom bg-fixed bg-auto">
+      <div className="flex flex-col items-center min-h-screen">
         <NavbarComponent currentPage="donate" />
         <HamSVG
           onClick={() => setShowSidebar(!showSidebar)}
