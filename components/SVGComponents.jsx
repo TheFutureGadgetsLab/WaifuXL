@@ -147,5 +147,5 @@ export function GitHubSVG({ className }) {
 
 export function KizunaBG() {
   const css = { width: 'auto', height: '95vh' }
-  return <Image src={Kizuna} className="fixed right-0 bottom-0" style={css} priority />
+  return <Image src={Kizuna} className="fixed right-0 bottom-0" style={css} priority alt="Kizuna AI background"/>
 }
