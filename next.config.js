@@ -15,6 +15,7 @@ const longHash = require('child_process').execSync('git rev-parse HEAD').toStrin
 
 module.exports = withPWA({
   reactStrictMode: true,
+  images: { unoptimized: true }, // disable next/image optimization as doesn't work with static export
   webpack: (config, { }) => {
     config.plugins.push(
       new CopyPlugin({
