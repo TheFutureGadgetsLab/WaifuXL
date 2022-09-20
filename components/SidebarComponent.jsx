@@ -2,7 +2,6 @@ import DownloadComponent from './DownloadComponent'
 import RunComponent from './RunComponent'
 import TagComponent from './TagComponent'
 import Router from 'next/router'
-import ScreenIcons from './ScreenIconsComponent'
 import { useImageStore, useAppStateStore } from '../services/useState'
 import { UploadSVG } from './SVGComponents'
 
@@ -17,7 +16,6 @@ const Sidebar = () => {
         className="relative flex-1 flex flex-col min-h-0 bg-gray-100 transition-all"
         style={{ left: `${showSidebar ? 0 : -100}%` }}
       >
-        <ScreenIcons />
         <div className="flex-1 flex flex-col overflow-y-auto">
           <div className="">
             <div className="pt-5 mt-10 mb-10 mx-8 grid grid-cols-1 space-y-2">
@@ -102,7 +100,7 @@ const InputComponent = () => {
 
 function GitHashComponent() {
   return (
-    <div className="flex justify-center items-center absolute bottom-0 w-full h-4 text-center text-grey">
+    <div className="bg-gray-100 flex justify-center items-center bottom-0 w-full h-4 text-center text-grey pt-5 pb-5">
       <div className="text-xs">
         Built from commit{' '}
         <a

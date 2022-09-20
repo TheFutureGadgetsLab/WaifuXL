@@ -74,12 +74,10 @@ function handleInputFile(items, setFileName, setInputURI) {
 const pasteListener = (e, setInputURI, setFileName, setShowSidebar, setInputModalOpen) => {
   if (e.clipboardData.getData('text/plain')) {
     const url = e.clipboardData.getData('text/plain')
-    console.log(url)
     getDataURIFromInput(url).then((u) => {
       setInputURI(u)
     })
     setFileName(url.split('/').at(-1).split('.')[0])
-    success = true
   } else {
     const success = handleInputFile((e.clipboardData || e.originalEvent.clipboardData).items, setFileName, setInputURI)
     if (success) {
