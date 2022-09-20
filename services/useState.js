@@ -2,12 +2,12 @@ import default_tags from '../services/landing_tags'
 import create from 'zustand'
 
 const useImageStore = create((set) => ({
-  inputURI: './images/senjougahara.webp',
-  outputURI: './images/senjougahara_2x.webp',
-  tags: default_tags,
-  fileName: 'example',
-  extension: 'png',
-  upscaleFactor: 1,
+  inputURI: './images/senjougahara.webp', // Input image URI
+  outputURI: './images/senjougahara_2x.webp', // Output image URI
+  tags: default_tags, // Tags returned by tagger network
+  fileName: 'example', // Output file name
+  extension: 'png', // Output file extension
+  upscaleFactor: 1, // Upscale factor (will be automatically log2'd)
 
   setInputURI: (uri) => {
     set(() => ({ inputURI: uri }))
@@ -27,25 +27,26 @@ const useImageStore = create((set) => ({
 }))
 
 const useAppStateStore = create((set) => ({
-  loading: false,
-  inputModalOpen: false,
-  showSidebar: true,
-  userHasRun: false,
-  modelLoading: false,
-  mobile: false,
-  errorMessage: null,
-  shouldRun: false,
-  modelLoadProg: 0,
+  // We need to combine these into one
+  // Maybe modelLoadProg is -1 if model is not loading, and 0-100 if it is
+  loading: false, // IDK, needs documentation
+  modelLoading: false, // Flag for model loading
+  modelLoadProg: 0, // Progress of model loading
 
-  setLoading: (newLoading) => set((state) => ({ loading: newLoading })),
-  setInputModalOpen: (newInputModalOpen) => set((state) => ({ inputModalOpen: newInputModalOpen })),
-  setShowSidebar: (newShowSidebar) => set((state) => ({ showSidebar: newShowSidebar })),
-  setUserHasRun: (newUserHasRun) => set((state) => ({ userHasRun: newUserHasRun })),
+  inputModalOpen: false, // Flag indicating if input modal is open
+  showSidebar: true, // Flag indicating if sidebar is open
+  mobile: false, // Are we on a mobile aspect ratio?
+  errorMessage: null, // Error message to display
+  shouldRun: false, // Flag indicating if we should run the model, fires a useEffect
+
+  setLoading: (newLoading) => set(() => ({ loading: newLoading })),
+  setInputModalOpen: (newInputModalOpen) => set(() => ({ inputModalOpen: newInputModalOpen })),
+  setShowSidebar: (newShowSidebar) => set(() => ({ showSidebar: newShowSidebar })),
   setModelLoading: () => set((state) => ({ modelLoading: !state.modelLoading })),
-  setMobile: (newMobile) => set((state) => ({ mobile: newMobile })),
-  setErrorMessage: (newError) => set((state) => ({ errorMessage: newError })),
-  setShouldRun: (newShouldRun) => set((state) => ({ shouldRun: newShouldRun })),
-  setModelLoadProg: (newProg) => set((state) => ({ modelLoadProg: newProg })),
+  setMobile: (newMobile) => set(() => ({ mobile: newMobile })),
+  setErrorMessage: (newError) => set(() => ({ errorMessage: newError })),
+  setShouldRun: (newShouldRun) => set(() => ({ shouldRun: newShouldRun })),
+  setModelLoadProg: (newProg) => set(() => ({ modelLoadProg: newProg })),
 }))
 
 export { useImageStore, useAppStateStore }

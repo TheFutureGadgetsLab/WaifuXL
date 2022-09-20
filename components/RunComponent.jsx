@@ -6,7 +6,6 @@ import { useImageStore, useAppStateStore } from '../services/useState'
 
 const RunComponent = () => {
   const setOutputURI = useImageStore((state) => state.setOutputURI)
-  const setUserHasRun = useAppStateStore((state) => state.setUserHasRun)
   const setShouldRun = useAppStateStore((state) => state.setShouldRun)
   const setUpscaleFactor = useImageStore((state) => state.setUpscaleFactor)
   const setErrorMessage = useAppStateStore((state) => state.setErrorMessage)
@@ -28,7 +27,6 @@ const RunComponent = () => {
     if (shouldRun) {
       try {
         upScaleFromURI(setLoading, extension, setTags, uri, upscaleFactor).then((result) => {
-          setUserHasRun(true)
           // If the models output is valid
           if (result) {
             // Set the output and increment the counter
