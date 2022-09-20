@@ -5,11 +5,11 @@ import ImageDisplay from '../components/ImageDisplayComponent'
 import AnnouncementComponent from '../components/Announcement'
 import Error from '../components/ErrorComponent'
 import ModalComponent from '../components/ModalComponent'
+import ScreenIcons from '../components/ScreenIconsComponent'
 import { useAppStateStore } from '../services/useState'
 import { useWindowSize } from '../services/windowUtilities'
 import { useEffect } from 'react'
 import { KizunaBG } from '../components/SVGComponents'
-import ScreenIcons from '../components/ScreenIconsComponent'
 
 export default function Main() {
   const size = useWindowSize()
