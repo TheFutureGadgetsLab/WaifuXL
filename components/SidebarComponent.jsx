@@ -3,12 +3,12 @@ import RunComponent from './RunComponent'
 import TagComponent from './TagComponent'
 import Router from 'next/router'
 import { useImageStore, useAppStateStore } from '../services/useState'
-import { UploadSVG } from './SVGComponents'
+import { CopySVG, UploadSVG } from './SVGComponents'
+import { copyImageToClipboard } from '../services/imageUtilities'
 
 const Sidebar = () => {
   const showSidebar = useAppStateStore((state) => state.showSidebar)
-  const outputURI = useImageStore((state) => state.outputURI)
-  const tags = useImageStore((state) => state.tags)
+  const [outputURI, extension, tags] = useImageStore((state) => [state.outputURI, state.extension, state.tags])
 
   return (
     <div id="sidebar" className="w-80 flex flex-col fixed inset-y-0 z-20">
@@ -22,7 +22,14 @@ const Sidebar = () => {
               <MobileNavLinksComponent />
               <hr className="md:hidden" />
               <InputComponent />
-              {outputURI != null ? <DownloadComponent /> : <UpscaleContainer />}
+              {outputURI != null ? (
+                <>
+                  <DownloadComponent />
+                  {extension != 'gif' ? <CopyComponent /> : <></>}
+                </>
+              ) : (
+                <UpscaleContainer />
+              )}
             </div>
             {tags != null && (
               <>
@@ -95,6 +102,21 @@ const InputComponent = () => {
         <UploadSVG /> <span>Choose Image/GIF</span>
       </button>
     </>
+  )
+}
+
+const CopyComponent = () => {
+  const outputURI = useImageStore((state) => state.outputURI)
+  return (
+    <button
+      className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center"
+      onClick={() => {
+        copyImageToClipboard(outputURI)
+      }}
+    >
+      <CopySVG />
+      <span>Copy Upscaled</span>
+    </button>
   )
 }
 

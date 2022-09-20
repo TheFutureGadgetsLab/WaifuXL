@@ -6,7 +6,7 @@ const useImageStore = create((set) => ({
   outputURI: './images/senjougahara_2x.webp', // Output image URI
   tags: default_tags, // Tags returned by tagger network
   fileName: 'example', // Output file name
-  extension: 'png', // Output file extension
+  extension: 'webp', // Output file extension
   upscaleFactor: 1, // Upscale factor (will be automatically log2'd)
 
   setInputURI: (uri) => {

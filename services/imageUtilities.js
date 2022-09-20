@@ -45,6 +45,33 @@ function downloadImage(fileName, extension, outputURI) {
 }
 
 /**
+ * Copies a Data URI to the clipboard. Note that since Chrome only implementes PNGs in the Clipboard API
+ * we need to convert all input images to PNGs before being copied (realistically only an edge case when
+ * using the landing page image since it's stored as a webp)
+ * 
+ * @param {String} outputURI 
+ */
+function copyImageToClipboard(outputURI) {
+  const img = new Image()
+  img.src = outputURI
+  img.crossOrigin = 'Anonymous'
+  img.onload = function () {
+    //Convert image to PNG (needs to be done if the input image is anything other than PNG)
+    const canvas = document.createElement('canvas')
+    canvas.width = img.width
+    canvas.height = img.height
+    const context = canvas.getContext('2d')
+    context.drawImage(img, 0, 0)
+    canvas.toBlob(function (blob) {
+      var item = {
+        'image/png': blob,
+      }
+      navigator.clipboard.write([new ClipboardItem(item)])
+    }, 'image/png')
+  }
+}
+
+/**
  * Get data URI from image, passing it to a callback
  *
  * @param {File} fileObj File object from file upload or paste event
@@ -76,4 +103,4 @@ function isValidHttpUrl(string) {
   return url.protocol === 'http:' || url.protocol === 'https:'
 }
 
-export { getDataURIFromInput, downloadImage, setDataURIFromFile }
+export { getDataURIFromInput, downloadImage, setDataURIFromFile, copyImageToClipboard }
