@@ -25,9 +25,7 @@ export function buildImageFromND(nd, height, width) {
   return canvas.toDataURL()
 }
 
-export async function upScaleFromURI(setLoading, extension, setTags, uri, upscaleFactor) {
-  setLoading(true)
-
+export async function upScaleFromURI(extension, setTags, uri, upscaleFactor) {
   let resultURI = null
   if (extension == 'gif') {
     let currentURI = uri
@@ -43,6 +41,5 @@ export async function upScaleFromURI(setLoading, extension, setTags, uri, upscal
 
     resultURI = await multiUpscale(imageArray, upscaleFactor)
   }
-  setLoading(false)
   return resultURI
 }

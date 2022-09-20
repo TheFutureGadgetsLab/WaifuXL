@@ -4,7 +4,7 @@ import { useAppStateStore } from '../services/useState'
 const TitleComponent = () => {
   const [loadingText, setLoadingText] = useState('')
 
-  const loading = useAppStateStore((state) => state.loading)
+  const running = useAppStateStore((state) => state.running)
   const downloadReady = useAppStateStore((state) => state.downloadReady)
   const modelLoading = useAppStateStore((state) => state.modelLoading)
 
@@ -29,10 +29,10 @@ const TitleComponent = () => {
           </h1>
         ) : (
           <h1 id="title" className="select-none absolute bottom-20 lg:text-6xl md:text-4xl text-2xl font-bold mt-10">
-            {downloadReady ? 'Download' : loading ? 'Expanding' : 'Expand'} your{' '}
+            {downloadReady ? 'Download' : running ? 'Expanding' : 'Expand'} your{' '}
             <span className="text-pink">
               waifu
-              {loading ? loadingText : '!'}
+              {running ? loadingText : '!'}
             </span>
           </h1>
         )}

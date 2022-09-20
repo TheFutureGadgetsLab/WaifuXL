@@ -29,7 +29,6 @@ const useImageStore = create((set) => ({
 const useAppStateStore = create((set) => ({
   // We need to combine these into one
   // Maybe modelLoadProg is -1 if model is not loading, and 0-100 if it is
-  loading: false, // IDK, needs documentation
   modelLoading: false, // Flag for model loading
   modelLoadProg: 0, // Progress of model loading
 
@@ -37,15 +36,14 @@ const useAppStateStore = create((set) => ({
   showSidebar: true, // Flag indicating if sidebar is open
   mobile: false, // Are we on a mobile aspect ratio?
   errorMessage: null, // Error message to display
-  shouldRun: false, // Flag indicating if we should run the model, fires a useEffect
+  running: false, // Flag indicating if we should run the model, fires a useEffect
 
-  setLoading: (newLoading) => set(() => ({ loading: newLoading })),
   setInputModalOpen: (newInputModalOpen) => set(() => ({ inputModalOpen: newInputModalOpen })),
   setShowSidebar: (newShowSidebar) => set(() => ({ showSidebar: newShowSidebar })),
   setModelLoading: () => set((state) => ({ modelLoading: !state.modelLoading })),
   setMobile: (newMobile) => set(() => ({ mobile: newMobile })),
   setErrorMessage: (newError) => set(() => ({ errorMessage: newError })),
-  setShouldRun: (newShouldRun) => set(() => ({ shouldRun: newShouldRun })),
+  setRunning: (newRunning) => set(() => ({ running: newRunning })),
   setModelLoadProg: (newProg) => set(() => ({ modelLoadProg: newProg })),
 }))
 

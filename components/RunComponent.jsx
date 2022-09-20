@@ -6,55 +6,52 @@ import { useImageStore, useAppStateStore } from '../services/useState'
 
 const RunComponent = () => {
   const setOutputURI = useImageStore((state) => state.setOutputURI)
-  const setShouldRun = useAppStateStore((state) => state.setShouldRun)
+  const setRunning = useAppStateStore((state) => state.setRunning)
   const setUpscaleFactor = useImageStore((state) => state.setUpscaleFactor)
   const setErrorMessage = useAppStateStore((state) => state.setErrorMessage)
   const setModelLoading = useAppStateStore((state) => state.setModelLoading)
   const setModelLoadProg = useAppStateStore((state) => state.setModelLoadProg)
 
-  const shouldRun = useAppStateStore((state) => state.shouldRun)
+  const running = useAppStateStore((state) => state.running)
   const modelLoading = useAppStateStore((state) => state.modelLoading)
-  const loading = useAppStateStore((state) => state.loading)
   const modelLoadProg = useAppStateStore((state) => state.modelLoadProg)
 
-  const setLoading = useAppStateStore((state) => state.setLoading)
   const setTags = useImageStore((state) => state.setTags)
   const uri = useImageStore((state) => state.inputURI)
   const extension = useImageStore((state) => state.extension)
   const upscaleFactor = useImageStore((state) => state.upscaleFactor)
 
   useEffect(() => {
-    if (shouldRun) {
+    if (running) {
       try {
-        upScaleFromURI(setLoading, extension, setTags, uri, upscaleFactor).then((result) => {
+        upScaleFromURI(extension, setTags, uri, upscaleFactor).then((result) => {
           // If the models output is valid
           if (result) {
             // Set the output and increment the counter
             setOutputURI(result)
             incrementCounter()
           }
+          setRunning(false)
+          setUpscaleFactor(2)
         })
       } catch (error) {
         console.log(error)
         setErrorMessage('Model failed to run.')
         return
       }
-
-      setShouldRun(false)
-      setUpscaleFactor(2)
     }
-  }, [shouldRun])
+  }, [running])
 
   return (
     <button
       className={`grow hover:bg-blue-700 text-white font-bold py-2 px-4 rounded relative
-        drop-shadow-lg inline-flex items-center ${!modelLoading && !loading ? 'bg-pink' : 'bg-gray-300'}`}
+        drop-shadow-lg inline-flex items-center ${!modelLoading && !running ? 'bg-pink' : 'bg-gray-300'}`}
       onClick={() => {
         setModelLoading(true)
         try {
           initializeONNX(setModelLoadProg).then(() => {
             setModelLoading(false)
-            setShouldRun(true)
+            setRunning(true)
           })
         } catch (error) {
           setErrorMessage('Could not load model.')
@@ -71,7 +68,7 @@ const RunComponent = () => {
 
       <UpscaleSVG />
 
-      {loading ? ( // Button text
+      {running ? ( // Button text
         <span> Upscaling... </span>
       ) : !modelLoading ? (
         <span> Upscale </span>
