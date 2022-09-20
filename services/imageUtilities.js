@@ -18,7 +18,6 @@ function getDataURIFromInput(input) {
       const img = new Image()
       img.src = input
       img.crossOrigin = 'Anonymous'
-      const results = null
       img.onload = function () {
         const canvas = document.createElement('canvas')
         canvas.width = img.width
