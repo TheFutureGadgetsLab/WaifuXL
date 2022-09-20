@@ -7,7 +7,7 @@ const ScreenIcons = () => {
   return (
     <>
       <HamSVG onClick={() => setShowSidebar(!showSidebar)} className="fixed left-5 top-4 cursor-pointer z-50" />
-      <GitHubSVG className="fixed right-5 top-4" />
+      <GitHubSVG className="fixed right-5 top-12 z-50" />
     </>
   )
 }

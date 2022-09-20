@@ -32,8 +32,8 @@ export default function Main() {
           <NavbarComponent currentPage="index" />
         </div>
         <div className="h-3/4 grow w-full">
-            <ImageDisplay />
-            <TitleComponent />
+          <ImageDisplay />
+          <TitleComponent />
         </div>
       </main>
     </div>

@@ -48,8 +48,8 @@ function downloadImage(fileName, extension, outputURI) {
  * Copies a Data URI to the clipboard. Note that since Chrome only implementes PNGs in the Clipboard API
  * we need to convert all input images to PNGs before being copied (realistically only an edge case when
  * using the landing page image since it's stored as a webp)
- * 
- * @param {String} outputURI 
+ *
+ * @param {String} outputURI
  */
 function copyImageToClipboard(outputURI) {
   const img = new Image()
