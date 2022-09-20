@@ -22,24 +22,22 @@ const RunComponent = () => {
   const modelLoading = loadProg >= 0
 
   useEffect(() => {
-    if (running) {
-      try {
-        upScaleFromURI(extension, setTags, uri, upscaleFactor).then((result) => {
-          // If the models output is valid
-          if (result) {
-            // Set the output and increment the counter
-            setOutputURI(result)
-            incrementCounter()
-          }
-          setRunning(false)
-          setUpscaleFactor(2)
-        })
-      } catch (error) {
-        console.log(error)
-        setErrorMessage('Model failed to run.')
-        return
-      }
+    if (!running) {
+      return
     }
+
+    upScaleFromURI(extension, setTags, uri, upscaleFactor)
+      .then((result) => {
+        setOutputURI(result)
+        incrementCounter()
+      })
+      .catch((error) => {
+        setErrorMessage(error)
+      })
+      .finally(() => {
+        setRunning(false)
+        setUpscaleFactor(2)
+      })
   }, [running])
 
   return (
@@ -47,15 +45,17 @@ const RunComponent = () => {
       className={`grow hover:bg-blue-700 text-white font-bold py-2 px-4 rounded relative
         drop-shadow-lg inline-flex items-center ${!modelLoading && !running ? 'bg-pink' : 'bg-gray-300'}`}
       onClick={() => {
-        try {
-          setLoadProg(0)
-          initializeONNX(setLoadProg).then(() => {
-            setLoadProg(-1)
+        setLoadProg(0)
+        initializeONNX(setLoadProg)
+          .then(() => {
             setRunning(true)
           })
-        } catch (error) {
-          setErrorMessage('Could not load model.')
-        }
+          .catch(() => {
+            setErrorMessage('Could not load model.')
+          })
+          .finally(() => {
+            setLoadProg(-1)
+          })
       }}
     >
       {modelLoading && ( // Model downloading progress displayed underneath button
