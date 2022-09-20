@@ -27,10 +27,7 @@ const useImageStore = create((set) => ({
 }))
 
 const useAppStateStore = create((set) => ({
-  // We need to combine these into one
-  // Maybe modelLoadProg is -1 if model is not loading, and 0-100 if it is
-  modelLoading: false, // Flag for model loading
-  modelLoadProg: 0, // Progress of model loading
+  loadProg: -1, // Progress of model loading
 
   inputModalOpen: false, // Flag indicating if input modal is open
   showSidebar: true, // Flag indicating if sidebar is open
@@ -40,11 +37,10 @@ const useAppStateStore = create((set) => ({
 
   setInputModalOpen: (newInputModalOpen) => set(() => ({ inputModalOpen: newInputModalOpen })),
   setShowSidebar: (newShowSidebar) => set(() => ({ showSidebar: newShowSidebar })),
-  setModelLoading: () => set((state) => ({ modelLoading: !state.modelLoading })),
   setMobile: (newMobile) => set(() => ({ mobile: newMobile })),
   setErrorMessage: (newError) => set(() => ({ errorMessage: newError })),
   setRunning: (newRunning) => set(() => ({ running: newRunning })),
-  setModelLoadProg: (newProg) => set(() => ({ modelLoadProg: newProg })),
+  setLoadProg: (newProg) => set(() => ({ loadProg: newProg })),
 }))
 
 export { useImageStore, useAppStateStore }

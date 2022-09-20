@@ -9,17 +9,17 @@ const RunComponent = () => {
   const setRunning = useAppStateStore((state) => state.setRunning)
   const setUpscaleFactor = useImageStore((state) => state.setUpscaleFactor)
   const setErrorMessage = useAppStateStore((state) => state.setErrorMessage)
-  const setModelLoading = useAppStateStore((state) => state.setModelLoading)
-  const setModelLoadProg = useAppStateStore((state) => state.setModelLoadProg)
+  const setLoadProg = useAppStateStore((state) => state.setLoadProg)
 
   const running = useAppStateStore((state) => state.running)
-  const modelLoading = useAppStateStore((state) => state.modelLoading)
-  const modelLoadProg = useAppStateStore((state) => state.modelLoadProg)
+  const loadProg = useAppStateStore((state) => state.loadProg)
 
   const setTags = useImageStore((state) => state.setTags)
   const uri = useImageStore((state) => state.inputURI)
   const extension = useImageStore((state) => state.extension)
   const upscaleFactor = useImageStore((state) => state.upscaleFactor)
+
+  const modelLoading = loadProg >= 0
 
   useEffect(() => {
     if (running) {
@@ -47,10 +47,10 @@ const RunComponent = () => {
       className={`grow hover:bg-blue-700 text-white font-bold py-2 px-4 rounded relative
         drop-shadow-lg inline-flex items-center ${!modelLoading && !running ? 'bg-pink' : 'bg-gray-300'}`}
       onClick={() => {
-        setModelLoading(true)
         try {
-          initializeONNX(setModelLoadProg).then(() => {
-            setModelLoading(false)
+          setLoadProg(0)
+          initializeONNX(setLoadProg).then(() => {
+            setLoadProg(-1)
             setRunning(true)
           })
         } catch (error) {
@@ -62,7 +62,7 @@ const RunComponent = () => {
         <div
           id="upscale-button-bg"
           className="bg-litepink absolute h-full left-0 rounded duration-300"
-          style={{ width: `${modelLoadProg * 100}%`, zIndex: -1, transitionProperty: 'width' }}
+          style={{ width: `${loadProg * 100}%`, zIndex: -1, transitionProperty: 'width' }}
         />
       )}
 
