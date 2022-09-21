@@ -40,3 +40,4 @@ superRes
 sw.js.map
 
 package-lock.json
+torch_upscaler/discriminator.ckpt
