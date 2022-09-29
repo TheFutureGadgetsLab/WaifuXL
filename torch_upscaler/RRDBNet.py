@@ -13,6 +13,7 @@ class RealESRGANWrapper(nn.Module):
     ):
         """
         SISR model based on Real-ESRGAN
+
         Parameters
         ----------
         device: torch.device
@@ -27,6 +28,8 @@ class RealESRGANWrapper(nn.Module):
         super().__init__()
 
         self.model = RRDBNet(in_ch=3, out_ch=3, num_feat=64, num_block=6, num_grow_ch=32, scale=2)
+        self.load_state_dict(torch.load("./data/superRes.ckpt"), strict=True)
+
         self.model = self.model.to(device, dtype=dtype)
 
         if jit:
@@ -39,7 +42,21 @@ class RealESRGANWrapper(nn.Module):
         self.dtype = dtype
         self.freeze()
 
+    @torch.inference_mode()
     def forward(self, lr: Tensor) -> Tensor:
+        """
+        Forward pass of the model
+
+        Parameters
+        ----------
+        lr: Tensor
+            Low resolution image tensor, shape: (batch_size, 3, height, width)
+
+        Returns
+        -------
+        Tensor
+            High resolution image tensor, shape: (batch_size, 3, height * 2, width * 2)
+        """
         lr = lr.to(device=self.device, dtype=self.dtype)
         lr = self.preproc(lr)
 
