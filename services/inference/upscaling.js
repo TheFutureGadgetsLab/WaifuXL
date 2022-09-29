@@ -61,7 +61,7 @@ export async function multiUpscale(imageArray, upscaleFactor) {
 }
 
 async function upscaleFrame(imageArray) {
-  const CHUNK_SIZE = 512
+  const CHUNK_SIZE = 1024
   const PAD_SIZE = 32
 
   const inImgH = imageArray.shape[2]
@@ -73,9 +73,9 @@ async function upscaleFrame(imageArray) {
   const chunkH = Math.floor(inImgH / nChunksH)
   const chunkW = Math.floor(inImgW / nChunksW)
 
-  console.debug(`Upscaling ${inImgH}x${inImgW} -> ${outImgH}x${outImgW}`)
-  console.debug(`Chunk size: ${chunkH}x${chunkW}`)
-  console.debug(`Number of chunks: ${nChunksH}x${nChunksW}`)
+  console.log(`Upscaling ${inImgH}x${inImgW} -> ${outImgH}x${outImgW}`)
+  console.log(`Chunk size: ${chunkH}x${chunkW}`)
+  console.log(`Number of chunks: ${nChunksH}x${nChunksW}`)
 
   // Split the image in chunks and run super resolution on each chunk
   // Time execution

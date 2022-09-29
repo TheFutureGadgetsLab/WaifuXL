@@ -46,3 +46,4 @@ workbox-*.js
 workbox-*.js.map
 
 /out/
+torch_upscaler
