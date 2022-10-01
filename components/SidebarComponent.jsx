@@ -4,7 +4,6 @@ import TagComponent from './TagComponent'
 import Router from 'next/router'
 import { useImageStore, useAppStateStore } from '../services/useState'
 import { CopySVG, UploadSVG } from './SVGComponents'
-import { copyImageToClipboard } from '../services/imageUtilities'
 
 const Sidebar = () => {
   const showSidebar = useAppStateStore((state) => state.showSidebar)
@@ -108,15 +107,15 @@ const InputComponent = () => {
 const CopyComponent = () => {
   const outputURI = useImageStore((state) => state.outputURI)
   return (
-    <button
+    <a
       className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center"
-      onClick={() => {
-        copyImageToClipboard(outputURI)
-      }}
+      href={outputURI}
+      target="_blank"
+      rel="noreferrer"
     >
       <CopySVG />
-      <span>Copy Upscaled</span>
-    </button>
+      Open In New Tab
+    </a>
   )
 }
 
