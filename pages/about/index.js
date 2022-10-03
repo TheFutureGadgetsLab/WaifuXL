@@ -1,11 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import NavbarComponent from '../../components/NavbarComponent'
-import SideNavbar from '../../components/SideNavbar'
-import { HamSVG, GitHubSVG, KizunaBG } from '../../components/SVGComponents'
+import { GitHubSVG, KizunaBG } from '../../components/SVGComponents'
 
 export default function About() {
-  const [showSidebar, setShowSidebar] = useState(true)
-
   useEffect(() => {
     document.body.style.overflow = 'auto'
   }, [])
@@ -13,13 +10,8 @@ export default function About() {
   return (
     <>
       <KizunaBG />
-      <SideNavbar showSidebar={showSidebar} currentPage="about" />
       <div className="flex flex-col items-center min-h-screen">
         <NavbarComponent currentPage="about" />
-        <HamSVG
-          onClick={() => setShowSidebar(!showSidebar)}
-          className="md:hidden absolute left-5 top-4 z-40 cursor-pointer"
-        />
         <GitHubSVG className="absolute right-5 top-4 z-40" />
         <main className="flex flex-col items-center flex-shrink justify-center lg:w-5/12 p-10 text-center">
           <div className="lg:mt-20 mt-5 lg:text-6xl text-2xl">At a Glance</div>

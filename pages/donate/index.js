@@ -1,7 +1,6 @@
 import NavbarComponent from '../../components/NavbarComponent'
-import SideNavbar from '../../components/SideNavbar'
 import { createRef, useEffect, useState } from 'react'
-import { GitHubSVG, HamSVG, KizunaBG } from '../../components/SVGComponents'
+import { GitHubSVG, KizunaBG } from '../../components/SVGComponents'
 import { sleep } from '../../services/inference/utils'
 
 export default function Donate() {
@@ -9,18 +8,11 @@ export default function Donate() {
     document.body.style.overflow = 'auto'
   }, [])
 
-  const [showSidebar, setShowSidebar] = useState(true)
-
   return (
     <>
       <KizunaBG />
-      <SideNavbar showSidebar={showSidebar} currentPage="donate" />
       <div className="flex flex-col items-center min-h-screen">
         <NavbarComponent currentPage="donate" />
-        <HamSVG
-          onClick={() => setShowSidebar(!showSidebar)}
-          className="md:hidden absolute left-5 top-4 z-40 cursor-pointer"
-        />
         <GitHubSVG className="absolute right-5 top-4 z-40" />
         <main className="items-center justify-center lg:w-8/12 p-10 text-center">
           <img src="./images/chibi_pablo.webp" className="md:h-96 h-64 float-left" />
