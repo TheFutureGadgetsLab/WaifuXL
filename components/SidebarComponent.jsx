@@ -1,13 +1,13 @@
-import DownloadComponent from './DownloadComponent'
 import RunComponent from './RunComponent'
 import TagComponent from './TagComponent'
 import Router from 'next/router'
 import { useImageStore, useAppStateStore } from '../services/useState'
-import { CopySVG, UploadSVG } from './SVGComponents'
+import { UploadSVG } from './SVGComponents'
+import { CopyComponent, DownloadComponent } from './ButtonComponents'
 
 const Sidebar = () => {
   const showSidebar = useAppStateStore((state) => state.showSidebar)
-  const [outputURI, extension, tags] = useImageStore((state) => [state.outputURI, state.extension, state.tags])
+  const [outputURI, tags] = useImageStore((state) => [state.outputURI, state.tags])
 
   return (
     <div id="sidebar" className="w-80 flex flex-col fixed inset-y-0 z-20">
@@ -104,21 +104,6 @@ const InputComponent = () => {
   )
 }
 
-const CopyComponent = () => {
-  const outputURI = useImageStore((state) => state.outputURI)
-  return (
-    <a
-      className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center"
-      href={outputURI}
-      target="_blank"
-      rel="noreferrer"
-    >
-      <CopySVG />
-      Open In New Tab
-    </a>
-  )
-}
-
 function GitHashComponent() {
   return (
     <div className="bg-gray-100 flex justify-center items-center bottom-0 w-full h-4 text-center text-grey pt-5 pb-5">
@@ -137,4 +122,4 @@ function GitHashComponent() {
   )
 }
 
-export { Sidebar, UpscaleContainer, CopyComponent }
+export { Sidebar, UpscaleContainer }

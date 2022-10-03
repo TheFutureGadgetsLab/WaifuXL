@@ -1,6 +1,6 @@
 import NavbarComponent from '../components/NavbarComponent'
 import TitleComponent from '../components/TitleComponent'
-import { Sidebar, UpscaleContainer, CopyComponent } from '../components/SidebarComponent'
+import { Sidebar, UpscaleContainer } from '../components/SidebarComponent'
 import ImageDisplay from '../components/ImageDisplayComponent'
 import AnnouncementComponent from '../components/Announcement'
 import Error from '../components/ErrorComponent'
@@ -10,7 +10,8 @@ import { useAppStateStore, useImageStore } from '../services/useState'
 import { useWindowSize } from '../services/windowUtilities'
 import { useEffect } from 'react'
 import { KizunaBG, MobileBG } from '../components/SVGComponents'
-import DownloadComponent from '../components/DownloadComponent'
+import { DownloadComponent, CopyComponent } from '../components/ButtonComponents'
+
 export default function Main() {
   const size = useWindowSize()
   const setMobile = useAppStateStore((state) => state.setMobile)
