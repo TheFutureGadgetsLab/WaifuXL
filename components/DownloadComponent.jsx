@@ -11,7 +11,7 @@ const DownloadComponent = () => {
       onClick={() => downloadImage(fileName, extension, outputURI)}
     >
       <DownloadSVG />
-      <span>Download Upscaled</span>
+      <span>Download</span>
     </button>
   )
 }

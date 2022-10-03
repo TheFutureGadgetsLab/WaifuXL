@@ -57,17 +57,23 @@ function ModalComponent() {
                   />
                 </div>
                 <PreviewComponent />
-                <div id="preset-menu" className="mt-10 p-3 flex justify-between relative gap-4">
-                  <PresetSelectorComponent />
-                  <UploadButtonComponent />
-                  <DoneButtonComponent />
-                </div>
+                <PresetMenuComponent />
               </div>
             </div>
           </div>
         </div>
       )}
     </>
+  )
+}
+
+function PresetMenuComponent() {
+  return (
+    <div id="preset-menu" className="mt-10 p-3 flex justify-between relative gap-4">
+      <PresetSelectorComponent />
+      <UploadButtonComponent />
+      <DoneButtonComponent />
+    </div>
   )
 }
 
@@ -138,7 +144,7 @@ function DoneButtonComponent() {
   const inputURI = useImageStore((state) => state.inputURI)
 
   return (
-    <div className="grid grid-cols-1">
+    <div className="md:grid-cols-1 md:grid hidden">
       <button
         id="done-button"
         type="button"
@@ -186,4 +192,4 @@ function PresetSelectorComponent() {
   )
 }
 
-export default ModalComponent
+export { ModalComponent, PresetMenuComponent }

@@ -1,14 +1,14 @@
-const NavbarComponent = ({ currentPage }) => {
+const MobileNavbarComponent = ({ currentPage }) => {
   return (
-    <div className="flex flex-col items-center h-full w-screen relative">
+    <div className="">
       <header>
         <nav className="">
           <div className="container mx-auto py-4 flex justify-between items-center">
-            <div className="flex gap-4">
+            <div className="flex px-10 gap-4">
               <div className="grow flex items-center">
                 <a
                   href="/about"
-                  className={`text-2xl font-semibold text-black cursor-pointer ${
+                  className={`text-md font-semibold text-black cursor-pointer ${
                     currentPage === 'about' ? 'underline' : ''
                   }`}
                 >
@@ -21,7 +21,7 @@ const NavbarComponent = ({ currentPage }) => {
                 </a>
               </div>
 
-              <div className="grow flex items-center">
+              <div className="grow md:flex md:items-center hidden">
                 <a
                   href="/donate"
                   className={`text-2xl font-semibold text-black cursor-pointer ${
@@ -39,4 +39,4 @@ const NavbarComponent = ({ currentPage }) => {
   )
 }
 
-export default NavbarComponent
+export default MobileNavbarComponent

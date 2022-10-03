@@ -24,7 +24,7 @@ const Sidebar = () => {
               {outputURI != null ? (
                 <>
                   <DownloadComponent />
-                  {extension != 'gif' ? <CopyComponent /> : <></>}
+                  <CopyComponent />
                 </>
               ) : (
                 <UpscaleContainer />
@@ -137,4 +137,4 @@ function GitHashComponent() {
   )
 }
 
-export default Sidebar
+export { Sidebar, UpscaleContainer, CopyComponent }
