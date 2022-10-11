@@ -7,14 +7,14 @@ class MyDocument extends Document {
         <Head>
           <link rel="manifest" href="/manifest.json" />
           <link rel="apple-touch-icon" href="/images/icon.webp" />
-          <meta name="theme-color" content="#fff" />
+          <meta name="theme-color" content="#FF869C" />
           <link rel="icon" type="image/png" href="/images/icon.webp" />
           <link rel="manifest" href="/manifest.json" />
           <meta property="og:type" content="website" />
           <meta property="og:title" content="SOTA Anime Image Super Resolution" />
           <meta
             property="og:description"
-            content="High quality image upsampling for anime-style art using state-of-the-art neural networks, directly in your browser."
+            content="WaifuXL | High quality image upsampling for anime-style art using state-of-the-art neural networks, directly in your browser."
           />
           <meta property="og:site_name" content="WaifuXL" />
           <meta property="og:url" content="https://waifuxl.com/" />
