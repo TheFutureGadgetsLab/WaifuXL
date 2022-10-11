@@ -103,4 +103,28 @@ function isValidHttpUrl(string) {
   return url.protocol === 'http:' || url.protocol === 'https:'
 }
 
-export { getDataURIFromInput, downloadImage, setDataURIFromFile, copyImageToClipboard }
+async function uploadToImgur(dataURI) {
+  var myHeaders = new Headers()
+  myHeaders.append('Authorization', 'Client-ID e5f8d00a71976ed')
+
+  var formdata = new FormData()
+  formdata.append('image', dataURI.slice(22,))
+  formdata.append('type', 'base64')
+  formdata.append('name', 'waifu.png')
+  formdata.append('title', 'WaifuXL Upload')
+  formdata.append('description', 'WaifuXL Upload')
+
+  var requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: formdata,
+  }
+
+  fetch('https://api.imgur.com/3/image', requestOptions)
+    .then((response) => response.json())
+    .then((result) => window.open(result.data.link, '_blank', 'noopener,noreferrer'))
+    // .then((result) => console.log(result.link))
+    .catch((error) => console.log('error', error))
+}
+
+export { getDataURIFromInput, downloadImage, setDataURIFromFile, copyImageToClipboard, uploadToImgur }

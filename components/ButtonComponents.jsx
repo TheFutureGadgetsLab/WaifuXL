@@ -1,4 +1,4 @@
-import { downloadImage, getDataURIFromInput } from '../services/imageUtilities'
+import { downloadImage, getDataURIFromInput, uploadToImgur } from '../services/imageUtilities'
 import { DownloadSVG } from './SVGComponents'
 import { CopySVG } from './SVGComponents'
 import { useImageStore, useAppStateStore } from '../services/useState'
@@ -20,15 +20,24 @@ export function DownloadComponent() {
 export function CopyComponent() {
   const outputURI = useImageStore((state) => state.outputURI)
   return (
-    <a
+    // <a
+    //   className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center"
+    //   href={outputURI}
+    //   target="_blank"
+    //   rel="noreferrer"
+    // >
+    //   <CopySVG />
+    //   Open In New Tab
+    // </a>
+    <button
       className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center"
-      href={outputURI}
-      target="_blank"
-      rel="noreferrer"
+      onClick={(e) => {
+        uploadToImgur(outputURI)
+      }}
     >
       <CopySVG />
-      Open In New Tab
-    </a>
+      <span>Upload</span>
+    </button>
   )
 }
 
