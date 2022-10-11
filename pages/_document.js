@@ -11,10 +11,10 @@ class MyDocument extends Document {
           <link rel="icon" type="image/png" href="/images/icon.webp" />
           <link rel="manifest" href="/manifest.json" />
           <meta property="og:type" content="website" />
-          <meta property="og:title" content="SOTA Anime Image Super Resolution" />
+          <meta property="og:title" content="WaifuXL | SOTA Anime Image Super Resolution" />
           <meta
             property="og:description"
-            content="WaifuXL | High quality image upsampling for anime-style art using state-of-the-art neural networks, directly in your browser."
+            content="High quality image upsampling for anime-style art using state-of-the-art neural networks, directly in your browser."
           />
           <meta property="og:site_name" content="WaifuXL" />
           <meta property="og:url" content="https://waifuxl.com/" />
