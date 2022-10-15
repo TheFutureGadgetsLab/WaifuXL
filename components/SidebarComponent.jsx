@@ -122,4 +122,4 @@ function GitHashComponent() {
   )
 }
 
-export { Sidebar, UpscaleContainer }
+export { Sidebar, UpscaleContainer, UpscaleFactorComponent }

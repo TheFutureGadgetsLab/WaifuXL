@@ -1,6 +1,6 @@
 const NavbarComponent = ({ currentPage }) => {
   return (
-    <div className="flex flex-col items-center h-full w-screen relative">
+    <div className="flex flex-col items-center relative">
       <header>
         <nav className="">
           <div className="container mx-auto py-4 flex justify-between items-center">

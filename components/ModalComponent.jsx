@@ -107,4 +107,4 @@ function PreviewComponent() {
   )
 }
 
-export { ModalComponent, PresetMenuComponent }
+export { ModalComponent, PresetMenuComponent, PresetSelectorComponent, UploadButtonComponent }
