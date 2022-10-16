@@ -16,8 +16,7 @@ import RunComponent from '../components/RunComponent'
 export default function Main() {
   const size = useWindowSize()
   const setMobile = useAppStateStore((state) => state.setMobile)
-  const mobile = useAppStateStore((state) => state.mobile)
-  const [outputURI, extension, tags] = useImageStore((state) => [state.outputURI, state.extension, state.tags])
+  const outputURI = useImageStore((state) => state.outputURI)
 
   useEffect(() => {
     setMobile(size.width / size.height < 1.0)

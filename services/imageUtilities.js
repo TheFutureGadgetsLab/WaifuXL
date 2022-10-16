@@ -108,7 +108,7 @@ async function uploadToImgur(dataURI) {
   myHeaders.append('Authorization', 'Client-ID e5f8d00a71976ed')
 
   var formdata = new FormData()
-  formdata.append('image', dataURI.slice(22,))
+  formdata.append('image', dataURI.slice(22))
   formdata.append('type', 'base64')
   formdata.append('name', 'waifu.png')
   formdata.append('title', 'WaifuXL Upload')
