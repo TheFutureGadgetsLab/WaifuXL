@@ -12,19 +12,45 @@ const ImageDisplay = () => {
         <img
           src={inputURI}
           style={{
-            width: mobile ? '70vh' : 'auto',
+            maxHeight: mobile ? '100vw' : '',
+            maxWidth: mobile ? '100vh' : '',
+            minHeight: mobile ? '100vw' : '',
+            width: mobile ? 'auto' : 'auto',
             height: mobile ? 'auto' : '70vh',
+            objectFit: mobile ? 'cover' : '',
           }}
         />
       ) : (
         <ReactCompareSlider
           position={50}
-          itemOne={<ReactCompareSliderImage src={inputURI} alt="Image one" />}
-          itemTwo={<ReactCompareSliderImage src={outputURI} alt="Image two" />}
-          style={{
-            width: mobile ? 'auto' : 'auto',
-            height: mobile ? 'auto' : '70vh',
-          }}
+          itemOne={
+            <ReactCompareSliderImage
+              src={inputURI}
+              style={{
+                maxHeight: mobile ? '100vw' : '',
+                maxWidth: mobile ? '100vh' : '',
+                minHeight: mobile ? '100vw' : '',
+                width: mobile ? 'auto' : 'auto',
+                height: mobile ? 'auto' : '70vh',
+                objectFit: mobile ? 'cover' : '',
+              }}
+              alt="Image one"
+            />
+          }
+          itemTwo={
+            <ReactCompareSliderImage
+              src={outputURI}
+              style={{
+                maxHeight: mobile ? '100vw' : '',
+                maxWidth: mobile ? '100vh' : '',
+                minHeight: mobile ? '100vw' : '',
+                width: mobile ? 'auto' : 'auto',
+                height: mobile ? 'auto' : '70vh',
+                objectFit: mobile ? 'cover' : '',
+              }}
+              alt="Image two"
+            />
+          }
         />
       )}
     </div>
