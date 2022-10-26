@@ -24,11 +24,11 @@ function truncateString(str) {
 }
 
 function cleanStringRemoveParen(str) {
-  return titleCase(str.replace(/_/g, ' ').split('(')[0]);
+  return titleCase(str.replace(/_/g, ' ').split('(')[0])
 }
 
 function cleanString(str) {
-  return titleCase(str.replace(/_/g, ' '));
+  return titleCase(str.replace(/_/g, ' '))
 }
 
 function buildTagLine(x) {

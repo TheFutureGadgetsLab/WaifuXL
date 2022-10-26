@@ -1,6 +1,6 @@
 import Kizuna from '../public/images/bg.svg'
 import Mobile from '../public/images/MobileBG.svg'
-import Image from "next/image";
+import Image from 'next/image'
 
 export function LeftArrowSVG({ onClick }) {
   return (
