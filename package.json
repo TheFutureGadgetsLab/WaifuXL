@@ -8,11 +8,12 @@
     "cloudflare_deploy": "npm run build && npm run export"
   },
   "dependencies": {
+    "eslint-config-next": "^13.0.0",
     "get-pixels": "^3.3.3",
     "gifuct-js": "^2.1.2",
     "ndarray": "^1.0.19",
     "ndarray-ops": "^1.2.2",
-    "next": "^12.3.1",
+    "next": "^13.0.0",
     "next-pwa": "^5.6.0",
     "onnxruntime-common": "^1.13.0-dev.20221007-f4b944e1a",
     "onnxruntime-web": "^1.13.0-dev.20221007-f4b944e1a",
