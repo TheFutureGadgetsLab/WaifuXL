@@ -1,3 +1,5 @@
+// USE NEXTJS LINKS FOR NAVIGATION
+
 const NavbarComponent = ({ currentPage }) => {
   return (
     <div className="flex flex-col items-center relative">

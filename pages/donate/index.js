@@ -1,7 +1,10 @@
 import NavbarComponent from '../../components/NavbarComponent'
+import Image from 'next/image'
 import { createRef, useEffect, useState } from 'react'
 import { GitHubSVG, KizunaBG } from '../../components/SVGComponents'
 import { sleep } from '../../services/inference/utils'
+import pj from '../../public/images/chibi_pablo.webp'
+import kofi from '../../public/images/koficup.webp'
 
 export default function Donate() {
   useEffect(() => {
@@ -14,10 +17,10 @@ export default function Donate() {
       <div className="flex flex-col items-center min-h-screen">
         <NavbarComponent currentPage="donate" />
         <GitHubSVG className="absolute right-5 top-4 z-40" />
-        <main className="items-center justify-center lg:w-8/12 p-10 text-center">
-          <img src="./images/chibi_pablo.webp" className="md:h-96 h-64 float-left" />
-          <div className="md:text-left lg:mt-20 mt-5 lg:text-6xl text-2xl font-black">Donation Links</div>
-          <div className="text-left flex flex-col flex-grow flex-wrap">
+        <Image alt="DonatePls" src={pj} className="md:h-96 h-64 float-center w-auto" />
+        <main className="items-center justify-center lg:w-8/12 text-center">
+          <div className="md:text-center lg:mt-20 mt-5 lg:text-6xl text-2xl font-black">Donation Links</div>
+          <div className="text-left flex items-center flex-col">
             <KofiComponent />
             <CryptoComponent addr="0xDBF8321ba37D14eFc82BA1d9A416145EE039b78d" imgPath="./images/ETH.svg" />
             <CryptoComponent addr="33NgbSU66P42afwF3nbvn7qsYy4iJ3rRbL" imgPath="./images/BTC.svg" />
@@ -57,11 +60,11 @@ function CryptoComponent({ addr, imgPath }) {
           sleep(1000).then(() => setIsHidden(true))
         }}
       >
-        <img className="h-6 pr-2" src={imgPath} />
+        <Image alt="Crypto Logo" src={imgPath} width="1" height="1" className="h-6 w-auto pr-2" />
         <a className="">
           <span className="font-mono">{addr}</span>
         </a>
-        <img className="h-5 pr-2 absolute left-full" src="./images/copy.svg" />
+        <Image alt="Crypto Logo" src="./images/copy.svg" width="1" height="1" className="h-5 w-auto pl-3" />
       </button>
       <Tooltip tooltipText="Copied!" isHidden={isHidden} />
     </div>
@@ -71,7 +74,7 @@ function CryptoComponent({ addr, imgPath }) {
 function KofiComponent() {
   return (
     <button className="hover:bg-blue-700 text-black font-bold py-2 px-4 rounded inline-flex items-center w-max">
-      <img className="h-4 pr-2" src="/images/koficup.webp" />
+      <Image alt="Kofi Logo" src={kofi} className="h-4 w-auto pr-2" />
 
       <a
         className="font-mono"

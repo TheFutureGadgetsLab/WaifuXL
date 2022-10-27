@@ -1,5 +1,6 @@
 import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider'
 import { useImageStore, useAppStateStore } from '../services/useState'
+import Image from 'next/image'
 
 const ImageDisplay = () => {
   const mobile = useAppStateStore((state) => state.mobile)
@@ -9,8 +10,10 @@ const ImageDisplay = () => {
   return (
     <div className={`items-center flex justify-center drop-shadow-md overflow-hidden ml-5 mr-5 ${!mobile ? 'w-full' : ''}`}>
       {outputURI == null ? (
-        <img
+        <Image
           src={inputURI}
+          width="1"
+          height="1"
           style={{
             maxHeight: mobile ? '100vw' : '',
             maxWidth: mobile ? '100vw' : '',
