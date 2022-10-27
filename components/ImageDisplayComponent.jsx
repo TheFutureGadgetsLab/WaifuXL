@@ -6,9 +6,9 @@ const ImageDisplay = () => {
   const mobile = useAppStateStore((state) => state.mobile)
   const outputURI = useImageStore((state) => state.outputURI)
   const inputURI = useImageStore((state) => state.inputURI)
-
+  console.log(mobile)
   return (
-    <div className={'items-center flex justify-center w-full drop-shadow-md overflow-hidden'}>
+    <div className={`items-center flex justify-center drop-shadow-md overflow-hidden ml-5 mr-5 ${!mobile ? 'w-full' : ''}`}>
       {outputURI == null ? (
         <Image
           src={inputURI}
@@ -16,8 +16,9 @@ const ImageDisplay = () => {
           height="1"
           style={{
             maxHeight: mobile ? '100vw' : '',
-            maxWidth: mobile ? '100vh' : '',
+            maxWidth: mobile ? '100vw' : '',
             minHeight: mobile ? '100vw' : '',
+            minWidth: mobile ? '100vw' : '',
             width: mobile ? 'auto' : 'auto',
             height: mobile ? 'auto' : '70vh',
             objectFit: mobile ? 'cover' : '',
@@ -31,8 +32,9 @@ const ImageDisplay = () => {
               src={inputURI}
               style={{
                 maxHeight: mobile ? '100vw' : '',
-                maxWidth: mobile ? '100vh' : '',
+                maxWidth: mobile ? '100vw' : '',
                 minHeight: mobile ? '100vw' : '',
+                minWidth: mobile ? '100vw' : '',
                 width: mobile ? 'auto' : 'auto',
                 height: mobile ? 'auto' : '70vh',
                 objectFit: mobile ? 'cover' : '',
@@ -45,8 +47,9 @@ const ImageDisplay = () => {
               src={outputURI}
               style={{
                 maxHeight: mobile ? '100vw' : '',
-                maxWidth: mobile ? '100vh' : '',
+                maxWidth: mobile ? '100vw' : '',
                 minHeight: mobile ? '100vw' : '',
+                minWidth: mobile ? '100vw' : '',
                 width: mobile ? 'auto' : 'auto',
                 height: mobile ? 'auto' : '70vh',
                 objectFit: mobile ? 'cover' : '',
