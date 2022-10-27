@@ -27,7 +27,7 @@ export function CopyComponent() {
       }}
     >
       <CopySVG />
-      <span>Upload</span>
+      <span>Post To Imgur</span>
     </button>
   )
 }
