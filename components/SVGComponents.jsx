@@ -2,7 +2,7 @@ import Kizuna from '../public/images/bg.svg'
 import Mobile from '../public/images/MobileBG.svg'
 import Image from 'next/image'
 
-export function LeftArrowSVG({ onClick }) {
+export function LeftArrowSVG({ onClick, hidden }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -12,6 +12,7 @@ export function LeftArrowSVG({ onClick }) {
       fill="#000000"
       className="mt-1 cursor-pointer"
       onClick={onClick}
+      visibility={hidden ? 'hidden' : 'visible'}
     >
       <path d="M0 0h24v24H0V0z" fill="none" />
       <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
@@ -19,7 +20,7 @@ export function LeftArrowSVG({ onClick }) {
   )
 }
 
-export function RighArrowSVG({ onClick }) {
+export function RighArrowSVG({ onClick, hidden }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -29,6 +30,7 @@ export function RighArrowSVG({ onClick }) {
       fill="#000000"
       className="mt-1 cursor-pointer"
       onClick={onClick}
+      visibility={hidden ? 'hidden' : 'visible'}
     >
       <path d="M0 0h24v24H0V0z" fill="none" />
       <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z" />

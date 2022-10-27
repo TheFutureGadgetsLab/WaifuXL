@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { LeftArrowSVG, RighArrowSVG } from './SVGComponents'
 import Tooltip from './TooltipComponent'
+import ProgressBar from '@ramonak/react-progress-bar'
 
 function titleCase(str) {
   return str
@@ -31,62 +32,71 @@ function cleanString(str) {
   return titleCase(str.replace(/_/g, ' '))
 }
 
-function buildTagLine(x) {
+function TagLine({ x }) {
   const [isHidden, setIsHidden] = useState(true)
-  function handleMouseEnter() {
-    setIsHidden(false)
-  }
-  function handleMouseLeave() {
-    setIsHidden(true)
-  }
-
+  const perc = Math.round(x[1] * 100)
+  const clean = cleanString(x[0])
+  const trunc = truncateString(x[0])
   return (
-    <div className="grid grid-cols-2 font-mono h-4" key={x[0]}>
-      <span className="">
-        <Tooltip tooltipText={cleanString(x[0])} isHidden={isHidden} />
-        <span onMouseEnter={(e) => handleMouseEnter()} onMouseLeave={(e) => handleMouseLeave()}>
-          {truncateString(x[0])}
+    <tr key={clean}>
+      <th align="left" className="font-mono font-normal">
+        <Tooltip tooltipText={clean} isHidden={isHidden} />
+        <span onMouseEnter={(e) => setIsHidden(false)} onMouseLeave={(e) => setIsHidden(true)}>
+          {trunc}
         </span>
-      </span>
-      <div className="top-1 w-full relative bg-gray-200 rounded-full text-center text-black" style={{ height: '1rem' }}>
-        <div className="left-0 absolute w-full" style={{ top: '-3.5px' }}>
-          <span className="text-center">{Math.round(x[1] * 100)}%</span>
-        </div>
-        <div
-          className="bg-blue font-medium p-0.5 leading-none rounded-full"
-          style={{ width: `${Math.round(x[1] * 100)}%`, height: '1rem' }}
+      </th>
+      <th align="left" colSpan={2}>
+        <ProgressBar
+          completed={perc}
+          bgColor="#44ABBC"
+          labelAlignment="left"
+          labelColor="#000"
+          animateOnRender={true}
         />
-      </div>
-    </div>
+      </th>
+    </tr>
+  )
+}
+
+function TagSection({ tags, name }) {
+  const [tagPage, setTagPage] = useState(0)
+  const curTags = tags.slice(10 * tagPage, 10 * (tagPage + 1))
+  const maxTagPage = Math.ceil(tags.length / 10) - 1
+  return (
+    <table>
+      <tbody key={name}>
+        <tr>
+          <th align="left" className="text-xl font-bold" width="145px">
+            {name}
+          </th>
+          <th align="right">
+            <LeftArrowSVG onClick={() => setTagPage(tagPage - 1)} hidden={tagPage == 0} />
+          </th>
+          <th align="right">
+            <RighArrowSVG onClick={() => setTagPage(tagPage + 1)} hidden={tagPage >= maxTagPage} />
+          </th>
+        </tr>
+        {curTags.map((x) => (
+          <TagLine x={x} />
+        ))}
+      </tbody>
+    </table>
   )
 }
 
 const TagComponent = ({ tags }) => {
-  const [tagPage, setTagPage] = useState(0)
-  const [charPage, setCharPage] = useState(0)
-
   return (
     <>
-      <div className="text-xl font-bold grid grid-cols-6 pb-3" style={{ textShadow: 'white 0px 2px 4px' }}>
-        <span className="col-span-4">Tags</span>
-        {tagPage > 0 ? <LeftArrowSVG onClick={() => setTagPage(tagPage - 1)} /> : <span />}
-        {tagPage < tags.topDesc.length / 10 - 1 ? <RighArrowSVG onClick={() => setTagPage(tagPage + 1)} /> : <span />}
-      </div>
-      {tags.topDesc.slice(10 * tagPage, 10 * (tagPage + 1)).map((x) => buildTagLine(x))}
-      <div className="text-xl font-bold grid grid-cols-6 pt-10 pb-3" style={{ textShadow: 'white 0px 2px 4px' }}>
-        <span className="col-span-4">Characters</span>
-        {charPage > 0 ? <LeftArrowSVG onClick={() => setCharPage(charPage - 1)} /> : <span />}
-        {charPage < tags.topChars.length / 10 - 1 ? (
-          <RighArrowSVG onClick={() => setCharPage(charPage + 1)} />
-        ) : (
-          <span />
-        )}
-      </div>
-      {tags.topChars.slice(10 * charPage, 10 * (charPage + 1)).map((x) => buildTagLine(x))}
-      <div className="text-xl font-bold pt-10 pb-3" style={{ textShadow: 'white 0px 2px 4px' }}>
-        Explicitness
-      </div>
-      {tags.rating.map((x) => buildTagLine(x))}
+      <TagSection tags={tags.topDesc} name="Tags" />
+      <TagSection tags={tags.topChars} name="Characters"/>
+      <div className="text-xl font-bold pt-10 pb-3">Explicitness</div>
+      <table>
+        <tbody key='Explicitness'>
+          {tags.rating.map((x) => (
+            <TagLine x={x} />
+          ))}
+        </tbody>
+      </table>
     </>
   )
 }
