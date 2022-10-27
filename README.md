@@ -2,7 +2,7 @@
 [![Upscale Count](https://img.shields.io/endpoint?color=blue&url=https%3A%2F%2Fwaifuxl_upscale_counter.haydnjonest8327.workers.dev%2Fbadge)](waifuxl.com)  [![GitHub Super-Linter](https://github.com/TheFutureGadgetsLab/WaifuXL/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)  
 
 [Check out a full write-up here!](https://haydn.fgl.dev/posts/the-launch-of-waifuxl/)  
-WaifuXL is a state of the art super resolution model trained on  ~1,200,000 anime style images from the [Danbooru2021](https://www.gwern.net/Danbooru2021) dataset. You cant find it online at https://waifuxl.com/. Note that while you *can* upscale natural (real) images, the model was only trained on anime style drawings, so dont expect to have your socks blown off.
+WaifuXL is a state of the art super resolution model trained on  ~1,200,000 anime style images from the [Danbooru2021](https://www.gwern.net/Danbooru2021) dataset. You can find it online at https://waifuxl.com/. Note that while you *can* upscale natural (real) images, the model was only trained on anime style drawings, so dont expect to have your socks blown off.
 
 # Comparison to Waifu2x
 In general, the [Real-ESRGAN](https://arxiv.org/abs/2107.10833) will outperform the models used on [waifu2x](http://waifu2x.udp.jp/) by a significant margin, without the need for multiple models trained on various noise reduction levels.
