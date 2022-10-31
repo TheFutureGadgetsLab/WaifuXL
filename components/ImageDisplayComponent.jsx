@@ -6,9 +6,10 @@ const ImageDisplay = () => {
   const mobile = useAppStateStore((state) => state.mobile)
   const outputURI = useImageStore((state) => state.outputURI)
   const inputURI = useImageStore((state) => state.inputURI)
-  console.log(mobile)
   return (
-    <div className={`items-center flex justify-center drop-shadow-md overflow-hidden ml-5 mr-5 ${!mobile ? 'w-full' : ''}`}>
+    <div
+      className={`items-center flex justify-center drop-shadow-md overflow-hidden ml-5 mr-5 ${!mobile ? 'w-full' : ''}`}
+    >
       {outputURI == null ? (
         <Image
           src={inputURI}
