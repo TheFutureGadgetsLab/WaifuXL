@@ -10,7 +10,7 @@ const NavbarComponent = ({ currentPage }) => {
               <div className="grow flex items-center">
                 <Link
                   href="/about"
-                  className={`text-2xl font-semibold text-black cursor-pointer ${
+                  className={`text-3xl font-semibold text-black cursor-pointer ${
                     currentPage === 'about' ? 'underline' : ''
                   }`}
                 >
@@ -19,7 +19,7 @@ const NavbarComponent = ({ currentPage }) => {
               </div>
               <Link
                 href="/"
-                className={`grow text-3xl font-bold cursor-pointer text-pink ${
+                className={`grow text-4xl font-bold cursor-pointer text-pink ${
                   currentPage === 'index' ? 'underline' : ''
                 }`}
               >
@@ -27,7 +27,7 @@ const NavbarComponent = ({ currentPage }) => {
               </Link>
               <Link
                 href="/donate"
-                className={`text-2xl font-semibold text-black cursor-pointer ${
+                className={`text-3xl font-semibold text-black cursor-pointer ${
                   currentPage === 'donate' ? 'underline' : ''
                 }`}
               >

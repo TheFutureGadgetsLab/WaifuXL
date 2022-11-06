@@ -61,9 +61,8 @@ function CryptoComponent({ addr, imgPath }) {
         }}
       >
         <Image alt="Crypto Logo" src={imgPath} width="1" height="1" className="h-6 w-auto pr-2" />
-        <a className="">
-          <span className="font-mono">{addr}</span>
-        </a>
+        <span className="font-mono block md:hidden">{truncateString(addr, 16)}</span>
+        <span className="font-mono md:block hidden">{addr}</span>
         <Image alt="Crypto Logo" src="./images/copy.svg" width="1" height="1" className="h-5 w-auto pl-3" />
       </button>
       <Tooltip tooltipText="Copied!" isHidden={isHidden} />
@@ -86,4 +85,8 @@ function KofiComponent() {
       </a>
     </button>
   )
+}
+
+export function truncateString(str, n) {
+  return str.length > n ? str.substr(0, n - 1) + '...' : str
 }
