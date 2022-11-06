@@ -1,4 +1,4 @@
-import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider'
+import { ReactCompareSlider } from 'react-compare-slider'
 import { useImageStore, useAppStateStore } from '@/services/useState'
 import Image from 'next/image'
 
@@ -21,12 +21,12 @@ const ImageDisplay = () => {
       className={`items-center flex justify-center drop-shadow-md overflow-hidden ml-5 mr-5 ${!mobile ? 'w-full' : ''}`}
     >
       {outputURI == null ? (
-        <Image src={inputURI} width="1" height="1" style={styling} />
+        <Image src={inputURI} width="1" height="1" style={styling} priority={true} />
       ) : (
         <ReactCompareSlider
           position={50}
-          itemOne={<ReactCompareSliderImage src={inputURI} style={styling} alt="Before image" />}
-          itemTwo={<ReactCompareSliderImage src={outputURI} style={styling} alt="After image" />}
+          itemOne={<Image width="500" height="500" src={inputURI} style={styling}  priority={true} alt="Before image" />}
+          itemTwo={<Image width="500" height="500" src={outputURI} style={styling} priority={true} alt="After image" />}
         />
       )}
     </div>
