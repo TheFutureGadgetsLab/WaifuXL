@@ -5,11 +5,10 @@ import ImageDisplay from '@/components/ImageDisplayComponent'
 import AnnouncementComponent from '@/components/Announcement'
 import Error from '@/components/ErrorComponent'
 import { ModalComponent, PresetSelectorComponent, UploadButtonComponent } from '@/components/ModalComponent'
-import ScreenIcons from '@/components/ScreenIconsComponent'
 import { useAppStateStore, useImageStore } from '@/services/useState'
 import { useWindowSize } from '@/services/windowUtilities'
 import { useEffect } from 'react'
-import { KizunaBG, MobileBG } from '@/components/SVGComponents'
+import { GitHubSVG, KizunaBG, MobileBG } from '@/components/SVGComponents'
 import { DownloadComponent, CopyComponent } from '@/components/ButtonComponents'
 import RunComponent from '@/components/RunComponent'
 
@@ -50,7 +49,7 @@ export default function Main() {
         <TitleComponent />
       </div>
       <div className="overflow-hidden hidden md:block">
-        <ScreenIcons />
+        <GitHubSVG className="fixed right-5 top-12 z-50" />
         <KizunaBG />
         <Error />
         <Sidebar />

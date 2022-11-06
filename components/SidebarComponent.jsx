@@ -5,41 +5,35 @@ import { UploadSVG } from '@/components/SVGComponents'
 import { CopyComponent, DownloadComponent } from '@/components/ButtonComponents'
 
 const Sidebar = () => {
-  const showSidebar = useAppStateStore((state) => state.showSidebar)
   const [outputURI, tags] = useImageStore((state) => [state.outputURI, state.tags])
 
   return (
     <div id="sidebar" className="w-80 flex flex-col fixed inset-y-0 z-20">
-      <div
-        className="relative flex-1 flex flex-col min-h-0 bg-gray-100 transition-all"
-        style={{ left: `${showSidebar ? 0 : -100}%` }}
-      >
+      <div className="relative flex-1 flex flex-col min-h-0 bg-gray-100">
         <div className="flex-1 flex flex-col overflow-y-auto">
-          <div className="">
-            <div className="pt-5 mt-10 mb-10 mx-8 grid grid-cols-1 space-y-2">
-              <hr className="md:hidden" />
-              <InputComponent />
-              {outputURI != null ? (
-                <>
-                  <DownloadComponent />
-                  <CopyComponent />
-                </>
-              ) : (
-                <UpscaleContainer />
-              )}
-            </div>
-            {tags != null && (
+          <div className="pt-5 mt-10 mb-10 mx-8 grid grid-cols-1 space-y-2">
+            <hr className="md:hidden" />
+            <InputComponent />
+            {outputURI != null ? (
               <>
-                <hr />
-                <div className="mt-10 mx-3 space-y-2 grid grid-cols-1">
-                  <TagComponent tags={tags} />
-                </div>
+                <DownloadComponent />
+                <CopyComponent />
               </>
+            ) : (
+              <UpscaleContainer />
             )}
           </div>
+          {tags != null && (
+            <>
+              <hr />
+              <div className="mt-10 mx-3 space-y-2 grid grid-cols-1">
+                <TagComponent tags={tags} />
+              </div>
+            </>
+          )}
         </div>
-        <GitHashComponent />
       </div>
+      <GitHashComponent />
     </div>
   )
 }
