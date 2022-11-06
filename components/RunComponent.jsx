@@ -14,7 +14,8 @@ const RunComponent = () => {
     state.upscaleFactor,
   ])
 
-  const [setRunning, setErrorMessage, setLoadProg, running, loadProg] = useAppStateStore((state) => [
+  const [setDownloadReady, setRunning, setErrorMessage, setLoadProg, running, loadProg] = useAppStateStore((state) => [
+    state.setDownloadReady,
     state.setRunning,
     state.setErrorMessage,
     state.setLoadProg,
@@ -38,6 +39,7 @@ const RunComponent = () => {
         setErrorMessage(error)
       })
       .finally(() => {
+        setDownloadReady(true)
         setRunning(false)
         setUpscaleFactor(2)
       })
