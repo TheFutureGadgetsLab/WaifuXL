@@ -10,15 +10,16 @@ export function DownloadComponent() {
     state.outputURI,
     state.hasntRun,
   ])
+  const mobile = useAppStateStore((state) => state.mobile)
 
   return (
     <button
-      className={`text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center disabled:bg-gray-400 disabled:opacity-60 disabled:text-white disabled:cursor-not-allowed
+      className={`text-white h-12 mt-1 lg:h-9 font-bold py-2 px-2 md:px-4 rounded drop-shadow-lg bg-pink inline-flex items-center disabled:bg-gray-400 disabled:opacity-60 disabled:text-white disabled:cursor-not-allowed
         ${hasntRun ? '' : 'animate-pulse'}`}
       onClick={() => downloadImage(fileName, extension, outputURI)}
       disabled={hasntRun}
     >
-      <DownloadSVG />
+      {mobile ? null : <DownloadSVG />}
       <span>Download</span>
     </button>
   )
@@ -26,16 +27,17 @@ export function DownloadComponent() {
 
 export function CopyComponent() {
   const [outputURI, hasntRun] = useImageStore((state) => [state.outputURI, state.hasntRun])
+  const mobile = useAppStateStore((state) => state.mobile)
   return (
     <button
-      className={`text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center disabled:bg-gray-400 disabled:opacity-60 disabled:text-white disabled:cursor-not-allowed
+      className={`h-12 mt-1 lg:h-9 text-white font-bold py-2 px-2 md:px-4 rounded drop-shadow-lg bg-pink inline-flex items-center disabled:bg-gray-400 disabled:opacity-60 disabled:text-white disabled:cursor-not-allowed
         ${hasntRun ? '' : 'animate-pulse'}`}
       onClick={(e) => {
         uploadToImgur(outputURI)
       }}
       disabled={hasntRun}
     >
-      <CopySVG />
+      {mobile ? null : <CopySVG />}
       <span>Post To Imgur</span>
     </button>
   )
@@ -43,10 +45,11 @@ export function CopyComponent() {
 
 export function PresetSelectorComponent() {
   const [setInputURI, setFileName] = useImageStore((state) => [state.setInputURI, state.setFileName])
+  const mobile = useAppStateStore((state) => state.mobile)
 
   return (
     <label>
-      <span className="text-gray-700">Preset Images</span>
+      {mobile ? null : <span className="text-gray-700">Preset Images</span>}
       <select
         id="preset-select"
         className="form-select border-none rounded mt-1 block text-ellipsis w-full p-3 bg-blue text-white cursor-pointer"
@@ -78,9 +81,8 @@ export function UploadButtonComponent() {
       <button
         id="upload-button"
         type="button"
-        className="relative mt-7 rounded-md right-0 bottom-0 text-white shadow-sm px-4 py-1
-text-base font-medium h-12 focus:outline-none focus:ring-2 focus:ring-offset-2
-border-blue border-2 bg-blue hover:bg-blue hover:text-white disabled:bg-white disabled:text-gray-200 disabled:border-gray-200"
+        className="relative mt-1 lg:mt-7 rounded right-0 bottom-0 text-white shadow-sm px-2 md:px-4 py-1
+text-base font-medium h-12 border-blue border-2 bg-blue disabled:bg-white disabled:text-gray-200 disabled:border-gray-200"
       >
         <label className="absolute left-0 top-0 w-full h-full cursor-pointer">
           <input

@@ -150,5 +150,10 @@ export function KizunaBG() {
 
 export function MobileBG() {
   const css = { width: '90vw', height: 'auto' }
-  return <Image src={Mobile} className="mx-auto inset-x-0" style={css} priority={true} alt="Mobile background" />
+
+  return (
+    <div className="flex flex-col justify-center items-center">
+      <Image src={Mobile} className="w-3/4" style={css} priority={true} alt="Mobile background" />
+    </div>
+  )
 }

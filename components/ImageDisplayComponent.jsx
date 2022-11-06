@@ -25,7 +25,7 @@ const ImageDisplay = () => {
       ) : (
         <ReactCompareSlider
           position={50}
-          itemOne={<Image width="500" height="500" src={inputURI} style={styling}  priority={true} alt="Before image" />}
+          itemOne={<Image width="500" height="500" src={inputURI} style={styling} priority={true} alt="Before image" />}
           itemTwo={<Image width="500" height="500" src={outputURI} style={styling} priority={true} alt="After image" />}
         />
       )}

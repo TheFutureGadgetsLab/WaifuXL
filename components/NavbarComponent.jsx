@@ -5,7 +5,7 @@ const NavbarComponent = ({ currentPage }) => {
     <div className="flex flex-col items-center relative">
       <header>
         <nav className="">
-          <div className="container mx-auto py-4 flex justify-between items-center">
+          <div className="container mx-auto md:py-4 pt-0 flex justify-between items-center">
             <div className="flex gap-4">
               <div className="grow flex items-center">
                 <Link
