@@ -1,6 +1,7 @@
 import { downloadImage, getDataURIFromInput, uploadToImgur } from '@/services/imageUtilities'
 import { DownloadSVG, CopySVG } from '@/components/SVGComponents'
 import { useImageStore, useAppStateStore } from '@/services/useState'
+import { setDataURIFromFile } from '@/services/imageUtilities'
 
 export function DownloadComponent() {
   const [fileName, extension, outputURI, hasntRun] = useImageStore((state) => [
