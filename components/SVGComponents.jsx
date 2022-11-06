@@ -161,10 +161,10 @@ export function GitHubSVG({ className }) {
 
 export function KizunaBG() {
   const css = { width: 'auto', height: '95vh' }
-  return <Image src={Kizuna} className="fixed right-0 bottom-0" style={css} priority alt="Kizuna AI background" />
+  return <Image src={Kizuna} className="fixed right-0 bottom-0" style={css} priority={true} alt="Kizuna AI background" />
 }
 
 export function MobileBG() {
   const css = { width: '90vw', height: 'auto' }
-  return <Image src={Mobile} className="mx-auto inset-x-0" style={css} priority alt="Mobile background" />
+  return <Image src={Mobile} className="mx-auto inset-x-0" style={css} priority={true} alt="Mobile background" />
 }
