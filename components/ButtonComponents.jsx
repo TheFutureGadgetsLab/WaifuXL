@@ -3,12 +3,19 @@ import { DownloadSVG, CopySVG } from '@/components/SVGComponents'
 import { useImageStore, useAppStateStore } from '@/services/useState'
 
 export function DownloadComponent() {
-  const [fileName, extension, outputURI] = useImageStore((state) => [state.fileName, state.extension, state.outputURI])
+  const [fileName, extension, outputURI, hasntRun] = useImageStore((state) => [
+    state.fileName,
+    state.extension,
+    state.outputURI,
+    state.hasntRun,
+  ])
 
   return (
     <button
-      className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center"
+      className={`text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center disabled:bg-gray-400 disabled:opacity-60 disabled:text-white disabled:cursor-not-allowed
+        ${hasntRun ? '' : 'animate-pulse'}`}
       onClick={() => downloadImage(fileName, extension, outputURI)}
+      disabled={hasntRun}
     >
       <DownloadSVG />
       <span>Download</span>
@@ -17,13 +24,15 @@ export function DownloadComponent() {
 }
 
 export function CopyComponent() {
-  const outputURI = useImageStore((state) => state.outputURI)
+  const [outputURI, hasntRun] = useImageStore((state) => [state.outputURI, state.hasntRun])
   return (
     <button
-      className="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center"
+      className={`text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center disabled:bg-gray-400 disabled:opacity-60 disabled:text-white disabled:cursor-not-allowed
+        ${hasntRun ? '' : 'animate-pulse'}`}
       onClick={(e) => {
         uploadToImgur(outputURI)
       }}
+      disabled={hasntRun}
     >
       <CopySVG />
       <span>Post To Imgur</span>
@@ -32,8 +41,7 @@ export function CopyComponent() {
 }
 
 export function PresetSelectorComponent() {
-  const setInputURI = useImageStore((state) => state.setInputURI)
-  const setFileName = useImageStore((state) => state.setFileName)
+  const [setInputURI, setFileName] = useImageStore((state) => [state.setInputURI, state.setFileName])
 
   return (
     <label>

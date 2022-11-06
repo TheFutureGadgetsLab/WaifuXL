@@ -5,19 +5,22 @@ import { UpscaleSVG } from '@/components/SVGComponents'
 import { useImageStore, useAppStateStore } from '@/services/useState'
 
 const RunComponent = () => {
-  const setOutputURI = useImageStore((state) => state.setOutputURI)
-  const setRunning = useAppStateStore((state) => state.setRunning)
-  const setUpscaleFactor = useImageStore((state) => state.setUpscaleFactor)
-  const setErrorMessage = useAppStateStore((state) => state.setErrorMessage)
-  const setLoadProg = useAppStateStore((state) => state.setLoadProg)
+  const [setOutputURI, setUpscaleFactor, setTags, uri, extension, upscaleFactor] = useImageStore((state) => [
+    state.setOutputURI,
+    state.setUpscaleFactor,
+    state.setTags,
+    state.inputURI,
+    state.extension,
+    state.upscaleFactor,
+  ])
 
-  const running = useAppStateStore((state) => state.running)
-  const loadProg = useAppStateStore((state) => state.loadProg)
-
-  const setTags = useImageStore((state) => state.setTags)
-  const uri = useImageStore((state) => state.inputURI)
-  const extension = useImageStore((state) => state.extension)
-  const upscaleFactor = useImageStore((state) => state.upscaleFactor)
+  const [setRunning, setErrorMessage, setLoadProg, running, loadProg] = useAppStateStore((state) => [
+    state.setRunning,
+    state.setErrorMessage,
+    state.setLoadProg,
+    state.running,
+    state.loadProg,
+  ])
 
   const modelLoading = loadProg >= 0
 
@@ -42,8 +45,8 @@ const RunComponent = () => {
 
   return (
     <button
-      className={`grow hover:bg-blue-700 text-white font-bold py-2 px-4 rounded relative
-        drop-shadow-lg inline-flex items-center ${!modelLoading && !running ? 'bg-pink' : 'bg-gray-300'}`}
+      className="grow text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center disabled:bg-gray-400 disabled:opacity-60 disabled:text-white disabled:cursor-not-allowed"
+      disabled={modelLoading || running}
       onClick={() => {
         setLoadProg(0)
         initializeONNX(setLoadProg)

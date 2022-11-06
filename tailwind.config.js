@@ -24,8 +24,5 @@ module.exports = {
       yellow: colors.amber
     },
   },
-  variants: {
-    extend: {}
-  },
   plugins: [require('@tailwindcss/forms')]
 }

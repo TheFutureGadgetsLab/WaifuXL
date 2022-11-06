@@ -8,10 +8,12 @@ const useImageStore = create((set) => ({
   fileName: 'example', // Output file name
   extension: 'webp', // Output file extension
   upscaleFactor: 1, // Upscale factor (will be automatically log2'd)
+  hasntRun: true, // Upscale factor (will be automatically log2'd)
 
   setInputURI: (uri) => {
     set(() => ({ inputURI: uri }))
     set(() => ({ outputURI: null }))
+    set(() => ({ hasntRun: true }))
 
     if (uri.slice(0, 14) == 'data:image/gif') {
       set(() => ({ extension: 'gif' }))
@@ -21,7 +23,10 @@ const useImageStore = create((set) => ({
   },
   setUpscaleFactor: (newFactor) => set(() => ({ upscaleFactor: Math.log2(newFactor) })),
 
-  setOutputURI: (uri) => set(() => ({ outputURI: uri })),
+  setOutputURI: (uri) => {
+    set(() => ({ outputURI: uri }))
+    set(() => ({ hasntRun: false }))
+  },
   setTags: (newTags) => set(() => ({ tags: newTags })),
   setFileName: (newFilename) => set(() => ({ fileName: newFilename })),
 }))
