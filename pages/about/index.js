@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
-import NavbarComponent from '../../components/NavbarComponent'
-import { GitHubSVG, KizunaBG } from '../../components/SVGComponents'
+import NavbarComponent from '@/components/NavbarComponent'
+import { GitHubSVG, KizunaBG } from '@/components/SVGComponents'
 
 export default function About() {
   useEffect(() => {

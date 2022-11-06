@@ -1,4 +1,4 @@
-import { createRef, useState } from 'react'
+import { createRef } from 'react'
 
 function Tooltip({ children, tooltipText, isHidden }) {
   const tipRef = createRef(null)

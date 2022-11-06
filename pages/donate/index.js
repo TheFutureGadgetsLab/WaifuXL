@@ -1,10 +1,10 @@
-import NavbarComponent from '../../components/NavbarComponent'
+import NavbarComponent from '@/components/NavbarComponent'
 import Image from 'next/image'
 import { createRef, useEffect, useState } from 'react'
-import { GitHubSVG, KizunaBG } from '../../components/SVGComponents'
-import { sleep } from '../../services/inference/utils'
-import pj from '../../public/images/chibi_pablo.webp'
-import kofi from '../../public/images/koficup.webp'
+import { GitHubSVG, KizunaBG } from '@/components/SVGComponents'
+import { sleep } from '@/services/inference/utils'
+import pj from '@/public/images/chibi_pablo.webp'
+import kofi from '@/public/images/koficup.webp'
 
 export default function Donate() {
   useEffect(() => {

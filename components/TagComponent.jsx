@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { LeftArrowSVG, RighArrowSVG } from './SVGComponents'
+import { LeftArrowSVG, RighArrowSVG } from '@/components/SVGComponents'
 import Tooltip from './TooltipComponent'
 import ProgressBar from '@ramonak/react-progress-bar'
 

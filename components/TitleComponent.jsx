@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useAppStateStore } from '../services/useState'
+import { useAppStateStore } from '@/services/useState'
 
 const TitleComponent = () => {
   const [loadingText, setLoadingText] = useState('')

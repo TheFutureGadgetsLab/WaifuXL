@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { useImageStore, useAppStateStore } from '../services/useState'
-import { getDataURIFromInput, setDataURIFromFile } from '../services/imageUtilities'
+import { useImageStore, useAppStateStore } from '@/services/useState'
+import { getDataURIFromInput, setDataURIFromFile } from '@/services/imageUtilities'
 
 function useWindowSize() {
   const [windowSize, setWindowSize] = useState({

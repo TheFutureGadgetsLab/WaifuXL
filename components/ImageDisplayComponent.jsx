@@ -1,5 +1,5 @@
 import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider'
-import { useImageStore, useAppStateStore } from '../services/useState'
+import { useImageStore, useAppStateStore } from '@/services/useState'
 import Image from 'next/image'
 
 const ImageDisplay = () => {

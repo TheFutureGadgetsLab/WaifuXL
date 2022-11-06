@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react'
-import { setDataURIFromFile } from '../services/imageUtilities'
-import { CloseSVG } from './SVGComponents'
-import { useImageStore, useAppStateStore } from '../services/useState'
-import { DoneButtonComponent, PresetSelectorComponent, UploadButtonComponent } from './ButtonComponents'
+import { setDataURIFromFile } from '@/services/imageUtilities'
+import { CloseSVG } from '@/components/SVGComponents'
+import { useImageStore, useAppStateStore } from '@/services/useState'
+import { DoneButtonComponent, PresetSelectorComponent, UploadButtonComponent } from '@/components/ButtonComponents'
 
 function ModalComponent() {
   const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen)

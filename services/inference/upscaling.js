@@ -1,6 +1,6 @@
 import ndarray from 'ndarray'
 import ops from 'ndarray-ops'
-import { buildImageFromND, buildNdarrayFromImageOutput } from '../processingUtilities'
+import { buildImageFromND, buildNdarrayFromImageOutput } from '@/services/processingUtilities'
 import { fetchModel, prepareImage } from './utils'
 import * as ort from 'onnxruntime-web'
 

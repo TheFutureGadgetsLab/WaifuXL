@@ -1,9 +1,9 @@
 import RunComponent from './RunComponent'
 import TagComponent from './TagComponent'
 import Router from 'next/router'
-import { useImageStore, useAppStateStore } from '../services/useState'
-import { UploadSVG } from './SVGComponents'
-import { CopyComponent, DownloadComponent } from './ButtonComponents'
+import { useImageStore, useAppStateStore } from '@/services/useState'
+import { UploadSVG } from '@/components/SVGComponents'
+import { CopyComponent, DownloadComponent } from '@/components/ButtonComponents'
 
 const Sidebar = () => {
   const showSidebar = useAppStateStore((state) => state.showSidebar)

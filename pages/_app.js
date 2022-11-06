@@ -1,6 +1,5 @@
 import 'tailwindcss/tailwind.css'
 import Head from 'next/head'
-import { Html } from 'next/document'
 function MyApp({ Component, pageProps }) {
   return (
     <>
