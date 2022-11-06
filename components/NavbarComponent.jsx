@@ -28,7 +28,7 @@ const NavbarComponent = ({ currentPage }) => {
               <Link
                 href="/donate"
                 className={`text-2xl font-semibold text-black cursor-pointer ${
-                  currentPage === 'about' ? 'underline' : ''
+                  currentPage === 'donate' ? 'underline' : ''
                 }`}
               >
                 Donate

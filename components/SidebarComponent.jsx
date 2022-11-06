@@ -1,6 +1,5 @@
 import RunComponent from '@/components/RunComponent'
 import TagComponent from '@/components/TagComponent'
-import Router from 'next/router'
 import { useImageStore, useAppStateStore } from '@/services/useState'
 import { UploadSVG } from '@/components/SVGComponents'
 import { CopyComponent, DownloadComponent } from '@/components/ButtonComponents'
@@ -18,7 +17,6 @@ const Sidebar = () => {
         <div className="flex-1 flex flex-col overflow-y-auto">
           <div className="">
             <div className="pt-5 mt-10 mb-10 mx-8 grid grid-cols-1 space-y-2">
-              <MobileNavLinksComponent />
               <hr className="md:hidden" />
               <InputComponent />
               {outputURI != null ? (
@@ -43,19 +41,6 @@ const Sidebar = () => {
         <GitHashComponent />
       </div>
     </div>
-  )
-}
-
-function MobileNavLinksComponent() {
-  return (
-    <>
-      <div className="md:hidden flex items-center space-x-2" onClick={() => Router.push('./about')}>
-        <span className="text-2xl font-semibold text-black cursor-pointer">About</span>
-      </div>
-      <div className="md:hidden flex items-center space-x-2" onClick={() => Router.push('./donate')}>
-        <span className="text-2xl font-semibold text-black cursor-pointer">Donate</span>
-      </div>
-    </>
   )
 }
 
