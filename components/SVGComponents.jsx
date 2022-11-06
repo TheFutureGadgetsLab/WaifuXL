@@ -141,19 +141,18 @@ export function GitHubSVG({ className }) {
   )
 }
 
-export function KizunaBG() {
+export function BackgroundImage() {
   const css = { width: 'auto', height: '95vh' }
   return (
-    <Image src={Kizuna} className="fixed right-0 bottom-0" style={css} priority={true} alt="Kizuna AI background" />
-  )
-}
-
-export function MobileBG() {
-  const css = { width: '90vw', height: 'auto' }
-
-  return (
-    <div className="flex flex-col justify-center items-center">
-      <Image src={Mobile} className="w-3/4" style={css} priority={true} alt="Mobile background" />
-    </div>
+    <>
+      <Image src={Mobile} className="visible md:hidden block fixed right-0 bottom-0" priority={true} alt="Mobile BG" />
+      <Image
+        src={Kizuna}
+        className="hidden md:block fixed right-0 bottom-0"
+        style={css}
+        priority={true}
+        alt="Kizuna AI background"
+      />
+    </>
   )
 }

@@ -8,7 +8,7 @@ import { ModalComponent, UploadButtonComponent } from '@/components/ModalCompone
 import { useAppStateStore, useImageStore } from '@/services/useState'
 import { useWindowSize } from '@/services/windowUtilities'
 import { useEffect } from 'react'
-import { GitHubSVG, KizunaBG, MobileBG } from '@/components/SVGComponents'
+import { GitHubSVG, BackgroundImage, MobileBG } from '@/components/SVGComponents'
 import { DownloadComponent, CopyComponent } from '@/components/ButtonComponents'
 import RunComponent from '@/components/RunComponent'
 
@@ -24,6 +24,7 @@ export default function Main() {
     <>
       <MobileLayout />
       <DesktopLayout />
+      <BackgroundImage />
     </>
   )
 }
@@ -57,7 +58,6 @@ function MobileLayout() {
           <UpscaleFactorComponent />
         </div>
       )}
-      <MobileBG />
     </div>
   )
 }
@@ -73,7 +73,6 @@ function DesktopLayout() {
   return (
     <div className="overflow-hidden hidden md:block min-h-screen">
       <GitHubSVG className="fixed right-5 top-12 z-50" />
-      <KizunaBG />
       <Error />
       <Sidebar />
       <ModalComponent />

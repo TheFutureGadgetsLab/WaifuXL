@@ -10,7 +10,6 @@ export function DownloadComponent() {
     state.outputURI,
     state.hasntRun,
   ])
-  const mobile = useAppStateStore((state) => state.mobile)
 
   return (
     <button
@@ -19,7 +18,9 @@ export function DownloadComponent() {
       onClick={() => downloadImage(fileName, extension, outputURI)}
       disabled={hasntRun}
     >
-      {mobile ? null : <DownloadSVG />}
+      <div className="hidden md:block">
+        <DownloadSVG />
+      </div>
       <span>Download</span>
     </button>
   )
@@ -27,7 +28,6 @@ export function DownloadComponent() {
 
 export function CopyComponent() {
   const [outputURI, hasntRun] = useImageStore((state) => [state.outputURI, state.hasntRun])
-  const mobile = useAppStateStore((state) => state.mobile)
   return (
     <button
       className={`h-12 mt-1 lg:h-9 text-white font-bold py-2 px-2 md:px-4 rounded drop-shadow-lg bg-pink inline-flex items-center disabled:bg-gray-400 disabled:opacity-60 disabled:text-white disabled:cursor-not-allowed
@@ -37,7 +37,9 @@ export function CopyComponent() {
       }}
       disabled={hasntRun}
     >
-      {mobile ? null : <CopySVG />}
+      <div className="hidden md:block">
+        <CopySVG />
+      </div>
       <span>Post To Imgur</span>
     </button>
   )
@@ -45,11 +47,10 @@ export function CopyComponent() {
 
 export function PresetSelectorComponent() {
   const [setInputURI, setFileName] = useImageStore((state) => [state.setInputURI, state.setFileName])
-  const mobile = useAppStateStore((state) => state.mobile)
 
   return (
     <label>
-      {mobile ? null : <span className="text-gray-700">Preset Images</span>}
+      <span className="text-gray-700">Preset Images</span>
       <select
         id="preset-select"
         className="form-select border-none rounded mt-1 block text-ellipsis w-full p-3 bg-blue text-white cursor-pointer"

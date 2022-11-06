@@ -1,7 +1,7 @@
 import NavbarComponent from '@/components/NavbarComponent'
 import Image from 'next/image'
 import { createRef, useEffect, useState } from 'react'
-import { GitHubSVG, KizunaBG } from '@/components/SVGComponents'
+import { GitHubSVG, BackgroundImage } from '@/components/SVGComponents'
 import { sleep } from '@/services/inference/utils'
 import pj from '@/public/images/chibi_pablo.webp'
 import kofi from '@/public/images/koficup.webp'
@@ -13,7 +13,7 @@ export default function Donate() {
 
   return (
     <>
-      <KizunaBG />
+      <BackgroundImage />
       <div className="flex flex-col items-center min-h-screen">
         <NavbarComponent currentPage="donate" />
         <GitHubSVG className="absolute right-5 top-4 z-40" />

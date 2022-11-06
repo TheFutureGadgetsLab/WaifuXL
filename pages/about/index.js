@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import NavbarComponent from '@/components/NavbarComponent'
-import { GitHubSVG, KizunaBG } from '@/components/SVGComponents'
+import { GitHubSVG, BackgroundImage } from '@/components/SVGComponents'
 
 export default function About() {
   useEffect(() => {
@@ -9,7 +9,6 @@ export default function About() {
 
   return (
     <>
-      <KizunaBG />
       <div className="flex flex-col items-center min-h-screen">
         <NavbarComponent currentPage="about" />
         <GitHubSVG className="absolute right-5 top-4 z-40" />
@@ -84,6 +83,7 @@ export default function About() {
           </div>
         </main>
       </div>
+      <BackgroundImage />
     </>
   )
 }
