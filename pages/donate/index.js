@@ -13,7 +13,9 @@ export default function Donate() {
 
   return (
     <>
-      <BackgroundImage />
+      <span className="hidden md:block">
+        <BackgroundImage />
+      </span>
       <div className="flex flex-col items-center min-h-screen">
         <NavbarComponent currentPage="donate" />
         <GitHubSVG className="absolute right-5 top-4 z-40" />

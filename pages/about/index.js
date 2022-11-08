@@ -12,7 +12,7 @@ export default function About() {
       <div className="flex flex-col items-center min-h-screen">
         <NavbarComponent currentPage="about" />
         <GitHubSVG className="absolute right-5 top-4 z-40" />
-        <main className="flex flex-col items-center flex-shrink justify-center lg:w-5/12 p-10 text-center">
+        <main className="flex flex-col items-center flex-shrink justify-center lg:w-5/12 p-10 text-center z-50">
           <div className="lg:mt-20 mt-5 lg:text-6xl text-2xl">At a Glance</div>
           <div className="mt-5 lg:text-lg text-sm text-left">
             <a href="https://www.waifuxl.com" className="text-pink underline">
@@ -83,7 +83,9 @@ export default function About() {
           </div>
         </main>
       </div>
-      <BackgroundImage />
+      <span className="hidden md:block">
+        <BackgroundImage />
+      </span>
     </>
   )
 }
