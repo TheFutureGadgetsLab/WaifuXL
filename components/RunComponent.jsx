@@ -47,7 +47,7 @@ const RunComponent = () => {
 
   return (
     <button
-      className="grow text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center disabled:bg-gray-400 disabled:opacity-60 disabled:text-white disabled:cursor-not-allowed"
+      className="grow text-white font-bold py-2 px-4 overflow-hidden rounded drop-shadow-lg bg-pink inline-flex items-center disabled:bg-gray-400 disabled:opacity-60 disabled:text-white disabled:cursor-not-allowed"
       disabled={modelLoading || running}
       onClick={() => {
         setLoadProg(0)
