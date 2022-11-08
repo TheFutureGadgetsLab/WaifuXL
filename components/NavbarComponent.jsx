@@ -7,16 +7,14 @@ const NavbarComponent = ({ currentPage }) => {
         <nav className="">
           <div className="container mx-auto md:py-4 pt-0 flex justify-between items-center">
             <div className="flex gap-4">
-              <div className="grow flex items-center">
-                <Link
-                  href="/about"
-                  className={`text-3xl font-semibold text-black cursor-pointer ${
-                    currentPage === 'about' ? 'underline' : ''
-                  }`}
-                >
-                  About
-                </Link>
-              </div>
+              <Link
+                href="/about"
+                className={`text-3xl font-semibold text-black cursor-pointer ${
+                  currentPage === 'about' ? 'underline' : ''
+                }`}
+              >
+                About
+              </Link>
               <Link
                 href="/"
                 className={`grow text-4xl font-bold cursor-pointer text-pink ${
