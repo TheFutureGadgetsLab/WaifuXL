@@ -41,6 +41,7 @@ function MobileLayout() {
   return (
     <div className="h-fit md:hidden">
       <NavbarComponent currentPage="index" />
+      <GitHubSVG className="absolute right-5 bottom-4 md:top-4 z-40" />
       <div className="grid grid-flow-col gap-1 ml-1 mr-1 justify-center mb-2"></div>
       <TitleComponent />
       <div className="mb-2">

@@ -18,7 +18,7 @@ export default function Donate() {
       </span>
       <div className="flex flex-col items-center min-h-screen">
         <NavbarComponent currentPage="donate" />
-        <GitHubSVG className="absolute right-5 top-4 z-40" />
+        <GitHubSVG className="absolute right-5 bottom-4 md:top-4 z-40" />
         <Image alt="DonatePls" src={pj} className="md:h-96 h-64 float-center w-auto" priority={true} />
         <main className="items-center justify-center lg:w-8/12 text-center">
           <div className="md:text-center lg:mt-20 mt-5 lg:text-6xl text-2xl font-black">Donation Links</div>

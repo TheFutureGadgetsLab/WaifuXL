@@ -145,10 +145,15 @@ export function BackgroundImage() {
   const css = { width: 'auto', height: '95vh' }
   return (
     <>
-      <Image src={Mobile} className="visible md:hidden block fixed right-0 bottom-0" priority={true} alt="Mobile BG" />
+      <Image
+        src={Mobile}
+        className="-z-50 visible md:hidden block fixed right-0 bottom-0"
+        priority={true}
+        alt="Mobile BG"
+      />
       <Image
         src={Kizuna}
-        className="hidden md:block fixed right-0 bottom-0"
+        className="-z-50 hidden md:block fixed right-0 bottom-0"
         style={css}
         priority={true}
         alt="Kizuna AI background"
