@@ -5,10 +5,12 @@ import { multiUpscale } from './inference/upscaling'
 import ndarray from 'ndarray'
 import ops from 'ndarray-ops'
 
+// https://medium.com/@emma.pejko/making-gifs-in-javascript-497349bf3cc8
+
 async function frameAdd(frame, gif, delay) {
   return new Promise(async (resolve, reject) => {
     const img = new Image()
-    img.src = await multiUpscale(frame, 1)
+    img.src = frame
     img.crossOrigin = 'Anonymous'
     img.onload = function () {
       gif.addFrame(img, { delay })
@@ -26,24 +28,30 @@ export async function doGif(inputURI, setTags) {
     .then((buff) => parseGIF(buff))
     .then((gif) => decompressFrames(gif, true))
 
-  const tagInput = sliceFrame(allFrames, 0)
-  const tags = await runTagger(tagInput)
-  setTags(tags)
-
-  return new Promise(async (resolve, reject) => {
-    const GIF = require('./gif.js')
-    const gif = new GIF({
-      workers: 2,
-      quality: 1,
-      width: W * 2,
-      height: H * 2,
-    })
-
-    for (let i = 0; i < N; i++) {
-      const newND = sliceFrame(allFrames, i)
-      await frameAdd(newND, gif, promisedGif[i].delay)
+  var srFrames = []
+  for (let i = 0; i < N; i++) {
+    const lr = sliceFrame(allFrames, i)
+    if (i == 0) {
+      setTags(await runTagger(lr))
     }
 
+    const sr = await multiUpscale(lr, 1)
+    srFrames.push(sr)
+  }
+
+  const GIF = require('./gif.js')
+  const gif = new GIF({
+    workers: 2,
+    quality: 1,
+    width: W * 2,
+    height: H * 2,
+  })
+
+  for (let i = 0; i < N; i++) {
+    await frameAdd(srFrames[i], gif, promisedGif[i].delay)
+  }
+
+  return new Promise(async (resolve, reject) => {
     gif.on('finished', function (blob) {
       const reader = new FileReader()
       reader.readAsDataURL(blob)
