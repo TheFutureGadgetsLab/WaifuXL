@@ -78,7 +78,7 @@ function DesktopLayout() {
       <Sidebar />
       <ModalComponent />
       <main className="flex-1">
-        <AnnouncementComponent announcement="Safari performance will be worse than other browsers. If possible use a non-webkit based browser." />
+        {/* <AnnouncementComponent announcement="Safari performance will be worse than other browsers. If possible use a non-webkit based browser." /> */}
         <NavbarComponent currentPage="index" />
         <div className="h-3/4 grow w-full">
           <ImageDisplay />
