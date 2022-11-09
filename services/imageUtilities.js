@@ -115,16 +115,34 @@ async function uploadToImgur(dataURI) {
   formdata.append('description', 'WaifuXL Upload')
 
   var requestOptions = {
-    method: 'POST',
+    method: 'GET',
     headers: myHeaders,
-    body: formdata,
   }
-
-  fetch('https://api.imgur.com/3/image', requestOptions)
+  try {
+    fetch('https://api.imgur.com/3/credits', requestOptions)
     .then((response) => response.json())
-    .then((result) => window.open(result.data.link, '_blank', 'noopener,noreferrer'))
-    // .then((result) => console.log(result.link))
-    .catch((error) => console.log('error', error))
+    .then((res) => {
+      if (res.data.ClientRemaining > 10) {
+        var requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: formdata,
+        }
+
+        fetch('https://api.imgur.com/3/image', requestOptions)
+          .then((response) => response.json())
+          .then((data) => window.open(data.data.link, '_blank', 'noopener,noreferrer'))
+          .catch((error) => {
+            //some feedback to user
+            console.log('error', error)
+          })
+      } else {
+        //some feedback to user
+      }
+    })    
+  } catch (error) {
+    //some feedback to user
+  }
 }
 
 export { getDataURIFromInput, downloadImage, setDataURIFromFile, copyImageToClipboard, uploadToImgur }
