@@ -5,7 +5,7 @@ const NavbarComponent = ({ currentPage }) => {
   const index_style = currentPage === 'index' ? 'text-white' : 'text-black'
   const donate_style = currentPage === 'donate' ? 'text-white' : 'text-black'
   return (
-    <header className="flex flex-col items-center relative w-full bg-pink mb-10">
+    <header className="flex flex-col items-center relative w-full bg-pink md:mb-10">
       <nav className="">
         <div className="container mx-auto md:py-4 pt-0 flex justify-between items-center gap-4">
           <Link href="/about" className={`text-3xl font-semibold ${about_style}`}>
