@@ -41,7 +41,7 @@ export async function doGif(inputURI, setTags) {
 
   const GIF = require('./gif.js')
   const gif = new GIF({
-    workers: 2,
+    workers: 8,
     quality: 1,
     width: W * 2,
     height: H * 2,
