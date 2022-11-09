@@ -1,7 +1,7 @@
 import NavbarComponent from '@/components/NavbarComponent'
 import Image from 'next/image'
 import { createRef, useEffect, useState } from 'react'
-import { GitHubSVG, BackgroundImage } from '@/components/SVGComponents'
+import { BackgroundImage } from '@/components/SVGComponents'
 import { sleep } from '@/services/inference/utils'
 import pj from '@/public/images/chibi_pablo.webp'
 import kofi from '@/public/images/koficup.webp'
@@ -18,8 +18,7 @@ export default function Donate() {
       </span>
       <div className="flex flex-col items-center min-h-screen">
         <NavbarComponent currentPage="donate" />
-        <GitHubSVG className="absolute right-5 bottom-4 md:top-4 z-40" />
-        <Image alt="DonatePls" src={pj} className="md:h-96 h-64 float-center w-auto" priority={true} />
+        <Image alt="DonatePls" src={pj} className="md:h-96 h-64 float-center w-auto mt-6 md:mt-0" priority={true} />
         <main className="items-center justify-center lg:w-8/12 text-center">
           <div className="md:text-center lg:mt-20 mt-5 lg:text-6xl text-2xl font-black">Donation Links</div>
           <div className="text-left flex items-center flex-col">

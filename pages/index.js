@@ -2,13 +2,12 @@ import NavbarComponent from '@/components/NavbarComponent'
 import TitleComponent from '@/components/TitleComponent'
 import { Sidebar, UpscaleFactorComponent } from '@/components/SidebarComponent'
 import ImageDisplay from '@/components/ImageDisplayComponent'
-import AnnouncementComponent from '@/components/Announcement'
 import Error from '@/components/ErrorComponent'
 import { ModalComponent, UploadButtonComponent } from '@/components/ModalComponent'
 import { useAppStateStore, useImageStore } from '@/services/useState'
 import { useWindowSize } from '@/services/windowUtilities'
 import { useEffect } from 'react'
-import { GitHubSVG, BackgroundImage, MobileBG } from '@/components/SVGComponents'
+import { BackgroundImage } from '@/components/SVGComponents'
 import { DownloadComponent, CopyComponent } from '@/components/ButtonComponents'
 import RunComponent from '@/components/RunComponent'
 
@@ -41,7 +40,6 @@ function MobileLayout() {
   return (
     <div className="h-fit md:hidden">
       <NavbarComponent currentPage="index" />
-      <GitHubSVG className="absolute right-5 bottom-4 md:top-4 z-40" />
       <div className="grid grid-flow-col gap-1 ml-1 mr-1 justify-center mb-2"></div>
       <TitleComponent />
       <div className="mb-2">
@@ -73,7 +71,6 @@ function DesktopLayout() {
 
   return (
     <div className="overflow-hidden hidden md:block min-h-screen">
-      <GitHubSVG className="fixed right-5 top-12 z-50" />
       <Error />
       <Sidebar />
       <ModalComponent />

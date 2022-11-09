@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import NavbarComponent from '@/components/NavbarComponent'
-import { GitHubSVG, BackgroundImage } from '@/components/SVGComponents'
+import { BackgroundImage } from '@/components/SVGComponents'
 
 export default function About() {
   useEffect(() => {
@@ -11,7 +11,6 @@ export default function About() {
     <>
       <div className="flex flex-col items-center min-h-screen">
         <NavbarComponent currentPage="about" />
-        <GitHubSVG className="absolute right-5 bottom-4 md:top-4 z-40" />
         <main className="flex flex-col items-center flex-shrink justify-center lg:w-5/12 p-10 text-center z-50">
           <div className="lg:mt-20 mt-5 lg:text-6xl text-2xl">At a Glance</div>
           <div className="mt-5 lg:text-lg text-sm text-left">
