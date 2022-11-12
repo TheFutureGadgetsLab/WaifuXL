@@ -120,26 +120,26 @@ async function uploadToImgur(dataURI) {
   }
   try {
     fetch('https://api.imgur.com/3/credits', requestOptions)
-    .then((response) => response.json())
-    .then((res) => {
-      if (res.data.ClientRemaining > 10) {
-        var requestOptions = {
-          method: 'POST',
-          headers: myHeaders,
-          body: formdata,
-        }
+      .then((response) => response.json())
+      .then((res) => {
+        if (res.data.ClientRemaining > 10) {
+          var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+          }
 
-        fetch('https://api.imgur.com/3/image', requestOptions)
-          .then((response) => response.json())
-          .then((data) => window.open(data.data.link, '_blank', 'noopener,noreferrer'))
-          .catch((error) => {
-            //some feedback to user
-            console.log('error', error)
-          })
-      } else {
-        //some feedback to user
-      }
-    })    
+          fetch('https://api.imgur.com/3/image', requestOptions)
+            .then((response) => response.json())
+            .then((data) => window.open(data.data.link, '_blank', 'noopener,noreferrer'))
+            .catch((error) => {
+              //some feedback to user
+              console.log('error', error)
+            })
+        } else {
+          //some feedback to user
+        }
+      })
   } catch (error) {
     //some feedback to user
   }
