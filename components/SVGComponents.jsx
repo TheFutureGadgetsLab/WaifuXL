@@ -69,6 +69,18 @@ export function CopySVG() {
   )
 }
 
+export function UploadingSVG() {
+  return (
+    <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6 mr-2 animate-spin">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+      />
+    </svg>
+  )
+}
+
 export function UploadSVG() {
   return (
     <svg
@@ -89,7 +101,7 @@ export function UploadSVG() {
   )
 }
 
-export function ErrorSVG({color}) {
+export function ErrorSVG({ color }) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" className={`stroke-${color}-800`}>
       <path d="M22.65 26.35H25.65V13.7H22.65ZM24 34Q24.7 34 25.175 33.525Q25.65 33.05 25.65 32.35Q25.65 31.65 25.175 31.175Q24.7 30.7 24 30.7Q23.3 30.7 22.825 31.175Q22.35 31.65 22.35 32.35Q22.35 33.05 22.825 33.525Q23.3 34 24 34ZM24 44Q19.75 44 16.1 42.475Q12.45 40.95 9.75 38.25Q7.05 35.55 5.525 31.9Q4 28.25 4 24Q4 19.8 5.525 16.15Q7.05 12.5 9.75 9.8Q12.45 7.1 16.1 5.55Q19.75 4 24 4Q28.2 4 31.85 5.55Q35.5 7.1 38.2 9.8Q40.9 12.5 42.45 16.15Q44 19.8 44 24Q44 28.25 42.45 31.9Q40.9 35.55 38.2 38.25Q35.5 40.95 31.85 42.475Q28.2 44 24 44ZM24 24Q24 24 24 24Q24 24 24 24Q24 24 24 24Q24 24 24 24Q24 24 24 24Q24 24 24 24Q24 24 24 24Q24 24 24 24ZM24 41Q31 41 36 36Q41 31 41 24Q41 17 36 12Q31 7 24 7Q17 7 12 12Q7 17 7 24Q7 31 12 36Q17 41 24 41Z" />
@@ -106,7 +118,7 @@ export function CloseSVG({ onClick }) {
       viewBox="0 0 24 24"
       width="24px"
       fill="#000000"
-      className="mt-3 mr-3 float-right cursor-pointer"
+      className="mt-3 mr-3 cursor-pointer"
       onClick={onClick}
     >
       <path d="M0 0h24v24H0V0z" fill="none" />

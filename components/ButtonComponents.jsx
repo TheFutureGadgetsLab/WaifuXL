@@ -1,5 +1,5 @@
 import { downloadImage, getDataURIFromInput, uploadToImgur } from '@/services/imageUtilities'
-import { DownloadSVG, CopySVG } from '@/components/SVGComponents'
+import { DownloadSVG, CopySVG, UploadingSVG } from '@/components/SVGComponents'
 import { useImageStore, useAppStateStore } from '@/services/useState'
 import { setDataURIFromFile } from '@/services/imageUtilities'
 
@@ -28,22 +28,27 @@ export function DownloadComponent() {
 
 export function CopyComponent() {
   const [outputURI, hasntRun] = useImageStore((state) => [state.outputURI, state.hasntRun])
-  const setFeedbackMessage = useAppStateStore((state) => state.setFeedbackMessage)
-
+  const [setFeedbackMessage, isUploading, setIsUploading] = useAppStateStore((state) => [
+    state.setFeedbackMessage,
+    state.isUploading,
+    state.setIsUploading,
+  ])
   return (
     <button
       className={`h-12 mt-1 lg:h-9 text-white font-bold py-2 px-2 md:px-4 rounded drop-shadow-lg bg-pink inline-flex items-center disabled:bg-gray-400 disabled:opacity-60 disabled:text-white disabled:cursor-not-allowed
         ${hasntRun ? '' : 'animate-pulse'}`}
       onClick={(e) => {
-        uploadToImgur(outputURI).catch((err) => 
-          setFeedbackMessage(err)
-        )
+        setIsUploading(true)
+        uploadToImgur(outputURI)
+          .then(() => setIsUploading(false))
+          .catch((err) => {
+            setFeedbackMessage(err)
+            setIsUploading(false)
+          })
       }}
       disabled={hasntRun}
     >
-      <div className="hidden md:block">
-        <CopySVG />
-      </div>
+      <div className="hidden md:block">{isUploading ? <UploadingSVG /> : <CopySVG />}</div>
       <span>Post To Imgur</span>
     </button>
   )

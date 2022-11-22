@@ -49,7 +49,7 @@ function ModalComponent() {
                 id="modal"
                 className="bg-white rounded-lg shadow-xl transform transition-all text-center w-full h-full md:w-auto md:h-auto"
               >
-                <div>
+                <div className="float-right">
                   <CloseSVG
                     onClick={(e) => {
                       setInputModalOpen(false)

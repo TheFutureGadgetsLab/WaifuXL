@@ -121,7 +121,7 @@ async function uploadToImgur(dataURI) {
   return fetch('https://api.imgur.com/3/credits', requestOptions)
     .then((response) => response.json())
     .then((res) => {
-      if (res.success && res.data.ClientRemaining < 10) {
+      if (res.success && res.data.ClientRemaining > 10) {
         var requestOptions = {
           method: 'POST',
           headers: myHeaders,
@@ -132,12 +132,12 @@ async function uploadToImgur(dataURI) {
           .then((response) => response.json())
           .then((data) => window.open(data.data.link, '_blank', 'noopener,noreferrer'))
           .catch((error) => {
-            throw 'Error uploading'
+            throw 'Error uploading. Please try again later.'
           })
       } else if (res.success) {
-        throw 'Out of credits'
+        throw 'Unfortunately, we have reached the upload limit with Imgur. Please try again at a later time.'
       } else {
-        throw 'Could not  make credit call'
+        throw 'Error reaching Imgur. Please try again later. '
       }
     })
     .catch((err) => {
