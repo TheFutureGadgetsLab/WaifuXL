@@ -3,6 +3,7 @@ import TitleComponent from '@/components/TitleComponent'
 import { Sidebar, UpscaleFactorComponent } from '@/components/SidebarComponent'
 import ImageDisplay from '@/components/ImageDisplayComponent'
 import Error from '@/components/ErrorComponent'
+import Feedback from '@/components/FeedbackModal'
 import { ModalComponent, UploadButtonComponent } from '@/components/ModalComponent'
 import { useAppStateStore, useImageStore } from '@/services/useState'
 import { useWindowSize } from '@/services/windowUtilities'
@@ -72,6 +73,7 @@ function DesktopLayout() {
   return (
     <div className="overflow-hidden hidden md:block min-h-screen">
       <Error />
+      <Feedback />
       <Sidebar />
       <ModalComponent />
       <main className="flex-1">

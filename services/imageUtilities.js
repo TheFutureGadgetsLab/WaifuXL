@@ -118,31 +118,31 @@ async function uploadToImgur(dataURI) {
     method: 'GET',
     headers: myHeaders,
   }
-  try {
-    fetch('https://api.imgur.com/3/credits', requestOptions)
-      .then((response) => response.json())
-      .then((res) => {
-        if (res.data.ClientRemaining > 10) {
-          var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: formdata,
-          }
-
-          fetch('https://api.imgur.com/3/image', requestOptions)
-            .then((response) => response.json())
-            .then((data) => window.open(data.data.link, '_blank', 'noopener,noreferrer'))
-            .catch((error) => {
-              //some feedback to user
-              console.log('error', error)
-            })
-        } else {
-          //some feedback to user
+  return fetch('https://api.imgur.com/3/credits', requestOptions)
+    .then((response) => response.json())
+    .then((res) => {
+      if (res.success && res.data.ClientRemaining < 10) {
+        var requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: formdata,
         }
-      })
-  } catch (error) {
-    //some feedback to user
-  }
+
+        return fetch('https://api.imgur.com/3/image', requestOptions)
+          .then((response) => response.json())
+          .then((data) => window.open(data.data.link, '_blank', 'noopener,noreferrer'))
+          .catch((error) => {
+            throw 'Error uploading'
+          })
+      } else if (res.success) {
+        throw 'Out of credits'
+      } else {
+        throw 'Could not  make credit call'
+      }
+    })
+    .catch((err) => {
+      throw err
+    })
 }
 
 export { getDataURIFromInput, downloadImage, setDataURIFromFile, copyImageToClipboard, uploadToImgur }

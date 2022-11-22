@@ -40,6 +40,7 @@ const useAppStateStore = create((set) => ({
   errorMessage: null, // Error message to display
   running: false, // Flag indicating if we should run the model, fires a useEffect
   downloadReady: false, // Flag indicating upscale is ready for download
+  feedbackMessage: null,
 
   setInputModalOpen: (newInputModalOpen) => set(() => ({ inputModalOpen: newInputModalOpen })),
   setShowSidebar: (newShowSidebar) => set(() => ({ showSidebar: newShowSidebar })),
@@ -48,6 +49,7 @@ const useAppStateStore = create((set) => ({
   setRunning: (newRunning) => set(() => ({ running: newRunning })),
   setLoadProg: (newProg) => set(() => ({ loadProg: newProg })),
   setDownloadReady: (newDownloadReady) => set(() => ({ downloadReady: newDownloadReady })),
+  setFeedbackMessage: (newFeedbackMessage) => set(() => ({ feedbackMessage : newFeedbackMessage })),
 }))
 
 export { useImageStore, useAppStateStore }

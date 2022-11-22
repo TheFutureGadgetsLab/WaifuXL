@@ -28,12 +28,16 @@ export function DownloadComponent() {
 
 export function CopyComponent() {
   const [outputURI, hasntRun] = useImageStore((state) => [state.outputURI, state.hasntRun])
+  const setFeedbackMessage = useAppStateStore((state) => state.setFeedbackMessage)
+
   return (
     <button
       className={`h-12 mt-1 lg:h-9 text-white font-bold py-2 px-2 md:px-4 rounded drop-shadow-lg bg-pink inline-flex items-center disabled:bg-gray-400 disabled:opacity-60 disabled:text-white disabled:cursor-not-allowed
         ${hasntRun ? '' : 'animate-pulse'}`}
       onClick={(e) => {
-        uploadToImgur(outputURI)
+        uploadToImgur(outputURI).catch((err) => 
+          setFeedbackMessage(err)
+        )
       }}
       disabled={hasntRun}
     >
