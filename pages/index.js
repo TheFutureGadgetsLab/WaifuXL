@@ -11,6 +11,7 @@ import { useEffect } from 'react'
 import { BackgroundImage } from '@/components/SVGComponents'
 import { DownloadComponent, CopyComponent } from '@/components/ButtonComponents'
 import RunComponent from '@/components/RunComponent'
+import { Fireworks } from 'fireworks/lib/react'
 
 export default function Main() {
   const size = useWindowSize()
@@ -72,6 +73,17 @@ function DesktopLayout() {
 
   return (
     <div className="overflow-hidden hidden md:block min-h-screen">
+      <Fireworks
+        count={5}
+        canvasWidth={size.width}
+        canvasHeight={size.height}
+        bubbleSizeMaximum={5}
+        calc={(props, i) => ({
+          ...props,
+          x: window.innerWidth / 2,
+          y: window.innerHeight / 2,
+        })}
+      />
       <Error />
       <Feedback />
       <Sidebar />

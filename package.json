@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@ramonak/react-progress-bar": "^5.0.3",
+    "fireworks": "^2.2.7",
     "get-pixels": "^3.3.3",
     "gifuct-js": "^2.1.2",
     "ndarray": "^1.0.19",
@@ -25,10 +26,10 @@
     "zustand": "^4.1.4"
   },
   "devDependencies": {
-    "eslint-config-next": "^13.0.3",
     "@tailwindcss/forms": "^0.5.3",
     "autoprefixer": "^10.4.13",
     "copy-webpack-plugin": "^11.0.0",
+    "eslint-config-next": "^13.0.3",
     "postcss": "^8.4.19",
     "prettier": "2.7.1",
     "standard": "^17.0.0",
