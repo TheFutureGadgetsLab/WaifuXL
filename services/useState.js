@@ -50,8 +50,8 @@ const useAppStateStore = create((set) => ({
   setRunning: (newRunning) => set(() => ({ running: newRunning })),
   setLoadProg: (newProg) => set(() => ({ loadProg: newProg })),
   setDownloadReady: (newDownloadReady) => set(() => ({ downloadReady: newDownloadReady })),
-  setFeedbackMessage: (newFeedbackMessage) => set(() => ({ feedbackMessage : newFeedbackMessage })),
-  setIsUploading: (newIsUploading) => set(() => ({isUploading: newIsUploading})),
+  setFeedbackMessage: (newFeedbackMessage) => set(() => ({ feedbackMessage: newFeedbackMessage })),
+  setIsUploading: (newIsUploading) => set(() => ({ isUploading: newIsUploading })),
 }))
 
 export { useImageStore, useAppStateStore }
