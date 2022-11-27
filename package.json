@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "@ramonak/react-progress-bar": "^5.0.3",
-    "fireworks": "^2.2.7",
     "get-pixels": "^3.3.3",
     "gifuct-js": "^2.1.2",
     "ndarray": "^1.0.19",
