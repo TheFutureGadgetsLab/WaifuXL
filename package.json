@@ -21,6 +21,7 @@
     "react": "^18.2.0",
     "react-compare-slider": "2.2.0",
     "react-dom": "^18.2.0",
+    "save-pixels": "^2.3.6",
     "ua-parser-js": "^1.0.32",
     "zustand": "^4.1.4"
   },

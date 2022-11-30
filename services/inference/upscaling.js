@@ -1,8 +1,8 @@
 import ndarray from 'ndarray'
 import ops from 'ndarray-ops'
-import { buildImageFromND, buildNdarrayFromImageOutput } from '@/services/processingUtilities'
 import { fetchModel, prepareImage } from './utils'
 import * as ort from 'onnxruntime-web'
+import { imageNDarrayToDataURI } from '../imageUtilities'
 
 let superSession = null
 
@@ -52,12 +52,7 @@ export async function multiUpscale(imageArray, upscaleFactor) {
   }
   console.timeEnd('Upscaling')
 
-  // Reshape network output into a normal image
-  const outImgH = outArr.shape[2]
-  const outImgW = outArr.shape[3]
-  const outImg = buildNdarrayFromImageOutput(outArr, outImgH, outImgW)
-  const outURI = buildImageFromND(outImg, outImgH, outImgW)
-  return outURI
+  return imageNDarrayToDataURI(outArr)
 }
 
 async function upscaleFrame(imageArray) {

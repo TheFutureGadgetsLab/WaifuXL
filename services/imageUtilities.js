@@ -1,3 +1,7 @@
+var savePixels = require("save-pixels")
+import ndarray from 'ndarray'
+import ops from 'ndarray-ops'
+
 /**
  * Given some input, return the data URI from that.
  *
@@ -56,6 +60,20 @@ function setDataURIFromFile(fileObj, setDataURI) {
     setDataURI(fr.result)
   }
   fr.readAsDataURL(fileObj)
+}
+
+function imageNDarrayToDataURI(data) {
+  const [_b, _c, H, W] = data.shape
+
+  var output = ndarray(new Uint8Array(H * W * 4).fill(255), [H, W, 4])
+
+  ops.assign(output.pick(null, null, 0), data.pick(0, 0, null, null))
+  ops.assign(output.pick(null, null, 1), data.pick(0, 1, null, null))
+  ops.assign(output.pick(null, null, 2), data.pick(0, 2, null, null))
+  
+  output = output.transpose(1, 0, 2)
+  const canvas = savePixels(output, "canvas")
+  return canvas.toDataURL("image/png")
 }
 
 /**
@@ -118,4 +136,4 @@ async function uploadToImgur(dataURI) {
     })
 }
 
-export { getDataURIFromInput, downloadImage, setDataURIFromFile, uploadToImgur }
+export { getDataURIFromInput, downloadImage, setDataURIFromFile, uploadToImgur, imageNDarrayToDataURI }
