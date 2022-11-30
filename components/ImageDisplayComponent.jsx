@@ -12,7 +12,7 @@ const ImageDisplay = () => {
       className={`items-center flex justify-center drop-shadow-md overflow-hidden ml-5 mr-5 w-auto md:w-full`}
     >
       {outputURI == null ? (
-        <Image src={inputURI} width="1" height="1" id="stock-image" priority={true} />
+        <Image src={inputURI} width="1" height="1" id="stock-image" priority={true} alt="Before image" />
       ) : (
         <ReactCompareSlider
           position={50}
