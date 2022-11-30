@@ -33,12 +33,11 @@ function useWindowSize() {
 
   const setInputURI = useImageStore((state) => state.setInputURI)
   const setFileName = useImageStore((state) => state.setFileName)
-  const setShowSidebar = useAppStateStore((state) => state.setShowSidebar)
   const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen)
 
   if (typeof window !== 'undefined') {
     window.addEventListener('paste', (e) => {
-      pasteListener(e, setInputURI, setFileName, setShowSidebar, setInputModalOpen)
+      pasteListener(e, setInputURI, setFileName, setInputModalOpen)
     })
     window.addEventListener('dragenter', preventDefault)
     window.addEventListener('drag', preventDefault)
@@ -46,7 +45,7 @@ function useWindowSize() {
     window.addEventListener('dragend', preventDefault)
     window.addEventListener('dragstart', preventDefault)
     window.addEventListener('drop', (e) => {
-      dropListener(e, setFileName, setInputURI, setShowSidebar, setInputModalOpen)
+      dropListener(e, setFileName, setInputURI, setInputModalOpen)
     })
   }
 
@@ -71,7 +70,7 @@ function handleInputFile(items, setFileName, setInputURI) {
   }
 }
 
-const pasteListener = (e, setInputURI, setFileName, setShowSidebar, setInputModalOpen) => {
+const pasteListener = (e, setInputURI, setFileName, setInputModalOpen) => {
   if (e.clipboardData.getData('text/plain')) {
     const url = e.clipboardData.getData('text/plain')
     getDataURIFromInput(url).then((u) => {
@@ -82,19 +81,17 @@ const pasteListener = (e, setInputURI, setFileName, setShowSidebar, setInputModa
     const success = handleInputFile((e.clipboardData || e.originalEvent.clipboardData).items, setFileName, setInputURI)
     if (success) {
       console.log('Succesful...')
-      setShowSidebar(true)
       setInputModalOpen(true)
     }
   }
 }
 
-const dropListener = (e, setFileName, setInputURI, setShowSidebar, setInputModalOpen) => {
+const dropListener = (e, setFileName, setInputURI, setInputModalOpen) => {
   e.preventDefault()
   e.stopPropagation()
   const success = handleInputFile(e.dataTransfer.items, setFileName, setInputURI)
   if (success) {
     console.log('Succesful drag')
-    setShowSidebar(true)
     setInputModalOpen(true)
     setFileName(e.dataTransfer.files[0].name.split('/').at(-1).split('.')[0])
   }

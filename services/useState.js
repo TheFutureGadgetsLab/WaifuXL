@@ -35,7 +35,6 @@ const useAppStateStore = create((set) => ({
   loadProg: -1, // Progress of model loading
 
   inputModalOpen: false, // Flag indicating if input modal is open
-  showSidebar: true, // Flag indicating if sidebar is open
   mobile: false, // Are we on a mobile aspect ratio?
   errorMessage: null, // Error message to display
   running: false, // Flag indicating if we should run the model, fires a useEffect
@@ -44,7 +43,6 @@ const useAppStateStore = create((set) => ({
   isUploading: false,
 
   setInputModalOpen: (newInputModalOpen) => set(() => ({ inputModalOpen: newInputModalOpen })),
-  setShowSidebar: (newShowSidebar) => set(() => ({ showSidebar: newShowSidebar })),
   setMobile: (newMobile) => set(() => ({ mobile: newMobile })),
   setErrorMessage: (newError) => set(() => ({ errorMessage: newError })),
   setRunning: (newRunning) => set(() => ({ running: newRunning })),
