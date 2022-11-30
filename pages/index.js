@@ -30,13 +30,7 @@ export default function Main() {
 }
 
 function MobileLayout() {
-  const size = useWindowSize()
-  const setMobile = useAppStateStore((state) => state.setMobile)
   const outputURI = useImageStore((state) => state.outputURI)
-
-  useEffect(() => {
-    setMobile(size.width / size.height < 1.0)
-  }, [size])
 
   return (
     <div className="h-fit md:hidden">
@@ -63,13 +57,6 @@ function MobileLayout() {
 }
 
 function DesktopLayout() {
-  const size = useWindowSize()
-  const setMobile = useAppStateStore((state) => state.setMobile)
-
-  useEffect(() => {
-    setMobile(size.width / size.height < 1.0)
-  }, [size])
-
   return (
     <div className="overflow-hidden hidden md:block min-h-screen">
       <Error />
@@ -77,7 +64,6 @@ function DesktopLayout() {
       <Sidebar />
       <ModalComponent />
       <main className="flex-1">
-        {/* <AnnouncementComponent announcement="Safari performance will be worse than other browsers. If possible use a non-webkit based browser." /> */}
         <NavbarComponent currentPage="index" />
         <div className="h-3/4 grow w-full">
           <ImageDisplay />
