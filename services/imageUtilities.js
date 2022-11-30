@@ -1,4 +1,4 @@
-var savePixels = require("save-pixels")
+var savePixels = require('save-pixels')
 import ndarray from 'ndarray'
 import ops from 'ndarray-ops'
 
@@ -70,10 +70,10 @@ function imageNDarrayToDataURI(data) {
   ops.assign(output.pick(null, null, 0), data.pick(0, 0, null, null))
   ops.assign(output.pick(null, null, 1), data.pick(0, 1, null, null))
   ops.assign(output.pick(null, null, 2), data.pick(0, 2, null, null))
-  
+
   output = output.transpose(1, 0, 2)
-  const canvas = savePixels(output, "canvas")
-  return canvas.toDataURL("image/png")
+  const canvas = savePixels(output, 'canvas')
+  return canvas.toDataURL('image/png')
 }
 
 /**
