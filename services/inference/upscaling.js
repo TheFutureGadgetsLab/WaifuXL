@@ -1,8 +1,7 @@
 import ndarray from 'ndarray'
 import ops from 'ndarray-ops'
-import { fetchModel, prepareImage } from './utils'
+import { fetchModel, prepareImage, imageNDarrayToDataURI } from './utils'
 import * as ort from 'onnxruntime-web'
-import { imageNDarrayToDataURI } from '../imageUtilities'
 
 let superSession = null
 

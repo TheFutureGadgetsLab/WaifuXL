@@ -6,6 +6,7 @@ import * as ort from 'onnxruntime-web'
 import pify from 'pify'
 const usr = require('ua-parser-js')
 const getPixels = pify(require('get-pixels'))
+var savePixels = require('save-pixels')
 
 /**
  * Given a URI, return an ndarray of the image pixel data.
@@ -28,6 +29,20 @@ export async function imageToNdarray(imageURI) {
   ops.assign(img.pick(0, 2, null, null), pixels.pick(null, null, 2))
 
   return img
+}
+
+export function imageNDarrayToDataURI(data) {
+  const [_b, _c, H, W] = data.shape
+
+  var output = ndarray(new Uint8Array(H * W * 4).fill(255), [H, W, 4])
+
+  ops.assign(output.pick(null, null, 0), data.pick(0, 0, null, null))
+  ops.assign(output.pick(null, null, 1), data.pick(0, 1, null, null))
+  ops.assign(output.pick(null, null, 2), data.pick(0, 2, null, null))
+
+  output = output.transpose(1, 0, 2)
+  const canvas = savePixels(output, 'canvas')
+  return canvas.toDataURL('image/png')
 }
 
 /**
