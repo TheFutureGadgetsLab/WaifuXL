@@ -18,6 +18,20 @@ For our super resolution network we are using the state-of-the-art [Real-ESRGAN]
 ## Site
 [Onnx Runtime](https://onnxruntime.ai/) is multithreaded and supports SIMD instructions--while upscaling on a phone or a laptop is suprisingly quick, using a beefier computer will bring noticable benefits. We're hosted on [Cloudflare Pages](https://pages.cloudflare.com/) which provides unlimited bandwidth. The site is written in React with Next.js and TailwindCSS. 
 
+# Running Locally
+If you'd like to run locally, this should get you started:
+```bash
+git clone https://github.com/TheFutureGadgetsLab/WaifuXL
+cd WaifuXL
+git checkout de_spaghetti
+npm i
+npm run dev
+```
+A few notes:
+  - The main branch no longer works for some reason. We've been doing a full rewrite for a while in the `de_spaghetti` branch, hence the checkout above.
+  - Multithreading is hard to do locally because of [Spectre](https://en.wikipedia.org/wiki/Spectre_(security_vulnerability)). You can get multithreading working by making sure Google Chrome is closed, then launching it from the command line with the following argument: `--enable-features=SharedArrayBuffer`
+  - After the website rewrite, we will be working on GPU accelerated versions of WaifuXL using PyTorch, ONNX Runtime, or AITemplate. Once this is done it  will need to be run locally on your own computer, but the performance uplift should be *significant*.
+  
 # Contribution Guide
 ## Code / Site
 We're definitely open to code contributions, whether it be code cleanup, new features, or bugfixes. Simply open a discussion so we all can collaborate and discuss the merit of your ideas!
