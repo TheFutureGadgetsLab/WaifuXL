@@ -14,8 +14,8 @@ export async function upScaleFromURI(extension, setTags, uri, upscaleFactor) {
     resultURI = currentURI
   } else {
     const imageArray = await imageToNdarray(uri)
-    const tags = await runTagger(imageArray)
-    setTags(tags)
+    // const tags = await runTagger(imageArray)
+    // setTags(tags)
 
     resultURI = await multiUpscale(imageArray, upscaleFactor)
   }

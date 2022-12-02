@@ -1,6 +1,6 @@
 import { parseGIF, decompressFrames } from 'gifuct-js'
 import { runTagger } from './inference/tagging'
-import { gifToNdarray } from './inference/utils'
+import { imageToNdarray } from './inference/utils'
 import { multiUpscale } from './inference/upscaling'
 import ndarray from 'ndarray'
 import ops from 'ndarray-ops'
@@ -20,8 +20,8 @@ async function frameAdd(frame, gif, delay) {
 }
 
 export async function doGif(inputURI, setTags) {
-  const allFrames = await gifToNdarray(inputURI)
-  const [ign, N, C, H, W] = allFrames.shape
+  const allFrames = await imageToNdarray(inputURI)
+  const [N, W, H, _C] = allFrames.shape
 
   const promisedGif = await fetch(inputURI)
     .then((resp) => resp.arrayBuffer())
@@ -31,9 +31,9 @@ export async function doGif(inputURI, setTags) {
   var srFrames = []
   for (let i = 0; i < N; i++) {
     const lr = sliceFrame(allFrames, i)
-    if (i == 0) {
-      setTags(await runTagger(lr))
-    }
+    // if (i == 0) {
+    // setTags(await runTagger(lr))
+    // }
 
     const sr = await multiUpscale(lr, 1)
     srFrames.push(sr)
@@ -65,9 +65,9 @@ export async function doGif(inputURI, setTags) {
 }
 
 function sliceFrame(allFrames, frameIndex) {
-  const [ign, N, C, H, W] = allFrames.shape
+  const [_N, W, H, C] = allFrames.shape
 
-  const outFrame = ndarray(new Uint8Array(1 * C * H * W), [1, C, H, W])
-  ops.assign(outFrame, allFrames.pick(null, frameIndex, null, null, null))
+  const outFrame = ndarray(new Uint8Array(W * H * C), [W, H, C])
+  ops.assign(outFrame, allFrames.pick(frameIndex, null, null, null))
   return outFrame
 }

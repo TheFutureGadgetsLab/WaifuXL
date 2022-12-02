@@ -58,14 +58,14 @@ async function upscaleFrame(imageArray) {
   const CHUNK_SIZE = 1024
   const PAD_SIZE = 32
 
-  const inImgH = imageArray.shape[2]
-  const inImgW = imageArray.shape[3]
-  const outImgH = inImgH * 2
+  const inImgW = imageArray.shape[0]
+  const inImgH = imageArray.shape[1]
   const outImgW = inImgW * 2
-  const nChunksH = Math.ceil(inImgH / CHUNK_SIZE)
+  const outImgH = inImgH * 2
   const nChunksW = Math.ceil(inImgW / CHUNK_SIZE)
-  const chunkH = Math.floor(inImgH / nChunksH)
+  const nChunksH = Math.ceil(inImgH / CHUNK_SIZE)
   const chunkW = Math.floor(inImgW / nChunksW)
+  const chunkH = Math.floor(inImgH / nChunksH)
 
   console.log(`Upscaling ${inImgH}x${inImgW} -> ${outImgH}x${outImgW}`)
   console.log(`Chunk size: ${chunkH}x${chunkW}`)
@@ -73,7 +73,7 @@ async function upscaleFrame(imageArray) {
 
   // Split the image in chunks and run super resolution on each chunk
   // Time execution
-  const outArr = ndarray(new Uint8Array(3 * outImgH * outImgW), [1, 3, outImgH, outImgW])
+  const outArr = ndarray(new Uint8Array(outImgW * outImgH * 4), [outImgW, outImgH, 4])
   for (let i = 0; i < nChunksH; i += 1) {
     for (let j = 0; j < nChunksW; j += 1) {
       const x = j * chunkW
@@ -89,15 +89,15 @@ async function upscaleFrame(imageArray) {
 
       // Create sliced and copy
       console.debug(`Chunk ${i}x${j}  (${yStart}, ${xStart})  (${inH}, ${inW}) -> (${outH}, ${outW})`)
-      const inSlice = imageArray.lo(0, 0, yStart, xStart).hi(1, 3, inH, inW)
-      const subArr = ndarray(new Uint8Array(inH * inW * 3), inSlice.shape)
+      const inSlice = imageArray.lo(xStart, yStart, 0).hi(inW, inH, 4)
+      const subArr = ndarray(new Uint8Array(inW * inH * 4), inSlice.shape)
       ops.assign(subArr, inSlice)
 
       // Run the super resolution model on the chunk, copy the result into the combined array
       const chunkData = await runSuperRes(subArr)
       const chunkArr = ndarray(chunkData.data, chunkData.dims)
-      const chunkSlice = chunkArr.lo(0, 0, (y - yStart) * 2, (x - xStart) * 2).hi(1, 3, outH, outW)
-      const outSlice = outArr.lo(0, 0, y * 2, x * 2).hi(1, 3, outH, outW)
+      const chunkSlice = chunkArr.lo((x - xStart) * 2, (y - yStart) * 2, 0).hi(outW, outH, 4)
+      const outSlice = outArr.lo(x * 2, y * 2, 0).hi(outW, outH, 4)
       ops.assign(outSlice, chunkSlice)
     }
   }
