@@ -1,7 +1,9 @@
+import * as ort from 'onnxruntime-web'
+
+import { fetchModel, imageNDarrayToDataURI, prepareImage } from './utils'
+
 import ndarray from 'ndarray'
 import ops from 'ndarray-ops'
-import { fetchModel, prepareImage, imageNDarrayToDataURI } from './utils'
-import * as ort from 'onnxruntime-web'
 
 let superSession = null
 
@@ -43,7 +45,7 @@ export async function initializeSuperRes(setProgress) {
  * @param {Number} upscaleFactor How many times to repeat the super resolution
  * @returns Upscaled image as URI
  */
-export async function multiUpscale(imageArray, upscaleFactor) {
+export async function multiUpscale(imageArray, upscaleFactor, outputType = 'image/png') {
   let outArr = imageArray
   console.time('Upscaling')
   for (let s = 0; s < upscaleFactor; s += 1) {
@@ -51,7 +53,7 @@ export async function multiUpscale(imageArray, upscaleFactor) {
   }
   console.timeEnd('Upscaling')
 
-  return imageNDarrayToDataURI(outArr)
+  return imageNDarrayToDataURI(outArr, outputType)
 }
 
 async function upscaleFrame(imageArray) {

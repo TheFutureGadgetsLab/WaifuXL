@@ -49,9 +49,13 @@ export async function imageToNdarray(imageURI, coalesce = true) {
   return pixels
 }
 
-export function imageNDarrayToDataURI(data) {
+export function imageNDarrayToDataURI(data, outputType) {
   const canvas = savePixels(data, 'canvas')
-  return canvas.toDataURL('image/png')
+  if (outputType == 'canvas') {
+    return canvas
+  }
+
+  return canvas.toDataURL(outputType)
 }
 
 /**
@@ -129,6 +133,7 @@ export async function upScaleFromURI(extension, setTags, uri, upscaleFactor) {
     }
 
     resultURI = currentURI
+    console.log("GIF OUTPUT: ", resultURI)
   } else {
     const imageArray = await imageToNdarray(uri)
     // const tags = await runTagger(imageArray)

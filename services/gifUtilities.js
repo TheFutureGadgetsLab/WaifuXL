@@ -6,19 +6,7 @@ import ndarray from 'ndarray'
 import ops from 'ndarray-ops'
 import { runTagger } from '@/services/inference/tagging'
 
-// https://medium.com/@emma.pejko/making-gifs-in-javascript-497349bf3cc8
-
-async function frameAdd(frame, gif, delay) {
-  return new Promise(async (resolve, reject) => {
-    const img = new Image()
-    img.src = frame
-    img.crossOrigin = 'Anonymous'
-    img.onload = function () {
-      gif.addFrame(img, { delay })
-      resolve('Worked')
-    }
-  })
-}
+const GIFEncoder = require('gif-encoder-2')
 
 export async function doGif(inputURI, setTags) {
   const allFrames = await imageToNdarray(inputURI)
@@ -30,6 +18,7 @@ export async function doGif(inputURI, setTags) {
     .then((gif) => decompressFrames(gif, true))
 
   var srFrames = []
+  var canvasFrames = []
   console.log('Starting frame upscale!')
   for (let i = 0; i < N; i++) {
     const lr = sliceFrame(allFrames, i)
@@ -37,36 +26,25 @@ export async function doGif(inputURI, setTags) {
     // setTags(await runTagger(lr))
     // }
 
-    const sr = await multiUpscale(lr, 1)
-    srFrames.push(sr)
+    const sr = await multiUpscale(lr, 1, 'canvas')
+    srFrames.push(sr.toDataURL('image/png'))
+    canvasFrames.push(sr)
   }
   console.log('GIF FRAME UPSCALE DONE!')
 
-  const GIF = require('./gif.js')
-  const gif = new GIF({
-    workers: 8,
-    quality: 1,
-    width: W * 2,
-    height: H * 2,
-  })
+  const encoder = new GIFEncoder(W*2, H*2, 'neuquant', true)
+  encoder.start()
 
-  console.log('Adding frames to gif')
   for (let i = 0; i < N; i++) {
-    await frameAdd(srFrames[i], gif, promisedGif[i].delay)
+    const ctx = canvasFrames[i].getContext("2d")
+    encoder.setDelay(promisedGif[i].delay)
+    encoder.addFrame(ctx)
   }
-  console.log('Adding frames to DONE')
 
-  return new Promise(async (resolve, reject) => {
-    gif.on('finished', function (blob) {
-      const reader = new FileReader()
-      reader.readAsDataURL(blob)
-      reader.onload = function () {
-        resolve(reader.result)
-      }
-    })
-
-    await gif.render()
-  })
+  encoder.finish()
+  const buffer = "data:image/gif;base64," + encoder.out.getData().toString("base64")
+  
+  return buffer;
 }
 
 function sliceFrame(allFrames, frameIndex) {
