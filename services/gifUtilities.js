@@ -18,8 +18,6 @@ export async function doGif(inputURI, setTags) {
     .then((gif) => decompressFrames(gif, true))
 
   var srFrames = []
-  var canvasFrames = []
-  console.log('Starting frame upscale!')
   for (let i = 0; i < N; i++) {
     const lr = sliceFrame(allFrames, i)
     // if (i == 0) {
@@ -27,17 +25,15 @@ export async function doGif(inputURI, setTags) {
     // }
 
     const sr = await multiUpscale(lr, 1, 'canvas')
-    srFrames.push(sr.toDataURL('image/png'))
-    canvasFrames.push(sr)
+    srFrames.push(sr)
   }
-  console.log('GIF FRAME UPSCALE DONE!')
 
   const encoder = new GIFEncoder(W * 2, H * 2, 'neuquant', true)
   encoder.setQuality(1)
   encoder.start()
 
   for (let i = 0; i < N; i++) {
-    const ctx = canvasFrames[i].getContext('2d')
+    const ctx = srFrames[i].getContext('2d')
     encoder.setDelay(promisedGif[i].delay)
     encoder.addFrame(ctx)
   }
