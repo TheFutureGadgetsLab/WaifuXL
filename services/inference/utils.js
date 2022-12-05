@@ -133,7 +133,6 @@ export async function upScaleFromURI(extension, setTags, uri, upscaleFactor) {
     }
 
     resultURI = currentURI
-    console.log("GIF OUTPUT: ", resultURI)
   } else {
     const imageArray = await imageToNdarray(uri)
     // const tags = await runTagger(imageArray)

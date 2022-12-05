@@ -32,19 +32,19 @@ export async function doGif(inputURI, setTags) {
   }
   console.log('GIF FRAME UPSCALE DONE!')
 
-  const encoder = new GIFEncoder(W*2, H*2, 'neuquant', true)
+  const encoder = new GIFEncoder(W * 2, H * 2, 'neuquant', true)
   encoder.start()
 
   for (let i = 0; i < N; i++) {
-    const ctx = canvasFrames[i].getContext("2d")
+    const ctx = canvasFrames[i].getContext('2d')
     encoder.setDelay(promisedGif[i].delay)
     encoder.addFrame(ctx)
   }
 
   encoder.finish()
-  const buffer = "data:image/gif;base64," + encoder.out.getData().toString("base64")
-  
-  return buffer;
+  const buffer = 'data:image/gif;base64,' + encoder.out.getData().toString('base64')
+
+  return buffer
 }
 
 function sliceFrame(allFrames, frameIndex) {
