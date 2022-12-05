@@ -1,9 +1,10 @@
-import { parseGIF, decompressFrames } from 'gifuct-js'
-import { runTagger } from './inference/tagging'
-import { imageToNdarray } from './inference/utils'
-import { multiUpscale } from './inference/upscaling'
+import { decompressFrames, parseGIF } from 'gifuct-js'
+
+import { imageToNdarray } from '@/services/inference/utils'
+import { multiUpscale } from '@/services/inference/upscaling'
 import ndarray from 'ndarray'
 import ops from 'ndarray-ops'
+import { runTagger } from '@/services/inference/tagging'
 
 // https://medium.com/@emma.pejko/making-gifs-in-javascript-497349bf3cc8
 
@@ -29,6 +30,7 @@ export async function doGif(inputURI, setTags) {
     .then((gif) => decompressFrames(gif, true))
 
   var srFrames = []
+  console.log('Starting frame upscale!')
   for (let i = 0; i < N; i++) {
     const lr = sliceFrame(allFrames, i)
     // if (i == 0) {
@@ -38,6 +40,7 @@ export async function doGif(inputURI, setTags) {
     const sr = await multiUpscale(lr, 1)
     srFrames.push(sr)
   }
+  console.log('GIF FRAME UPSCALE DONE!')
 
   const GIF = require('./gif.js')
   const gif = new GIF({
@@ -47,9 +50,11 @@ export async function doGif(inputURI, setTags) {
     height: H * 2,
   })
 
+  console.log('Adding frames to gif')
   for (let i = 0; i < N; i++) {
     await frameAdd(srFrames[i], gif, promisedGif[i].delay)
   }
+  console.log('Adding frames to DONE')
 
   return new Promise(async (resolve, reject) => {
     gif.on('finished', function (blob) {

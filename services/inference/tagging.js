@@ -1,6 +1,8 @@
-import ndarray from 'ndarray'
-import { fetchModel, prepareImage } from './utils'
 import * as ort from 'onnxruntime-web'
+
+import { fetchModel, prepareImage } from './utils'
+
+import ndarray from 'ndarray'
 
 let taggerSession = null
 

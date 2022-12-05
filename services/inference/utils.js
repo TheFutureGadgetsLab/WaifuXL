@@ -1,11 +1,15 @@
-import ndarray from 'ndarray'
-import { initializeTagger } from './tagging'
-import { initializeSuperRes } from './upscaling'
 import * as ort from 'onnxruntime-web'
+
+import { initializeSuperRes, multiUpscale } from '@/services/inference/upscaling'
+import { initializeTagger, runTagger } from '@/services/inference/tagging'
+
+import { doGif } from '@/services/gifUtilities'
+import ndarray from 'ndarray'
 import pify from 'pify'
-const usr = require('ua-parser-js')
+
 const getPixels = pify(require('get-pixels'))
-var savePixels = require('save-pixels')
+const savePixels = require('save-pixels')
+const usr = require('ua-parser-js')
 
 /**
  * Given a URI, return an ndarray of the image pixel data.
@@ -114,4 +118,23 @@ export async function initializeONNX(setProgress) {
   // Needed because WASM workers are created async, wait for them
   // to be ready
   await sleep(300)
+}
+
+export async function upScaleFromURI(extension, setTags, uri, upscaleFactor) {
+  let resultURI = null
+  if (extension == 'gif') {
+    let currentURI = uri
+    for (let s = 0; s < upscaleFactor; s += 1) {
+      currentURI = await doGif(currentURI, setTags)
+    }
+
+    resultURI = currentURI
+  } else {
+    const imageArray = await imageToNdarray(uri)
+    // const tags = await runTagger(imageArray)
+    // setTags(tags)
+
+    resultURI = await multiUpscale(imageArray, upscaleFactor)
+  }
+  return resultURI
 }
