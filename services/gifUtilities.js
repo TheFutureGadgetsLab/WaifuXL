@@ -33,6 +33,7 @@ export async function doGif(inputURI, setTags) {
   console.log('GIF FRAME UPSCALE DONE!')
 
   const encoder = new GIFEncoder(W * 2, H * 2, 'neuquant', true)
+  encoder.setQuality(1)
   encoder.start()
 
   for (let i = 0; i < N; i++) {
