@@ -1,5 +1,5 @@
-import default_tags from '@/services/landing_tags'
 import create from 'zustand'
+import default_tags from '@/services/landing_tags'
 
 const useImageStore = create((set) => ({
   inputURI: './images/senjougahara.webp', // Input image URI

@@ -69,10 +69,6 @@ async function upscaleFrame(imageArray) {
   const chunkW = Math.floor(inImgW / nChunksW)
   const chunkH = Math.floor(inImgH / nChunksH)
 
-  console.log(`Upscaling ${inImgH}x${inImgW} -> ${outImgH}x${outImgW}`)
-  console.log(`Chunk size: ${chunkH}x${chunkW}`)
-  console.log(`Number of chunks: ${nChunksH}x${nChunksW}`)
-
   // Split the image in chunks and run super resolution on each chunk
   // Time execution
   const outArr = ndarray(new Uint8Array(outImgW * outImgH * 4), [outImgW, outImgH, 4])
@@ -90,7 +86,6 @@ async function upscaleFrame(imageArray) {
       const outW = 2 * (Math.min(inImgW, x + chunkW) - x)
 
       // Create sliced and copy
-      console.debug(`Chunk ${i}x${j}  (${yStart}, ${xStart})  (${inH}, ${inW}) -> (${outH}, ${outW})`)
       const inSlice = imageArray.lo(xStart, yStart, 0).hi(inW, inH, 4)
       const subArr = ndarray(new Uint8Array(inW * inH * 4), inSlice.shape)
       ops.assign(subArr, inSlice)
