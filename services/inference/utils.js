@@ -20,26 +20,24 @@ const usr = require('ua-parser-js')
 export async function imageToNdarray(imageURI, coalesce = true) {
   let pixels = await getPixels(imageURI)
 
-  if (pixels.shape.length === 4) {
+  if (pixels.shape.length === 4 && coalesce) {
     // animated gif with multiple frames
     const [N, W, H, C] = pixels.shape
 
     const numPixelsInFrame = W * H
 
     for (let i = 0; i < N; ++i) {
-      if (i > 0 && coalesce) {
-        const currIndex = pixels.index(i, 0, 0, 0)
-        const prevIndex = pixels.index(i - 1, 0, 0, 0)
+      const currIndex = pixels.index(i, 0, 0, 0)
+      const prevIndex = pixels.index(i - 1, 0, 0, 0)
 
-        for (let j = 0; j < numPixelsInFrame; ++j) {
-          const curr = currIndex + j * C
+      for (let j = 0; j < numPixelsInFrame; ++j) {
+        const curr = currIndex + j * C
 
-          if (pixels.data[curr + C - 1] === 0) {
-            const prev = prevIndex + j * C
+        if (pixels.data[curr + C - 1] === 0) {
+          const prev = prevIndex + j * C
 
-            for (let k = 0; k < C; ++k) {
-              pixels.data[curr + k] = pixels.data[prev + k]
-            }
+          for (let k = 0; k < C; ++k) {
+            pixels.data[curr + k] = pixels.data[prev + k]
           }
         }
       }
