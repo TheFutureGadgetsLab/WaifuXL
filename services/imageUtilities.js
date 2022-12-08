@@ -45,17 +45,19 @@ function downloadImage(fileName, extension, outputURI) {
 }
 
 /**
- * Get data URI from image, passing it to a callback
+ * Get data URI from image file
  *
  * @param {File} fileObj File object from file upload or paste event
  * @param {Function} setDataURI Callback to set data URI from file
  */
 function setDataURIFromFile(fileObj, setDataURI) {
-  const fr = new FileReader()
-  fr.onload = function () {
-    setDataURI(fr.result)
+  const reader = new FileReader()
+  reader.readAsArrayBuffer(fileObj)
+
+  reader.onloadend = function () {
+    const uri = 'data:' + fileObj.type + ';base64,' + Buffer.from(reader.result).toString('base64')
+    setDataURI(uri)
   }
-  fr.readAsDataURL(fileObj)
 }
 
 /**
