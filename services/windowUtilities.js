@@ -31,6 +31,10 @@ function useWindowSize() {
     }
   }, []) // Empty array ensures that effect is only run on mount
 
+  return windowSize
+}
+
+function registerEventHandlers() {
   const setInputURI = useImageStore((state) => state.setInputURI)
   const setFileName = useImageStore((state) => state.setFileName)
   const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen)
@@ -48,8 +52,6 @@ function useWindowSize() {
       dropListener(e, setFileName, setInputURI, setInputModalOpen)
     })
   }
-
-  return windowSize
 }
 
 function handleInputFile(items, setFileName, setInputURI) {
@@ -101,4 +103,4 @@ const preventDefault = (e) => {
   e.preventDefault()
 }
 
-export { useWindowSize }
+export { useWindowSize, registerEventHandlers }

@@ -14,7 +14,7 @@ const shortHash = require('child_process').execSync('git rev-parse --short HEAD'
 const longHash = require('child_process').execSync('git rev-parse HEAD').toString().trim()
 
 module.exports = withPWA({
-  reactStrictMode: true,
+  reactStrictMode: process.env.NODE_ENV === 'development',
   images: { unoptimized: true }, // disable next/image optimization as doesn't work with static export
   webpack: (config, { }) => {
     config.plugins.push(

@@ -1,16 +1,17 @@
-import NavbarComponent from '@/components/NavbarComponent'
-import TitleComponent from '@/components/TitleComponent'
+import { CopyComponent, DownloadComponent } from '@/components/ButtonComponents'
+import { ModalComponent, UploadButtonComponent } from '@/components/ModalComponent'
 import { Sidebar, UpscaleFactorComponent } from '@/components/SidebarComponent'
-import ImageDisplay from '@/components/ImageDisplayComponent'
+import { useAppStateStore, useImageStore } from '@/services/useState'
+
+import { BackgroundImage } from '@/components/SVGComponents'
 import Error from '@/components/ErrorComponent'
 import Feedback from '@/components/FeedbackModal'
-import { ModalComponent, UploadButtonComponent } from '@/components/ModalComponent'
-import { useAppStateStore, useImageStore } from '@/services/useState'
-import { useWindowSize } from '@/services/windowUtilities'
-import { useEffect } from 'react'
-import { BackgroundImage } from '@/components/SVGComponents'
-import { DownloadComponent, CopyComponent } from '@/components/ButtonComponents'
+import ImageDisplay from '@/components/ImageDisplayComponent'
+import NavbarComponent from '@/components/NavbarComponent'
 import RunComponent from '@/components/RunComponent'
+import TitleComponent from '@/components/TitleComponent'
+import { useEffect } from 'react'
+import { useWindowSize } from '@/services/windowUtilities'
 
 export default function Main() {
   const size = useWindowSize()
