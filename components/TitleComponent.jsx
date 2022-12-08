@@ -29,7 +29,7 @@ const TitleComponent = () => {
           </h1>
         ) : (
           <h1 id="title" className="select-none lg:text-6xl md:text-4xl text-2xl font-bold">
-            {downloadReady ? 'Download' : running ? 'Expanding' : 'Expand'} your{' '}
+            {downloadReady && !running ? 'Download' : running ? 'Expanding' : 'Expand'} your{' '}
             <span className="text-pink">
               waifu
               {running ? loadingText : '!'}
