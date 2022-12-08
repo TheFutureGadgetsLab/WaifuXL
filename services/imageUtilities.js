@@ -66,12 +66,6 @@ function setDataURIFromFile(fileObj, setDataURI) {
     setDataURI(uri)
   }
 }
-// Like above but faster
-function setDataURIFromFileFast(fileObj, setDataURI) {
-  const reader = new FileReader()
-  reader.readAsArrayBuffer(fileObj)
-  reader.onloadend = function () {}
-}
 
 /**
  * Returns whether the given string is a valid http(s) url
