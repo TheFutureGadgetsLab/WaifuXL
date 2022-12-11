@@ -1,5 +1,10 @@
 # ![](https://i.imgur.com/lPsvvh7.png) WaifuXL
-[![Upscale Count](https://img.shields.io/endpoint?color=blue&url=https%3A%2F%2Fwaifuxl_upscale_counter.haydnjonest8327.workers.dev%2Fbadge)](waifuxl.com)  [![GitHub Super-Linter](https://github.com/TheFutureGadgetsLab/WaifuXL/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)  
+[![Upscale Count](https://img.shields.io/endpoint?color=blue&url=https%3A%2F%2Fwaifuxl_upscale_counter.haydnjonest8327.workers.dev%2Fbadge)](waifuxl.com)  [![GitHub Super-Linter](https://github.com/TheFutureGadgetsLab/WaifuXL/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)
+
+# Notice
+We're currently nearing the end of a full rewrite of the website (you as a user shouldn't notice much, but the code is much cleaner and more maintainable), you can check out the updated version at https://de-spaghetti.waifuxl.pages.dev/. After that we will be working on Desktop GPU/CPU acceleration so users can upscale larger images faster (maybe even videos, depends on the performance we can get out of the model). Some things we're considering for acceleration are PyTorch 2.0 model compilation, ONNX, and AITemplate. When that's available we'll put an announcement on the website.
+
+---
 
 [Check out a full write-up here!](https://haydn.fgl.dev/posts/the-launch-of-waifuxl/)  
 WaifuXL is a state of the art super resolution model trained on  ~1,200,000 anime style images from the [Danbooru2021](https://www.gwern.net/Danbooru2021) dataset. You cant find it online at https://waifuxl.com/. Note that while you *can* upscale natural (real) images, the model was only trained on anime style drawings, so dont expect to have your socks blown off.
