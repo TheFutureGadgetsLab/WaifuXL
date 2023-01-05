@@ -1,6 +1,6 @@
+import Image from 'next/image'
 import { ReactCompareSlider } from 'react-compare-slider'
 import { useImageStore } from '@/services/useState'
-import Image from 'next/image'
 
 const ImageDisplay = () => {
   const outputURI = useImageStore((state) => state.outputURI)

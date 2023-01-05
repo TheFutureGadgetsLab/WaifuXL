@@ -9,7 +9,7 @@ import Feedback from '@/components/FeedbackModal'
 import ImageDisplay from '@/components/ImageDisplayComponent'
 import NavbarComponent from '@/components/NavbarComponent'
 import RunComponent from '@/components/RunComponent'
-import TitleComponent from '@/components/TitleComponent'
+import WaifuProgressComponent from '@/components/WaifuProgComponent'
 import { useEffect } from 'react'
 import { useWindowSize } from '@/services/windowUtilities'
 
@@ -37,7 +37,7 @@ function MobileLayout() {
     <div className="h-fit md:hidden">
       <NavbarComponent currentPage="index" />
       <div className="grid grid-flow-col gap-1 ml-1 mr-1 justify-center mb-2"></div>
-      <TitleComponent />
+      <WaifuProgressComponent />
       <div className="mb-2">
         <ImageDisplay />
       </div>
@@ -68,7 +68,7 @@ function DesktopLayout() {
         <NavbarComponent currentPage="index" />
         <div className="h-3/4 grow w-full">
           <ImageDisplay />
-          <TitleComponent />
+          <WaifuProgressComponent />
         </div>
       </main>
     </div>

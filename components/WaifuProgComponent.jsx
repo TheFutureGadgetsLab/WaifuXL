@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
+
 import { useAppStateStore } from '@/services/useState'
 
-const TitleComponent = () => {
+const WaifuProgressComponent = () => {
   const [loadingText, setLoadingText] = useState('')
 
   const running = useAppStateStore((state) => state.running)
@@ -41,4 +42,4 @@ const TitleComponent = () => {
   )
 }
 
-export default TitleComponent
+export default WaifuProgressComponent
