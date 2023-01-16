@@ -1,4 +1,4 @@
-import create from 'zustand'
+import { create } from'zustand'
 import default_tags from '@/services/landing_tags'
 
 const useImageStore = create((set) => ({
