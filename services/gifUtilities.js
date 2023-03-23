@@ -21,9 +21,9 @@ export async function doGif(inputURI, setTags) {
 
   for (let i = 0; i < N; i++) {
     const lr = sliceFrame(allFrames, i)
-    // if (i == 0) {
-    // setTags(await runTagger(lr))
-    // }
+    if (i == 0) {
+      setTags(await runTagger(lr))
+    }
 
     const sr = await multiUpscale(lr, 1, 'canvas')
     const ctx = sr.getContext('2d')

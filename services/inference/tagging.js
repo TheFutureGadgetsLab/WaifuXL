@@ -7,7 +7,7 @@ import ndarray from 'ndarray'
 let taggerSession = null
 
 export async function runTagger(imageArray) {
-  const feeds = prepareImage(imageArray)
+  const feeds = prepareImage(imageArray, 'tagger')
 
   let tags
   try {

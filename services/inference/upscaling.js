@@ -8,7 +8,7 @@ import ops from 'ndarray-ops'
 let superSession = null
 
 export async function runSuperRes(imageArray) {
-  const feeds = prepareImage(imageArray)
+  const feeds = prepareImage(imageArray, 'superRes')
 
   let sr
   try {

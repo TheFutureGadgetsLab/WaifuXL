@@ -5,6 +5,7 @@ import { initializeTagger, runTagger } from '@/services/inference/tagging'
 
 import { doGif } from '@/services/gifUtilities'
 import ndarray from 'ndarray'
+import ops from 'ndarray-ops'
 import pify from 'pify'
 
 const getPixels = pify(require('get-pixels'))
@@ -70,11 +71,21 @@ export function sleep(ms) {
  * @param {ndarray} imageArray
  * @returns {ort.Tensor} ORT Tensor
  */
-export function prepareImage(imageArray) {
+export function prepareImage(imageArray, model) {
   const width = imageArray.shape[0]
   const height = imageArray.shape[1]
-  const tensor = new ort.Tensor('uint8', imageArray.data.slice(), [width, height, 4])
-  return { input: tensor }
+  if (model === 'superRes') {
+    const tensor = new ort.Tensor('uint8', imageArray.data.slice(), [width, height, 4])
+    return { input: tensor }
+  } else if (model === 'tagger') {
+    const newND = ndarray(new Uint8Array(width * height * 3), [1, 3, height, width])
+    ops.assign(newND.pick(0, null, null), imageArray.lo(0, 0, 0).hi(width, height, 3).transpose(2, 1, 0))
+    const tensor = new ort.Tensor('uint8', newND.data.slice(), [1, 3, height, width])
+    return { input: tensor }
+  } else {
+    console.error('Invalid model type')
+    throw new Error('Invalid model type')
+  }
 }
 
 export async function fetchModel(filepathOrUri, setProgress, startProgress, endProgress) {
@@ -133,8 +144,8 @@ export async function upScaleFromURI(extension, setTags, uri, upscaleFactor) {
     resultURI = currentURI
   } else {
     const imageArray = await imageToNdarray(uri)
-    // const tags = await runTagger(imageArray)
-    // setTags(tags)
+    const tags = await runTagger(imageArray)
+    setTags(tags)
 
     resultURI = await multiUpscale(imageArray, upscaleFactor)
   }
