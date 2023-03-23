@@ -2,7 +2,6 @@ import { initializeONNX, upScaleFromURI } from '@/services/inference/utils'
 import { useAppStateStore, useImageStore } from '@/services/useState'
 
 import { UpscaleSVG } from '@/components/SVGComponents'
-import { useEffect } from 'react'
 
 const RunComponent = () => {
   const [setOutputURI, setUpscaleFactor, setTags, uri, extension, upscaleFactor] = useImageStore((state) => [
@@ -25,26 +24,6 @@ const RunComponent = () => {
 
   const modelLoading = loadProg >= 0
 
-  useEffect(() => {
-    if (!running) {
-      return
-    }
-
-    upScaleFromURI(extension, setTags, uri, upscaleFactor)
-      .then((result) => {
-        setOutputURI(result)
-        incrementCounter()
-      })
-      .catch((error) => {
-        setErrorMessage(error)
-      })
-      .finally(() => {
-        setDownloadReady(true)
-        setRunning(false)
-        setUpscaleFactor(2)
-      })
-  }, [running])
-
   return (
     <button
       className="grow text-white font-bold py-2 px-4 overflow-hidden rounded drop-shadow-lg bg-pink inline-flex items-center disabled:bg-gray-400 disabled:opacity-60 disabled:text-white disabled:cursor-not-allowed"
@@ -54,6 +33,21 @@ const RunComponent = () => {
         initializeONNX(setLoadProg)
           .then(() => {
             setRunning(true)
+          })
+          .then(() => {
+            upScaleFromURI(extension, setTags, uri, upscaleFactor)
+              .then((result) => {
+                setOutputURI(result)
+                incrementCounter()
+              })
+              .catch((error) => {
+                setErrorMessage(error)
+              })
+              .finally(() => {
+                setDownloadReady(true)
+                setRunning(false)
+                setUpscaleFactor(2)
+              })
           })
           .catch(() => {
             setErrorMessage('Could not load model.')
