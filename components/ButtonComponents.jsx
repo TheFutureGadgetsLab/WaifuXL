@@ -1,6 +1,7 @@
+import { CopySVG, DownloadSVG, UploadingSVG } from '@/components/SVGComponents'
 import { downloadImage, getDataURIFromInput, uploadToImgur } from '@/services/imageUtilities'
-import { DownloadSVG, CopySVG, UploadingSVG } from '@/components/SVGComponents'
-import { useImageStore, useAppStateStore } from '@/services/useState'
+import { useAppStateStore, useImageStore } from '@/services/useState'
+
 import { setDataURIFromFile } from '@/services/imageUtilities'
 
 export function DownloadComponent() {

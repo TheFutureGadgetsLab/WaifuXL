@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import { GitHubSVG } from '@/components/SVGComponents'
+import Link from 'next/link'
 
 const NavbarComponent = ({ currentPage }) => {
   const about_style = currentPage === 'about' ? 'text-white' : 'text-black'
@@ -14,7 +14,7 @@ const NavbarComponent = ({ currentPage }) => {
             <Link href="/about" className={`text-3xl font-semibold ${about_style}`}>
               About
             </Link>
-            <Link href="/" className={`text-4xl font-bold text-pink ${index_style}`}>
+            <Link href="/" className={`text-4xl font-bold ${index_style}`}>
               WaifuXL
             </Link>
             <Link href="/donate" className={`text-3xl font-semibold ${donate_style}`}>

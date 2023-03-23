@@ -1,6 +1,6 @@
+import Image from 'next/image'
 import Kizuna from '@/public/images/DesktopBG.svg'
 import Mobile from '@/public/images/MobileBG.svg'
-import Image from 'next/image'
 
 export function LeftArrowSVG({ onClick, hidden }) {
   return (
