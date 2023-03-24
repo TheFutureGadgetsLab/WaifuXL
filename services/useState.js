@@ -46,6 +46,7 @@ const useAppStateStore = create((set) => ({
   downloadReady: false, // Flag indicating upscale is ready for download
   feedbackMessage: null,
   isUploading: false,
+  selectedPreset: 'senjougahara|https://i.imgur.com/cMX8YcK.jpg',
 
   setInputModalOpen: (newInputModalOpen) => set(() => ({ inputModalOpen: newInputModalOpen })),
   setMobile: (newMobile) => set(() => ({ mobile: newMobile })),
@@ -55,6 +56,7 @@ const useAppStateStore = create((set) => ({
   setDownloadReady: (newDownloadReady) => set(() => ({ downloadReady: newDownloadReady })),
   setFeedbackMessage: (newFeedbackMessage) => set(() => ({ feedbackMessage: newFeedbackMessage })),
   setIsUploading: (newIsUploading) => set(() => ({ isUploading: newIsUploading })),
+  setSelectedPreset: (newSelectedPreset) => set(() => ({ selectedPreset: newSelectedPreset}))
 }))
 
 export { useImageStore, useAppStateStore }

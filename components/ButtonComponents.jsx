@@ -57,17 +57,21 @@ export function CopyComponent() {
 
 export function PresetSelectorComponent() {
   const [setTempURI, setTempFileName] = useImageStore((state) => [state.setTempURI, state.setTempFileName])
-
+  const selectedPreset = useAppStateStore((state) => state.selectedPreset)
+  const setSelectedPreset = useAppStateStore((state) => state.setSelectedPreset)
   return (
     <label>
       <span className="text-gray-700">Preset Images</span>
       <select
         id="preset-select"
+        value = {selectedPreset}
         className="form-select border-none rounded mt-1 block text-ellipsis w-full p-3 bg-blue text-white cursor-pointer"
         onInput={(inp) => {
+          setSelectedPreset(inp.target.value)
           const [name, url] = inp.target.value.split('|')
           getDataURIFromInput(url).then((uri) => setTempURI(uri))
           setTempFileName(`example_${name}`)
+          
         }}
       >
         <option>Select a Preset</option>
@@ -86,6 +90,7 @@ export function PresetSelectorComponent() {
 export function UploadButtonComponent() {
   const setTempFileName = useImageStore((state) => state.setTempFileName)
   const setTempInputURI = useImageStore((state) => state.setTempURI)
+  const setSelectedPreset = useAppStateStore((state) => state.setSelectedPreset)
 
   return (
     <div className="grid grid-cols-1">
@@ -103,12 +108,14 @@ text-base font-medium h-12 border-blue border-2 bg-blue disabled:bg-white disabl
               if (e.target.files[0]) {
                 setDataURIFromFile(e.target.files[0], setTempInputURI)
                 setTempFileName(e.target.files[0].name.split('.')[0])
+                setSelectedPreset("")
               }
             }}
             onChange={(e) => {
               if (e.target.files[0]) {
                 setDataURIFromFile(e.target.files[0], setTempInputURI)
                 setTempFileName(e.target.files[0].name.split('.')[0])
+                setSelectedPreset("")
               }
             }}
             onClick={(e) => {
@@ -127,6 +134,7 @@ export function DoneButtonComponent() {
   const setInputURI = useImageStore((state) => state.setInputURI)
   const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen)
   const tempURI = useImageStore((state) => state.tempURI)
+  const setSelectedPreset = useAppStateStore((state) => state.setSelectedPreset)
 
   return (
     <div className="md:grid-cols-1 md:grid hidden">
@@ -140,6 +148,7 @@ border-blue border-2 bg-white hover:bg-blue hover:text-white disabled:bg-white d
           setInputURI(tempURI)
           setTags(null)
           setInputModalOpen(false)
+          setSelectedPreset("")
         }}
       >
         Done

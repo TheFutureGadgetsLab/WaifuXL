@@ -10,6 +10,8 @@ function ModalComponent() {
   const inputModalOpen = useAppStateStore((state) => state.inputModalOpen)
   const setTempUri = useImageStore((state) => state.setTempURI)
   const inputUri = useImageStore((state) => state.inputURI)
+  const setSelectedPreset = useAppStateStore((state) => state.setSelectedPreset)
+
   const divRef = useRef(null)
   function focusDiv() {
     divRef.current?.focus()
@@ -34,7 +36,8 @@ function ModalComponent() {
             onKeyDown={(e) => {
               if(e.key == "Escape") {
                 setInputModalOpen(false)
-                setTempUri(inputUri)  
+                setTempUri(inputUri)
+                setSelectedPreset("")
               }
             }}
           >
@@ -45,6 +48,7 @@ function ModalComponent() {
               onClick={(e) => {
                 setInputModalOpen(false)
                 setTempUri(inputUri)
+                setSelectedPreset("")
               }}
             />
             <div id="modal-container" className="flex items-center justify-center w-screen h-screen">
@@ -57,6 +61,7 @@ function ModalComponent() {
                     onClick={(e) => {
                       setInputModalOpen(false)
                       setTempUri(inputUri)
+                      setSelectedPreset("")
                     }}
                   />
                 </div>
