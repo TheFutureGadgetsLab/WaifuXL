@@ -56,7 +56,7 @@ export function CopyComponent() {
 }
 
 export function PresetSelectorComponent() {
-  const [setInputURI, setFileName] = useImageStore((state) => [state.setInputURI, state.setFileName])
+  const [setTempURI, setTempFileName] = useImageStore((state) => [state.setTempURI, state.setTempFileName])
 
   return (
     <label>
@@ -66,8 +66,8 @@ export function PresetSelectorComponent() {
         className="form-select border-none rounded mt-1 block text-ellipsis w-full p-3 bg-blue text-white cursor-pointer"
         onInput={(inp) => {
           const [name, url] = inp.target.value.split('|')
-          getDataURIFromInput(url).then((uri) => setInputURI(uri))
-          setFileName(`example_${name}`)
+          getDataURIFromInput(url).then((uri) => setTempURI(uri))
+          setTempFileName(`example_${name}`)
         }}
       >
         <option>Select a Preset</option>
@@ -84,8 +84,8 @@ export function PresetSelectorComponent() {
 }
 
 export function UploadButtonComponent() {
-  const setFileName = useImageStore((state) => state.setFileName)
-  const setInputURI = useImageStore((state) => state.setInputURI)
+  const setTempFileName = useImageStore((state) => state.setTempFileName)
+  const setTempInputURI = useImageStore((state) => state.setTempURI)
 
   return (
     <div className="grid grid-cols-1">
@@ -101,8 +101,8 @@ text-base font-medium h-12 border-blue border-2 bg-blue disabled:bg-white disabl
             className="hidden"
             onChange={(e) => {
               if (e.target.files[0]) {
-                setDataURIFromFile(e.target.files[0], setInputURI)
-                setFileName(e.target.files[0].name.split('.')[0])
+                setDataURIFromFile(e.target.files[0], setTempInputURI)
+                setTempFileName(e.target.files[0].name.split('.')[0])
               }
             }}
           />
@@ -117,7 +117,7 @@ export function DoneButtonComponent() {
   const setTags = useImageStore((state) => state.setTags)
   const setInputURI = useImageStore((state) => state.setInputURI)
   const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen)
-  const inputURI = useImageStore((state) => state.inputURI)
+  const tempURI = useImageStore((state) => state.tempURI)
 
   return (
     <div className="md:grid-cols-1 md:grid hidden">
@@ -128,7 +128,7 @@ export function DoneButtonComponent() {
 text-base font-medium h-12 focus:outline-none focus:ring-2 focus:ring-offset-2
 border-blue border-2 bg-white hover:bg-blue hover:text-white disabled:bg-white disabled:text-gray-200 disabled:border-gray-200"
         onClick={() => {
-          setInputURI(inputURI)
+          setInputURI(tempURI)
           setTags(null)
           setInputModalOpen(false)
         }}

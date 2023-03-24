@@ -7,9 +7,9 @@ import { setDataURIFromFile } from '@/services/imageUtilities'
 
 function ModalComponent() {
   const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen)
-  const setFileName = useImageStore((state) => state.setFileName)
   const inputModalOpen = useAppStateStore((state) => state.inputModalOpen)
-
+  const setTempUri = useImageStore((state) => state.setTempURI)
+  const inputUri = useImageStore((state) => state.inputURI)
   const divRef = useRef(null)
   function focusDiv() {
     divRef.current?.focus()
@@ -33,7 +33,7 @@ function ModalComponent() {
             ref={divRef}
             onKeyDown={(e) => {
               setInputModalOpen(e.key != 'Escape')
-              setFileName()
+              setTempUri(inputUri)
             }}
           >
             <div
@@ -42,7 +42,7 @@ function ModalComponent() {
               aria-hidden="true"
               onClick={(e) => {
                 setInputModalOpen(false)
-                setFileName()
+                setTempUri(inputUri)
               }}
             />
             <div id="modal-container" className="flex items-center justify-center w-screen h-screen">
@@ -54,7 +54,7 @@ function ModalComponent() {
                   <CloseSVG
                     onClick={(e) => {
                       setInputModalOpen(false)
-                      setFileName()
+                      setTempUri(inputUri)
                     }}
                   />
                 </div>
@@ -80,15 +80,15 @@ function PresetMenuComponent() {
 }
 
 function PreviewComponent() {
-  const setInputURI = useImageStore((state) => state.setInputURI)
-  const inputURI = useImageStore((state) => state.inputURI)
+  const setTempURI = useImageStore((state) => state.setTempURI)
+  const tempURI = useImageStore((state) => state.tempURI)
   const setFileName = useImageStore((state) => state.setFileName)
 
   return (
     <label
       className="flex flex-col items-center justify-center cursor-pointer mt-16 h-96 m-3 bg-contain bg-origin-content p-4 bg-no-repeat bg-center"
       style={{
-        backgroundImage: `url(${inputURI})`,
+        backgroundImage: `url(${tempURI})`,
         boxShadow: 'inset 0px 0px 12px #00000050',
       }}
     >
@@ -98,7 +98,7 @@ function PreviewComponent() {
           className="hidden"
           onChange={(e) => {
             if (e.target.files[0]) {
-              setDataURIFromFile(e.target.files[0], setInputURI)
+              setDataURIFromFile(e.target.files[0], setTempURI)
               setFileName(e.target.files[0].name.split('.')[0])
             }
           }}

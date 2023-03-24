@@ -9,6 +9,8 @@ const useImageStore = create((set) => ({
   extension: 'webp', // Output file extension
   upscaleFactor: 1, // Upscale factor (will be automatically log2'd)
   hasntRun: true, // Upscale factor (will be automatically log2'd)
+  tempURI: './images/senjougahara.webp',
+  tempFileName: 'example',
 
   setInputURI: (uri) => {
     set(() => ({ inputURI: uri }))
@@ -29,6 +31,9 @@ const useImageStore = create((set) => ({
   },
   setTags: (newTags) => set(() => ({ tags: newTags })),
   setFileName: (newFilename) => set(() => ({ fileName: newFilename })),
+  setTempURI: (newTempUri) => set(() => ({tempURI : newTempUri})),
+  setTempFileName: (newTempFileName) => set(() => ({tempFileName : newTempFileName}))
+
 }))
 
 const useAppStateStore = create((set) => ({
