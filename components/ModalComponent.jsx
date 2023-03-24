@@ -32,8 +32,10 @@ function ModalComponent() {
             tabIndex="-1"
             ref={divRef}
             onKeyDown={(e) => {
-              setInputModalOpen(e.key != 'Escape')
-              setTempUri(inputUri)
+              if(e.key == "Escape") {
+                setInputModalOpen(false)
+                setTempUri(inputUri)  
+              }
             }}
           >
             <div
@@ -96,13 +98,22 @@ function PreviewComponent() {
         <input
           type="file"
           className="hidden"
+          onInput={(e) => {
+            if (e.target.files[0]) {
+              setDataURIFromFile(e.target.files[0], setTempURI)
+              setFileName(e.target.files[0].name.split('.')[0])
+            }
+          }}
           onChange={(e) => {
             if (e.target.files[0]) {
               setDataURIFromFile(e.target.files[0], setTempURI)
               setFileName(e.target.files[0].name.split('.')[0])
             }
           }}
-        />
+          onClick={(e) => {
+            e.target.value = null
+          }}
+      />
       </label>
     </label>
   )
