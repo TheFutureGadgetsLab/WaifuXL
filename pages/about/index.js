@@ -21,8 +21,11 @@ export default function About() {
 
   return (
     <>
-      <NavbarComponent currentPage="about" />
+      <span className="hidden md:block">
+        <BackgroundImage />
+      </span>
       <div className="flex flex-col items-center min-h-screen">
+        <NavbarComponent currentPage="about" />
         <main className="flex flex-col items-center flex-shrink justify-center lg:w-5/12 p-10 text-center z-50">
           <Section title="At a Glance">
             {WXLURI} provides state of the art upscaling <Bold text="directly" /> in your browser at the click of a
@@ -43,9 +46,6 @@ export default function About() {
           </Section>
         </main>
       </div>
-      <span className="hidden md:block">
-        <BackgroundImage />
-      </span>
     </>
   )
 }
