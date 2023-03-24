@@ -99,11 +99,20 @@ text-base font-medium h-12 border-blue border-2 bg-blue disabled:bg-white disabl
           <input
             type="file"
             className="hidden"
+            onInput={(e) => {
+              if (e.target.files[0]) {
+                setDataURIFromFile(e.target.files[0], setTempInputURI)
+                setTempFileName(e.target.files[0].name.split('.')[0])
+              }
+            }}
             onChange={(e) => {
               if (e.target.files[0]) {
                 setDataURIFromFile(e.target.files[0], setTempInputURI)
                 setTempFileName(e.target.files[0].name.split('.')[0])
               }
+            }}
+            onClick={(e) => {
+              e.target.value = null
             }}
           />
         </label>
