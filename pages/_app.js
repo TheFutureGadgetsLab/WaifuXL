@@ -13,7 +13,7 @@ function MyApp({ Component, pageProps }) {
         <title>WaifuXL</title>
         <meta
           name="description"
-          content="High quality image upsampling for anime-style art using state-of-the-art neural networks, directly in your browser. Supports both images and gifs."
+          content="High quality image upsampling for anime-style art using state-of-the-art neural networks, directly in your browser. Supports both images and gifs. Better than waifu2x."
         />
       </Head>
       <Component {...pageProps} />
