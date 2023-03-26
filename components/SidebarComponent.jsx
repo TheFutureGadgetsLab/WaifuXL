@@ -9,7 +9,7 @@ const Sidebar = () => {
   const [outputURI, tags] = useImageStore((state) => [state.outputURI, state.tags])
 
   return (
-    <div id="sidebar" className="w-80 flex flex-col fixed inset-y-0 z-20">
+    <div id="sidebar" className="absolute w-80 flex flex-col inset-y-0 z-20 h-full">
       <div className="relative flex-1 flex flex-col min-h-0 bg-gray-100">
         <div className="flex-1 flex flex-col overflow-y-auto">
           <div className="pt-5 mt-10 mb-10 mx-8 grid grid-cols-1 space-y-2">

@@ -62,10 +62,10 @@ function DesktopLayout() {
     <div className="overflow-hidden hidden md:block min-h-screen">
       <Error />
       <Feedback />
-      <Sidebar />
       <ModalComponent />
       <main className="flex-1">
         <NavbarComponent currentPage="index" />
+        <Sidebar />
         <div className="h-3/4 grow w-full">
           <ImageDisplay />
           <WaifuProgressComponent />

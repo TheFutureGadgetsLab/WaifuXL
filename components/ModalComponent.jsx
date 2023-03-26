@@ -34,10 +34,10 @@ function ModalComponent() {
             tabIndex="-1"
             ref={divRef}
             onKeyDown={(e) => {
-              if(e.key == "Escape") {
+              if (e.key == 'Escape') {
                 setInputModalOpen(false)
                 setTempUri(inputUri)
-                setSelectedPreset("")
+                setSelectedPreset('')
               }
             }}
           >
@@ -48,7 +48,7 @@ function ModalComponent() {
               onClick={(e) => {
                 setInputModalOpen(false)
                 setTempUri(inputUri)
-                setSelectedPreset("")
+                setSelectedPreset('')
               }}
             />
             <div id="modal-container" className="flex items-center justify-center w-screen h-screen">
@@ -61,7 +61,7 @@ function ModalComponent() {
                     onClick={(e) => {
                       setInputModalOpen(false)
                       setTempUri(inputUri)
-                      setSelectedPreset("")
+                      setSelectedPreset('')
                     }}
                   />
                 </div>
@@ -118,7 +118,7 @@ function PreviewComponent() {
           onClick={(e) => {
             e.target.value = null
           }}
-      />
+        />
       </label>
     </label>
   )

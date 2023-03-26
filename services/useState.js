@@ -31,9 +31,8 @@ const useImageStore = create((set) => ({
   },
   setTags: (newTags) => set(() => ({ tags: newTags })),
   setFileName: (newFilename) => set(() => ({ fileName: newFilename })),
-  setTempURI: (newTempUri) => set(() => ({tempURI : newTempUri})),
-  setTempFileName: (newTempFileName) => set(() => ({tempFileName : newTempFileName}))
-
+  setTempURI: (newTempUri) => set(() => ({ tempURI: newTempUri })),
+  setTempFileName: (newTempFileName) => set(() => ({ tempFileName: newTempFileName })),
 }))
 
 const useAppStateStore = create((set) => ({
@@ -56,7 +55,7 @@ const useAppStateStore = create((set) => ({
   setDownloadReady: (newDownloadReady) => set(() => ({ downloadReady: newDownloadReady })),
   setFeedbackMessage: (newFeedbackMessage) => set(() => ({ feedbackMessage: newFeedbackMessage })),
   setIsUploading: (newIsUploading) => set(() => ({ isUploading: newIsUploading })),
-  setSelectedPreset: (newSelectedPreset) => set(() => ({ selectedPreset: newSelectedPreset}))
+  setSelectedPreset: (newSelectedPreset) => set(() => ({ selectedPreset: newSelectedPreset })),
 }))
 
 export { useImageStore, useAppStateStore }

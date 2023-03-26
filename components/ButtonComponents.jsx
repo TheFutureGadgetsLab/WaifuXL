@@ -64,14 +64,13 @@ export function PresetSelectorComponent() {
       <span className="text-gray-700">Preset Images</span>
       <select
         id="preset-select"
-        value = {selectedPreset}
+        value={selectedPreset}
         className="form-select border-none rounded mt-1 block text-ellipsis w-full p-3 bg-blue text-white cursor-pointer"
         onInput={(inp) => {
           setSelectedPreset(inp.target.value)
           const [name, url] = inp.target.value.split('|')
           getDataURIFromInput(url).then((uri) => setTempURI(uri))
           setTempFileName(`example_${name}`)
-          
         }}
       >
         <option>Select a Preset</option>
@@ -108,14 +107,14 @@ text-base font-medium h-12 border-blue border-2 bg-blue disabled:bg-white disabl
               if (e.target.files[0]) {
                 setDataURIFromFile(e.target.files[0], setTempInputURI)
                 setTempFileName(e.target.files[0].name.split('.')[0])
-                setSelectedPreset("")
+                setSelectedPreset('')
               }
             }}
             onChange={(e) => {
               if (e.target.files[0]) {
                 setDataURIFromFile(e.target.files[0], setTempInputURI)
                 setTempFileName(e.target.files[0].name.split('.')[0])
-                setSelectedPreset("")
+                setSelectedPreset('')
               }
             }}
             onClick={(e) => {
@@ -148,7 +147,7 @@ border-blue border-2 bg-white hover:bg-blue hover:text-white disabled:bg-white d
           setInputURI(tempURI)
           setTags(null)
           setInputModalOpen(false)
-          setSelectedPreset("")
+          setSelectedPreset('')
         }}
       >
         Done
