@@ -16,6 +16,7 @@
     "ndarray-ops": "^1.2.2",
     "next": "^13.2.4",
     "next-pwa": "^5.6.0",
+    "node-polyfill-webpack-plugin": "^2.0.1",
     "onnxruntime-common": "^1.15.0-dev.20230317-e42f7487df",
     "onnxruntime-web": "^1.15.0-dev.20230317-e42f7487df",
     "pify": "^6.1.0",
