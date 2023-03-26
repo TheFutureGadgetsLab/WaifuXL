@@ -22,15 +22,16 @@ module.exports = withPWA({
   webpack: (config, { }) => {
     config.plugins.push(
       new CopyPlugin({
+        // Use copy plugin to copy *.wasm to output folder.
         patterns: [
           {
             from: path.join(
               __dirname,
-              'node_modules/onnxruntime-web/dist/*.wasm'
+              "node_modules/onnxruntime-web/dist/*.wasm"
             ),
-            to: path.join(__dirname, '.next/static/chunks/pages/[name][ext]')
-          }
-        ]
+            to: path.join(__dirname, ".next/static/chunks/pages/[name][ext]"),
+          },
+        ],
       })
     )
 
