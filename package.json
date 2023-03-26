@@ -8,27 +8,33 @@
     "cloudflare_deploy": "npm run build && npm run export"
   },
   "dependencies": {
-    "@tailwindcss/forms": "^0.4.0",
+    "@ramonak/react-progress-bar": "^5.0.3",
     "get-pixels": "^3.3.3",
+    "gif-encoder-2": "^1.0.5",
     "gifuct-js": "^2.1.2",
     "ndarray": "^1.0.19",
     "ndarray-ops": "^1.2.2",
-    "next": "^12.1.0",
+    "next": "^13.2.4",
     "next-pwa": "^5.6.0",
-    "onnxruntime-common": "^1.12.0",
-    "onnxruntime-web": "^1.12.0",
-    "pify": "^5.0.0",
-    "react": "^17.0.2",
-    "react-compare-slider": "^2.2.0",
-    "react-dom": "^17.0.2",
-    "ua-parser-js": "^1.0.2"
+    "onnxruntime-common": "^1.15.0-dev.20230317-e42f7487df",
+    "onnxruntime-web": "^1.15.0-dev.20230317-e42f7487df",
+    "pify": "^6.1.0",
+    "react": "^18.2.0",
+    "react-compare-slider": "2.2.0",
+    "react-dom": "^18.2.0",
+    "save-pixels": "^2.3.6",
+    "sharp": "^0.32.0",
+    "ua-parser-js": "^1.0.34",
+    "zustand": "^4.3.6"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.2",
-    "copy-webpack-plugin": "^8.1.1",
-    "postcss": "^8.4.5",
-    "tailwindcss": "^3.0.18",
-    "webpack": "^5.36.2",
-    "webpack-cli": "^4.6.0"
+    "@tailwindcss/forms": "^0.5.3",
+    "autoprefixer": "^10.4.14",
+    "copy-webpack-plugin": "^11.0.0",
+    "eslint-config-next": "^13.2.4",
+    "postcss": "^8.4.21",
+    "prettier": "2.8.7",
+    "standard": "^17.0.0",
+    "tailwindcss": "^3.2.7"
   }
 }

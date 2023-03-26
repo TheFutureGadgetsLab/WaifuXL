@@ -1,73 +1,46 @@
-import { parseGIF, decompressFrames } from "gifuct-js";
-import {
-  buildImageFromND,
-  upScaleGifFrameFromURI,
-  buildNdarrayFromImage,
-  getTopTags,
-} from "./processingUtilities";
-import { getPixelDataFromURI } from "./imageUtilities";
-import { runTagger } from "./onnxBackend";
+import { imageToNdarray } from '@/services/inference/utils'
+import { multiUpscale } from '@/services/inference/upscaling'
+import ndarray from 'ndarray'
+import ops from 'ndarray-ops'
+import { parseGIF } from 'gifuct-js'
+import { runTagger } from '@/services/inference/tagging'
 
-async function frameAdd(frame, gif, height, width, delay) {
-  return new Promise(async (resolve, reject) => {
-    const img = new Image();
-    img.src = await upScaleGifFrameFromURI(
-      frame,
-      height,
-      width
-    );
-    img.crossOrigin = "Anonymous";
-    img.onload = function () {
-      gif.addFrame(img, { delay: delay });
-      resolve("Worked");
-    };
-  });
-}
-export async function doGif(inputURI, setTags, upscaleFactor) {
-  return new Promise(async (resolve, reject) => {
-    const extractFrames = require("./gifExtract.js");
-    const results = await extractFrames({
-      input: inputURI,
-    });
-    var promisedGif = await fetch(inputURI)
-      .then((resp) => resp.arrayBuffer())
-      .then((buff) => parseGIF(buff))
-      .then((gif) => decompressFrames(gif, true));
-    var GIF = require("./gif.js");
-    var gif = new GIF({
-      workers: 2,
-      quality: 1,
-      width: results.shape[1] * 2,
-      height: results.shape[2] * 2,
-    });
+const GIFEncoder = require('gif-encoder-2')
 
-    const inputData = await getPixelDataFromURI(
-      buildImageFromND(
-        results.data.slice(0 * results.stride[0], 1 * results.stride[0]),
-        results.shape[2],
-        results.shape[1],
-      )
-    );
-    const tagInput = buildNdarrayFromImage(inputData);
-    const tagOutput = await runTagger(tagInput);
-    const tags = await getTopTags(tagOutput);
-    setTags(tags);
-    for (var j = 0; j < results.shape[0]; j++) {
-      var currentND = results.data.slice(
-        j * results.stride[0],
-        (j + 1) * results.stride[0]
-      );
-      await frameAdd(currentND, gif, results.shape[2], results.shape[1], promisedGif[j].delay);
+export async function doGif(inputURI, setTags) {
+  const allFrames = await imageToNdarray(inputURI)
+  const [N, W, H, _C] = allFrames.shape
+
+  const promisedGif = await fetch(inputURI)
+    .then((resp) => resp.arrayBuffer())
+    .then((buff) => parseGIF(buff))
+
+  const encoder = new GIFEncoder(W * 2, H * 2, 'neuquant', true)
+  encoder.setQuality(5)
+  encoder.start()
+
+  for (let i = 0; i < N; i++) {
+    const lr = sliceFrame(allFrames, i)
+    if (i == 0) {
+      setTags(await runTagger(lr))
     }
 
-    gif.on("finished", function (blob) {
-      const reader = new FileReader();
-      reader.readAsDataURL(blob);
-      reader.onload = function () {
-        resolve(reader.result);
-      };
-    });
+    const sr = await multiUpscale(lr, 1, 'canvas')
+    const ctx = sr.getContext('2d')
+    encoder.setDelay(promisedGif.frames[i].delay)
+    encoder.addFrame(ctx)
+  }
 
-    await gif.render();
-  });
+  encoder.finish()
+  const buffer = 'data:image/gif;base64,' + encoder.out.getData().toString('base64')
+
+  return buffer
+}
+
+function sliceFrame(allFrames, frameIndex) {
+  const [_N, W, H, C] = allFrames.shape
+
+  const outFrame = ndarray(new Uint8Array(W * H * C), [W, H, C])
+  ops.assign(outFrame, allFrames.pick(frameIndex, null, null, null))
+  return outFrame
 }

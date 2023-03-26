@@ -1,40 +1,41 @@
-const isProd = process.env.NODE_ENV === "production";
-/**
- * @type {import('next').NextConfig}
- */
-const nextConfig = {
-  /* config options here */
-};
+const CopyPlugin = require('copy-webpack-plugin')
+const path = require('path')
+const webpack = require('webpack')
 
-const path = require("path");
-const CopyPlugin = require("copy-webpack-plugin");
 const withPWA = require('next-pwa')({
   dest: 'public',
   register: true,
   skipWaiting: true,
   disable: process.env.NODE_ENV === 'development' // Disable PWA in development
 })
-const webpack = require('webpack')
+
+// get git info from command line
+const shortHash = require('child_process').execSync('git rev-parse --short HEAD').toString().trim()
+const longHash = require('child_process').execSync('git rev-parse HEAD').toString().trim()
 
 module.exports = withPWA({
-  assetPrefix: ".",
-  basePath: isProd ? "" : "",
+  reactStrictMode: false,
+  images: { unoptimized: true }, // disable next/image optimization as doesn't work with static export
   webpack: (config, { }) => {
     config.plugins.push(
       new CopyPlugin({
-        // Use copy plugin to copy *.wasm to output folder.
         patterns: [
           {
             from: path.join(
               __dirname,
-              "node_modules/onnxruntime-web/dist/*.wasm"
+              'node_modules/onnxruntime-web/dist/*.wasm'
             ),
-            to: path.join(__dirname, ".next/static/chunks/pages/[name][ext]"),
-          },
-        ],
+            to: path.join(__dirname, '.next/static/chunks/pages/[name][ext]')
+          }
+        ]
       })
     )
 
+    config.plugins.push(new webpack.DefinePlugin({
+      __SHORT_HASH__: JSON.stringify(shortHash),
+      __LONG_HASH__: JSON.stringify(longHash)
+    }))
+
     return config
   }
-});
+})
