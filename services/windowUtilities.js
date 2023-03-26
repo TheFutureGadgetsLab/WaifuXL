@@ -35,13 +35,13 @@ function useWindowSize() {
 }
 
 function registerEventHandlers() {
-  const setInputURI = useImageStore((state) => state.setInputURI)
-  const setFileName = useImageStore((state) => state.setFileName)
+  const setTempUri = useImageStore((state) => state.setTempURI)
+  const setTempFileName = useImageStore((state) => state.setTempFileName)
   const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen)
 
   if (typeof window !== 'undefined') {
     window.addEventListener('paste', (e) => {
-      pasteListener(e, setInputURI, setFileName, setInputModalOpen)
+      pasteListener(e, setTempUri, setTempFileName, setInputModalOpen)
     })
     window.addEventListener('dragenter', preventDefault)
     window.addEventListener('drag', preventDefault)
@@ -49,7 +49,7 @@ function registerEventHandlers() {
     window.addEventListener('dragend', preventDefault)
     window.addEventListener('dragstart', preventDefault)
     window.addEventListener('drop', (e) => {
-      dropListener(e, setFileName, setInputURI, setInputModalOpen)
+      dropListener(e, setTempFileName, setTempUri, setInputModalOpen)
     })
   }
 }
