@@ -1,39 +1,31 @@
-import {
-  ReactCompareSlider,
-  ReactCompareSliderImage,
-} from "react-compare-slider";
-import {useEffect, useState} from 'react';
+import Image from 'next/image'
+import { ReactCompareSlider } from 'react-compare-slider'
+import { useImageStore } from '@/services/useState'
 
+const ImageDisplay = () => {
+  const outputURI = useImageStore((state) => state.outputURI)
+  const inputURI = useImageStore((state) => state.inputURI)
 
-
-const ImageDisplay = ({ outputURI, inputURI, mobile }) => {
   return (
-    <div className={`${mobile ? 'h-2/3' : 'h-5/6' } items-center flex justify-center w-full drop-shadow-md overflow-hidden`}>
+    <div
+      id="image-display-container"
+      className={`items-center flex justify-center drop-shadow-md overflow-hidden ml-5 mr-5 w-auto md:w-full`}
+    >
       {outputURI == null ? (
-        <img
-          src={inputURI}
-          className="h-5/6"
-          style={{
-            width: mobile ? "70vw" : "auto",
-            height: mobile ? "auto" : "70vh",
-            // height: "auto",
-          }}
-        />
+        <Image src={inputURI} width="1" height="1" id="stock-image" priority={true} alt="Before image" />
       ) : (
         <ReactCompareSlider
-          className="h-5/6"
           position={50}
-          itemOne={<ReactCompareSliderImage src={inputURI} alt="Image one" />}
-          itemTwo={<ReactCompareSliderImage src={outputURI} alt="Image two" />}
-          style={{
-            width: mobile ? "70vw" : "auto",
-            height: mobile ? "auto" : "70vh",
-          }}
+          itemOne={
+            <Image width="500" height="500" src={inputURI} id="before-image" priority={true} alt="Before image" />
+          }
+          itemTwo={
+            <Image width="500" height="500" src={outputURI} id="after-image" priority={true} alt="After image" />
+          }
         />
       )}
-
     </div>
-  );
-};
+  )
+}
 
-export default ImageDisplay;
+export default ImageDisplay

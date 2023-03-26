@@ -1,29 +1,16 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import './base.css';
-@import 'tailwindcss/utilities';
-
-#sidebar {
-    animation-duration: 0.25s;
-    animation-name: slidein;
-}
-  
-@keyframes slidein {
-    from {
-        transform: translateX(-600px);
-    }
-
-    to {
-        transform: translateX(0);
-    }
+#stock-image,
+#before-image,
+#after-image {
+  width: auto;
+  height: 70vh;
 }
 
-@keyframes scalein {
-    from {
-        transform: scale(0.0);
-    }
-
-    to {
-        transform: scale(1.0);
-    }
+@media (max-width: 640px) {
+  #stock-image,
+  #before-image,
+  #after-image {
+    width: 100vw;
+    height: 100vw;
+    object-fit: cover;
+  }
 }
