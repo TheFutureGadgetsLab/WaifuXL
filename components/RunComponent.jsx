@@ -1,105 +1,93 @@
-import { useEffect, useState } from "react";
-import { upScaleFromURI } from "../services/processingUtilities";
-import { initializeONNX } from "../services/onnxBackend";
-import { uploadToImgur } from "../services/miscUtils";
-const RunComponent = ({
-  loading,
-  setLoading,
-  inputURI,
-  setOutputURI,
-  setTags,
-  setExtension,
-  setUserHasRun,
-  upscaleFactor,
-  setModelLoading,
-  modelLoading,
-  setUpscaleFactor,
-  setErrorMessage,
-}) => {
-  const [shouldRun, setShouldRun] = useState(false);
-  const [modelLoadProg, setModelLoadProg] = useState(0);
+import { initializeONNX, upScaleFromURI } from '@/services/inference/utils'
+import { useAppStateStore, useImageStore } from '@/services/useState'
 
-  useEffect(async () => {
-    if (shouldRun) {
-      // Clear previous output
-      setOutputURI(null);
-      try {
-        const result = await upScaleFromURI(
-          inputURI,
-          setLoading,
-          setTags,
-          setExtension,
-          upscaleFactor
-        );
-        setUserHasRun(true);
-        // If the models output is valid
-        if (result) {
-          //set the output
-          setOutputURI(result);
-          // await uploadToImgur(result);
-          // Set should run to false
-          setShouldRun(false);
-          setUpscaleFactor(2);
+import { UpscaleSVG } from '@/components/SVGComponents'
 
-          //hit the api and note an image has been upscaled
-          var requestOptions = {
-            method: "GET",
-            redirect: "follow",
-          };
+const RunComponent = () => {
+  const [setOutputURI, setUpscaleFactor, setTags, uri, extension, upscaleFactor] = useImageStore((state) => [
+    state.setOutputURI,
+    state.setUpscaleFactor,
+    state.setTags,
+    state.inputURI,
+    state.extension,
+    state.upscaleFactor,
+  ])
 
-          fetch(
-            "https://waifuxl_upscale_counter.haydnjonest8327.workers.dev/increment",
-            requestOptions
-          ).catch((error) => console.log("Error incrementing counter"));
-        }
-      } catch (error) {
-        setShouldRun(false);
-        setUpscaleFactor(2);
-        setErrorMessage("Model failed to run.");
-      }
-    }
-  }, [shouldRun]);
+  const [setDownloadReady, setRunning, setErrorMessage, setLoadProg, running, loadProg] = useAppStateStore((state) => [
+    state.setDownloadReady,
+    state.setRunning,
+    state.setErrorMessage,
+    state.setLoadProg,
+    state.running,
+    state.loadProg,
+  ])
+
+  const modelLoading = loadProg >= 0
 
   return (
     <button
-      className={`grow hover:bg-blue-700 text-white font-bold py-2 px-4 rounded relative
-        drop-shadow-lg inline-flex items-center ${(!modelLoading && !loading) ? "bg-pink" : "bg-gray-300"}`}
-      onClick={async () => {
-        setModelLoading(true);
-        try {
-          await initializeONNX(setModelLoadProg);
-          setModelLoading(false);
-          setShouldRun(true);
-        } catch (error) {
-          setErrorMessage("Could not load model.");
-        }
+      className="grow text-white font-bold py-2 px-4 overflow-hidden rounded drop-shadow-lg bg-pink inline-flex items-center disabled:bg-gray-400 disabled:opacity-60 disabled:text-white disabled:cursor-not-allowed"
+      disabled={modelLoading || running}
+      onClick={() => {
+        setLoadProg(0)
+        initializeONNX(setLoadProg)
+          .then(() => {
+            setRunning(true)
+          })
+          .then(() => {
+            upScaleFromURI(extension, setTags, uri, upscaleFactor)
+              .then((result) => {
+                setOutputURI(result)
+                incrementCounter()
+              })
+              .catch((error) => {
+                setErrorMessage(error)
+              })
+              .finally(() => {
+                setDownloadReady(true)
+                setRunning(false)
+                setUpscaleFactor(2)
+              })
+          })
+          .catch(() => {
+            setErrorMessage('Could not load model.')
+          })
+          .finally(() => {
+            setLoadProg(-1)
+          })
       }}
     >
-      { modelLoading && // Model downloading progress displayed underneath button
-        (<div id="upscale-button-bg" className="bg-litepink absolute h-full left-0 rounded duration-300"
-          style={{width: `${modelLoadProg * 100}%`, zIndex: -1, transitionProperty: "width"}}></div>)
-      }
+      {modelLoading && ( // Model downloading progress displayed underneath button
+        <div
+          id="upscale-button-bg"
+          className="bg-litepink absolute h-full left-0 rounded duration-300"
+          style={{ width: `${loadProg * 100}%`, zIndex: -1, transitionProperty: 'width' }}
+        />
+      )}
 
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        height="24px"
-        viewBox="0 0 24 24"
-        width="24px"
-        fill="#FFFFFF"
-        className="w-6 h-6 mr-2"
-      >
-        <path d="M0 0h24v24H0V0z" fill="none" />
-        <path d="M19 12h-2v3h-3v2h5v-5zM7 9h3V7H5v5h2V9zm14-6H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16.01H3V4.99h18v14.02z" />
-      </svg>
+      <UpscaleSVG />
 
-      { loading ? // Button text
-        (<span> Upscaling... </span>) :
-        (!modelLoading ?
-          (<span> Upscale </span>) :
-          (<span> Loading Model </span>))
-      }
+      {running ? ( // Button text
+        <span> Upscaling... </span>
+      ) : !modelLoading ? (
+        <span> Upscale </span>
+      ) : (
+        <span> Loading Model </span>
+      )}
     </button>
-  );
-};
+  )
+}
 
-export default RunComponent;
+function incrementCounter() {
+  // hit the api and note an image has been upscaled
+  const requestOptions = {
+    method: 'GET',
+    redirect: 'follow',
+  }
+
+  fetch('https://waifuxl_upscale_counter.haydnjonest8327.workers.dev/increment', requestOptions).catch((error) =>
+    console.log('Error incrementing counter'),
+  )
+}
+
+export default RunComponent

@@ -7,7 +7,7 @@ We're currently nearing the end of a full rewrite of the website (you as a user 
 ---
 
 [Check out a full write-up here!](https://haydn.fgl.dev/posts/the-launch-of-waifuxl/)  
-WaifuXL is a state of the art super resolution model trained on  ~1,200,000 anime style images from the [Danbooru2021](https://www.gwern.net/Danbooru2021) dataset. You cant find it online at https://waifuxl.com/. Note that while you *can* upscale natural (real) images, the model was only trained on anime style drawings, so dont expect to have your socks blown off.
+WaifuXL is a state of the art super resolution model trained on  ~1,200,000 anime style images from the [Danbooru2021](https://www.gwern.net/Danbooru2021) dataset. You can find it online at https://waifuxl.com/. Note that while you *can* upscale natural (real) images, the model was only trained on anime style drawings, so dont expect to have your socks blown off.
 
 # Comparison to Waifu2x
 In general, the [Real-ESRGAN](https://arxiv.org/abs/2107.10833) will outperform the models used on [waifu2x](http://waifu2x.udp.jp/) by a significant margin, without the need for multiple models trained on various noise reduction levels.

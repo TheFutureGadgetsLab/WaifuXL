@@ -1,21 +1,24 @@
-import "tailwindcss/tailwind.css";
-import Head from "next/head";
-import { Html } from "next/document";
+import 'tailwindcss/tailwind.css'
+import './globals.css'
+
+import Head from 'next/head'
+import { registerEventHandlers } from '@/services/windowUtilities'
+
 function MyApp({ Component, pageProps }) {
+  registerEventHandlers()
+
   return (
     <>
       <Head>
         <title>WaifuXL</title>
         <meta
           name="description"
-          content="High quality image upsampling for anime-style art using state-of-the-art neural networks, directly in your browser. Supports both images and gifs."
+          content="High quality image upsampling for anime-style art using state-of-the-art neural networks, directly in your browser. Supports both images and gifs. Better than waifu2x."
         />
       </Head>
-      <Component
-        {...pageProps}
-      />
+      <Component {...pageProps} />
     </>
-  );
+  )
 }
 
-export default MyApp;
+export default MyApp
