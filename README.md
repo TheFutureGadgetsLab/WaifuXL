@@ -2,7 +2,7 @@
 [![Upscale Count](https://img.shields.io/endpoint?color=blue&url=https%3A%2F%2Fwaifuxl_upscale_counter.haydnjonest8327.workers.dev%2Fbadge)](waifuxl.com)  [![GitHub Super-Linter](https://github.com/TheFutureGadgetsLab/WaifuXL/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)
 
 # Notice
-WaifuXL 1.5 has been released!
+WaifuXL 1.5 has been released!  
 Next we will be working on Desktop GPU/CPU acceleration so users can upscale larger images faster (maybe even videos, depends on the performance we can get out of the model). Some things we're considering for acceleration are PyTorch 2.0 model compilation, ONNX, and AITemplate. When that's available we'll put an announcement on the website.
 
 ---
