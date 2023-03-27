@@ -1,5 +1,4 @@
 const CopyPlugin = require('copy-webpack-plugin')
-const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 const webpack = require('webpack')
 
 const withPWA = require('next-pwa')({
@@ -18,7 +17,6 @@ module.exports = withPWA({
   images: { unoptimized: true }, // disable next/image optimization as doesn't work with static export
   webpack: (config, { }) => {
     config.plugins.push(
-      new NodePolyfillPlugin(), 
       new CopyPlugin({
         patterns: [
           {
