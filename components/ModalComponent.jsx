@@ -21,58 +21,56 @@ function ModalComponent() {
     focusDiv()
   }, [divRef])
 
+  if (!inputModalOpen) return null
+
   return (
-    <>
-      {inputModalOpen && (
-        <div className="w-80 flex flex-col fixed inset-y-0 z-20">
+    <div className="w-80 flex flex-col fixed inset-y-0 z-20">
+      <div
+        id="modal-component-container"
+        className="absolute inset-0 overflow-y-auto w-screen h-screen m-0"
+        aria-labelledby="modal-title"
+        role="dialog"
+        aria-modal="true"
+        tabIndex="-1"
+        ref={divRef}
+        onKeyDown={(e) => {
+          if (e.key == 'Escape') {
+            setInputModalOpen(false)
+            setTempUri(inputUri)
+            setSelectedPreset('')
+          }
+        }}
+      >
+        <div
+          id="modal-bg"
+          className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity w-screen h-screen"
+          aria-hidden="true"
+          onClick={(e) => {
+            setInputModalOpen(false)
+            setTempUri(inputUri)
+            setSelectedPreset('')
+          }}
+        />
+        <div id="modal-container" className="flex items-center justify-center w-screen h-screen">
           <div
-            id="modal-component-container"
-            className="absolute inset-0 overflow-y-auto w-screen h-screen m-0"
-            aria-labelledby="modal-title"
-            role="dialog"
-            aria-modal="true"
-            tabIndex="-1"
-            ref={divRef}
-            onKeyDown={(e) => {
-              if (e.key == 'Escape') {
-                setInputModalOpen(false)
-                setTempUri(inputUri)
-                setSelectedPreset('')
-              }
-            }}
+            id="modal"
+            className="bg-white rounded-lg shadow-xl transform transition-all text-center w-full h-full md:w-auto md:h-auto"
           >
-            <div
-              id="modal-bg"
-              className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity w-screen h-screen"
-              aria-hidden="true"
-              onClick={(e) => {
-                setInputModalOpen(false)
-                setTempUri(inputUri)
-                setSelectedPreset('')
-              }}
-            />
-            <div id="modal-container" className="flex items-center justify-center w-screen h-screen">
-              <div
-                id="modal"
-                className="bg-white rounded-lg shadow-xl transform transition-all text-center w-full h-full md:w-auto md:h-auto"
-              >
-                <div className="float-right">
-                  <CloseSVG
-                    onClick={(e) => {
-                      setInputModalOpen(false)
-                      setTempUri(inputUri)
-                      setSelectedPreset('')
-                    }}
-                  />
-                </div>
-                <PreviewComponent />
-                <PresetMenuComponent />
-              </div>
+            <div className="float-right">
+              <CloseSVG
+                onClick={(e) => {
+                  setInputModalOpen(false)
+                  setTempUri(inputUri)
+                  setSelectedPreset('')
+                }}
+              />
             </div>
+            <PreviewComponent />
+            <PresetMenuComponent />
           </div>
         </div>
-      )}
-    </>
+      </div>
+    </div>
   )
 }
 

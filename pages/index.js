@@ -32,6 +32,11 @@ export default function Main() {
 
 function MobileLayout() {
   const outputURI = useImageStore((state) => state.outputURI)
+  const mobile = useAppStateStore((state) => state.mobile)
+
+  if (!mobile) {
+    return null
+  }
 
   return (
     <div className="h-fit md:hidden">
@@ -58,6 +63,12 @@ function MobileLayout() {
 }
 
 function DesktopLayout() {
+  const mobile = useAppStateStore((state) => state.mobile)
+
+  if (mobile) {
+    return null
+  }
+
   return (
     <div className="overflow-hidden hidden md:block min-h-screen">
       <Error />
