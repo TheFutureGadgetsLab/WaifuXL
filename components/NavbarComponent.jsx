@@ -1,7 +1,6 @@
 import { GitHubSVG } from '@/components/SVGComponents'
 import Link from 'next/link'
 import NewsBox from './NewsBox'
-import { Sidebar } from './SidebarComponent'
 import { useAppStateStore } from '@/services/useState'
 
 const NavbarComponent = ({ currentPage }) => {

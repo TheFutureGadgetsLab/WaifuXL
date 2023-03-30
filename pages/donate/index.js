@@ -1,10 +1,11 @@
-import NavbarComponent from '@/components/NavbarComponent'
-import Image from 'next/image'
 import { createRef, useEffect, useState } from 'react'
+
 import { BackgroundImage } from '@/components/SVGComponents'
-import { sleep } from '@/services/inference/utils'
-import pj from '@/public/images/chibi_pablo.webp'
+import Image from 'next/image'
+import NavbarComponent from '@/components/NavbarComponent'
 import kofi from '@/public/images/koficup.webp'
+import pj from '@/public/images/chibi_pablo.webp'
+import { sleep } from '@/services/inference/utils'
 
 export default function Donate() {
   useEffect(() => {

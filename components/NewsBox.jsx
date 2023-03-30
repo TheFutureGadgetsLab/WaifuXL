@@ -23,6 +23,7 @@ const NewsBox = () => {
               <span className="text-black">WaifuXL v1.5.0 Released!</span>
             </p>
             <ul className="pl-1">
+              <span className="font-bold"> Clear browser cache if having issues!</span>
               <li>🌸 Upsampling is now faster!</li>
               <li>🌸 Website fully rewritten.</li>
               <li>🌸 Still better than waifu2x.</li>

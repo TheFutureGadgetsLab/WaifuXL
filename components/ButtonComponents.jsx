@@ -76,7 +76,7 @@ export function PresetSelectorComponent() {
         <option>Select a Preset</option>
         <option value="ozen|https://i.imgur.com/Sf6sfPj.png">Ozen</option>
         <option value="eat|https://c.tenor.com/rnhV3fu39f8AAAAM/eating-anime.gif">Eating (GIF)</option>
-        <option value="senjougahara|https://i.imgur.com/cMX8YcK.jpg">Hitagi Senjougahara</option>
+        <option value="senjougahara|https://i.imgur.com/cMX8YcK.jpg">Senjougahara</option>
         <option value="moomin|https://i.imgur.com/9I91yMq.png">Moomin</option>
         <option value="megumin|https://i.imgur.com/BKBt6bC.png">Megumin</option>
         <option value="aqua|https://i.imgur.com/yhIwVjZ.jpeg">Aqua</option>
