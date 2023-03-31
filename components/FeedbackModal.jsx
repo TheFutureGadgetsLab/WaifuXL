@@ -3,8 +3,7 @@ import { CloseSVG, ErrorSVG } from '@/components/SVGComponents'
 import { useAppStateStore } from '@/services/useState'
 
 export default function Feedback() {
-  const feedbackMessage = useAppStateStore((state) => state.feedbackMessage)
-  const setFeedbackMessage = useAppStateStore((state) => state.setFeedbackMessage)
+  const { feedbackMessage, setFeedbackMessage } = useAppStateStore()
 
   if (!feedbackMessage) return null
 

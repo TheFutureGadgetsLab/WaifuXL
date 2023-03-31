@@ -84,28 +84,18 @@ function ExplicitnessSection({ tags }) {
 }
 
 function titleCase(str) {
-  return str
-    .toLowerCase()
-    .split(' ')
-    .map(function (word) {
-      return word.charAt(0).toUpperCase() + word.slice(1)
-    })
-    .join(' ')
-    .split('(')
-    .map(function (word) {
-      return word.charAt(0).toUpperCase() + word.slice(1)
-    })
-    .join('(')
+  return str.toLowerCase().replace(/(?:^|\s)\S/g, function (a) {
+    return a.toUpperCase()
+  })
 }
 
 function truncateString(str) {
   str = cleanStringRemoveParen(str)
-  const split = str.length > 13 ? str.slice(0, 13) + '…' : str
-  return split
+  return str.length > 13 ? str.slice(0, 13) + '…' : str
 }
 
 function cleanStringRemoveParen(str) {
-  return titleCase(str.replace(/_/g, ' ').split('(')[0])
+  return titleCase(str.split('(')[0].replace(/_/g, ' '))
 }
 
 function cleanString(str) {

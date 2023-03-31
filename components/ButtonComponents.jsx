@@ -5,12 +5,7 @@ import { useAppStateStore, useImageStore } from '@/services/useState'
 import { setDataURIFromFile } from '@/services/imageUtilities'
 
 export function DownloadComponent() {
-  const [fileName, extension, outputURI, hasntRun] = useImageStore((state) => [
-    state.fileName,
-    state.extension,
-    state.outputURI,
-    state.hasntRun,
-  ])
+  const { fileName, extension, outputURI, hasntRun } = useImageStore()
 
   return (
     <button
@@ -28,12 +23,9 @@ export function DownloadComponent() {
 }
 
 export function CopyComponent() {
-  const [outputURI, hasntRun] = useImageStore((state) => [state.outputURI, state.hasntRun])
-  const [setFeedbackMessage, isUploading, setIsUploading] = useAppStateStore((state) => [
-    state.setFeedbackMessage,
-    state.isUploading,
-    state.setIsUploading,
-  ])
+  const { outputURI, hasntRun } = useImageStore()
+  const { setFeedbackMessage, isUploading, setIsUploading } = useAppStateStore()
+
   return (
     <button
       className={`h-12 mt-1 lg:h-9 text-white font-bold py-2 px-2 md:px-4 rounded drop-shadow-lg bg-pink inline-flex items-center disabled:bg-gray-400 disabled:opacity-60 disabled:text-white disabled:cursor-not-allowed
@@ -56,9 +48,9 @@ export function CopyComponent() {
 }
 
 export function PresetSelectorComponent() {
-  const [setTempURI, setTempFileName] = useImageStore((state) => [state.setTempURI, state.setTempFileName])
-  const selectedPreset = useAppStateStore((state) => state.selectedPreset)
-  const setSelectedPreset = useAppStateStore((state) => state.setSelectedPreset)
+  const { setTempURI, setTempFileName } = useImageStore()
+  const { selectedPreset, setSelectedPreset } = useAppStateStore()
+
   return (
     <label>
       <span className="text-gray-700">Preset Images</span>
@@ -87,8 +79,7 @@ export function PresetSelectorComponent() {
 }
 
 export function UploadButtonComponent() {
-  const setTempFileName = useImageStore((state) => state.setTempFileName)
-  const setTempInputURI = useImageStore((state) => state.setTempURI)
+  const { setTempFileName, setTempInputURI } = useImageStore()
   const setSelectedPreset = useAppStateStore((state) => state.setSelectedPreset)
 
   return (
@@ -129,11 +120,8 @@ text-base font-medium h-12 border-blue border-2 bg-blue disabled:bg-white disabl
 }
 
 export function DoneButtonComponent() {
-  const setTags = useImageStore((state) => state.setTags)
-  const setInputURI = useImageStore((state) => state.setInputURI)
-  const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen)
-  const tempURI = useImageStore((state) => state.tempURI)
-  const setSelectedPreset = useAppStateStore((state) => state.setSelectedPreset)
+  const { setTags, setInputURI, tempURI } = useImageStore()
+  const { setInputModalOpen, setSelectedPreset } = useAppStateStore()
 
   return (
     <div className="md:grid-cols-1 md:grid hidden">

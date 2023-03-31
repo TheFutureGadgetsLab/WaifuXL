@@ -3,8 +3,7 @@ import { ReactCompareSlider } from 'react-compare-slider'
 import { useImageStore } from '@/services/useState'
 
 const ImageDisplay = () => {
-  const outputURI = useImageStore((state) => state.outputURI)
-  const inputURI = useImageStore((state) => state.inputURI)
+  const { inputURI, outputURI } = useImageStore()
 
   return (
     <div

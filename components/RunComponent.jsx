@@ -4,23 +4,8 @@ import { useAppStateStore, useImageStore } from '@/services/useState'
 import { UpscaleSVG } from '@/components/SVGComponents'
 
 const RunComponent = () => {
-  const [setOutputURI, setUpscaleFactor, setTags, uri, extension, upscaleFactor] = useImageStore((state) => [
-    state.setOutputURI,
-    state.setUpscaleFactor,
-    state.setTags,
-    state.inputURI,
-    state.extension,
-    state.upscaleFactor,
-  ])
-
-  const [setDownloadReady, setRunning, setErrorMessage, setLoadProg, running, loadProg] = useAppStateStore((state) => [
-    state.setDownloadReady,
-    state.setRunning,
-    state.setErrorMessage,
-    state.setLoadProg,
-    state.running,
-    state.loadProg,
-  ])
+  const { setOutputURI, setUpscaleFactor, setTags, inputURI, extension, upscaleFactor } = useImageStore()
+  const { setDownloadReady, setRunning, setErrorMessage, setLoadProg, running, loadProg } = useAppStateStore()
 
   const modelLoading = loadProg >= 0
 
@@ -35,7 +20,7 @@ const RunComponent = () => {
             setRunning(true)
           })
           .then(() => {
-            upScaleFromURI(extension, setTags, uri, upscaleFactor)
+            upScaleFromURI(extension, setTags, inputURI, upscaleFactor)
               .then((result) => {
                 setOutputURI(result)
                 incrementCounter()

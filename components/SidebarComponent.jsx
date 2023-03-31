@@ -6,7 +6,7 @@ import TagComponent from '@/components/TagComponent'
 import { UploadSVG } from '@/components/SVGComponents'
 
 const Sidebar = () => {
-  const [outputURI, tags] = useImageStore((state) => [state.outputURI, state.tags])
+  const { outputURI, tags } = useImageStore()
 
   return (
     <div id="sidebar" className="absolute w-80 flex flex-col inset-y-0 z-20 h-full">
@@ -69,7 +69,8 @@ function UpscaleFactorComponent() {
 }
 
 const InputComponent = () => {
-  const [setInputModalOpen, running] = useAppStateStore((state) => [state.setInputModalOpen, state.running])
+  const { setInputModalOpen, running } = useAppStateStore()
+
   return (
     <button
       id="choose-image-button"

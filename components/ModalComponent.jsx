@@ -6,11 +6,8 @@ import { CloseSVG } from '@/components/SVGComponents'
 import { setDataURIFromFile } from '@/services/imageUtilities'
 
 function ModalComponent() {
-  const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen)
-  const inputModalOpen = useAppStateStore((state) => state.inputModalOpen)
-  const setTempUri = useImageStore((state) => state.setTempURI)
-  const inputUri = useImageStore((state) => state.inputURI)
-  const setSelectedPreset = useAppStateStore((state) => state.setSelectedPreset)
+  const { inputModalOpen, setInputModalOpen, setSelectedPreset } = useAppStateStore()
+  const { setTempUri, inputUri } = useImageStore()
 
   const divRef = useRef(null)
   function focusDiv() {
@@ -85,9 +82,7 @@ function PresetMenuComponent() {
 }
 
 function PreviewComponent() {
-  const setTempURI = useImageStore((state) => state.setTempURI)
-  const tempURI = useImageStore((state) => state.tempURI)
-  const setFileName = useImageStore((state) => state.setFileName)
+  const { setTempURI, tempURI, setFileName } = useImageStore()
 
   return (
     <label
