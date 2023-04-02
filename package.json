@@ -23,14 +23,12 @@
     "react-compare-slider": "2.2.0",
     "react-dom": "^18.2.0",
     "save-pixels": "^2.3.6",
-    "ua-parser-js": "^1.0.34",
     "zustand": "^4.3.7"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.3",
     "autoprefixer": "^10.4.14",
     "copy-webpack-plugin": "^11.0.0",
-    "eslint-config-next": "^13.2.4",
     "postcss": "^8.4.21",
     "prettier": "2.8.7",
     "standard": "^17.0.0",
