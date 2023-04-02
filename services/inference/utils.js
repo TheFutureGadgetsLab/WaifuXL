@@ -10,6 +10,7 @@ import pify from 'pify'
 
 const getPixels = pify(require('get-pixels'))
 const savePixels = require('save-pixels')
+const usr = require('ua-parser-js')
 
 /**
  * Given a URI, return an ndarray of the image pixel data.
@@ -114,7 +115,13 @@ export async function fetchModel(filepathOrUri, setProgress, startProgress, endP
 export async function initializeONNX(setProgress) {
   ort.env.wasm.simd = true
   ort.env.wasm.proxy = true
-  ort.env.wasm.numThreads = Math.min(navigator.hardwareConcurrency / 2, 16)
+
+  const ua = usr(navigator.userAgent)
+  if (ua.engine.name == 'WebKit') {
+    ort.env.wasm.numThreads = 1
+  } else {
+    ort.env.wasm.numThreads = Math.min(navigator.hardwareConcurrency / 2, 16)
+  }
 
   setProgress(0)
   await initializeTagger(setProgress)
