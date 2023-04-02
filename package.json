@@ -23,7 +23,7 @@
     "react-compare-slider": "2.2.0",
     "react-dom": "^18.2.0",
     "save-pixels": "^2.3.6",
-    "ua-parser-js": "^1.0.34",
+    "ua-parser-js": "^1.0.35",
     "zustand": "^4.3.7"
   },
   "devDependencies": {

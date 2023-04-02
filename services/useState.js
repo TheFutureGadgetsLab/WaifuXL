@@ -17,6 +17,8 @@ const useImageStore = create((set) => ({
     set(() => ({ outputURI: null }))
     set(() => ({ hasntRun: true }))
 
+    useAppStateStore.setState({ downloadReady: false })
+
     if (uri.slice(0, 14) == 'data:image/gif') {
       set(() => ({ extension: 'gif' }))
     } else {
