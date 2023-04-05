@@ -79,7 +79,7 @@ export function PresetSelectorComponent() {
 }
 
 export function UploadButtonComponent() {
-  const { setTempFileName, setTempInputURI } = useImageStore()
+  const { setTempFileName, setTempURI } = useImageStore()
   const setSelectedPreset = useAppStateStore((state) => state.setSelectedPreset)
 
   return (
@@ -96,14 +96,14 @@ text-base font-medium h-12 border-blue border-2 bg-blue disabled:bg-white disabl
             className="hidden"
             onInput={(e) => {
               if (e.target.files[0]) {
-                setDataURIFromFile(e.target.files[0], setTempInputURI)
+                setDataURIFromFile(e.target.files[0], setTempURI)
                 setTempFileName(e.target.files[0].name.split('.')[0])
                 setSelectedPreset('')
               }
             }}
             onChange={(e) => {
               if (e.target.files[0]) {
-                setDataURIFromFile(e.target.files[0], setTempInputURI)
+                setDataURIFromFile(e.target.files[0], setTempURI)
                 setTempFileName(e.target.files[0].name.split('.')[0])
                 setSelectedPreset('')
               }
