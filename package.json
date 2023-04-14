@@ -4,8 +4,7 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "export": "next export",
-    "cloudflare_deploy": "npm run build && npm run export"
+    "cloudflare_deploy": "npm run build"
   },
   "dependencies": {
     "@ramonak/react-progress-bar": "^5.0.3",
@@ -14,10 +13,10 @@
     "gifuct-js": "^2.1.2",
     "ndarray": "^1.0.19",
     "ndarray-ops": "^1.2.2",
-    "next": "^13.2.4",
+    "next": "^13.3.0",
     "next-pwa": "^5.6.0",
-    "onnxruntime-common": "^1.15.0-dev.20230317-e42f7487df",
-    "onnxruntime-web": "^1.15.0-dev.20230317-e42f7487df",
+    "onnxruntime-common": "^1.15.0-dev.20230411-0fbf715824",
+    "onnxruntime-web": "^1.15.0-dev.20230411-0fbf715824",
     "pify": "^6.1.0",
     "react": "^18.2.0",
     "react-compare-slider": "2.2.0",
@@ -30,7 +29,7 @@
     "@tailwindcss/forms": "^0.5.3",
     "autoprefixer": "^10.4.14",
     "copy-webpack-plugin": "^11.0.0",
-    "eslint-config-next": "^13.2.4",
+    "eslint-config-next": "^13.3.0",
     "postcss": "^8.4.21",
     "prettier": "2.8.7",
     "standard": "^17.0.0",
