@@ -94,6 +94,7 @@ text-base font-medium h-12 border-blue border-2 bg-blue disabled:bg-white disabl
         <label className="absolute left-0 top-0 w-full h-full cursor-pointer">
           <input
             type="file"
+            accept="image/*"
             className="hidden"
             onInput={(e) => {
               if (e.target.files[0]) {
