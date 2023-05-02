@@ -7,7 +7,7 @@ import { setDataURIFromFile } from '@/services/imageUtilities'
 
 function ModalComponent() {
   const { inputModalOpen, setInputModalOpen, setSelectedPreset } = useAppStateStore()
-  const { setTempUri, inputUri } = useImageStore()
+  const { setTempURI, inputURI } = useImageStore()
 
   const divRef = useRef(null)
   function focusDiv() {
@@ -33,7 +33,7 @@ function ModalComponent() {
         onKeyDown={(e) => {
           if (e.key == 'Escape') {
             setInputModalOpen(false)
-            setTempUri(inputUri)
+            setTempURI(inputURI)
             setSelectedPreset('')
           }
         }}
@@ -44,7 +44,7 @@ function ModalComponent() {
           aria-hidden="true"
           onClick={(e) => {
             setInputModalOpen(false)
-            setTempUri(inputUri)
+            setTempURI(inputURI)
             setSelectedPreset('')
           }}
         />
@@ -57,7 +57,7 @@ function ModalComponent() {
               <CloseSVG
                 onClick={(e) => {
                   setInputModalOpen(false)
-                  setTempUri(inputUri)
+                  setTempURI(inputURI)
                   setSelectedPreset('')
                 }}
               />
