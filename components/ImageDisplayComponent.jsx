@@ -16,10 +16,10 @@ const ImageDisplay = () => {
         <ReactCompareSlider
           position={50}
           itemOne={
-            <Image width="500" height="500" src={inputURI} id="before-image" priority={true} alt="Before image" />
+            <Image width="500" height="500" src={inputURI} id="before-image" className="z-0" priority={true} alt="Before image" />
           }
           itemTwo={
-            <Image width="500" height="500" src={outputURI} id="after-image" priority={true} alt="After image" />
+            <Image width="500" height="500" src={outputURI} id="after-image" className="z-0" priority={true} alt="After image" />
           }
         />
       )}
