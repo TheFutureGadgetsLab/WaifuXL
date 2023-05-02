@@ -9,7 +9,7 @@ const NewsBox = () => {
   }
 
   return (
-    <div className="absolute z-50 w-80 left-80">
+    <div className="absolute z-10 w-80 left-80">
       <div className="shadow-lg bg-white">
         <div className="flex justify-between items-center py-2 px-4 border-b">
           <h3 className="text-lg font-medium">Latest News</h3>

@@ -79,8 +79,9 @@ export function PresetSelectorComponent() {
 }
 
 export function UploadButtonComponent() {
-  const { setTempFileName, setTempURI } = useImageStore()
+  const { setTempFileName, setTempURI, setInputURI } = useImageStore()
   const setSelectedPreset = useAppStateStore((state) => state.setSelectedPreset)
+  const mobile = useAppStateStore((state) => state.mobile)
 
   return (
     <div className="grid grid-cols-1">
@@ -96,14 +97,22 @@ text-base font-medium h-12 border-blue border-2 bg-blue disabled:bg-white disabl
             className="hidden"
             onInput={(e) => {
               if (e.target.files[0]) {
-                setDataURIFromFile(e.target.files[0], setTempURI)
+                if(mobile) {
+                  setDataURIFromFile(e.target.files[0], setInputURI)
+                } else {
+                  setDataURIFromFile(e.target.files[0], setTempURI)
+                }
                 setTempFileName(e.target.files[0].name.split('.')[0])
                 setSelectedPreset('')
               }
             }}
             onChange={(e) => {
               if (e.target.files[0]) {
-                setDataURIFromFile(e.target.files[0], setTempURI)
+                if(mobile) {
+                  setDataURIFromFile(e.target.files[0], setInputURI)
+                } else {
+                  setDataURIFromFile(e.target.files[0], setTempURI)
+                }
                 setTempFileName(e.target.files[0].name.split('.')[0])
                 setSelectedPreset('')
               }

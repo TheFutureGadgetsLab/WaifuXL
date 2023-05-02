@@ -82,7 +82,6 @@ const pasteListener = (e, setInputURI, setFileName, setInputModalOpen) => {
   } else {
     const success = handleInputFile((e.clipboardData || e.originalEvent.clipboardData).items, setFileName, setInputURI)
     if (success) {
-      console.log('Succesful...')
       setInputModalOpen(true)
     }
   }
@@ -93,7 +92,6 @@ const dropListener = (e, setFileName, setInputURI, setInputModalOpen) => {
   e.stopPropagation()
   const success = handleInputFile(e.dataTransfer.items, setFileName, setInputURI)
   if (success) {
-    console.log('Succesful drag')
     setInputModalOpen(true)
     setFileName(e.dataTransfer.files[0].name.split('/').at(-1).split('.')[0])
   }
