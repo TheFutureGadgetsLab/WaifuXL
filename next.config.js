@@ -13,7 +13,29 @@ const shortHash = require('child_process').execSync('git rev-parse --short HEAD'
 const longHash = require('child_process').execSync('git rev-parse HEAD').toString().trim()
 
 if (process.env.NODE_ENV === 'development') {
-  module.exports = {
+  module.exports = withPWA({
+    reactStrictMode: false,
+    images: { unoptimized: true }, // disable next/image optimization as doesn't work with static export
+    output: 'standalone',
+    webpack: (config, { }) => {
+      config.plugins.push(
+        new CopyPlugin({
+          patterns: [
+            {
+              from: 'node_modules/onnxruntime-web/dist/*.wasm',
+              to: 'static/chunks/pages/[name][ext]' 
+            }
+          ]
+        })
+      )
+
+      config.plugins.push(new webpack.DefinePlugin({
+        __SHORT_HASH__: JSON.stringify(shortHash),
+        __LONG_HASH__: JSON.stringify(longHash)
+      }))
+
+      return config
+    },
     async headers() {
       return [
         {
@@ -32,7 +54,7 @@ if (process.env.NODE_ENV === 'development') {
         },
       ]
     },
-  }
+  })
 } else {
   module.exports = withPWA({
     reactStrictMode: false,
