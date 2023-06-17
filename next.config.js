@@ -36,21 +36,25 @@ module.exports = withPWA({
     return config
   },
   async headers() {
-    return [
-      {
-        // Apply these headers to all routes in your application.
-        source: '/(.*)',
-        headers: [
-          {
-            key: 'Cross-Origin-Embedder-Policy',
-            value: 'require-corp',
-          },
-          {
-            key: 'Cross-Origin-Opener-Policy',
-            value: 'same-origin',
-          },
-        ],
-      },
-    ]
+    if (process.env.NODE_ENV === 'development') {
+      return [
+        {
+          // Apply these headers to all routes in your application.
+          source: '/(.*)',
+          headers: [
+            {
+              key: 'Cross-Origin-Embedder-Policy',
+              value: 'require-corp',
+            },
+            {
+              key: 'Cross-Origin-Opener-Policy',
+              value: 'same-origin',
+            },
+          ],
+        },
+      ]
+    } else {
+      return [];
+    }
   },
 })
