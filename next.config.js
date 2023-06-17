@@ -15,7 +15,7 @@ const longHash = require('child_process').execSync('git rev-parse HEAD').toStrin
 module.exports = withPWA({
   reactStrictMode: false,
   images: { unoptimized: true }, // disable next/image optimization as doesn't work with static export
-  output: 'export', // export static site
+  output: process.env.NODE_ENV === 'development' ? 'standalone': 'export',
   webpack: (config, { }) => {
     config.plugins.push(
       new CopyPlugin({
@@ -34,5 +34,23 @@ module.exports = withPWA({
     }))
 
     return config
-  }
+  },
+  async headers() {
+    return [
+      {
+        // Apply these headers to all routes in your application.
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Cross-Origin-Embedder-Policy',
+            value: 'require-corp',
+          },
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin',
+          },
+        ],
+      },
+    ]
+  },
 })
