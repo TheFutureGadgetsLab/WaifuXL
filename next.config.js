@@ -12,26 +12,72 @@ const withPWA = require('next-pwa')({
 const shortHash = require('child_process').execSync('git rev-parse --short HEAD').toString().trim()
 const longHash = require('child_process').execSync('git rev-parse HEAD').toString().trim()
 
-module.exports = withPWA({
-  reactStrictMode: false,
-  images: { unoptimized: true }, // disable next/image optimization as doesn't work with static export
-  webpack: (config, { }) => {
-    config.plugins.push(
-      new CopyPlugin({
-        patterns: [
-          {
-            from: 'node_modules/onnxruntime-web/dist/*.wasm',
-            to: 'static/chunks/pages/[name][ext]' 
-          }
-        ]
-      })
-    )
+if (process.env.NODE_ENV === 'development') {
+  module.exports = withPWA({
+    reactStrictMode: false,
+    images: { unoptimized: true }, // disable next/image optimization as doesn't work with static export
+    output: 'standalone',
+    webpack: (config, { }) => {
+      config.plugins.push(
+        new CopyPlugin({
+          patterns: [
+            {
+              from: 'node_modules/onnxruntime-web/dist/*.wasm',
+              to: 'static/chunks/pages/[name][ext]' 
+            }
+          ]
+        })
+      )
 
-    config.plugins.push(new webpack.DefinePlugin({
-      __SHORT_HASH__: JSON.stringify(shortHash),
-      __LONG_HASH__: JSON.stringify(longHash)
-    }))
+      config.plugins.push(new webpack.DefinePlugin({
+        __SHORT_HASH__: JSON.stringify(shortHash),
+        __LONG_HASH__: JSON.stringify(longHash)
+      }))
 
-    return config
-  }
-})
+      return config
+    },
+    async headers() {
+      return [
+        {
+          // Apply these headers to all routes in your application.
+          source: '/(.*)',
+          headers: [
+            {
+              key: 'Cross-Origin-Embedder-Policy',
+              value: 'require-corp',
+            },
+            {
+              key: 'Cross-Origin-Opener-Policy',
+              value: 'same-origin',
+            },
+          ],
+        },
+      ]
+    },
+  })
+} else {
+  module.exports = withPWA({
+    reactStrictMode: false,
+    images: { unoptimized: true }, // disable next/image optimization as doesn't work with static export
+    output: 'export',
+    webpack: (config, { }) => {
+      config.plugins.push(
+        new CopyPlugin({
+          patterns: [
+            {
+              from: 'node_modules/onnxruntime-web/dist/*.wasm',
+              to: 'static/chunks/pages/[name][ext]' 
+            }
+          ]
+        })
+      )
+
+      config.plugins.push(new webpack.DefinePlugin({
+        __SHORT_HASH__: JSON.stringify(shortHash),
+        __LONG_HASH__: JSON.stringify(longHash)
+      }))
+
+      return config
+    },
+  })
+}
