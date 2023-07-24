@@ -33,10 +33,6 @@ git checkout de_spaghetti
 npm i
 npm run dev
 ```
-A few notes:
-  - The main branch no longer works for some reason. We've been doing a full rewrite for a while in the `de_spaghetti` branch, hence the checkout above.
-  - Multithreading is hard to do locally because of [Spectre](https://en.wikipedia.org/wiki/Spectre_(security_vulnerability)). You can get multithreading working by making sure Google Chrome is closed, then launching it from the command line with the following argument: `--enable-features=SharedArrayBuffer`
-  - After the website rewrite, we will be working on GPU accelerated versions of WaifuXL using PyTorch, ONNX Runtime, or AITemplate. Once this is done it  will need to be run locally on your own computer, but the performance uplift should be *significant*.
   
 # Contribution Guide
 ## Code / Site
