@@ -5,7 +5,7 @@ const withPWA = require('next-pwa')({
   dest: 'public',
   register: true,
   skipWaiting: true,
-  disable: process.env.NODE_ENV === 'development' // Disable PWA in development
+  disable: process.env.NODE_ENV === 'development', // Disable PWA in development
 })
 
 // get git info from command line
@@ -17,22 +17,24 @@ if (process.env.NODE_ENV === 'development') {
     reactStrictMode: false,
     images: { unoptimized: true }, // disable next/image optimization as doesn't work with static export
     output: 'standalone',
-    webpack: (config, { }) => {
+    webpack: (config, {}) => {
       config.plugins.push(
         new CopyPlugin({
           patterns: [
             {
               from: 'node_modules/onnxruntime-web/dist/*.wasm',
-              to: 'static/chunks/pages/[name][ext]' 
-            }
-          ]
-        })
+              to: 'static/chunks/pages/[name][ext]',
+            },
+          ],
+        }),
       )
 
-      config.plugins.push(new webpack.DefinePlugin({
-        __SHORT_HASH__: JSON.stringify(shortHash),
-        __LONG_HASH__: JSON.stringify(longHash)
-      }))
+      config.plugins.push(
+        new webpack.DefinePlugin({
+          __SHORT_HASH__: JSON.stringify(shortHash),
+          __LONG_HASH__: JSON.stringify(longHash),
+        }),
+      )
 
       return config
     },
@@ -60,22 +62,24 @@ if (process.env.NODE_ENV === 'development') {
     reactStrictMode: false,
     images: { unoptimized: true }, // disable next/image optimization as doesn't work with static export
     output: 'export',
-    webpack: (config, { }) => {
+    webpack: (config, {}) => {
       config.plugins.push(
         new CopyPlugin({
           patterns: [
             {
               from: 'node_modules/onnxruntime-web/dist/*.wasm',
-              to: 'static/chunks/pages/[name][ext]' 
-            }
-          ]
-        })
+              to: 'static/chunks/pages/[name][ext]',
+            },
+          ],
+        }),
       )
 
-      config.plugins.push(new webpack.DefinePlugin({
-        __SHORT_HASH__: JSON.stringify(shortHash),
-        __LONG_HASH__: JSON.stringify(longHash)
-      }))
+      config.plugins.push(
+        new webpack.DefinePlugin({
+          __SHORT_HASH__: JSON.stringify(shortHash),
+          __LONG_HASH__: JSON.stringify(longHash),
+        }),
+      )
 
       return config
     },

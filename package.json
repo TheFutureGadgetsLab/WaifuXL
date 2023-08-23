@@ -4,7 +4,9 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "cloudflare_deploy": "npm run build"
+    "cloudflare_deploy": "npm run build",
+    "format": "prettier --check --ignore-path .gitignore .",
+    "format:fix": "prettier --write --ignore-path .gitignore ."
   },
   "dependencies": {
     "@ramonak/react-progress-bar": "^5.0.3",
@@ -13,7 +15,7 @@
     "gifuct-js": "^2.1.2",
     "ndarray": "^1.0.19",
     "ndarray-ops": "^1.2.2",
-    "next": "^13.4.11",
+    "next": "^13.4.19",
     "next-pwa": "^5.6.0",
     "onnxruntime-common": "^1.15.1",
     "onnxruntime-web": "^1.15.1",
@@ -23,15 +25,15 @@
     "react-dom": "^18.2.0",
     "save-pixels": "^2.3.6",
     "ua-parser-js": "^1.0.35",
-    "zustand": "^4.3.9"
+    "zustand": "^4.4.1"
   },
   "devDependencies": {
-    "@tailwindcss/forms": "^0.5.4",
-    "autoprefixer": "^10.4.14",
+    "@tailwindcss/forms": "^0.5.5",
+    "autoprefixer": "^10.4.15",
     "copy-webpack-plugin": "^11.0.0",
-    "eslint-config-next": "^13.4.11",
-    "postcss": "^8.4.27",
-    "prettier": "3.0.0",
+    "eslint-config-next": "^13.4.19",
+    "postcss": "^8.4.28",
+    "prettier": "^3.0.2",
     "standard": "^17.1.0",
     "tailwindcss": "^3.3.3"
   }

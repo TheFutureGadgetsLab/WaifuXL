@@ -1,7 +1,6 @@
-import * as ort from 'onnxruntime-web'
-
 import { fetchModel, imageNDarrayToDataURI, prepareImage } from './utils'
 
+import { InferenceSession } from 'onnxruntime-web'
 import ndarray from 'ndarray'
 import ops from 'ndarray-ops'
 
@@ -28,7 +27,7 @@ export async function initializeSuperRes(setProgress) {
   }
 
   const superBuf = await fetchModel('./models/superRes.onnx', setProgress, 0.5, 0.9)
-  superSession = await ort.InferenceSession.create(superBuf, {
+  superSession = await InferenceSession.create(superBuf, {
     executionProviders: ['wasm'],
     graphOptimizationLevel: 'all',
     enableCpuMemArena: true,
