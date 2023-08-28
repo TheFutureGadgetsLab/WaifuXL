@@ -34,7 +34,7 @@ yarn-error.log*
 
 .vscode
 **/__pycache__
-data
+# data
 superRes
 **.wasm
 sw.js.map
