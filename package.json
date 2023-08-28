@@ -1,40 +1,41 @@
 {
+  "name": "unit03",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "next",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "cloudflare_deploy": "npm run build",
+    "lint": "next lint",
     "format": "prettier --check --ignore-path .gitignore .",
-    "format:fix": "prettier --write --ignore-path .gitignore ."
+    "format:fix": "prettier --write --ignore-path .gitignore .",
+    "cloudflare_deploy": "npm run build"
   },
   "dependencies": {
-    "@ramonak/react-progress-bar": "^5.0.3",
-    "get-pixels": "^3.3.3",
-    "gif-encoder-2": "^1.0.5",
-    "gifuct-js": "^2.1.2",
-    "ndarray": "^1.0.19",
-    "ndarray-ops": "^1.2.2",
+    "@elastic/datemath": "^5.0.3",
+    "@elastic/eui": "^88.0.0",
+    "@emotion/css": "^11.11.2",
+    "@emotion/react": "^11.11.1",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.43",
     "next": "^13.4.19",
-    "next-pwa": "^5.6.0",
-    "onnxruntime-common": "^1.15.1",
-    "onnxruntime-web": "^1.15.1",
-    "pify": "^6.1.0",
+    "prop-types": "^15.8.1",
     "react": "^18.2.0",
-    "react-compare-slider": "2.2.0",
+    "react-compare-slider": "^2.2.0",
     "react-dom": "^18.2.0",
-    "save-pixels": "^2.3.6",
-    "ua-parser-js": "^1.0.35",
     "zustand": "^4.4.1"
   },
   "devDependencies": {
-    "@tailwindcss/forms": "^0.5.5",
-    "autoprefixer": "^10.4.15",
+    "@next/bundle-analyzer": "^13.4.19",
+    "@types/node": "^20.5.7",
+    "@types/react": "^18.2.21",
+    "@types/react-dom": "^18.2.7",
     "copy-webpack-plugin": "^11.0.0",
+    "eslint": "^8.48.0",
     "eslint-config-next": "^13.4.19",
-    "postcss": "^8.4.28",
+    "iniparser": "^1.0.5",
     "prettier": "^3.0.2",
-    "standard": "^17.1.0",
-    "tailwindcss": "^3.3.3"
+    "typescript": "^4.0.0"
   }
 }
