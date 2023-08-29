@@ -45,6 +45,7 @@ const ImageContainer: FC<ImageProps> = ({ src, width, height, alt }) => (
     priority
     alt={alt}
     loader={imageLoader}
+    unoptimized
   />
 );
 

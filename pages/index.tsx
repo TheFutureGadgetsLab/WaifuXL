@@ -16,6 +16,7 @@ import {
 import ImageDisplay from 'components/ImageDisplay';
 import React from 'react';
 import Table from 'components/Table';
+import meg from 'public/images/meg.png';
 import senjo from 'public/images/senjo.webp';
 
 export function GitHubSVG() {
@@ -95,7 +96,7 @@ export default function Home() {
               justifyContent="center"
             >
               <EuiFlexItem grow={true}>
-                <ImageDisplay inputURI={senjo} outputURI={'https://i.imgur.com/7WcPlwS.png'} />
+                <ImageDisplay inputURI={senjo} outputURI={meg} />
               </EuiFlexItem>
             </EuiFlexGroup>
           </EuiPanel>
