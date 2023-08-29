@@ -5,36 +5,36 @@ import React from 'react';
 type Tag = {
   id: string;
   name: string;
-  percent: string;
+  percent: number;
 };
 const tags: Tag[] = [
-  { id: '1', name: '1girl', percent: '99' },
-  { id: '2', name: 'Solo', percent: '96' },
-  { id: '3', name: 'Purple Hair', percent: '81' },
-  { id: '4', name: 'Long Hair', percent: '63' },
-  { id: '5', name: 'Blue Eyes', percent: '48' },
-  { id: '6', name: 'School Uniform', percent: '24' },
-  { id: '7', name: 'Shirt', percent: '22' },
-  { id: '8', name: 'Blonde Hair', percent: '21' },
-  { id: '9', name: 'Skirt', percent: '20' },
-  { id: '10', name: 'Brown Hair', percent: '19' },
+  { id: '1', name: '1girl', percent: 99 },
+  { id: '2', name: 'Solo', percent: 96 },
+  { id: '3', name: 'Purple Hair', percent: 81 },
+  { id: '4', name: 'Long Hair', percent: 63 },
+  { id: '5', name: 'Blue Eyes', percent: 48 },
+  { id: '6', name: 'School Uniform', percent: 24 },
+  { id: '7', name: 'Shirt', percent: 22 },
+  { id: '8', name: 'Blonde Hair', percent: 21 },
+  { id: '9', name: 'Skirt', percent: 20 },
+  { id: '10', name: 'Brown Hair', percent: 19 },
 ];
 const characters: Tag[] = [
-  { id: '1', name: 'Senjougahara Hitagi', percent: '52' },
-  { id: '2', name: 'Matou Sakura', percent: '5' },
-  { id: '3', name: 'Busujima Saeko', percent: '4' },
-  { id: '4', name: 'Souryuu Asuka Langley', percent: '1' },
-  { id: '5', name: 'Teana Lanster', percent: '1' },
-  { id: '6', name: 'Gokou Ruri', percent: '1' },
-  { id: '7', name: 'Hoshizora Miyuki', percent: '1' },
-  { id: '8', name: 'Faris Scherwiz', percent: '0' },
-  { id: '9', name: 'Ayanami Rei', percent: '0' },
-  { id: '10', name: 'Nagato Yuki', percent: '0' },
+  { id: '1', name: 'Senjougahara Hitagi', percent: 52 },
+  { id: '2', name: 'Matou Sakura', percent: 5 },
+  { id: '3', name: 'Busujima Saeko', percent: 4 },
+  { id: '4', name: 'Souryuu Asuka Langley', percent: 1 },
+  { id: '5', name: 'Teana Lanster', percent: 1 },
+  { id: '6', name: 'Gokou Ruri', percent: 1 },
+  { id: '7', name: 'Hoshizora Miyuki', percent: 1 },
+  { id: '8', name: 'Faris Scherwiz', percent: 0 },
+  { id: '9', name: 'Ayanami Rei', percent: 0 },
+  { id: '10', name: 'Nagato Yuki', percent: 0 },
 ];
 const explicit: Tag[] = [
-  { id: '1', name: 'Safe', percent: '89' },
-  { id: '2', name: 'Questionable', percent: '13' },
-  { id: '3', name: 'Explicit', percent: '1' },
+  { id: '1', name: 'Safe', percent: 89 },
+  { id: '2', name: 'Questionable', percent: 13 },
+  { id: '3', name: 'Explicit', percent: 1 },
 ];
 export default () => {
   const columns: Array<EuiBasicTableColumn<Tag>> = [
@@ -60,8 +60,8 @@ export default () => {
         show: false,
       },
       width: '60%',
-      render: (perc: string) => {
-        return <EuiProgress value={parseFloat(perc)} max={100} color="#44ABBC" />;
+      render: (perc: number) => {
+        return <EuiProgress value={perc} max={100} color="#44ABBC" />;
       },
     },
   ];

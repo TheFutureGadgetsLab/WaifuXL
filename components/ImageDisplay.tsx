@@ -15,7 +15,7 @@ interface ImageProps {
   alt: string;
 }
 
-const ImageDisplay: FC<ImageDisplayProps> = ({ inputURI, outputURI }) => {
+export const ImageDisplay: FC<ImageDisplayProps> = ({ inputURI, outputURI }) => {
   const renderImage = (src: string | StaticImport, alt: string) => (
     <ImageContainer src={src} width={500} height={500} alt={alt} />
   );
@@ -60,5 +60,3 @@ const imageLoader = ({
 }) => {
   return `${src}`;
 };
-
-export default ImageDisplay;
