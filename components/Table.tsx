@@ -61,7 +61,7 @@ export default () => {
       },
       width: '60%',
       render: (perc: number) => {
-        return <EuiProgress value={perc} max={100} color="#44ABBC" />;
+        return <EuiProgress value={String(perc)} max={100} color="#44ABBC" />;
       },
     },
   ];
