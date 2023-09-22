@@ -1,5 +1,4 @@
-import * as ort from 'onnxruntime-web'
-
+import { InferenceSession, env as ORTEnv, Tensor } from 'onnxruntime-web'
 import { initializeSuperRes, multiUpscale } from '@/services/inference/upscaling'
 import { initializeTagger, runTagger } from '@/services/inference/tagging'
 
@@ -75,12 +74,12 @@ export function prepareImage(imageArray, model) {
   const width = imageArray.shape[0]
   const height = imageArray.shape[1]
   if (model === 'superRes') {
-    const tensor = new ort.Tensor('uint8', imageArray.data.slice(), [width, height, 4])
+    const tensor = new Tensor('uint8', imageArray.data.slice(), [width, height, 4])
     return { input: tensor }
   } else if (model === 'tagger') {
     const newND = ndarray(new Uint8Array(width * height * 3), [1, 3, height, width])
     ops.assign(newND.pick(0, null, null), imageArray.lo(0, 0, 0).hi(width, height, 3).transpose(2, 1, 0))
-    const tensor = new ort.Tensor('uint8', newND.data.slice(), [1, 3, height, width])
+    const tensor = new Tensor('uint8', newND.data.slice(), [1, 3, height, width])
     return { input: tensor }
   } else {
     console.error('Invalid model type')
@@ -113,14 +112,14 @@ export async function fetchModel(filepathOrUri, setProgress, startProgress, endP
 }
 
 export async function initializeONNX(setProgress) {
-  ort.env.wasm.simd = true
-  ort.env.wasm.proxy = true
+  ORTEnv.wasm.simd = true
+  ORTEnv.wasm.proxy = true
 
   const ua = usr(navigator.userAgent)
   if (ua.engine.name == 'WebKit') {
-    ort.env.wasm.numThreads = 1
+    ORTEnv.wasm.numThreads = 1
   } else {
-    ort.env.wasm.numThreads = Math.min(navigator.hardwareConcurrency / 2, 16)
+    ORTEnv.wasm.numThreads = Math.min(navigator.hardwareConcurrency / 2, 16)
   }
 
   setProgress(0)

@@ -98,7 +98,7 @@ text-base font-medium h-12 border-blue border-2 bg-blue disabled:bg-white disabl
             className="hidden"
             onInput={(e) => {
               if (e.target.files[0]) {
-                if(mobile) {
+                if (mobile) {
                   setDataURIFromFile(e.target.files[0], setInputURI)
                 } else {
                   setDataURIFromFile(e.target.files[0], setTempURI)
@@ -109,7 +109,7 @@ text-base font-medium h-12 border-blue border-2 bg-blue disabled:bg-white disabl
             }}
             onChange={(e) => {
               if (e.target.files[0]) {
-                if(mobile) {
+                if (mobile) {
                   setDataURIFromFile(e.target.files[0], setInputURI)
                 } else {
                   setDataURIFromFile(e.target.files[0], setTempURI)

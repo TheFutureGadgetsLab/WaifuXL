@@ -1,7 +1,6 @@
-import * as ort from 'onnxruntime-web'
-
 import { fetchModel, prepareImage } from './utils'
 
+import { InferenceSession } from 'onnxruntime-web'
 import ndarray from 'ndarray'
 
 let taggerSession = null
@@ -27,7 +26,7 @@ export async function initializeTagger(setProgress) {
   }
 
   const taggerBuf = await fetchModel('./models/tagger.onnx', setProgress, 0.5, 0.9)
-  taggerSession = await ort.InferenceSession.create(taggerBuf, {
+  taggerSession = await InferenceSession.create(taggerBuf, {
     executionProviders: ['wasm'],
     graphOptimizationLevel: 'all',
     enableCpuMemArena: true,
