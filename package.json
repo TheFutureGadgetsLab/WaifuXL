@@ -15,24 +15,24 @@
     "gifuct-js": "^2.1.2",
     "ndarray": "^1.0.19",
     "ndarray-ops": "^1.2.2",
-    "next": "^14.0.0",
+    "next": "^14.0.2",
     "next-pwa": "^5.6.0",
-    "onnxruntime-web": "^1.16.1",
+    "onnxruntime-web": "^1.16.2",
     "pify": "^6.1.0",
     "react": "^18.2.0",
-    "react-compare-slider": "2.2.0",
+    "react-compare-slider": "3.0.1",
     "react-dom": "^18.2.0",
     "save-pixels": "^2.3.6",
-    "ua-parser-js": "^1.0.36",
-    "zustand": "^4.4.4"
+    "ua-parser-js": "^1.0.37",
+    "zustand": "^4.4.6"
   },
   "devDependencies": {
-    "@tailwindcss/forms": "^0.5.6",
+    "@tailwindcss/forms": "^0.5.7",
     "autoprefixer": "^10.4.16",
     "copy-webpack-plugin": "^11.0.0",
-    "eslint-config-next": "^14.0.0",
+    "eslint-config-next": "^14.0.2",
     "postcss": "^8.4.31",
-    "prettier": "^3.0.3",
+    "prettier": "^3.1.0",
     "standard": "^17.1.0",
     "tailwindcss": "^3.3.5"
   }
