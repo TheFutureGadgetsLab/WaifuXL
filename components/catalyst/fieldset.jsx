@@ -59,7 +59,7 @@ export function Label({ className, ...props }) {
       data-slot="label"
       className={clsx(
         className,
-        'select-none text-base/6 text-zinc-950 data-[disabled]:opacity-50 sm:text-sm/6 dark:text-white'
+        'select-none text-base/6 text-blue-900 data-[disabled]:opacity-50 sm:text-sm/6'
       )}
     />
   )
