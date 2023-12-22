@@ -4,6 +4,8 @@ import { useAppStateStore, useImageStore } from '@/services/useState'
 import RunComponent from '@/components/RunComponent'
 import TagComponent from '@/components/TagComponent'
 import { UploadSVG } from '@/components/SVGComponents'
+import { Button } from './catalyst/button'
+import { ArrowUpTrayIcon } from '@heroicons/react/16/solid'
 
 const Sidebar = () => {
   const { outputURI, tags } = useImageStore()
@@ -72,17 +74,16 @@ const InputComponent = () => {
   const { setInputModalOpen, running } = useAppStateStore()
 
   return (
-    <button
-      id="choose-image-button"
-      type="button"
-      className="text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center disabled:bg-gray-400 disabled:opacity-60 disabled:text-white disabled:cursor-not-allowed"
+    <Button
+      color="pink"
       onClick={() => {
         setInputModalOpen(true)
       }}
       disabled={running}
     >
-      <UploadSVG /> <span>Choose Image/GIF</span>
-    </button>
+      <ArrowUpTrayIcon /> 
+      <span className="text-white">Choose Image/GIF</span>
+    </Button>
   )
 }
 

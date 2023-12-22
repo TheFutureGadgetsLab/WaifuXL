@@ -1,24 +1,21 @@
-import { CopySVG, DownloadSVG, UploadingSVG } from '@/components/SVGComponents'
 import { downloadImage, getDataURIFromInput, uploadToImgur } from '@/services/imageUtilities'
 import { useAppStateStore, useImageStore } from '@/services/useState'
-
+import { Button } from '@/components/catalyst/button'
+import { ArrowDownTrayIcon, ClipboardIcon } from '@heroicons/react/16/solid'
 import { setDataURIFromFile } from '@/services/imageUtilities'
 
 export function DownloadComponent() {
   const { fileName, extension, outputURI, hasntRun } = useImageStore()
 
   return (
-    <button
-      className={`text-white h-12 mt-1 lg:h-9 font-bold py-2 px-2 md:px-4 rounded drop-shadow-lg bg-pink inline-flex items-center disabled:bg-gray-400 disabled:opacity-60 disabled:text-white disabled:cursor-not-allowed
-        ${hasntRun ? '' : 'animate-pulse'}`}
+    <Button
+      color="pink"
       onClick={() => downloadImage(fileName, extension, outputURI)}
       disabled={hasntRun}
     >
-      <div className="hidden md:block">
-        <DownloadSVG />
-      </div>
-      <span>Download</span>
-    </button>
+      <ArrowDownTrayIcon/>
+      <span className="text-white">Download</span>
+    </Button>
   )
 }
 
@@ -27,10 +24,9 @@ export function CopyComponent() {
   const { setFeedbackMessage, isUploading, setIsUploading } = useAppStateStore()
 
   return (
-    <button
-      className={`h-12 mt-1 lg:h-9 text-white font-bold py-2 px-2 md:px-4 rounded drop-shadow-lg bg-pink inline-flex items-center disabled:bg-gray-400 disabled:opacity-60 disabled:text-white disabled:cursor-not-allowed
-        ${hasntRun ? '' : 'animate-pulse'}`}
-      onClick={(e) => {
+    <Button
+    color="pink"
+    onClick={(e) => {
         setIsUploading(true)
         uploadToImgur(outputURI)
           .then(() => setIsUploading(false))
@@ -41,9 +37,9 @@ export function CopyComponent() {
       }}
       disabled={hasntRun}
     >
-      <div className="hidden md:block">{isUploading ? <UploadingSVG /> : <CopySVG />}</div>
-      <span>Post To Imgur</span>
-    </button>
+      {isUploading ? <ClipboardIcon /> : <ClipboardIcon />}
+      <span className="text-white">Post To Imgur</span>
+    </Button>
   )
 }
 

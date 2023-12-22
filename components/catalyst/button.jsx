@@ -169,7 +169,7 @@ let styles = {
     ],
     pink: [
       'text-white [--btn-hover-overlay:theme(colors.white/10%)] [--btn-bg:theme(colors.pink.500)] [--btn-border:theme(colors.pink.600/90%)]',
-      '[--btn-icon:theme(colors.pink.300)] data-[active]:[--btn-icon:theme(colors.pink.200)] data-[hover]:[--btn-icon:theme(colors.pink.200)]',
+      '[--btn-icon:theme(colors.white.300)] data-[active]:[--btn-icon:theme(colors.white.200)] data-[hover]:[--btn-icon:theme(colors.white.200)]',
     ],
     rose: [
       'text-white [--btn-hover-overlay:theme(colors.white/10%)] [--btn-bg:theme(colors.rose.500)] [--btn-border:theme(colors.rose.600/90%)]',
