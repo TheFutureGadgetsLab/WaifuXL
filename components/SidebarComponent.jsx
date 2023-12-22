@@ -3,9 +3,10 @@ import { useAppStateStore, useImageStore } from '@/services/useState'
 
 import RunComponent from '@/components/RunComponent'
 import TagComponent from '@/components/TagComponent'
-import { UploadSVG } from '@/components/SVGComponents'
 import { Button } from './catalyst/button'
 import { ArrowUpTrayIcon } from '@heroicons/react/16/solid'
+import { Field, Label } from '@/components/catalyst/fieldset'
+import { Select } from '@/components/catalyst/select'
 
 const Sidebar = () => {
   const { outputURI, tags } = useImageStore()
@@ -55,9 +56,10 @@ function UpscaleFactorComponent() {
   const running = useAppStateStore((state) => state.running)
 
   return (
-    <select
+    <Field>
+      <Select
+      color="pink"
       id="resolution-select"
-      className="form-select appearance-none border-none text-white font-bold py-2 px-4 rounded drop-shadow-lg bg-pink inline-flex items-center w-16 disabled:bg-gray-400 disabled:opacity-60 disabled:text-white disabled:cursor-not-allowed"
       onInput={(inp) => {
         setUpscaleFactor(parseInt(inp.target.value))
       }}
@@ -66,7 +68,8 @@ function UpscaleFactorComponent() {
       <option value="2">2&#215;</option>
       <option value="4">4&#215;</option>
       <option value="8">8&#215;</option>
-    </select>
+    </Select>
+    </Field>
   )
 }
 

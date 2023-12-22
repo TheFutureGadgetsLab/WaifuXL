@@ -15,12 +15,12 @@ const WaifuProgressComponent = () => {
 
   const title = modelLoading ? (
     <>
-      Preparing to <span className="text-pink">run{loadingText}</span>
+      Preparing to <span className="text-pink-100">run{loadingText}</span>
     </>
   ) : (
     <>
       {downloadReady ? 'Download' : running ? 'Expanding' : 'Expand'} your{' '}
-      <span className="text-pink">waifu{running ? loadingText : '!'}</span>
+      <span className="text--100">waifu{running ? loadingText : '!'}</span>
     </>
   )
 

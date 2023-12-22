@@ -1,5 +1,6 @@
 import { initializeONNX, upScaleFromURI } from '@/services/inference/utils'
 import { useAppStateStore, useImageStore } from '@/services/useState'
+import { Button } from '@/components/catalyst/button'
 
 import { UpscaleSVG } from '@/components/SVGComponents'
 
@@ -10,8 +11,9 @@ const RunComponent = () => {
   const modelLoading = loadProg >= 0
 
   return (
-    <button
-      className="grow text-white font-bold py-2 px-4 overflow-hidden rounded drop-shadow-lg bg-pink inline-flex items-center disabled:bg-gray-400 disabled:opacity-60 disabled:text-white disabled:cursor-not-allowed"
+    <Button
+      color="pink"
+      className="grow"
       disabled={modelLoading || running}
       onClick={() => {
         setLoadProg(0)
@@ -59,7 +61,7 @@ const RunComponent = () => {
       ) : (
         <span> Loading Model </span>
       )}
-    </button>
+    </Button>
   )
 }
 

@@ -14,7 +14,7 @@ const NavbarComponent = ({ currentPage }) => {
   return (
     <>
       <GitHubSVG className="absolute right-5 bottom-4 md:top-4 z-40" />
-      <header className="flex flex-col items-center relative w-full bg-pink md:mb-10 z-1">
+      <header className="flex flex-col items-center relative w-full bg-pink-100 md:mb-10 z-1">
         <nav className="">
           <div className="container mx-auto md:py-4 pt-0 flex justify-between items-center gap-4">
             <Link href="/about" className={`text-3xl font-semibold ${styles.about}`}>

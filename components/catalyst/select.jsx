@@ -48,7 +48,7 @@ export function Select({ className, multiple, ...props }) {
           'border border-zinc-950/10 data-[hover]:border-zinc-950/20 dark:data-[hover]:border-white/20',
 
           // Background color
-          'bg-blue-800',
+          'bg-pink-800',
 
           // Hide default focus styles
           'focus:outline-none',
@@ -57,7 +57,7 @@ export function Select({ className, multiple, ...props }) {
           'data-[invalid]:border-red-500 data-[invalid]:data-[hover]:border-red-500 data-[invalid]:dark:border-red-600 data-[invalid]:data-[hover]:dark:border-red-600',
 
           // Disabled state
-          'data-[disabled]:border-zinc-950/20 data-[disabled]:opacity-100 dark:data-[hover]:data-[disabled]:border-white/15 data-[disabled]:dark:border-white/15 data-[disabled]:dark:bg-white/[2.5%]',
+          'data-[disabled]:opacity-100 dark:data-[hover]:data-[disabled]:border-white/15',
         ])}
       />
       {!multiple && (

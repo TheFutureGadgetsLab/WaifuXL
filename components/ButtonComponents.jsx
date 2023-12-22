@@ -79,18 +79,20 @@ export function UploadButtonComponent() {
   const mobile = useAppStateStore((state) => state.mobile)
 
   return (
-    <div className="grid grid-cols-1">
-      <span className="text-white">
-        i hate css
-      </span>
+    <Field className="grid grid-cols-1">
+      <Label className="text-white">
+        Upload Button
+      </Label>
       <Button
       color="blue"
+      className="max-h-9 mt-3"
       >
         <label>
           <input
             type="file"
             accept="image/*"
-            className="hidden"
+            // TODO: replace with better looking upload component, for now just real ugly
+            // className="hidden"
             onInput={(e) => {
               if (e.target.files[0]) {
                 if (mobile) {
@@ -118,9 +120,8 @@ export function UploadButtonComponent() {
             }}
           />
         </label>
-        Upload
       </Button>
-    </div>
+    </Field>
   )
 }
 
@@ -132,6 +133,8 @@ export function DoneButtonComponent() {
     <Field className="md:grid-cols-1 md:grid hidden">
       <Label className="text-white">Done Button</Label>
       <Button
+        className="max-h-9 mt-3"
+        outline
         color="blue"
         onClick={() => {
           setInputURI(tempURI)

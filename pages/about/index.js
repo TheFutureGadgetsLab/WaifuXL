@@ -66,7 +66,7 @@ const Bold = ({ text }) => {
 const URL = ({ text, href, after = ' ' }) => {
   return (
     <>
-      <a className="text-pink underline" href={href} target="_blank" rel="noreferrer">
+      <a className="text-pink-100 underline" href={href} target="_blank" rel="noreferrer">
         {text}
       </a>
       {after}
