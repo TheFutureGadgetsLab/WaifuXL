@@ -6,6 +6,8 @@ module.exports = {
   content: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
   darkMode: 'media', // or 'media' or 'class'
   theme: {
+    extend: {
+  
     colors: {
       transparent: 'transparent',
       current: 'currentColor',
@@ -21,6 +23,6 @@ module.exports = {
       yellow: colors.amber,
       stockblue: colors.blue,
     },
-  },
+  }},
   plugins: [require('@tailwindcss/forms')],
 }
