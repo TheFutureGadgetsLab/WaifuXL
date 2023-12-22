@@ -30,7 +30,7 @@ const NavbarComponent = ({ currentPage }) => {
         </nav>
         {currentPage === 'index' && !mobile && (
           <div className="flex flex-initial flex-row absolute left-0 top-full">
-            <NewsBox />
+            {/* <NewsBox /> */}
           </div>
         )}
       </header>
