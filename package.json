@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "npx serve@latest out",
-    "lint": "next lint"
+    "lint": "next lint",
+    "cloudflare_deploy": "npm run build"
   },
   "dependencies": {
     "@emotion/cache": "latest",
