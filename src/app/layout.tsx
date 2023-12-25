@@ -18,7 +18,6 @@ export const metadata: Metadata = {
 }
 
 const DRAWER_WIDTH = 300
-const PINK = '#FF869C'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -57,7 +56,8 @@ function HeaderBar() {
   ]
 
   return (
-    <AppBar sx={{ zIndex: 2000, backgroundColor: PINK, boxShadow: 'none' }}>
+    // @ts-ignore
+    <AppBar sx={{ zIndex: 2000, boxShadow: 'none' }} color="pink">
       <Toolbar
         sx={{
           justifyContent: 'center',
@@ -117,14 +117,16 @@ function SideBar() {
           variant="contained"
           size="large"
           sx={{
-            bgcolor: '#FF869C',
             justifyContent: 'flex-start',
             marginBottom: 2,
             ':not(:last-child)': {
               marginBottom: 1,
             },
+            color: '#fff',
           }}
           startIcon={<Icon />}
+          // @ts-ignore
+          color="pink"
         >
           {text}
         </Button>

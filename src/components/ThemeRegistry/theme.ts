@@ -1,15 +1,19 @@
-import { Roboto } from 'next/font/google';
-import { createTheme } from '@mui/material/styles';
+import { Roboto } from 'next/font/google'
+import { createTheme } from '@mui/material/styles'
 
 const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
   subsets: ['latin'],
   display: 'swap',
-});
+})
 
 const theme = createTheme({
   palette: {
     mode: 'light',
+    // @ts-ignore
+    pink: {
+      main: '#FF869C',
+    },
   },
   typography: {
     fontFamily: roboto.style.fontFamily,
@@ -25,6 +29,6 @@ const theme = createTheme({
       },
     },
   },
-});
+})
 
-export default theme;
+export default theme
