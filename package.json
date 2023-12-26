@@ -17,7 +17,8 @@
     "@mui/material": "latest",
     "next": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "zustand": "^4.4.1"
   },
   "devDependencies": {
     "@types/node": "latest",

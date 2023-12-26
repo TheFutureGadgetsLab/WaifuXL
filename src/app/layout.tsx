@@ -1,3 +1,4 @@
+'use client';
 import * as React from 'react'
 
 import { CloudDownload, CloudUpload, CopyAll } from '@mui/icons-material'
@@ -11,11 +12,8 @@ import { Metadata } from 'next'
 import ThemeRegistry from '@/components/ThemeRegistry/ThemeRegistry'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
+import { useAppStateStore } from '../services/useState'
 
-export const metadata: Metadata = {
-  title: 'WaifuXL',
-  description: 'nyaa~',
-}
 
 const DRAWER_WIDTH = 300
 
@@ -57,7 +55,7 @@ function HeaderBar() {
 
   return (
     // @ts-ignore
-    <AppBar sx={{ zIndex: 2000, boxShadow: 'none' }} color="pink">
+    <AppBar sx={{ zIndex: 0, boxShadow: 'none' }} color="pink">
       <Toolbar
         sx={{
           justifyContent: 'center',
@@ -85,10 +83,29 @@ function HeaderBar() {
 }
 
 function SideBar() {
+  const { setInputModalOpen } = useAppStateStore()
+
   const SIDEBAR_LINKS = [
-    { text: 'Choose Image / GIF', href: '/', icon: CloudUpload },
-    { text: 'Download', href: '/starred', icon: CloudDownload },
-    { text: 'Post To Imgur', href: '/tasks', icon: CopyAll },
+    { 
+      key: 'ModalUpload',
+      text: 'Choose Image / GIF', 
+      func: () => {
+        setInputModalOpen(true)
+      }, 
+      icon: CloudUpload 
+    },
+    { 
+      key: 'DownloadImage',
+      text: 'Download', 
+      func: () => { }, 
+      icon: CloudDownload 
+    },
+    { 
+      key: 'ImgurPost',
+      text: 'Post To Imgur', 
+      func: () => { }, 
+      icon: CopyAll 
+    },
   ]
 
   return (
@@ -109,11 +126,10 @@ function SideBar() {
       open={true}
       variant="persistent"
     >
-      {SIDEBAR_LINKS.map(({ text, href, icon: Icon }) => (
+      {SIDEBAR_LINKS.map(({ key, text, func, icon: Icon }) => (
         <Button
-          key={href}
-          component={Link}
-          href={href}
+          key={key}
+          onClick={func}
           variant="contained"
           size="large"
           sx={{

@@ -1,3 +1,4 @@
+import ModalComponent from '@/components/modal'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
@@ -16,6 +17,7 @@ export default function HomePage() {
         <Typography variant="h1" gutterBottom>
           Home Page
         </Typography>
+        <ModalComponent />
       </Box>
     </Container>
   )

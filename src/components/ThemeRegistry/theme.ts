@@ -14,6 +14,9 @@ const theme = createTheme({
     pink: {
       main: '#FF869C',
     },
+    blue: {
+      main: '#44ABBC',
+    }
   },
   typography: {
     fontFamily: roboto.style.fontFamily,
