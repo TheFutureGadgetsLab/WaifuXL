@@ -84,7 +84,7 @@ function HeaderBar() {
 }
 
 function SideBar() {
-  const { setOutputURI, setUpscaleFactor, setTags, inputURI, extension, upscaleFactor, outputURI, fileName } = useImageStore()
+  const { setOutputURI, setUpscaleFactor, setTags, inputURI, extension, upscaleFactor, outputURI, fileName, hasntRun } = useImageStore()
   const { setDownloadReady, setRunning, setErrorMessage, setLoadProg, running, loadProg, setInputModalOpen } = useAppStateStore()
 
   const modelLoading = loadProg >= 0
@@ -97,7 +97,8 @@ function SideBar() {
         setInputModalOpen(true)
       }, 
       icon: CloudUpload,
-      display: true
+      display: true,
+      disabled: running,
     },
     { 
       key: 'DownloadImage',
@@ -106,7 +107,8 @@ function SideBar() {
         downloadImage(fileName, extension, outputURI)
       }, 
       icon: CloudDownload,
-      display: outputURI != null
+      display: outputURI != null,
+      disabled: hasntRun
     },
     //TODO: Replace this with a copy to clipboard option
     // { 
@@ -148,14 +150,16 @@ function SideBar() {
           })
       },
       icon: RunCircle,
-      display: outputURI == null
+      display: outputURI == null,
+      disabled: modelLoading || running
     },
     {
       key: 'UpscaleFactor',
       text: 'Upscale Factor',
       func: () => { },
       icon: CopyAll,
-      display: outputURI == null
+      display: outputURI == null,
+      disabled: running
     }
   ]
 
@@ -177,10 +181,11 @@ function SideBar() {
       open={true}
       variant="persistent"
     >
-      {SIDEBAR_LINKS.filter((info) => info.display).map(({ key, text, func, icon: Icon }) => (
+      {SIDEBAR_LINKS.filter((info) => info.display).map(({ key, text, func, icon: Icon, display, disabled }) => (
         <Button
           key={key}
           onClick={func}
+          disabled={disabled}
           variant="contained"
           size="large"
           sx={{
