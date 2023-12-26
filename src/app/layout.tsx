@@ -1,18 +1,19 @@
 'use client';
 import * as React from 'react'
 
-import { CloudDownload, CloudUpload, CopyAll } from '@mui/icons-material'
+import { CloudDownload, CloudUpload, CopyAll, RunCircle } from '@mui/icons-material'
 
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import { Button } from '@mui/material'
 import Drawer from '@mui/material/Drawer'
 import Link from 'next/link'
-import { Metadata } from 'next'
 import ThemeRegistry from '@/components/ThemeRegistry/ThemeRegistry'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
-import { useAppStateStore } from '../services/useState'
+import { useAppStateStore, useImageStore } from '../services/useState'
+import { initializeONNX, upScaleFromURI } from '@/services/inference/utils'
+import { downloadImage } from '@/services/imageUtilities'
 
 
 const DRAWER_WIDTH = 300
@@ -83,7 +84,10 @@ function HeaderBar() {
 }
 
 function SideBar() {
-  const { setInputModalOpen } = useAppStateStore()
+  const { setOutputURI, setUpscaleFactor, setTags, inputURI, extension, upscaleFactor, outputURI, fileName } = useImageStore()
+  const { setDownloadReady, setRunning, setErrorMessage, setLoadProg, running, loadProg, setInputModalOpen } = useAppStateStore()
+
+  const modelLoading = loadProg >= 0
 
   const SIDEBAR_LINKS = [
     { 
@@ -92,20 +96,67 @@ function SideBar() {
       func: () => {
         setInputModalOpen(true)
       }, 
-      icon: CloudUpload 
+      icon: CloudUpload,
+      display: true
     },
     { 
       key: 'DownloadImage',
       text: 'Download', 
-      func: () => { }, 
-      icon: CloudDownload 
+      func: () => {
+        downloadImage(fileName, extension, outputURI)
+      }, 
+      icon: CloudDownload,
+      display: outputURI != null
     },
-    { 
-      key: 'ImgurPost',
-      text: 'Post To Imgur', 
-      func: () => { }, 
-      icon: CopyAll 
+    //TODO: Replace this with a copy to clipboard option
+    // { 
+    //   key: 'ImgurPost',
+    //   text: 'Post To Imgur', 
+    //   func: () => { }, 
+    //   icon: CopyAll,
+    //   display: outputURI != null
+    // },
+    {
+      key: 'RunComponent',
+      text: 'Run',
+      func: () => {
+        setLoadProg(0)
+        initializeONNX(setLoadProg)
+          .then(() => {
+            setRunning(true)
+          })
+          .then(() => {
+            upScaleFromURI(extension, setTags, inputURI, upscaleFactor)
+              .then((result) => {
+                setOutputURI(result)
+                // incrementCounter()
+              })
+              .catch((error) => {
+                setErrorMessage(error)
+              })
+              .finally(() => {
+                setDownloadReady(true)
+                setRunning(false)
+                setUpscaleFactor(2)
+              })
+          })
+          .catch(() => {
+            setErrorMessage('Could not load model.')
+          })
+          .finally(() => {
+            setLoadProg(-1)
+          })
+      },
+      icon: RunCircle,
+      display: outputURI == null
     },
+    {
+      key: 'UpscaleFactor',
+      text: 'Upscale Factor',
+      func: () => { },
+      icon: CopyAll,
+      display: outputURI == null
+    }
   ]
 
   return (
@@ -126,7 +177,7 @@ function SideBar() {
       open={true}
       variant="persistent"
     >
-      {SIDEBAR_LINKS.map(({ key, text, func, icon: Icon }) => (
+      {SIDEBAR_LINKS.filter((info) => info.display).map(({ key, text, func, icon: Icon }) => (
         <Button
           key={key}
           onClick={func}

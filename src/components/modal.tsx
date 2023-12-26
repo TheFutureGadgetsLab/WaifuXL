@@ -2,7 +2,7 @@
 import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select } from "@mui/material";
 import { useAppStateStore, useImageStore } from '../services/useState'
 import { getDataURIFromInput, setDataURIFromFile } from '@/services/imageUtilities'
-import Image from 'next/image'
+
 
 export default function ModalComponent() {
     const { inputModalOpen, setInputModalOpen } = useAppStateStore()

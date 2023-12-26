@@ -1,7 +1,6 @@
+import ImageDisplayComponent from '@/components/imageDisplay'
 import ModalComponent from '@/components/modal'
-import Box from '@mui/material/Box'
-import Container from '@mui/material/Container'
-import Typography from '@mui/material/Typography'
+import {Box, Container} from '@mui/material'
 
 export default function HomePage() {
   return (
@@ -14,9 +13,7 @@ export default function HomePage() {
           alignItems: 'center',
         }}
       >
-        <Typography variant="h1" gutterBottom>
-          Home Page
-        </Typography>
+          <ImageDisplayComponent/>
         <ModalComponent />
       </Box>
     </Container>
