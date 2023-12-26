@@ -7,12 +7,16 @@ import Image from 'next/image'
 export default function ModalComponent() {
     const { inputModalOpen, setInputModalOpen } = useAppStateStore()
     const { selectedPreset, setSelectedPreset } = useAppStateStore()
-    const { setTempURI, setTempFileName, tempURI, setInputURI, setTags } = useImageStore()
+    const { setTempURI, setTempFileName, tempURI, setInputURI, setTags, inputURI } = useImageStore()
 
     return (
         <Modal
             open={inputModalOpen}
-            onClose={() => setInputModalOpen(false)}
+            onClose={() => {
+                setInputModalOpen(false)
+                setTempURI(inputURI)
+                setSelectedPreset('')
+            }}
         >
             <Box sx={{
                 position: 'absolute' as 'absolute',
