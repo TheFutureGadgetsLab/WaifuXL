@@ -24,7 +24,6 @@ const hashPlugin = new webpack.DefinePlugin({
 
 const config = {
   reactStrictMode: true,
-  output: 'export',
   swcMinify: true,
   modularizeImports: {
     '@mui/icons-material': {
@@ -32,47 +31,50 @@ const config = {
     },
   },
   images: { unoptimized: true },
-  output: 'standalone',
-  webpack: (config, { }) => {
+  output: process.env.NODE_ENV === 'development' ? 'standalone' : 'export',
+  webpack: (config, {}) => {
     config.plugins.push(copyPlugin)
     config.plugins.push(hashPlugin)
 
     return config
   },
-  async headers() {
-    if (process.env.NODE_ENV === 'development') {
-      return [
-        {
-          // Apply these headers to all routes in your application.
-          source: '/(.*)',
-          headers: [
-            {
-              key: 'Cross-Origin-Embedder-Policy',
-              value: 'require-corp'
-            },
-            {
-              key: 'Cross-Origin-Opener-Policy',
-              value: 'same-origin',
-            },
-          ],
-          // Apply these headers to donation route (allow iframe from Ko-fi)
-          source: '/donate',
-          headers: [
-            {
-              key: 'Cross-Origin-Embedder-Policy',
-              value: 'unsafe-none'
-            },
-            {
-              key: 'Cross-Origin-Opener-Policy',
-              value: 'same-origin',
-            },
-          ],
-
-        },
-      ]
-    }
-    return []
-  },
 }
-
-module.exports = config
+if (process.env.NODE_ENV === 'development') {
+  module.exports = {
+    ...config,
+    ...{
+      async headers() {
+        return [
+          {
+            // Apply these headers to all routes in your application.
+            source: '/(.*)',
+            headers: [
+              {
+                key: 'Cross-Origin-Embedder-Policy',
+                value: 'require-corp',
+              },
+              {
+                key: 'Cross-Origin-Opener-Policy',
+                value: 'same-origin',
+              },
+            ],
+            // Apply these headers to donation route (allow iframe from Ko-fi)
+            source: '/donate',
+            headers: [
+              {
+                key: 'Cross-Origin-Embedder-Policy',
+                value: 'unsafe-none',
+              },
+              {
+                key: 'Cross-Origin-Opener-Policy',
+                value: 'same-origin',
+              },
+            ],
+          },
+        ]
+      },
+    },
+  }
+} else {
+  module.exports = config
+}
