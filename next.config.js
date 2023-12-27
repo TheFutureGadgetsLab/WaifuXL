@@ -4,7 +4,7 @@ const webpack = require('webpack')
 const shortHash = require('child_process').execSync('git rev-parse --short HEAD').toString().trim()
 const longHash = require('child_process').execSync('git rev-parse HEAD').toString().trim()
 
-const nextConfig = {
+const devConfig = {
   reactStrictMode: true,
   output: 'export',
   swcMinify: true,
@@ -56,4 +56,34 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+const prodConfig = {
+  reactStrictMode: false,
+  images: { unoptimized: true }, // disable next/image optimization as doesn't work with static export
+  output: 'export',
+  webpack: (config, { }) => {
+    config.plugins.push(
+      new CopyPlugin({
+        patterns: [
+          {
+            from: 'node_modules/onnxruntime-web/dist/*.wasm',
+            to: 'static/chunks/pages/[name][ext]',
+          },
+        ],
+      }),
+    )
+
+    config.plugins.push(
+      new webpack.DefinePlugin({
+        __SHORT_HASH__: JSON.stringify(shortHash),
+        __LONG_HASH__: JSON.stringify(longHash),
+      }),
+    )
+
+  }
+}
+
+if (process.env.NODE_ENV === 'development') {
+  module.exports = devConfig;
+} else {
+  module.exports = prodConfig;
+}
