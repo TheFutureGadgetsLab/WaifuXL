@@ -1,5 +1,5 @@
 import { InferenceSession, Tensor } from 'onnxruntime-web'
-import { fetchModel, imageNDarrayToDataURI, prepareImage } from './utils'
+import { fetchModel, imageNDarrayToCanvas, imageNDarrayToDataURI, prepareImage } from './utils'
 import ndarray, { NdArray } from 'ndarray'
 
 import ops from 'ndarray-ops'
@@ -51,6 +51,20 @@ export async function multiUpscale(
 
   // @ts-ignore
   return imageNDarrayToDataURI(outArr, outputType)
+}
+
+export async function multiUpscaleCanvas(
+  imageArray: NdArray,
+  upscaleFactor: number
+): Promise<HTMLCanvasElement> {
+  let outArr = imageArray
+  console.time('Upscaling')
+  for (let s = 0; s < upscaleFactor; s += 1) {
+    outArr = await upscaleFrame(outArr)
+  }
+  console.timeEnd('Upscaling')
+
+  return imageNDarrayToCanvas(outArr)
 }
 
 async function upscaleFrame(imageArray: NdArray): Promise<NdArray> {

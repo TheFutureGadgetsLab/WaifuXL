@@ -51,13 +51,16 @@ export async function imageToNdarray(imageURI: string, coalesce: boolean = true)
   return pixels
 }
 
-export function imageNDarrayToDataURI(data: NdArray, outputType: string): string | HTMLCanvasElement {
+
+export function imageNDarrayToDataURI(data: NdArray, outputType: string): string {
   const canvas = savePixels(data, 'canvas')
-  if (outputType == 'canvas') {
-    return canvas
-  }
 
   return canvas.toDataURL(outputType)
+}
+
+export function imageNDarrayToCanvas(data: NdArray): HTMLCanvasElement {
+  const canvas = savePixels(data, 'canvas') as HTMLCanvasElement
+  return canvas
 }
 
 /**

@@ -1,15 +1,15 @@
 import { ParsedGif, parseGIF } from 'gifuct-js'
-import ndarray, { NdArray } from 'ndarray'
+import ndarray, { GenericArray, NdArray } from 'ndarray'
 
 import { imageToNdarray } from '@/services/inference/utils'
-import { multiUpscale } from '@/services/inference/upscaling'
+import { multiUpscale, multiUpscaleCanvas } from '@/services/inference/upscaling'
 import ops from 'ndarray-ops'
 import { runTagger } from '@/services/inference/tagging'
 
 const GIFEncoder = require('gif-encoder-2')
 
 export async function doGif(inputURI: string, setTags: (tags: any) => void): Promise<string> {
-  const allFrames: NdArray<Uint8Array> = await imageToNdarray(inputURI)
+  const allFrames: NdArray<Uint8Array> = await imageToNdarray(inputURI) as NdArray<Uint8Array>
   const [N, W, H, _C] = allFrames.shape
 
   const promisedGif: ParsedGif = await fetch(inputURI)
@@ -25,15 +25,14 @@ export async function doGif(inputURI: string, setTags: (tags: any) => void): Pro
     if (i === 0) {
       setTags(await runTagger(lr))
     }
-
-    const sr = await multiUpscale(lr, 1, 'canvas')
+    const sr = await multiUpscaleCanvas(lr, 1)
     const ctx = sr.getContext('2d')
     if (!ctx) {
       throw new Error('Failed to get canvas context')
     }
     // @ts-ignore
     encoder.setDelay(promisedGif.frames[i].delay)
-    encoder.addFrame(ctx)
+    encoder.addFrame(ctx)  
   }
 
   encoder.finish()
