@@ -37,20 +37,20 @@ export async function initializeTagger(setProgress: (progress: number) => void):
 }
 
 interface TagResult {
-  topDesc: [string, number][]
-  topChars: [string, number][]
-  rating: [string, number][]
+  topDesc: {0: string, 1: number}[]
+  topChars: {0: string, 1: number}[]
+  rating: {0: string, 1: number}[]
 }
 
 async function getTopTags(data: TypedTensor<'float32'>): Promise<TagResult> {
   const tags = await loadTags()
   const flattened = ndarray(data.data, data.dims as number[])
 
-  const topDesc = topK(flattened, 2000, 0, 2000).map((i) => [tags[i[0]], i[1]])
-  const topChars = topK(flattened, 2000, 2000, 4000).map((i) => [tags[i[0]], i[1]])
-  const rating = topK(flattened, 3, 4000, 4003).map((i) => [tags[i[0]], i[1]])
+  const topDesc = topK(flattened, 2000, 0, 2000).map((i) => {return {0: tags[i[0]], 1:  i[1]}})
+  const topChars = topK(flattened, 2000, 2000, 4000).map((i) => {return {0: tags[i[0]], 1:  i[1]}})
+  const rating = topK(flattened, 3, 4000, 4003).map((i) => {return {0: tags[i[0]], 1:  i[1]}})
 
-  // @ts-ignore
+
   return { topDesc, topChars, rating }
 }
 
@@ -66,7 +66,7 @@ function topK(ndarray: any, k: number, startIndex: number, stopIndex: number): [
   const indices = Array.from({ length: values.length }, (_, i) => i)
   indices.sort((a, b) => values[b] - values[a])
 
-  const tuples = indices.map((i) => [i + startIndex, values[i]])
-  // @ts-ignore
+  const tuples = indices.map((i) => [i + startIndex, values[i]]) as [number, number][]
+
   return tuples.slice(0, k)
 }
