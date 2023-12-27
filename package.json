@@ -18,17 +18,17 @@
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "zustand": "^4.4.1",
+    "zustand": "^4.4.7",
     "react-compare-slider": "latest",
     "ndarray": "^1.0.19",
     "ndarray-ops": "^1.2.2",
     "gifuct-js": "^2.1.2",
     "get-pixels": "^3.3.3",
     "gif-encoder-2": "^1.0.5",
-    "onnxruntime-web": "^1.16.0",
+    "onnxruntime-web": "^1.16.3",
     "pify": "^6.1.0",
     "save-pixels": "^2.3.6",
-    "ua-parser-js": "^1.0.36"
+    "ua-parser-js": "^1.0.37"
   },
   "devDependencies": {
     "@types/node": "latest",

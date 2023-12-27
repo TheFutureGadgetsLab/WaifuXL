@@ -1,6 +1,6 @@
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box'
+import Container from '@mui/material/Container'
+import Typography from '@mui/material/Typography'
 
 export default function StarredPage() {
   return (
@@ -18,5 +18,5 @@ export default function StarredPage() {
         </Typography>
       </Box>
     </Container>
-  );
+  )
 }

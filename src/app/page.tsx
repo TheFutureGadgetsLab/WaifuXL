@@ -1,7 +1,8 @@
+import { Box, Container } from '@mui/material'
+
 import ImageDisplayComponent from '@/components/imageDisplay'
 import ModalComponent from '@/components/modal'
 import Sidebar from '@/components/sidebar'
-import {Box, Container} from '@mui/material'
 
 export default function HomePage() {
   return (
@@ -15,9 +16,8 @@ export default function HomePage() {
         }}
       >
         <Sidebar />
-        <ImageDisplayComponent/>
+        <ImageDisplayComponent />
         <ModalComponent />
-
       </Box>
     </Container>
   )
