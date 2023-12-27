@@ -40,7 +40,6 @@ export default function ModalComponent() {
             width: 'auto',
             height: '24rem',
             backgroundImage: `url(${tempURI})`,
-            background: 'no-repeat',
             boxShadow: 'inset 0px 0px 12px #00000050',
             backgroundOrigin: 'content-box',
             backgroundSize: 'cover',

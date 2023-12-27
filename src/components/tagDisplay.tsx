@@ -8,7 +8,7 @@ interface tagDisplayTypes {
   index: string
 }
 
-interface xTypes {
+interface tagTypes {
   0: string
   1: number
 }
@@ -28,13 +28,13 @@ export function TagDisplayComponent({ title, index }: tagDisplayTypes) {
       <Typography align="center" sx={{ fontWeight: 'bold', marginTop: 2 }}>
         {title}
       </Typography>
-      <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-        {curTags.map((x: xTypes) => (
-          <>
-            <ListItem key={x[0]} alignItems="flex-start">
+      <List  sx={{ width: '100%', bgcolor: 'background.paper' }}>
+        {curTags.map((x: tagTypes) => (
+          <span key={`${x[0]}-sp`}>
+            <ListItem alignItems="flex-start">
               <ListItemText
                 primary={
-                  <React.Fragment>
+                  <React.Fragment >
                     <Typography sx={{ display: 'inline' }} component="span" variant="body2" color="text.primary">
                       {`${truncateString(x[0])} - ${truncateNumber(x[1])}%`}
                     </Typography>
@@ -42,8 +42,8 @@ export function TagDisplayComponent({ title, index }: tagDisplayTypes) {
                 }
               />
             </ListItem>
-            <Divider component="li" variant="middle" />
-          </>
+            <Divider  component="li" variant="middle" />
+          </span>
         ))}
       </List>
       <Pagination
