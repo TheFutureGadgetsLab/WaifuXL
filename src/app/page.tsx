@@ -1,5 +1,6 @@
 import ImageDisplayComponent from '@/components/imageDisplay'
 import ModalComponent from '@/components/modal'
+import Sidebar from '@/components/sidebar'
 import {Box, Container} from '@mui/material'
 
 export default function HomePage() {
@@ -13,8 +14,10 @@ export default function HomePage() {
           alignItems: 'center',
         }}
       >
-          <ImageDisplayComponent/>
+        <Sidebar />
+        <ImageDisplayComponent/>
         <ModalComponent />
+
       </Box>
     </Container>
   )

@@ -20,13 +20,9 @@ export function TagDisplayComponent({ title, index }: tagDisplayTypes) {
 
     return (
         <>
-            <Typography align='center'>
+            <Typography align='center' sx={{fontWeight: 'bold', marginTop: 2 }}>
                 {title}
             </Typography>
-            <Pagination hidden={index == "rating"} count={maxTagPage} boundaryCount={0} page={tagPage} onChange={
-                (_event: React.ChangeEvent<unknown>, value: number) =>
-                    setTagPage(value)}
-            />
             <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
                 {curTags
                     .map(
@@ -48,10 +44,15 @@ export function TagDisplayComponent({ title, index }: tagDisplayTypes) {
                                         }
                                     />
                                 </ListItem>
-                                <Divider component="li" />
+                                <Divider component="li" variant="middle"/>
                             </>
                     )}
             </List>
+            <Pagination hidden={index == "rating"} count={maxTagPage} boundaryCount={0} page={tagPage} onChange={
+                (_event: React.ChangeEvent<unknown>, value: number) =>
+                    setTagPage(value)}
+            />
+            <Divider sx={{marginTop: 2}} variant="fullWidth"/>
         </>
     )
 }
