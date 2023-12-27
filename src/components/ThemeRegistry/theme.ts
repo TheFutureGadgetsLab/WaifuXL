@@ -9,14 +9,14 @@ const roboto = Roboto({
 
 const theme = createTheme({
   palette: {
-    mode: 'light',
-    // @ts-ignore
-    pink: {
-      main: '#FF869C',
+    //this is our pink (use primary)
+    primary: {
+      main: '#FF869C'
     },
-    blue: {
-      main: '#44ABBC',
-    }
+    //this is our blue (use secondary)
+    secondary: {
+      main: '#44ABBC'
+    },
   },
   typography: {
     fontFamily: roboto.style.fontFamily,

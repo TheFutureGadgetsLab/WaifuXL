@@ -56,8 +56,7 @@ function HeaderBar() {
   ]
 
   return (
-    // @ts-ignore
-    <AppBar sx={{ zIndex: 0, boxShadow: 'none' }} color="pink">
+    <AppBar sx={{ zIndex: 0, boxShadow: 'none' }} color="primary">
       <Toolbar
         sx={{
           justifyContent: 'center',
@@ -198,8 +197,7 @@ function SideBar() {
             color: '#fff',
           }}
           startIcon={<Icon />}
-          // @ts-ignore
-          color="pink"
+          color="primary"
         >
           {text}
         </Button>
