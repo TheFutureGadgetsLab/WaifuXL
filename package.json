@@ -15,28 +15,30 @@
     "@emotion/styled": "latest",
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
-    "next": "latest",
-    "react": "latest",
-    "react-dom": "latest",
-    "zustand": "^4.4.7",
-    "react-compare-slider": "latest",
-    "ndarray": "^1.0.19",
-    "ndarray-ops": "^1.2.2",
-    "gifuct-js": "^2.1.2",
     "get-pixels": "^3.3.3",
     "gif-encoder-2": "^1.0.5",
+    "gifuct-js": "^2.1.2",
+    "ndarray": "^1.0.19",
+    "ndarray-ops": "^1.2.2",
+    "next": "latest",
     "onnxruntime-web": "^1.16.3",
     "pify": "^6.1.0",
+    "react": "latest",
+    "react-compare-slider": "latest",
+    "react-dom": "latest",
     "save-pixels": "^2.3.6",
-    "ua-parser-js": "^1.0.37"
+    "ua-parser-js": "^1.0.37",
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
+    "@types/ndarray": "^1.0.14",
+    "@types/ndarray-ops": "^1.2.7",
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "copy-webpack-plugin": "^11.0.0",
     "eslint": "latest",
     "eslint-config-next": "latest",
-    "typescript": "latest",
-    "copy-webpack-plugin": "^11.0.0"
+    "typescript": "latest"
   }
 }

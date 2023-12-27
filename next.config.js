@@ -4,7 +4,25 @@ const webpack = require('webpack')
 const shortHash = require('child_process').execSync('git rev-parse --short HEAD').toString().trim()
 const longHash = require('child_process').execSync('git rev-parse HEAD').toString().trim()
 
-const devConfig = {
+const copyPlugin = new CopyPlugin({
+  patterns: [
+    {
+      from: './node_modules/onnxruntime-web/dist/*.wasm',
+      to: 'static/chunks/app/[name][ext]',
+    },
+    {
+      from: './public/models',
+      to: 'static/chunks/app',
+    },
+  ],
+})
+
+const hashPlugin = new webpack.DefinePlugin({
+  __SHORT_HASH__: JSON.stringify(shortHash),
+  __LONG_HASH__: JSON.stringify(longHash),
+})
+
+const config = {
   reactStrictMode: true,
   output: 'export',
   swcMinify: true,
@@ -16,75 +34,32 @@ const devConfig = {
   images: { unoptimized: true },
   output: 'standalone',
   webpack: (config, {}) => {
-    config.plugins.push(
-      new CopyPlugin({
-        patterns: [
-          {
-            from: 'node_modules/onnxruntime-web/dist/*.wasm',
-            to: 'static/chunks/[name][ext]',
-          },
-        ],
-      }),
-    )
-
-    config.plugins.push(
-      new webpack.DefinePlugin({
-        __SHORT_HASH__: JSON.stringify(shortHash),
-        __LONG_HASH__: JSON.stringify(longHash),
-      }),
-    )
+    config.plugins.push(copyPlugin)
+    config.plugins.push(hashPlugin)
 
     return config
   },
   async headers() {
-    return [
-      {
-        // Apply these headers to all routes in your application.
-        source: '/(.*)',
-        headers: [
-          {
-            key: 'Cross-Origin-Embedder-Policy',
-            value: 'require-corp',
-          },
-          {
-            key: 'Cross-Origin-Opener-Policy',
-            value: 'same-origin',
-          },
-        ],
-      },
-    ]
+    if (process.env.NODE_ENV === 'development') {
+      return [
+        {
+          // Apply these headers to all routes in your application.
+          source: '/(.*)',
+          headers: [
+            {
+              key: 'Cross-Origin-Embedder-Policy',
+              value: 'require-corp',
+            },
+            {
+              key: 'Cross-Origin-Opener-Policy',
+              value: 'same-origin',
+            },
+          ],
+        },
+      ]
+    }
+    return []
   },
-};
-
-const prodConfig = {
-  reactStrictMode: false,
-  images: { unoptimized: true }, // disable next/image optimization as doesn't work with static export
-  output: 'export',
-  webpack: (config, { }) => {
-    config.plugins.push(
-      new CopyPlugin({
-        patterns: [
-          {
-            from: 'node_modules/onnxruntime-web/dist/*.wasm',
-            to: 'static/chunks/[name][ext]',
-          },
-        ],
-      }),
-    )
-
-    config.plugins.push(
-      new webpack.DefinePlugin({
-        __SHORT_HASH__: JSON.stringify(shortHash),
-        __LONG_HASH__: JSON.stringify(longHash),
-      }),
-    )
-    return config
-
-  }
 }
 
-if (process.env.NODE_ENV === 'development') {
-  module.exports = devConfig;
-} else {
-  module.exports = prodConfig;
-}
+module.exports = config

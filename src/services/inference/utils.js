@@ -112,6 +112,7 @@ export async function fetchModel(filepathOrUri, setProgress, startProgress, endP
 }
 
 export async function initializeONNX(setProgress) {
+  // Set up ORT environment
   ORTEnv.wasm.simd = true
   ORTEnv.wasm.proxy = true
 

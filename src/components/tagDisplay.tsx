@@ -14,7 +14,6 @@ interface xTypes {
 }
 export function TagDisplayComponent({ title, index }: tagDisplayTypes) {
   let { tags } = useImageStore()
-  console.log(tags)
   const [tagPage, setTagPage] = useState(1)
   // @ts-ignore
   tags = tags[index]
