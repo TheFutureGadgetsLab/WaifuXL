@@ -78,6 +78,7 @@ const prodConfig = {
         __LONG_HASH__: JSON.stringify(longHash),
       }),
     )
+    return config
 
   }
 }
