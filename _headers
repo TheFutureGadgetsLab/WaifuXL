@@ -3,3 +3,8 @@ https://:waifuxl.pages.dev/*
 /*
   Cross-Origin-Embedder-Policy: require-corp
   Cross-Origin-Opener-Policy: same-origin
+https://:waifuxl.pages.dev/donate
+  X-Robots-Tag: noindex
+/*
+  Cross-Origin-Embedder-Policy: unsafe-none
+  Cross-Origin-Opener-Policy: same-origin
