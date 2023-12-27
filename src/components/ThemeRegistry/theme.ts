@@ -13,8 +13,12 @@ const theme = createTheme({
     primary: {
       main: '#FF869C'
     },
-    //this is our blue (use secondary)
+    //this is our white (use secondary)
     secondary: {
+      main: '#FFFFFF'
+    },
+    //this is our blue (use success)
+    success: {
       main: '#44ABBC'
     },
   },

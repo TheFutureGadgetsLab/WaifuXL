@@ -60,10 +60,10 @@ export default function ModalComponent() {
                     />
 
                 </Box>
-                <FormControl color="secondary" sx={{ minWidth: 200, marginBottom: 2 }} fullWidth>
+                <FormControl color="success" sx={{ minWidth: 200, marginBottom: 2 }} fullWidth>
                     <InputLabel>Preset</InputLabel>
                     <Select
-                        color="secondary"
+                        color="success"
                         value={selectedPreset}
                         label="Preset"
                         onChange={inp => {
@@ -73,13 +73,13 @@ export default function ModalComponent() {
                             setTempFileName(`example_${name}`)
                         }}
                     >
-                        <MenuItem color="secondary" value="ozen|https://i.imgur.com/Sf6sfPj.png">Ozen</MenuItem>
-                        <MenuItem color="secondary" value="eat|https://c.tenor.com/rnhV3fu39f8AAAAM/eating-anime.gif">Eating (GIF)</MenuItem>
-                        <MenuItem color="secondary" value="senjougahara|https://i.imgur.com/cMX8YcK.jpg">Senjougahara</MenuItem>
-                        <MenuItem color="secondary" value="moomin|https://i.imgur.com/9I91yMq.png">Moomin</MenuItem>
-                        <MenuItem color="secondary" value="megumin|https://i.imgur.com/BKBt6bC.png">Megumin</MenuItem>
-                        <MenuItem color="secondary" value="aqua|https://i.imgur.com/yhIwVjZ.jpeg">Aqua</MenuItem>
-                        <MenuItem color="secondary" value="natsumi|https://i.imgur.com/yIIl7Z1.png">Kurobe Natsumi</MenuItem>
+                        <MenuItem color="success" value="ozen|https://i.imgur.com/Sf6sfPj.png">Ozen</MenuItem>
+                        <MenuItem color="success" value="eat|https://c.tenor.com/rnhV3fu39f8AAAAM/eating-anime.gif">Eating (GIF)</MenuItem>
+                        <MenuItem color="success" value="senjougahara|https://i.imgur.com/cMX8YcK.jpg">Senjougahara</MenuItem>
+                        <MenuItem color="success" value="moomin|https://i.imgur.com/9I91yMq.png">Moomin</MenuItem>
+                        <MenuItem color="success" value="megumin|https://i.imgur.com/BKBt6bC.png">Megumin</MenuItem>
+                        <MenuItem color="success" value="aqua|https://i.imgur.com/yhIwVjZ.jpeg">Aqua</MenuItem>
+                        <MenuItem color="success" value="natsumi|https://i.imgur.com/yIIl7Z1.png">Kurobe Natsumi</MenuItem>
                     </Select>
                 </FormControl>
                 <Button
@@ -88,7 +88,7 @@ export default function ModalComponent() {
                     variant="contained"
                     size="large"
                     sx={{ color: '#fff', marginRight: 2 }}
-                    color="secondary"
+                    color="success"
 
                 >
                     <input
@@ -117,7 +117,7 @@ export default function ModalComponent() {
                     variant="outlined"
                     size="large"
                     sx={{ float: 'right', marginLeft: 2 }}
-                    color="secondary"
+                    color="success"
                 >
                     Done
                 </Button>

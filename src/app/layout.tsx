@@ -51,7 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 function HeaderBar() {
   const HEADER_LINKS = [
     { text: 'About', href: '/about', weight: 450, color: 'text.primary' },
-    { text: 'WaifuXL', href: '/', weight: 600, color: 'white' },
+    { text: 'WaifuXL', href: '/', weight: 600, color: 'secondary.main' },
     { text: 'Donate', href: '/donate', weight: 450, color: 'text.primary' },
   ]
 
@@ -175,7 +175,7 @@ function SideBar() {
           height: 'auto',
           bottom: 0,
           padding: 2,
-          bgcolor: '#f5f5f5',
+          bgcolor: 'primary',
         },
       }}
       open={true}
@@ -194,7 +194,7 @@ function SideBar() {
             ':not(:last-child)': {
               marginBottom: 1,
             },
-            color: '#fff',
+            color: 'secondary.main',
           }}
           startIcon={<Icon />}
           color="primary"
