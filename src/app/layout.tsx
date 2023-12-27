@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography'
 import { useAppStateStore, useImageStore } from '../services/useState'
 import { initializeONNX, upScaleFromURI } from '@/services/inference/utils'
 import { downloadImage } from '@/services/imageUtilities'
+import { TagDisplayComponent } from '@/components/tagDisplay';
 
 
 const DRAWER_WIDTH = 300
@@ -49,9 +50,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 function HeaderBar() {
   const HEADER_LINKS = [
-    { text: 'About', href: '/about', weight: 450 },
-    { text: 'WaifuXL', href: '/', weight: 600 },
-    { text: 'Donate', href: '/donate', weight: 450 },
+    { text: 'About', href: '/about', weight: 450, color: 'text.primary' },
+    { text: 'WaifuXL', href: '/', weight: 600, color: 'white' },
+    { text: 'Donate', href: '/donate', weight: 450, color: 'text.primary' },
   ]
 
   return (
@@ -67,7 +68,7 @@ function HeaderBar() {
             <Button color="inherit">
               <Typography
                 variant="h4"
-                color="text.primary"
+                color={link.color}
                 sx={{
                   fontWeight: link.weight,
                   textTransform: 'none',
@@ -84,7 +85,7 @@ function HeaderBar() {
 }
 
 function SideBar() {
-  const { setOutputURI, setUpscaleFactor, setTags, inputURI, extension, upscaleFactor, outputURI, fileName, hasntRun } = useImageStore()
+  const { setOutputURI, setUpscaleFactor, setTags, inputURI, extension, upscaleFactor, outputURI, fileName, hasntRun, tags } = useImageStore()
   const { setDownloadReady, setRunning, setErrorMessage, setLoadProg, running, loadProg, setInputModalOpen } = useAppStateStore()
 
   const modelLoading = loadProg >= 0
@@ -203,6 +204,16 @@ function SideBar() {
           {text}
         </Button>
       ))}
+      {
+        tags != null ? 
+        <>
+          <TagDisplayComponent title={"Top Chars"} index={"topChars"}/>
+          <TagDisplayComponent title={"Top Desc"} index={"topDesc"}/>
+          <TagDisplayComponent title={"Explicitness"} index={"rating"}/>
+        </>
+        : <></>
+      }
+      
     </Drawer>
   )
 }
