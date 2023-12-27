@@ -20,32 +20,30 @@ const usr = require('ua-parser-js')
  */
 export async function imageToNdarray(imageURI: string, coalesce: boolean = true): Promise<NdArray> {
   // @ts-ignore
-  let pixels: NdArray = await getPixels(imageURI)
+  let pixels: NdArray = await getPixels(imageURI) as NdArray
 
   if (pixels.shape.length === 4 && coalesce) {
     // animated gif with multiple frames
     const [N, W, H, C] = pixels.shape
 
     const numPixelsInFrame = W * H
-
+    const data = pixels.data as number[];
     for (let i = 0; i < N; ++i) {
       const currIndex = pixels.index(i, 0, 0, 0)
       const prevIndex = pixels.index(i - 1, 0, 0, 0)
 
       for (let j = 0; j < numPixelsInFrame; ++j) {
         const curr = currIndex + j * C
-
-        // @ts-ignore
-        if (pixels.data[curr + C - 1] === 0) {
+        if (data[curr + C - 1] === 0) {
           const prev = prevIndex + j * C
 
           for (let k = 0; k < C; ++k) {
-            // @ts-ignore
-            pixels.data[curr + k] = pixels.data[prev + k]
+            data[curr + k] = data[prev + k]
           }
         }
       }
     }
+    pixels.data = data;
   }
 
   return pixels
@@ -83,8 +81,8 @@ export function prepareImage(imageArray: NdArray, model: string): { input: Tenso
   const height = imageArray.shape[1]
 
   if (model === 'superRes') {
-    // @ts-ignore
-    const tensor = new Tensor('uint8', imageArray.data.slice(), [width, height, 4])
+    const data = imageArray.data as number[];
+    const tensor = new Tensor('uint8', data.slice(), [width, height, 4])
     return { input: tensor }
   } else if (model === 'tagger') {
     const newND = ndarray(new Uint8Array(width * height * 3), [1, 3, height, width])
@@ -104,25 +102,25 @@ export async function fetchModel(
   endProgress: number,
 ): Promise<ArrayBuffer> {
   const response = await fetch(filepathOrUri)
-  // @ts-ignore
-  const reader = response.body.getReader()
-  // @ts-ignore
-  const length = parseInt(response.headers.get('content-length'))
+  const reader = response?.body?.getReader()
+  const length = parseInt(response.headers.get('content-length') as string)
   const data = new Uint8Array(length)
   let received = 0
 
   // Loop through the response stream and extract data chunks
   while (true) {
-    const { done, value } = await reader.read()
+    if(reader != null) {
+      const { done, value } = await reader.read()
 
-    if (done) {
-      setProgress(1)
-      break
-    } else {
-      // Push values to the chunk array
-      data.set(value, received)
-      received += value.length
-      setProgress(startProgress + (received / length) * (endProgress - startProgress))
+      if (done) {
+        setProgress(1)
+        break
+      } else {
+        // Push values to the chunk array
+        data.set(value, received)
+        received += value.length
+        setProgress(startProgress + (received / length) * (endProgress - startProgress))
+      }  
     }
   }
   return data.buffer
@@ -166,8 +164,7 @@ export async function upScaleFromURI(
 
     resultURI = currentURI
   } else {
-    const imageArray = await imageToNdarray(uri)
-    // @ts-ignore
+    const imageArray = await imageToNdarray(uri) as NdArray<Uint8Array>
     const tags = await runTagger(imageArray)
     setTags(tags)
 

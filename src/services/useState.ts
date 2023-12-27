@@ -1,11 +1,28 @@
 import { create } from 'zustand'
 import default_tags from '@/services/landing_tags'
-
+interface tagsType {
+  topChars: {
+   0: string,
+   1: number 
+  }[],
+  topDesc: {
+    0: string,
+    1: number 
+  }[],
+  rating: {
+    0: string,
+    1: number  
+  }[],
+  [key: string]: {
+    0: string,
+    1: number  
+  }[];
+}
 // Define the type for the state in the store
 type ImageStoreState = {
   inputURI: string
   outputURI: string | null
-  tags: typeof default_tags
+  tags: tagsType | null
   fileName: string
   extension: string
   upscaleFactor: number
@@ -16,7 +33,7 @@ type ImageStoreState = {
   setInputURI: (uri: string) => void
   setUpscaleFactor: (newFactor: number) => void
   setOutputURI: (uri: string) => void
-  setTags: (newTags: typeof default_tags) => void
+  setTags: (newTags: tagsType | null) => void
   setFileName: (newFilename: string) => void
   setTempURI: (newTempUri: string) => void
   setTempFileName: (newTempFileName: string) => void
@@ -48,7 +65,7 @@ const useImageStore = create<ImageStoreState>((set) => ({
   },
   setUpscaleFactor: (newFactor: number) => set(() => ({ upscaleFactor: Math.log2(newFactor) })),
   setOutputURI: (uri: string) => set(() => ({ outputURI: uri, hasntRun: false })),
-  setTags: (newTags: typeof default_tags) => set(() => ({ tags: newTags })),
+  setTags: (newTags: tagsType | null) => set(() => ({ tags: newTags })),
   setFileName: (newFilename: string) => set(() => ({ fileName: newFilename })),
   setTempURI: (newTempUri: string) => set(() => ({ tempURI: newTempUri })),
   setTempFileName: (newTempFileName: string) => set(() => ({ tempFileName: newTempFileName })),

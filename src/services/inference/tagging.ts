@@ -5,14 +5,14 @@ import ndarray, { NdArray } from 'ndarray'
 let taggerSession: InferenceSession | null = null
 
 export async function runTagger(imageArray: NdArray<Uint8Array>): Promise<TagResult | undefined> {
-  // @ts-ignore
+
   const feeds = prepareImage(imageArray, 'tagger')
 
   let tags: TagResult | undefined
   try {
     const output: InferenceSession.OnnxValueMapType = await taggerSession!.run(feeds)
-    // @ts-ignore
-    tags = getTopTags(output.output)
+
+    tags = await getTopTags(output.output as TypedTensor<"float32">)
   } catch (e) {
     console.error('Failed to run tagger')
     console.error(e)
@@ -44,8 +44,7 @@ interface TagResult {
 
 async function getTopTags(data: TypedTensor<'float32'>): Promise<TagResult> {
   const tags = await loadTags()
-  // @ts-ignore
-  const flattened = ndarray(data.data, data.dims)
+  const flattened = ndarray(data.data, data.dims as number[])
 
   const topDesc = topK(flattened, 2000, 0, 2000).map((i) => [tags[i[0]], i[1]])
   const topChars = topK(flattened, 2000, 2000, 4000).map((i) => [tags[i[0]], i[1]])

@@ -123,7 +123,6 @@ export default function ModalComponent() {
           key="ModalDone"
           onClick={() => {
             setInputURI(tempURI)
-            // @ts-ignore
             setTags(null)
             setInputModalOpen(false)
             setSelectedPreset('')

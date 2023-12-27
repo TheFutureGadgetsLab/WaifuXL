@@ -7,7 +7,6 @@ import ops from 'ndarray-ops'
 let superSession: InferenceSession | null = null
 
 export async function runSuperRes(imageArray: NdArray): Promise<Tensor | undefined> {
-  // @ts-ignore
   const feeds = prepareImage(imageArray, 'superRes')
 
   let sr: Tensor | undefined
@@ -49,7 +48,7 @@ export async function multiUpscale(
   }
   console.timeEnd('Upscaling')
 
-  // @ts-ignore
+
   return imageNDarrayToDataURI(outArr, outputType)
 }
 

@@ -15,26 +15,27 @@ interface tagTypes {
 export function TagDisplayComponent({ title, index }: tagDisplayTypes) {
   let { tags } = useImageStore()
   const [tagPage, setTagPage] = useState(1)
-  // @ts-ignore
-  tags = tags[index]
+  let curTags = [] as tagTypes[]
+  let maxTagPage = 0
+  if (tags != null) {
+    const tagIndex = tags[index]
 
-  // @ts-ignore
-  const curTags = tags.slice(5 * (tagPage - 1), 5 * tagPage)
-  // @ts-ignore
-  const maxTagPage = Math.ceil(tags.length / 5)
+    curTags = tagIndex?.slice(5 * (tagPage - 1), 5 * tagPage)
+    maxTagPage = Math.ceil(tagIndex?.length / 5)
+  }
 
   return (
     <>
       <Typography align="center" sx={{ fontWeight: 'bold', marginTop: 2 }}>
         {title}
       </Typography>
-      <List  sx={{ width: '100%', bgcolor: 'background.paper' }}>
+      <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
         {curTags.map((x: tagTypes) => (
           <span key={`${x[0]}-sp`}>
             <ListItem alignItems="flex-start">
               <ListItemText
                 primary={
-                  <React.Fragment >
+                  <React.Fragment>
                     <Typography sx={{ display: 'inline' }} component="span" variant="body2" color="text.primary">
                       {`${truncateString(x[0])} - ${truncateNumber(x[1])}%`}
                     </Typography>
@@ -42,7 +43,7 @@ export function TagDisplayComponent({ title, index }: tagDisplayTypes) {
                 }
               />
             </ListItem>
-            <Divider  component="li" variant="middle" />
+            <Divider component="li" variant="middle" />
           </span>
         ))}
       </List>
