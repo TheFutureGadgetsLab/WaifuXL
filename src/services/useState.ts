@@ -2,21 +2,21 @@ import { create } from 'zustand'
 import default_tags from '@/services/landing_tags'
 interface tagsType {
   topChars: {
-   0: string,
-   1: number 
-  }[],
+    0: string
+    1: number
+  }[]
   topDesc: {
-    0: string,
-    1: number 
-  }[],
+    0: string
+    1: number
+  }[]
   rating: {
-    0: string,
-    1: number  
-  }[],
+    0: string
+    1: number
+  }[]
   [key: string]: {
-    0: string,
-    1: number  
-  }[];
+    0: string
+    1: number
+  }[]
 }
 // Define the type for the state in the store
 type ImageStoreState = {

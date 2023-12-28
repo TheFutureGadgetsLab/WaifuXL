@@ -11,15 +11,15 @@ const theme = createTheme({
   palette: {
     //this is our pink (use primary)
     primary: {
-      main: '#FF869C'
+      main: '#FF869C',
     },
     //this is our white (use secondary)
     secondary: {
-      main: '#FFFFFF'
+      main: '#FFFFFF',
     },
     //this is our blue (use success)
     success: {
-      main: '#44ABBC'
+      main: '#44ABBC',
     },
   },
   typography: {

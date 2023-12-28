@@ -39,6 +39,7 @@
     "copy-webpack-plugin": "^11.0.0",
     "eslint": "latest",
     "eslint-config-next": "latest",
+    "prettier": "3.1.1",
     "typescript": "latest"
   }
 }

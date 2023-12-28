@@ -48,14 +48,10 @@ export async function multiUpscale(
   }
   console.timeEnd('Upscaling')
 
-
   return imageNDarrayToDataURI(outArr, outputType)
 }
 
-export async function multiUpscaleCanvas(
-  imageArray: NdArray,
-  upscaleFactor: number
-): Promise<HTMLCanvasElement> {
+export async function multiUpscaleCanvas(imageArray: NdArray, upscaleFactor: number): Promise<HTMLCanvasElement> {
   let outArr = imageArray
   console.time('Upscaling')
   for (let s = 0; s < upscaleFactor; s += 1) {

@@ -20,14 +20,14 @@ const usr = require('ua-parser-js')
  */
 export async function imageToNdarray(imageURI: string, coalesce: boolean = true): Promise<NdArray> {
   // @ts-ignore
-  let pixels: NdArray = await getPixels(imageURI) as NdArray
+  let pixels: NdArray = (await getPixels(imageURI)) as NdArray
 
   if (pixels.shape.length === 4 && coalesce) {
     // animated gif with multiple frames
     const [N, W, H, C] = pixels.shape
 
     const numPixelsInFrame = W * H
-    const data = pixels.data as number[];
+    const data = pixels.data as number[]
     for (let i = 0; i < N; ++i) {
       const currIndex = pixels.index(i, 0, 0, 0)
       const prevIndex = pixels.index(i - 1, 0, 0, 0)
@@ -43,12 +43,11 @@ export async function imageToNdarray(imageURI: string, coalesce: boolean = true)
         }
       }
     }
-    pixels.data = data;
+    pixels.data = data
   }
 
   return pixels
 }
-
 
 export function imageNDarrayToDataURI(data: NdArray, outputType: string): string {
   const canvas = savePixels(data, 'canvas')
@@ -81,7 +80,7 @@ export function prepareImage(imageArray: NdArray, model: string): { input: Tenso
   const height = imageArray.shape[1]
 
   if (model === 'superRes') {
-    const data = imageArray.data as number[];
+    const data = imageArray.data as number[]
     const tensor = new Tensor('uint8', data.slice(), [width, height, 4])
     return { input: tensor }
   } else if (model === 'tagger') {
@@ -109,7 +108,7 @@ export async function fetchModel(
 
   // Loop through the response stream and extract data chunks
   while (true) {
-    if(reader != null) {
+    if (reader != null) {
       const { done, value } = await reader.read()
 
       if (done) {
@@ -120,7 +119,7 @@ export async function fetchModel(
         data.set(value, received)
         received += value.length
         setProgress(startProgress + (received / length) * (endProgress - startProgress))
-      }  
+      }
     }
   }
   return data.buffer
@@ -164,7 +163,7 @@ export async function upScaleFromURI(
 
     resultURI = currentURI
   } else {
-    const imageArray = await imageToNdarray(uri) as NdArray<Uint8Array>
+    const imageArray = (await imageToNdarray(uri)) as NdArray<Uint8Array>
     const tags = await runTagger(imageArray)
     setTags(tags)
 
