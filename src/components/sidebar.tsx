@@ -7,7 +7,8 @@ import { useAppStateStore, useImageStore } from '../services/useState'
 import Drawer from '@mui/material/Drawer'
 import { TagDisplayComponent } from '@/components/tagDisplay'
 import { downloadImage } from '@/services/imageUtilities'
-import ButtonsComponent from './buttons'
+import ButtonsComponent from './inputs'
+import { SelectChangeEvent } from '@mui/material'
 
 const DRAWER_WIDTH = 300
 
@@ -29,7 +30,7 @@ export default function SideBarComponent() {
 
   const modelLoading = loadProg >= 0
 
-  const sidebarButtons = [
+  const sidebarContent = [
     {
       key: 'ModalUpload',
       text: 'Choose Image / GIF',
@@ -39,6 +40,8 @@ export default function SideBarComponent() {
       icon: CloudUpload,
       display: true,
       disabled: running,
+      type: 'button',
+      current: undefined,
     },
     {
       key: 'DownloadImage',
@@ -51,6 +54,8 @@ export default function SideBarComponent() {
       icon: CloudDownload,
       display: outputURI != null,
       disabled: hasntRun,
+      type: 'button',
+      current: undefined,
     },
     {
       key: 'Copy',
@@ -63,6 +68,8 @@ export default function SideBarComponent() {
       icon: CopyAll,
       display: outputURI != null,
       disabled: hasntRun || extension == 'gif',
+      type: 'button',
+      current: undefined,
     },
     {
       key: 'RunComponent',
@@ -87,7 +94,7 @@ export default function SideBarComponent() {
               .finally(() => {
                 setDownloadReady(true)
                 setRunning(false)
-                setUpscaleFactor(2)
+                setUpscaleFactor(1)
               })
           })
           .catch(() => {
@@ -100,14 +107,22 @@ export default function SideBarComponent() {
       icon: RunCircle,
       display: outputURI == null,
       disabled: modelLoading || running,
+      type: 'button',
+      current: undefined,
     },
     {
       key: 'UpscaleFactor',
       text: 'Upscale Factor',
-      func: () => {},
+      func: (e: SelectChangeEvent) => {
+        console.log(e.target.value)
+        console.log(upscaleFactor)
+        setUpscaleFactor(parseInt(e.target.value))
+      },
       icon: CopyAll,
       display: outputURI == null,
       disabled: running,
+      type: 'selection',
+      current: upscaleFactor,
     },
   ]
 
@@ -129,7 +144,7 @@ export default function SideBarComponent() {
       open={true}
       variant="persistent"
     >
-      <ButtonsComponent buttonSpecs={sidebarButtons} />
+      <ButtonsComponent buttonSpecs={sidebarContent} />
       {tags != null ? (
         <>
           <TagDisplayComponent title={'Top Chars'} index={'topChars'} />

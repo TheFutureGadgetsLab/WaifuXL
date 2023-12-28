@@ -3,17 +3,17 @@ import { OverridableComponent } from '@mui/material/OverridableComponent'
 import { MouseEventHandler } from 'react'
 
 interface buttonTypes {
-  key: string
+  item_key: string
   func: MouseEventHandler<HTMLButtonElement>
   disabled: boolean
   Icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>
   text: string
 }
 
-export default function ButtonComponent({ key, func, disabled, Icon, text }: buttonTypes) {
+export default function ButtonComponent({ item_key, func, disabled, Icon, text }: buttonTypes) {
   return (
     <Button
-      key={key}
+      key={item_key}
       onClick={func}
       disabled={disabled}
       variant="contained"

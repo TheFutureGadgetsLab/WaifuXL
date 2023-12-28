@@ -63,7 +63,7 @@ const useImageStore = create<ImageStoreState>((set) => ({
       set(() => ({ extension: 'png' }))
     }
   },
-  setUpscaleFactor: (newFactor: number) => set(() => ({ upscaleFactor: Math.log2(newFactor) })),
+  setUpscaleFactor: (newFactor: number) => set(() => ({ upscaleFactor: newFactor })),
   setOutputURI: (uri: string) => set(() => ({ outputURI: uri, hasntRun: false })),
   setTags: (newTags: tagsType | null) => set(() => ({ tags: newTags })),
   setFileName: (newFilename: string) => set(() => ({ fileName: newFilename })),
