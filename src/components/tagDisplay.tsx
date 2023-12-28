@@ -1,4 +1,4 @@
-import { Divider, List, ListItem, ListItemText, Pagination, Typography } from '@mui/material'
+import { Divider, List, ListItem, ListItemText, Pagination, Typography, CircularProgress, Box } from '@mui/material'
 import React, { useState } from 'react'
 
 import { useImageStore } from '@/services/useState'
@@ -37,7 +37,26 @@ export function TagDisplayComponent({ title, index }: tagDisplayTypes) {
                 primary={
                   <React.Fragment>
                     <Typography sx={{ display: 'inline' }} component="span" variant="body2" color="text.primary">
-                      {`${truncateString(x[0])} - ${truncateNumber(x[1])}%`}
+                      {`${truncateString(x[0])}`}
+                      <Box sx={{ float: 'right', position: 'relative', display: 'inline-flex' }}>
+                        <CircularProgress size={30} color="primary" value={x[1] * 100} variant="determinate" />
+                        <Box
+                          sx={{
+                            top: 0,
+                            left: 0,
+                            bottom: 0,
+                            right: 0,
+                            position: 'absolute',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                        >
+                          <Typography variant="caption" component="div" color="text.secondary">{`${Math.round(
+                            x[1] * 100,
+                          )}%`}</Typography>
+                        </Box>
+                      </Box>
                     </Typography>
                   </React.Fragment>
                 }
@@ -67,13 +86,7 @@ function titleCase(str: string) {
 
 function truncateString(str: string) {
   str = cleanStringRemoveParen(str)
-  return str.length > 13 ? str.slice(0, 13) + '…' : str
-}
-
-function truncateNumber(dig: number) {
-  let str = (dig * 100).toString()
-  str = cleanStringRemoveParen(str)
-  return str.length > 5 ? str.slice(0, 5) : str
+  return str.length > 25 ? str.slice(0, 25) + '…' : str
 }
 
 function cleanStringRemoveParen(str: string) {
