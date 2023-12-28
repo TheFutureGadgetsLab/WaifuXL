@@ -3,6 +3,7 @@ import { Box, Container } from '@mui/material'
 import ImageDisplayComponent from '@/components/imageDisplay'
 import ModalComponent from '@/components/modal'
 import Sidebar from '@/components/sidebar'
+import TitleComponent from '@/components/title'
 
 export default function HomePage() {
   return (
@@ -17,6 +18,7 @@ export default function HomePage() {
       >
         <Sidebar />
         <ImageDisplayComponent />
+        <TitleComponent />
         <ModalComponent />
       </Box>
     </Container>
