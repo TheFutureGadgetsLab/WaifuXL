@@ -1,8 +1,8 @@
 import { ParsedGif, parseGIF } from 'gifuct-js'
-import ndarray, { GenericArray, NdArray } from 'ndarray'
+import ndarray, { NdArray } from 'ndarray'
 
 import { imageToNdarray } from '@/services/inference/utils'
-import { multiUpscale, multiUpscaleCanvas } from '@/services/inference/upscaling'
+import { multiUpscaleCanvas } from '@/services/inference/upscaling'
 import ops from 'ndarray-ops'
 import { runTagger } from '@/services/inference/tagging'
 
