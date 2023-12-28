@@ -4,10 +4,10 @@ import { CloudDownload, CloudUpload, CopyAll, RunCircle } from '@mui/icons-mater
 import { initializeONNX, upScaleFromURI } from '@/services/inference/utils'
 import { useAppStateStore, useImageStore } from '../services/useState'
 
-import { Button } from '@mui/material'
 import Drawer from '@mui/material/Drawer'
 import { TagDisplayComponent } from '@/components/tagDisplay'
 import { downloadImage } from '@/services/imageUtilities'
+import ButtonsComponent from './buttons'
 
 const DRAWER_WIDTH = 300
 
@@ -29,7 +29,7 @@ export default function SideBarComponent() {
 
   const modelLoading = loadProg >= 0
 
-  const SIDEBAR_LINKS = [
+  const sidebarButtons = [
     {
       key: 'ModalUpload',
       text: 'Choose Image / GIF',
@@ -129,27 +129,7 @@ export default function SideBarComponent() {
       open={true}
       variant="persistent"
     >
-      {SIDEBAR_LINKS.filter((info) => info.display).map(({ key, text, func, icon: Icon, display, disabled }) => (
-        <Button
-          key={key}
-          onClick={func}
-          disabled={disabled}
-          variant="contained"
-          size="large"
-          sx={{
-            justifyContent: 'flex-start',
-            marginBottom: 2,
-            ':not(:last-child)': {
-              marginBottom: 1,
-            },
-            color: 'secondary.main',
-          }}
-          startIcon={<Icon />}
-          color="primary"
-        >
-          {text}
-        </Button>
-      ))}
+      <ButtonsComponent buttonSpecs={sidebarButtons} />
       {tags != null ? (
         <>
           <TagDisplayComponent title={'Top Chars'} index={'topChars'} />
