@@ -52,14 +52,18 @@ export default function SideBarComponent() {
       display: outputURI != null,
       disabled: hasntRun,
     },
-    //TODO: Replace this with a copy to clipboard option
-    // {
-    //   key: 'ImgurPost',
-    //   text: 'Post To Imgur',
-    //   func: () => { },
-    //   icon: CopyAll,
-    //   display: outputURI != null
-    // },
+    {
+      key: 'Copy',
+      text: 'Copy to Clipboard',
+      func: () => {
+        if (outputURI != null) {
+          copyImg(outputURI)
+        }
+      },
+      icon: CopyAll,
+      display: outputURI != null,
+      disabled: hasntRun || extension == 'gif',
+    },
     {
       key: 'RunComponent',
       text: 'Run',
@@ -157,4 +161,18 @@ export default function SideBarComponent() {
       )}
     </Drawer>
   )
+}
+
+async function copyImg(src: string) {
+  const img = await fetch(src)
+  const imgBlob = await img.blob()
+  try {
+    navigator.clipboard.write([
+      new ClipboardItem({
+        'image/png': imgBlob, // change image type accordingly
+      }),
+    ])
+  } catch (error) {
+    console.error(error)
+  }
 }
