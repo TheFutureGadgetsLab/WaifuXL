@@ -1,62 +1,16 @@
-import { env as ORTEnv, Tensor } from 'onnxruntime-web'
+import { env as ORTEnv, Tensor, TypedTensor } from 'onnxruntime-web'
 import { initializeSuperRes, multiUpscale } from '@/services/inference/upscaling'
 import { initializeTagger, runTagger } from '@/services/inference/tagging'
 import ndarray, { NdArray } from 'ndarray'
 
-import { doGif } from '@/services/gifUtilities'
 import ops from 'ndarray-ops'
-import pify from 'pify'
 
-const getPixels = pify(require('get-pixels'))
 const savePixels = require('save-pixels')
-
-/**
- * Given a URI, return an ndarray of the image pixel data.
- *  - Return shape is [1, 3, height, width]
- * @param imageURI The URI
- * @param coalesce Whether to coalesce frames in a GIF
- * @returns The pixels in this image
- */
-export async function imageToNdarray(imageURI: string, coalesce: boolean = true): Promise<NdArray> {
-  // @ts-ignore
-  let pixels: NdArray = (await getPixels(imageURI)) as NdArray
-
-  if (pixels.shape.length === 4 && coalesce) {
-    // animated gif with multiple frames
-    const [N, W, H, C] = pixels.shape
-
-    const numPixelsInFrame = W * H
-    const data = pixels.data as number[]
-    for (let i = 0; i < N; ++i) {
-      const currIndex = pixels.index(i, 0, 0, 0)
-      const prevIndex = pixels.index(i - 1, 0, 0, 0)
-
-      for (let j = 0; j < numPixelsInFrame; ++j) {
-        const curr = currIndex + j * C
-        if (data[curr + C - 1] === 0) {
-          const prev = prevIndex + j * C
-
-          for (let k = 0; k < C; ++k) {
-            data[curr + k] = data[prev + k]
-          }
-        }
-      }
-    }
-    pixels.data = data
-  }
-
-  return pixels
-}
 
 export function imageNDarrayToDataURI(data: NdArray, outputType: string): string {
   const canvas = savePixels(data, 'canvas')
 
   return canvas.toDataURL(outputType)
-}
-
-export function imageNDarrayToCanvas(data: NdArray): HTMLCanvasElement {
-  const canvas = savePixels(data, 'canvas') as HTMLCanvasElement
-  return canvas
 }
 
 /**
@@ -115,19 +69,47 @@ export async function upScaleFromURI(
 ): Promise<string | null> {
   let resultURI: string | null = null
 
-  if (extension == 'gif') {
-    let currentURI = uri
-    for (let s = 0; s < upscaleFactor; s += 1) {
-      currentURI = await doGif(currentURI, setTags)
-    }
+  var image = await imageDataToTensor(uri)
+  const tags = await runTagger(image)
+  setTags(tags)
 
-    resultURI = currentURI
-  } else {
-    const imageArray = (await imageToNdarray(uri)) as NdArray<Uint8Array>
-    const tags = await runTagger(imageArray)
-    setTags(tags)
-
-    resultURI = await multiUpscale(imageArray, upscaleFactor)
-  }
+  resultURI = await multiUpscale(image, upscaleFactor)
   return resultURI
+}
+
+async function imageDataToTensor(imgpath: string): Promise<TypedTensor<'uint8'>> {
+  const image = await new Promise<HTMLImageElement>((resolve, reject) => {
+    const img = new Image()
+    img.crossOrigin = 'anonymous'
+    img.onload = () => resolve(img)
+    img.onerror = () => reject(new Error('Error loading image'))
+    img.src = imgpath
+  })
+
+  // Draw image on canvas
+  const canvas = document.createElement('canvas')
+  Object.assign(canvas, { width: image.width, height: image.height })
+  const ctx = canvas.getContext('2d')
+  if (!ctx) throw new Error('Canvas not supported')
+  ctx.drawImage(image, 0, 0)
+
+  // Extract image data
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+  const imageBufferData = imageData.data
+
+  // Rest of your code to process the image data and create a tensor...
+  const redArray = []
+  const greenArray = []
+  const blueArray = []
+
+  for (let i = 0; i < imageBufferData.length; i += 4) {
+    redArray.push(imageBufferData[i])
+    greenArray.push(imageBufferData[i + 1])
+    blueArray.push(imageBufferData[i + 2])
+  }
+
+  const transposedData = new Uint8Array([...redArray, ...greenArray, ...blueArray])
+  const dims = [1, 3, image.height, image.width]
+  const inputTensor = new Tensor('uint8', transposedData, dims)
+  return inputTensor
 }

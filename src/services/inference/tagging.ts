@@ -1,8 +1,5 @@
 import { InferenceSession, Tensor, TypedTensor } from 'onnxruntime-web'
 
-import { NdArray } from 'ndarray'
-import { prepareImage } from './utils'
-
 export interface ModelTag {
   name: string
   prob: number
@@ -24,14 +21,14 @@ export function getEmptyTags(): ModelTags {
 
 let taggerSession: InferenceSession | null = null
 
-export async function runTagger(imageArray: NdArray<Uint8Array>): Promise<ModelTags> {
-  const feeds = prepareImage(imageArray, 'tagger')
+export async function runTagger(imageArray: TypedTensor<'uint8'>): Promise<ModelTags> {
+  const feeds = { input: new Tensor('uint8', imageArray.data.slice(), imageArray.dims) }
 
   let tags = getEmptyTags()
   try {
     const output: InferenceSession.OnnxValueMapType = await taggerSession!.run(feeds)
 
-    tags = await getTopTags(output.output as TypedTensor<'float32'>)
+    tags = await getTopTags(output.output)
   } catch (e) {
     console.error('Failed to run tagger')
     console.error(e)

@@ -72,30 +72,17 @@ export default function SideBarComponent() {
       key: 'RunComponent',
       text: 'Run',
       func: () => {
-        initializeONNX()
-          .then(() => {
-            setRunning(true)
-          })
-          .then(() => {
-            upScaleFromURI(extension, setTags, inputURI, upscaleFactor)
-              .then((result) => {
-                if (result != null) {
-                  setOutputURI(result)
-                  // incrementCounter()
-                }
-              })
-              .catch((error) => {
-                setErrorMessage(error)
-              })
-              .finally(() => {
-                setDownloadReady(true)
-                setRunning(false)
-                setUpscaleFactor(1)
-              })
-          })
-          .catch(() => {
-            setErrorMessage('Could not load model.')
-          })
+        pipeline(
+          setOutputURI,
+          setUpscaleFactor,
+          setTags,
+          inputURI,
+          extension,
+          upscaleFactor,
+          setDownloadReady,
+          setRunning,
+          setErrorMessage,
+        )
       },
       icon: RunCircle,
       display: outputURI == null,
@@ -156,5 +143,37 @@ async function copyImg(src: string) {
     ])
   } catch (error) {
     console.error(error)
+  }
+}
+
+async function pipeline(
+  setOutputURI: (uri: string) => void,
+  setUpscaleFactor: (factor: number) => void,
+  setTags: (tags: any) => void,
+  inputURI: string,
+  extension: string,
+  upscaleFactor: number,
+  setDownloadReady: (ready: boolean) => void,
+  setRunning: (running: boolean) => void,
+  setErrorMessage: (message: string) => void,
+) {
+  try {
+    await initializeONNX()
+    setRunning(true)
+
+    try {
+      const result = await upScaleFromURI(extension, setTags, inputURI, upscaleFactor)
+      if (result != null) {
+        setOutputURI(result)
+      }
+    } catch (error) {
+      setErrorMessage('Failed to upscale image.')
+    } finally {
+      setDownloadReady(true)
+      setRunning(false)
+      setUpscaleFactor(1)
+    }
+  } catch (error) {
+    setErrorMessage('Could not load model.')
   }
 }
