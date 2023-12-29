@@ -1,16 +1,12 @@
 import { env as ORTEnv, Tensor, TypedTensor } from 'onnxruntime-web'
 import { initializeSuperRes, multiUpscale } from '@/services/inference/upscaling'
 import { initializeTagger, runTagger } from '@/services/inference/tagging'
-import ndarray, { NdArray } from 'ndarray'
 
-import ops from 'ndarray-ops'
-
-const savePixels = require('save-pixels')
+import { NdArray } from 'ndarray'
 
 export function imageNDarrayToDataURI(data: NdArray, outputType: string): string {
-  const canvas = savePixels(data, 'canvas')
-
-  return canvas.toDataURL(outputType)
+  const tensor = new Tensor('uint8', data.data as Uint8Array, data.shape)
+  return tensor.toDataURL()
 }
 
 /**
@@ -28,23 +24,13 @@ export function sleep(ms: number): Promise<void> {
  * @param model The model to use for preparation
  * @returns ORT Tensor
  */
-export function prepareImage(imageArray: NdArray, model: string): { input: Tensor } {
+export function prepareImage(imageArray: NdArray): { input: Tensor } {
   const width = imageArray.shape[0]
   const height = imageArray.shape[1]
 
-  if (model === 'superRes') {
-    const data = imageArray.data as number[]
-    const tensor = new Tensor('uint8', data.slice(), [width, height, 4])
-    return { input: tensor }
-  } else if (model === 'tagger') {
-    const newND = ndarray(new Uint8Array(width * height * 3), [1, 3, height, width])
-    ops.assign(newND.pick(0, null, null), imageArray.lo(0, 0, 0).hi(width, height, 3).transpose(2, 1, 0))
-    const tensor = new Tensor('uint8', newND.data.slice(), [1, 3, height, width])
-    return { input: tensor }
-  } else {
-    console.error('Invalid model type')
-    throw new Error('Invalid model type')
-  }
+  const data = imageArray.data as number[]
+  const tensor = new Tensor('uint8', data.slice(), [width, height, 4])
+  return { input: tensor }
 }
 
 export async function initializeONNX(): Promise<void> {
@@ -85,31 +71,14 @@ async function imageDataToTensor(imgpath: string): Promise<TypedTensor<'uint8'>>
     img.onerror = () => reject(new Error('Error loading image'))
     img.src = imgpath
   })
+  const out = await Tensor.fromImage(image)
+  var buf = new Uint8Array(
+    out.data.map((x) => {
+      return x * 255
+    }),
+  )
 
-  // Draw image on canvas
-  const canvas = document.createElement('canvas')
-  Object.assign(canvas, { width: image.width, height: image.height })
-  const ctx = canvas.getContext('2d')
-  if (!ctx) throw new Error('Canvas not supported')
-  ctx.drawImage(image, 0, 0)
-
-  // Extract image data
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-  const imageBufferData = imageData.data
-
-  // Rest of your code to process the image data and create a tensor...
-  const redArray = []
-  const greenArray = []
-  const blueArray = []
-
-  for (let i = 0; i < imageBufferData.length; i += 4) {
-    redArray.push(imageBufferData[i])
-    greenArray.push(imageBufferData[i + 1])
-    blueArray.push(imageBufferData[i + 2])
-  }
-
-  const transposedData = new Uint8Array([...redArray, ...greenArray, ...blueArray])
-  const dims = [1, 3, image.height, image.width]
-  const inputTensor = new Tensor('uint8', transposedData, dims)
-  return inputTensor
+  const [_, C, H, W] = out.dims
+  buf = buf.slice(0, H * W * 3)
+  return new Tensor('uint8', buf, [1, 3, H, W])
 }

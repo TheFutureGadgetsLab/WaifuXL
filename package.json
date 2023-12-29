@@ -22,7 +22,6 @@
     "react": "latest",
     "react-compare-slider": "latest",
     "react-dom": "latest",
-    "save-pixels": "^2.3.6",
     "zustand": "^4.4.7"
   },
   "devDependencies": {
