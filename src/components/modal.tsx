@@ -6,17 +6,44 @@ import { useAppStateStore, useImageStore } from '../services/useState'
 
 import { getEmptyTags } from '@/services/inference/tagging'
 
+const preset_list = [
+  {
+    name: 'Ozen',
+    url: 'https://i.imgur.com/Sf6sfPj.png',
+  },
+  {
+    name: 'Senjougahara',
+    url: 'https://i.imgur.com/cMX8YcK.jpg',
+  },
+  {
+    name: 'Moomin',
+    url: 'https://i.imgur.com/9I91yMq.png',
+  },
+  {
+    name: 'Megumin',
+    url: 'https://i.imgur.com/BKBt6bC.png',
+  },
+  {
+    name: 'Aqua',
+    url: 'https://i.imgur.com/yhIwVjZ.jpeg',
+  },
+  {
+    name: 'Natsumi',
+    url: 'https://i.imgur.com/yIIl7Z1.png',
+  },
+]
+
 export default function ModalComponent() {
   const { inputModalOpen, setInputModalOpen } = useAppStateStore()
   const { selectedPreset, setSelectedPreset } = useAppStateStore()
-  const { setTempURI, setTempFileName, tempURI, setInputURI, setTags, inputURI } = useImageStore()
+  const { setInputURI, setTags, inputURI, setFileName } = useImageStore()
 
   return (
     <Modal
       open={inputModalOpen}
       onClose={() => {
         setInputModalOpen(false)
-        setTempURI(inputURI)
+        setInputURI(inputURI)
         setSelectedPreset('')
       }}
     >
@@ -41,7 +68,7 @@ export default function ModalComponent() {
             marginBottom: 10,
             width: 'auto',
             height: '24rem',
-            backgroundImage: `url(${tempURI})`,
+            backgroundImage: `url(${inputURI})`,
             boxShadow: 'inset 0px 0px 12px #00000050',
             backgroundOrigin: 'content-box',
             backgroundSize: 'cover',
@@ -55,8 +82,8 @@ export default function ModalComponent() {
             onInput={(e) => {
               let inp = e.target as HTMLInputElement
               if (inp.files && inp.files[0]) {
-                setDataURIFromFile(inp.files[0], setTempURI)
-                setTempFileName(inp.files[0].name.split('.')[0])
+                setDataURIFromFile(inp.files[0], setInputURI)
+                setFileName(inp.files[0].name.split('.')[0])
                 setSelectedPreset('')
               }
             }}
@@ -71,28 +98,15 @@ export default function ModalComponent() {
             onChange={(inp) => {
               setSelectedPreset(inp.target.value)
               const [name, url] = inp.target.value.split('|')
-              getDataURIFromInput(url).then((uri) => setTempURI(uri))
-              setTempFileName(`example_${name}`)
+              getDataURIFromInput(url).then((uri) => setInputURI(uri))
+              setFileName(`example_${name}`)
             }}
           >
-            <MenuItem color="success" value="ozen|https://i.imgur.com/Sf6sfPj.png">
-              Ozen
-            </MenuItem>
-            <MenuItem color="success" value="senjougahara|https://i.imgur.com/cMX8YcK.jpg">
-              Senjougahara
-            </MenuItem>
-            <MenuItem color="success" value="moomin|https://i.imgur.com/9I91yMq.png">
-              Moomin
-            </MenuItem>
-            <MenuItem color="success" value="megumin|https://i.imgur.com/BKBt6bC.png">
-              Megumin
-            </MenuItem>
-            <MenuItem color="success" value="aqua|https://i.imgur.com/yhIwVjZ.jpeg">
-              Aqua
-            </MenuItem>
-            <MenuItem color="success" value="natsumi|https://i.imgur.com/yIIl7Z1.png">
-              Kurobe Natsumi
-            </MenuItem>
+            {preset_list.map((preset) => (
+              <MenuItem color="success" value={`${preset.name}|${preset.url}`}>
+                {preset.name}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
         <Button
@@ -110,8 +124,8 @@ export default function ModalComponent() {
             onInput={(e) => {
               let inp = e.target as HTMLInputElement
               if (inp.files && inp.files[0]) {
-                setDataURIFromFile(inp.files[0], setTempURI)
-                setTempFileName(inp.files[0].name.split('.')[0])
+                setDataURIFromFile(inp.files[0], setInputURI)
+                setFileName(inp.files[0].name.split('.')[0])
                 setSelectedPreset('')
               }
             }}
@@ -121,7 +135,7 @@ export default function ModalComponent() {
         <Button
           key="ModalDone"
           onClick={() => {
-            setInputURI(tempURI)
+            setInputURI(inputURI)
             setTags(getEmptyTags())
             setInputModalOpen(false)
             setSelectedPreset('')

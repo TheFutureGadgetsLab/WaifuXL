@@ -1,8 +1,8 @@
 import { InferenceSession, Tensor, TypedTensor } from 'onnxruntime-web'
-import { imageNDarrayToDataURI, prepareImage } from './utils'
 import ndarray, { NdArray } from 'ndarray'
 
 import ops from 'ndarray-ops'
+import { prepareImage } from './utils'
 
 let superSession: InferenceSession | null = null
 
@@ -35,11 +35,7 @@ export async function initializeSuperRes(): Promise<void> {
   })
 }
 
-export async function multiUpscale(
-  imageArray: TypedTensor<'uint8'>,
-  upscaleFactor: number,
-  outputType: string = 'image/png',
-): Promise<string> {
+export async function multiUpscale(imageArray: TypedTensor<'uint8'>, upscaleFactor: number): Promise<string> {
   let outArr = ndarray(new Uint8Array(imageArray.data), imageArray.dims as number[])
   outArr = outArr.pick(0, null, null, null)
   outArr = outArr.transpose(2, 1, 0)
@@ -50,7 +46,8 @@ export async function multiUpscale(
   }
   console.timeEnd('Upscaling')
 
-  return imageNDarrayToDataURI(outArr, outputType)
+  let out = new Tensor('uint8', outArr.data as Uint8Array, outArr.shape)
+  return out.toDataURL()
 }
 
 async function upscaleFrame(imageArray: NdArray): Promise<NdArray<Uint8Array>> {
