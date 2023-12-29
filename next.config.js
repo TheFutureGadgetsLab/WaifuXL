@@ -4,13 +4,7 @@ const webpack = require('webpack')
 const shortHash = require('child_process').execSync('git rev-parse --short HEAD').toString().trim()
 const longHash = require('child_process').execSync('git rev-parse HEAD').toString().trim()
 
-var outpath;
-if (process.env.NODE_ENV === 'development') {
-  outpath = "static/chunks/app/"
-} else {
-  outpath = "static/chunks/"
-}
-
+var outpath = 'static/chunks/'
 
 const copyPlugin = new CopyPlugin({
   patterns: [
@@ -20,7 +14,7 @@ const copyPlugin = new CopyPlugin({
     },
     {
       from: './public/models',
-      to: outpath
+      to: outpath,
     },
   ],
 })

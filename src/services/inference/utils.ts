@@ -4,11 +4,6 @@ import { initializeTagger, runTagger } from '@/services/inference/tagging'
 
 import { NdArray } from 'ndarray'
 
-export function imageNDarrayToDataURI(data: NdArray, outputType: string): string {
-  const tensor = new Tensor('uint8', data.data as Uint8Array, data.shape)
-  return tensor.toDataURL()
-}
-
 /**
  * Sleep for the provided number of milliseconds
  * @param ms Milliseconds to sleep
