@@ -78,9 +78,6 @@ export default function ModalComponent() {
             <MenuItem color="success" value="ozen|https://i.imgur.com/Sf6sfPj.png">
               Ozen
             </MenuItem>
-            <MenuItem color="success" value="eat|https://c.tenor.com/rnhV3fu39f8AAAAM/eating-anime.gif">
-              Eating (GIF)
-            </MenuItem>
             <MenuItem color="success" value="senjougahara|https://i.imgur.com/cMX8YcK.jpg">
               Senjougahara
             </MenuItem>

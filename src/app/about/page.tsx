@@ -3,7 +3,7 @@ import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 
-export default function StarredPage() {
+export default function AboutPage() {
   const style = {
     maxWidth: '70%',
   }

@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 
-export default function StarredPage() {
+export default function DonatePage() {
   return (
     <Container>
       <Box
