@@ -7,7 +7,7 @@ import ops from 'ndarray-ops'
 let superSession: InferenceSession | null = null
 
 export async function runSuperRes(imageArray: NdArray): Promise<Tensor | undefined> {
-  const feeds = prepareImage(imageArray, 'superRes')
+  const feeds = prepareImage(imageArray)
 
   let sr: Tensor | undefined
   try {
