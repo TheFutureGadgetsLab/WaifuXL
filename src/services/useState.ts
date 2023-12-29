@@ -10,16 +10,12 @@ type ImageStoreState = {
   extension: string
   upscaleFactor: number
   hasntRun: boolean
-  tempURI: string
-  tempFileName: string
 
   setInputURI: (uri: string) => void
   setUpscaleFactor: (newFactor: number) => void
   setOutputURI: (uri: string) => void
   setTags: (newTags: ModelTags) => void
   setFileName: (newFilename: string) => void
-  setTempURI: (newTempUri: string) => void
-  setTempFileName: (newTempFileName: string) => void
 }
 
 // Define the store with its state and actions
@@ -31,8 +27,6 @@ const useImageStore = create<ImageStoreState>((set) => ({
   extension: 'webp',
   upscaleFactor: 1,
   hasntRun: true,
-  tempURI: './images/senjougahara.webp',
-  tempFileName: 'example',
 
   setInputURI: (uri: string) => {
     set(() => ({ inputURI: uri, outputURI: null, hasntRun: true }))
@@ -50,8 +44,6 @@ const useImageStore = create<ImageStoreState>((set) => ({
   setOutputURI: (uri: string) => set(() => ({ outputURI: uri, hasntRun: false })),
   setTags: (newTags: ModelTags) => set(() => ({ tags: newTags })),
   setFileName: (newFilename: string) => set(() => ({ fileName: newFilename })),
-  setTempURI: (newTempUri: string) => set(() => ({ tempURI: newTempUri })),
-  setTempFileName: (newTempFileName: string) => set(() => ({ tempFileName: newTempFileName })),
 }))
 
 // Define the type for the state in the store
@@ -62,7 +54,6 @@ type AppStateStoreState = {
   running: boolean
   downloadReady: boolean
   feedbackMessage: string | null
-  isUploading: boolean
   selectedPreset: string
 
   setInputModalOpen: (newInputModalOpen: boolean) => void
@@ -71,7 +62,6 @@ type AppStateStoreState = {
   setRunning: (newRunning: boolean) => void
   setDownloadReady: (newDownloadReady: boolean) => void
   setFeedbackMessage: (newFeedbackMessage: string | null) => void
-  setIsUploading: (newIsUploading: boolean) => void
   setSelectedPreset: (newSelectedPreset: string) => void
 }
 
@@ -83,7 +73,6 @@ const useAppStateStore = create<AppStateStoreState>((set) => ({
   running: false,
   downloadReady: false,
   feedbackMessage: null,
-  isUploading: false,
   selectedPreset: 'senjougahara|https://i.imgur.com/cMX8YcK.jpg',
 
   setInputModalOpen: (newInputModalOpen: boolean) => set(() => ({ inputModalOpen: newInputModalOpen })),
@@ -92,7 +81,6 @@ const useAppStateStore = create<AppStateStoreState>((set) => ({
   setRunning: (newRunning: boolean) => set(() => ({ running: newRunning })),
   setDownloadReady: (newDownloadReady: boolean) => set(() => ({ downloadReady: newDownloadReady })),
   setFeedbackMessage: (newFeedbackMessage: string | null) => set(() => ({ feedbackMessage: newFeedbackMessage })),
-  setIsUploading: (newIsUploading: boolean) => set(() => ({ isUploading: newIsUploading })),
   setSelectedPreset: (newSelectedPreset: string) => set(() => ({ selectedPreset: newSelectedPreset })),
 }))
 

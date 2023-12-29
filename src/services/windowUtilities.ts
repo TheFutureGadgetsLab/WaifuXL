@@ -34,20 +34,20 @@ function useWindowSize(): WindowSize {
 }
 
 function registerEventHandlers(): void {
-  const setTempUri = useImageStore((state) => state.setTempURI)
-  const setTempFileName = useImageStore((state) => state.setTempFileName)
+  const setURI = useImageStore((state) => state.setInputURI)
+  const setFileName = useImageStore((state) => state.setFileName)
   const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen)
 
   if (typeof window !== 'undefined') {
     window.addEventListener('paste', (e) => {
-      pasteListener(e, setTempUri, setTempFileName, setInputModalOpen)
+      pasteListener(e, setURI, setFileName, setInputModalOpen)
     })
     const preventDefaultListeners = ['dragenter', 'drag', 'dragover', 'dragend', 'dragstart']
     preventDefaultListeners.forEach((event) => {
       window.addEventListener(event, preventDefault)
     })
     window.addEventListener('drop', (e) => {
-      dropListener(e, setTempFileName, setTempUri, setInputModalOpen)
+      dropListener(e, setFileName, setURI, setInputModalOpen)
     })
   }
 }
