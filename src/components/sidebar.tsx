@@ -25,10 +25,7 @@ export default function SideBarComponent() {
     hasntRun,
     tags,
   } = useImageStore()
-  const { setDownloadReady, setRunning, setErrorMessage, setLoadProg, running, loadProg, setInputModalOpen } =
-    useAppStateStore()
-
-  const modelLoading = loadProg >= 0
+  const { setDownloadReady, setRunning, setErrorMessage, running, setInputModalOpen } = useAppStateStore()
 
   const sidebarContent = [
     {
@@ -75,8 +72,7 @@ export default function SideBarComponent() {
       key: 'RunComponent',
       text: 'Run',
       func: () => {
-        setLoadProg(0)
-        initializeONNX(setLoadProg)
+        initializeONNX()
           .then(() => {
             setRunning(true)
           })
@@ -100,13 +96,10 @@ export default function SideBarComponent() {
           .catch(() => {
             setErrorMessage('Could not load model.')
           })
-          .finally(() => {
-            setLoadProg(-1)
-          })
       },
       icon: RunCircle,
       display: outputURI == null,
-      disabled: modelLoading || running,
+      disabled: running,
       type: 'button',
       current: undefined,
     },

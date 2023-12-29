@@ -1,5 +1,5 @@
 import { InferenceSession, Tensor } from 'onnxruntime-web'
-import { fetchModel, imageNDarrayToCanvas, imageNDarrayToDataURI, prepareImage } from './utils'
+import { imageNDarrayToCanvas, imageNDarrayToDataURI, prepareImage } from './utils'
 import ndarray, { NdArray } from 'ndarray'
 
 import ops from 'ndarray-ops'
@@ -20,14 +20,13 @@ export async function runSuperRes(imageArray: NdArray): Promise<Tensor | undefin
   return sr
 }
 
-export async function initializeSuperRes(setProgress: (progress: number) => void): Promise<void> {
+export async function initializeSuperRes(): Promise<void> {
   console.debug('Initializing super resolution')
   if (superSession !== null) {
     return
   }
 
-  const superBuf = await fetchModel('./models/superRes.onnx', setProgress, 0.5, 0.9)
-  superSession = await InferenceSession.create(superBuf, {
+  superSession = await InferenceSession.create('./models/superRes.onnx', {
     executionProviders: ['wasm'],
     graphOptimizationLevel: 'all',
     enableCpuMemArena: true,

@@ -56,7 +56,6 @@ const useImageStore = create<ImageStoreState>((set) => ({
 
 // Define the type for the state in the store
 type AppStateStoreState = {
-  loadProg: number
   inputModalOpen: boolean
   mobile: boolean
   errorMessage: string | null
@@ -70,7 +69,6 @@ type AppStateStoreState = {
   setMobile: (newMobile: boolean) => void
   setErrorMessage: (newError: string | null) => void
   setRunning: (newRunning: boolean) => void
-  setLoadProg: (newProg: number) => void
   setDownloadReady: (newDownloadReady: boolean) => void
   setFeedbackMessage: (newFeedbackMessage: string | null) => void
   setIsUploading: (newIsUploading: boolean) => void
@@ -79,7 +77,6 @@ type AppStateStoreState = {
 
 // Define the store with its state and actions
 const useAppStateStore = create<AppStateStoreState>((set) => ({
-  loadProg: -1,
   inputModalOpen: false,
   mobile: false,
   errorMessage: null,
@@ -93,7 +90,6 @@ const useAppStateStore = create<AppStateStoreState>((set) => ({
   setMobile: (newMobile: boolean) => set(() => ({ mobile: newMobile })),
   setErrorMessage: (newError: string | null) => set(() => ({ errorMessage: newError })),
   setRunning: (newRunning: boolean) => set(() => ({ running: newRunning })),
-  setLoadProg: (newProg: number) => set(() => ({ loadProg: newProg })),
   setDownloadReady: (newDownloadReady: boolean) => set(() => ({ downloadReady: newDownloadReady })),
   setFeedbackMessage: (newFeedbackMessage: string | null) => set(() => ({ feedbackMessage: newFeedbackMessage })),
   setIsUploading: (newIsUploading: boolean) => set(() => ({ isUploading: newIsUploading })),

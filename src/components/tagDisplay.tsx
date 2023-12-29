@@ -5,7 +5,12 @@ import { ModelTag } from '@/services/inference/tagging'
 
 const itemsPerPage = 5
 
-export function TagDisplayComponent({ title, tags }: { title: string; tags: ModelTag[] }) {
+interface TagDisplayComponentProps {
+  title: string
+  tags: ModelTag[]
+}
+
+export function TagDisplayComponent({ title, tags }: TagDisplayComponentProps) {
   const [tagPage, setTagPage] = useState<number>(1)
 
   const curTags = useMemo(() => tags.slice(itemsPerPage * (tagPage - 1), itemsPerPage * tagPage), [tags, tagPage])

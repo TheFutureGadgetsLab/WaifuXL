@@ -27,7 +27,6 @@
     "react-compare-slider": "latest",
     "react-dom": "latest",
     "save-pixels": "^2.3.6",
-    "ua-parser-js": "^1.0.37",
     "zustand": "^4.4.7"
   },
   "devDependencies": {

@@ -1,7 +1,7 @@
 import { InferenceSession, Tensor, TypedTensor } from 'onnxruntime-web'
-import { fetchModel, prepareImage } from './utils'
 
 import { NdArray } from 'ndarray'
+import { prepareImage } from './utils'
 
 export interface ModelTag {
   name: string
@@ -40,13 +40,12 @@ export async function runTagger(imageArray: NdArray<Uint8Array>): Promise<ModelT
   return tags
 }
 
-export async function initializeTagger(setProgress: (progress: number) => void): Promise<void> {
+export async function initializeTagger(): Promise<void> {
   if (taggerSession !== null) {
     return
   }
 
-  const taggerBuf = await fetchModel('./models/tagger.onnx', setProgress, 0.5, 0.9)
-  taggerSession = await InferenceSession.create(taggerBuf, {
+  taggerSession = await InferenceSession.create('./models/tagger.onnx', {
     executionProviders: ['wasm'],
     graphOptimizationLevel: 'all',
     enableCpuMemArena: true,

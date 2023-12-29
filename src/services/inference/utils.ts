@@ -9,7 +9,6 @@ import pify from 'pify'
 
 const getPixels = pify(require('get-pixels'))
 const savePixels = require('save-pixels')
-const usr = require('ua-parser-js')
 
 /**
  * Given a URI, return an ndarray of the image pixel data.
@@ -94,53 +93,14 @@ export function prepareImage(imageArray: NdArray, model: string): { input: Tenso
   }
 }
 
-export async function fetchModel(
-  filepathOrUri: string,
-  setProgress: (progress: number) => void,
-  startProgress: number,
-  endProgress: number,
-): Promise<ArrayBuffer> {
-  const response = await fetch(filepathOrUri)
-  const reader = response?.body?.getReader()
-  const length = parseInt(response.headers.get('content-length') as string)
-  const data = new Uint8Array(length)
-  let received = 0
-
-  // Loop through the response stream and extract data chunks
-  while (true) {
-    if (reader != null) {
-      const { done, value } = await reader.read()
-
-      if (done) {
-        setProgress(1)
-        break
-      } else {
-        // Push values to the chunk array
-        data.set(value, received)
-        received += value.length
-        setProgress(startProgress + (received / length) * (endProgress - startProgress))
-      }
-    }
-  }
-  return data.buffer
-}
-
-export async function initializeONNX(setProgress: (progress: number) => void): Promise<void> {
+export async function initializeONNX(): Promise<void> {
   // Set up ORT environment
   ORTEnv.wasm.simd = true
   ORTEnv.wasm.proxy = true
+  ORTEnv.wasm.numThreads = Math.min(navigator.hardwareConcurrency / 2, 16)
 
-  const ua = usr(navigator.userAgent)
-  if (ua.engine.name == 'WebKit') {
-    ORTEnv.wasm.numThreads = 1
-  } else {
-    ORTEnv.wasm.numThreads = Math.min(navigator.hardwareConcurrency / 2, 16)
-  }
-
-  setProgress(0)
-  await initializeTagger(setProgress)
-  await initializeSuperRes(setProgress)
-  setProgress(1)
+  await initializeTagger()
+  await initializeSuperRes()
 
   // Needed because WASM workers are created async, wait for them
   // to be ready
