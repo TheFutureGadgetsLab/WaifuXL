@@ -1,13 +1,33 @@
 import { InferenceSession, Tensor, TypedTensor } from 'onnxruntime-web'
 import { fetchModel, prepareImage } from './utils'
-import ndarray, { NdArray } from 'ndarray'
+
+import { NdArray } from 'ndarray'
+
+export interface ModelTag {
+  name: string
+  prob: number
+}
+
+export interface ModelTags {
+  topDesc: ModelTag[]
+  topChars: ModelTag[]
+  rating: ModelTag[]
+}
+
+export function getEmptyTags(): ModelTags {
+  return {
+    topDesc: [],
+    topChars: [],
+    rating: [],
+  }
+}
 
 let taggerSession: InferenceSession | null = null
 
-export async function runTagger(imageArray: NdArray<Uint8Array>): Promise<TagResult | undefined> {
+export async function runTagger(imageArray: NdArray<Uint8Array>): Promise<ModelTags> {
   const feeds = prepareImage(imageArray, 'tagger')
 
-  let tags: TagResult | undefined
+  let tags = getEmptyTags()
   try {
     const output: InferenceSession.OnnxValueMapType = await taggerSession!.run(feeds)
 
@@ -35,27 +55,28 @@ export async function initializeTagger(setProgress: (progress: number) => void):
   })
 }
 
-interface TagResult {
-  topDesc: { 0: string; 1: number }[]
-  topChars: { 0: string; 1: number }[]
-  rating: { 0: string; 1: number }[]
+async function getTopTags(data: Tensor): Promise<ModelTags> {
+  const tags = await loadTags()
+  const flattened = Array.from(data.data as Float32Array)
+
+  const topDesc = topK(flattened, 2000, 0, 2000, tags)
+  const topChars = topK(flattened, 2000, 2000, 4000, tags)
+  const rating = topK(flattened, 3, 4000, 4003, tags)
+
+  return {
+    topDesc: topDesc,
+    topChars: topChars,
+    rating: rating,
+  }
 }
 
-async function getTopTags(data: TypedTensor<'float32'>): Promise<TagResult> {
-  const tags = await loadTags()
-  const flattened = ndarray(data.data, data.dims as number[])
-
-  const topDesc = topK(flattened, 2000, 0, 2000).map((i) => {
-    return { 0: tags[i[0]], 1: i[1] }
-  })
-  const topChars = topK(flattened, 2000, 2000, 4000).map((i) => {
-    return { 0: tags[i[0]], 1: i[1] }
-  })
-  const rating = topK(flattened, 3, 4000, 4003).map((i) => {
-    return { 0: tags[i[0]], 1: i[1] }
-  })
-
-  return { topDesc, topChars, rating }
+function topK(data: number[], k: number, startIndex: number, stopIndex: number, tags: string[]): ModelTag[] {
+  const values = data.slice(startIndex, stopIndex)
+  return values
+    .map((value, index) => ({ value, index: index + startIndex }))
+    .sort((a, b) => b.value - a.value)
+    .slice(0, k)
+    .map(({ value, index }) => ({ name: tags[index], prob: value }))
 }
 
 async function loadTags(): Promise<string[]> {
@@ -63,14 +84,4 @@ async function loadTags(): Promise<string[]> {
   const tagsJson = await response.json()
   const tagsArray: string[] = tagsJson.map((tag: [number, string]) => tag[1])
   return tagsArray
-}
-
-function topK(ndarray: any, k: number, startIndex: number, stopIndex: number): [number, number][] {
-  const values = ndarray.data.slice(startIndex, stopIndex)
-  const indices = Array.from({ length: values.length }, (_, i) => i)
-  indices.sort((a, b) => values[b] - values[a])
-
-  const tuples = indices.map((i) => [i + startIndex, values[i]]) as [number, number][]
-
-  return tuples.slice(0, k)
 }

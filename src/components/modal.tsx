@@ -4,6 +4,8 @@ import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select } from '@
 import { getDataURIFromInput, setDataURIFromFile } from '@/services/imageUtilities'
 import { useAppStateStore, useImageStore } from '../services/useState'
 
+import { getEmptyTags } from '@/services/inference/tagging'
+
 export default function ModalComponent() {
   const { inputModalOpen, setInputModalOpen } = useAppStateStore()
   const { selectedPreset, setSelectedPreset } = useAppStateStore()
@@ -123,7 +125,7 @@ export default function ModalComponent() {
           key="ModalDone"
           onClick={() => {
             setInputURI(tempURI)
-            setTags(null)
+            setTags(getEmptyTags())
             setInputModalOpen(false)
             setSelectedPreset('')
           }}

@@ -4,11 +4,11 @@ import { CloudDownload, CloudUpload, CopyAll, RunCircle } from '@mui/icons-mater
 import { initializeONNX, upScaleFromURI } from '@/services/inference/utils'
 import { useAppStateStore, useImageStore } from '../services/useState'
 
+import ButtonsComponent from './inputs'
 import Drawer from '@mui/material/Drawer'
+import { SelectChangeEvent } from '@mui/material'
 import { TagDisplayComponent } from '@/components/tagDisplay'
 import { downloadImage } from '@/services/imageUtilities'
-import ButtonsComponent from './inputs'
-import { SelectChangeEvent } from '@mui/material'
 
 const DRAWER_WIDTH = 300
 
@@ -145,15 +145,9 @@ export default function SideBarComponent() {
       variant="persistent"
     >
       <ButtonsComponent buttonSpecs={sidebarContent} />
-      {tags != null ? (
-        <>
-          <TagDisplayComponent title={'Top Chars'} index={'topChars'} />
-          <TagDisplayComponent title={'Top Desc'} index={'topDesc'} />
-          <TagDisplayComponent title={'Explicitness'} index={'rating'} />
-        </>
-      ) : (
-        <></>
-      )}
+      <TagDisplayComponent title={'Top Chars'} tags={tags.topChars} />
+      <TagDisplayComponent title={'Top Desc'} tags={tags.topDesc} />
+      <TagDisplayComponent title={'Explicitness'} tags={tags.rating} />
     </Drawer>
   )
 }

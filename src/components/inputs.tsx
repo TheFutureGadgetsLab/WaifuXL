@@ -1,7 +1,8 @@
-import { Container, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, SvgIconTypeMap } from '@mui/material'
-import { OverridableComponent } from '@mui/material/OverridableComponent'
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, SvgIconTypeMap } from '@mui/material'
 import { MouseEventHandler, ReactNode } from 'react'
+
 import ButtonComponent from './button'
+import { OverridableComponent } from '@mui/material/OverridableComponent'
 
 interface inputSpecType {
   key: string
@@ -11,7 +12,7 @@ interface inputSpecType {
   display: boolean
   disabled: boolean
   type: string
-  current: any
+  current?: any
 }
 
 interface inputsType {

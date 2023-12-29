@@ -1,9 +1,9 @@
 'use client'
 
-import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider'
-import { useAppStateStore, useImageStore } from '../services/useState'
-
 import Image from 'next/image'
+// @ts-ignore
+import { ReactCompareSlider } from 'react-compare-slider'
+import { useImageStore } from '../services/useState'
 
 export default function ImageDisplayComponent() {
   const { inputURI, outputURI } = useImageStore()
