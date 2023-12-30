@@ -1,14 +1,12 @@
 import { InferenceSession, Tensor, TypedTensor } from 'onnxruntime-web'
 import { ModelTags, getEmptyTags, loadTags, topK } from './utils'
 
-let taggerSession: InferenceSession | null = null
-
-export async function runTagger(imageArray: TypedTensor<'uint8'>): Promise<ModelTags> {
+export async function runTagger(session: InferenceSession, imageArray: TypedTensor<'uint8'>): Promise<ModelTags> {
   const feeds = { input: new Tensor('uint8', imageArray.data.slice(), imageArray.dims) }
 
   let tags = getEmptyTags()
   try {
-    const output: InferenceSession.OnnxValueMapType = await taggerSession!.run(feeds)
+    const output: InferenceSession.OnnxValueMapType = await session.run(feeds)
 
     tags = await getTopTags(output.output)
   } catch (e) {
@@ -17,20 +15,6 @@ export async function runTagger(imageArray: TypedTensor<'uint8'>): Promise<Model
   }
 
   return tags
-}
-
-export async function initializeTagger(): Promise<void> {
-  if (taggerSession !== null) {
-    return
-  }
-
-  taggerSession = await InferenceSession.create('./models/tagger.onnx', {
-    executionProviders: ['wasm'],
-    graphOptimizationLevel: 'all',
-    enableCpuMemArena: true,
-    enableMemPattern: true,
-    executionMode: 'sequential', // Inter-op sequential
-  })
 }
 
 async function getTopTags(data: Tensor): Promise<ModelTags> {

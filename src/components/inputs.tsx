@@ -1,16 +1,13 @@
-import { Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material'
-import { downloadImage } from '@/services/imageUtilities'
 import { CloudDownload, CloudUpload, CopyAll, RunCircle } from '@mui/icons-material'
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material'
 import { useAppStateStore, useImageStore } from '@/services/useState'
-import { initializeONNX, upScaleFromURI } from '@/services/inference/utils'
+
 import ButtonComponent from './button'
-import { ReactNode } from 'react'
-import { text } from 'stream/consumers'
+import { downloadImage } from '@/services/imageUtilities'
+import { upScaleFromURI } from '@/services/inference/utils'
 
 const ModalUpload = () => {
-  const { setOutputURI, setUpscaleFactor, setTags, inputURI, extension, upscaleFactor, outputURI, fileName, hasntRun } =
-    useImageStore()
-  const { setDownloadReady, setRunning, setErrorMessage, running, setInputModalOpen } = useAppStateStore()
+  const { running, setInputModalOpen } = useAppStateStore()
   return (
     <ButtonComponent
       item_key="ModalUpload"
@@ -23,8 +20,9 @@ const ModalUpload = () => {
     />
   )
 }
+
 const DownloadImage = () => {
-  const { extension, outputURI, fileName, hasntRun } = useImageStore()
+  const { outputURI, fileName, hasntRun } = useImageStore()
 
   if (outputURI != null) {
     return (
@@ -33,7 +31,7 @@ const DownloadImage = () => {
         text={'Download'}
         func={() => {
           if (outputURI != null) {
-            downloadImage(fileName, extension, outputURI)
+            downloadImage(fileName, outputURI)
           }
         }}
         Icon={CloudDownload}
@@ -45,7 +43,7 @@ const DownloadImage = () => {
   }
 }
 const CopyImage = () => {
-  const { extension, outputURI, hasntRun } = useImageStore()
+  const { outputURI, hasntRun } = useImageStore()
   if (outputURI != null) {
     return (
       <ButtonComponent
@@ -57,7 +55,7 @@ const CopyImage = () => {
           }
         }}
         Icon={CopyAll}
-        disabled={hasntRun || extension == 'gif'}
+        disabled={hasntRun}
       />
     )
   } else {
@@ -65,9 +63,8 @@ const CopyImage = () => {
   }
 }
 const RunModel = () => {
-  const { setOutputURI, setUpscaleFactor, setTags, inputURI, extension, upscaleFactor, outputURI, fileName, hasntRun } =
-    useImageStore()
-  const { setDownloadReady, setRunning, setErrorMessage, running, setInputModalOpen } = useAppStateStore()
+  const { setOutputURI, setUpscaleFactor, setTags, inputURI, upscaleFactor, outputURI } = useImageStore()
+  const { setDownloadReady, setRunning, setErrorMessage, running } = useAppStateStore()
   if (outputURI == null) {
     return (
       <ButtonComponent
@@ -79,7 +76,6 @@ const RunModel = () => {
             setUpscaleFactor,
             setTags,
             inputURI,
-            extension,
             upscaleFactor,
             setDownloadReady,
             setRunning,
@@ -95,9 +91,8 @@ const RunModel = () => {
   }
 }
 const UpscaleFactor = () => {
-  const { setOutputURI, setUpscaleFactor, setTags, inputURI, extension, upscaleFactor, outputURI, fileName, hasntRun } =
-    useImageStore()
-  const { setDownloadReady, setRunning, setErrorMessage, running, setInputModalOpen } = useAppStateStore()
+  const { setUpscaleFactor, upscaleFactor, outputURI } = useImageStore()
+  const { running } = useAppStateStore()
   if (outputURI == null) {
     return (
       <FormControl key={'UpscaleFactor'} fullWidth>
@@ -143,18 +138,16 @@ async function pipeline(
   setUpscaleFactor: (factor: number) => void,
   setTags: (tags: any) => void,
   inputURI: string,
-  extension: string,
   upscaleFactor: number,
   setDownloadReady: (ready: boolean) => void,
   setRunning: (running: boolean) => void,
   setErrorMessage: (message: string) => void,
 ) {
   try {
-    await initializeONNX()
     setRunning(true)
 
     try {
-      const result = await upScaleFromURI(extension, setTags, inputURI, upscaleFactor)
+      const result = await upScaleFromURI(setTags, inputURI, upscaleFactor)
       if (result != null) {
         setOutputURI(result)
       }

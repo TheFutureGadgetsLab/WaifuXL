@@ -39,12 +39,11 @@ function getDataURIFromInput(input: string): Promise<string> {
  * Download image to user's computer
  *
  * @param fileName File name
- * @param extension File extension
  * @param outputURI Image data URI / URL
  */
-function downloadImage(fileName: string, extension: string, outputURI: string): void {
+function downloadImage(fileName: string, outputURI: string): void {
   const link = document.createElement('a')
-  link.download = `${fileName}.${extension}`
+  link.download = `${fileName}.png`
   link.href = outputURI
   document.body.appendChild(link) // Needed for Firefox
   link.click()

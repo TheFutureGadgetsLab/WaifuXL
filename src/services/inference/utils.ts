@@ -1,8 +1,11 @@
-import { env as ORTEnv, Tensor, TypedTensor } from 'onnxruntime-web'
-import { initializeSuperRes, multiUpscale } from '@/services/inference/upscaling'
-import { initializeTagger, runTagger } from '@/services/inference/tagging'
+import { InferenceSession, env as ORTEnv, Tensor, TypedTensor } from 'onnxruntime-web'
 
 import { NdArray } from 'ndarray'
+import { multiUpscale } from '@/services/inference/upscaling'
+import { runTagger } from '@/services/inference/tagging'
+
+let superSession: InferenceSession | null = null
+let taggerSession: InferenceSession | null = null
 
 export interface ModelTag {
   name: string
@@ -30,33 +33,49 @@ export function prepareImage(imageArray: NdArray): { input: Tensor } {
   return { input: tensor }
 }
 
-export async function initializeONNX(): Promise<void> {
+async function initializeONNX(): Promise<void> {
+  if (superSession !== null && taggerSession !== null) {
+    return
+  }
+
   // Set up ORT environment
   ORTEnv.wasm.simd = true
   ORTEnv.wasm.proxy = true
   ORTEnv.wasm.numThreads = Math.min(navigator.hardwareConcurrency / 2, 16)
 
-  await initializeTagger()
-  await initializeSuperRes()
+  const onnx_options: InferenceSession.SessionOptions = {
+    executionProviders: ['wasm'],
+    graphOptimizationLevel: 'all',
+    enableCpuMemArena: true,
+    enableMemPattern: true,
+    executionMode: 'sequential', // Inter-op sequential
+  }
 
-  // Needed because WASM workers are created async, wait for them
-  // to be ready
-  await sleep(300)
+  taggerSession = await InferenceSession.create('./models/tagger.onnx', onnx_options)
+  superSession = await InferenceSession.create('./models/superRes.onnx', onnx_options)
 }
 
 export async function upScaleFromURI(
-  extension: string,
   setTags: (tags: any) => void,
   uri: string,
   upscaleFactor: number,
 ): Promise<string | null> {
+  await initializeONNX()
+
+  if (superSession === null) {
+    throw new Error('Super resolution session not initialized')
+  }
+  if (taggerSession === null) {
+    throw new Error('Tagger session not initialized')
+  }
+
   let resultURI: string | null = null
 
   var image = await imageDataToTensor(uri)
-  const tags = await runTagger(image)
+  const tags = await runTagger(taggerSession, image)
   setTags(tags)
 
-  resultURI = await multiUpscale(image, upscaleFactor)
+  resultURI = await multiUpscale(superSession, image, upscaleFactor)
   return resultURI
 }
 
@@ -94,10 +113,6 @@ export async function loadTags(): Promise<string[]> {
   const tagsJson = await response.json()
   const tagsArray: string[] = tagsJson.map((tag: [number, string]) => tag[1])
   return tagsArray
-}
-
-export function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 export function getEmptyTags(): ModelTags {
