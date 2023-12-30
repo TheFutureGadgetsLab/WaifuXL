@@ -4,7 +4,7 @@ import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select } from '@
 import { getDataURIFromInput, setDataURIFromFile } from '@/services/imageUtilities'
 import { useAppStateStore, useImageStore } from '../services/useState'
 
-import { getEmptyTags } from '@/services/inference/tagging'
+import { getEmptyTags } from '@/services/inference/utils'
 
 const preset_list = [
   {

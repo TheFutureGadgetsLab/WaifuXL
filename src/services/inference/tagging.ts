@@ -1,23 +1,5 @@
 import { InferenceSession, Tensor, TypedTensor } from 'onnxruntime-web'
-
-export interface ModelTag {
-  name: string
-  prob: number
-}
-
-export interface ModelTags {
-  topDesc: ModelTag[]
-  topChars: ModelTag[]
-  rating: ModelTag[]
-}
-
-export function getEmptyTags(): ModelTags {
-  return {
-    topDesc: [],
-    topChars: [],
-    rating: [],
-  }
-}
+import { ModelTags, getEmptyTags, loadTags, topK } from './utils'
 
 let taggerSession: InferenceSession | null = null
 
@@ -64,20 +46,4 @@ async function getTopTags(data: Tensor): Promise<ModelTags> {
     topChars: topChars,
     rating: rating,
   }
-}
-
-function topK(data: number[], k: number, startIndex: number, stopIndex: number, tags: string[]): ModelTag[] {
-  const values = data.slice(startIndex, stopIndex)
-  return values
-    .map((value, index) => ({ value, index: index + startIndex }))
-    .sort((a, b) => b.value - a.value)
-    .slice(0, k)
-    .map(({ value, index }) => ({ name: tags[index], prob: value }))
-}
-
-async function loadTags(): Promise<string[]> {
-  const response = await fetch('./tags.json')
-  const tagsJson = await response.json()
-  const tagsArray: string[] = tagsJson.map((tag: [number, string]) => tag[1])
-  return tagsArray
 }

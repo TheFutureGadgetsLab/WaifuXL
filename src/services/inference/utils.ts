@@ -4,13 +4,15 @@ import { initializeTagger, runTagger } from '@/services/inference/tagging'
 
 import { NdArray } from 'ndarray'
 
-/**
- * Sleep for the provided number of milliseconds
- * @param ms Milliseconds to sleep
- * @returns Promise that resolves after the sleep is complete
- */
-export function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms))
+export interface ModelTag {
+  name: string
+  prob: number
+}
+
+export interface ModelTags {
+  topDesc: ModelTag[]
+  topChars: ModelTag[]
+  rating: ModelTag[]
 }
 
 /**
@@ -76,4 +78,32 @@ async function imageDataToTensor(imgpath: string): Promise<TypedTensor<'uint8'>>
   const [_, C, H, W] = out.dims
   buf = buf.slice(0, H * W * 3)
   return new Tensor('uint8', buf, [1, 3, H, W])
+}
+
+export function topK(data: number[], k: number, startIndex: number, stopIndex: number, tags: string[]): ModelTag[] {
+  const values = data.slice(startIndex, stopIndex)
+  return values
+    .map((value, index) => ({ value, index: index + startIndex }))
+    .sort((a, b) => b.value - a.value)
+    .slice(0, k)
+    .map(({ value, index }) => ({ name: tags[index], prob: value }))
+}
+
+export async function loadTags(): Promise<string[]> {
+  const response = await fetch('./tags.json')
+  const tagsJson = await response.json()
+  const tagsArray: string[] = tagsJson.map((tag: [number, string]) => tag[1])
+  return tagsArray
+}
+
+export function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+export function getEmptyTags(): ModelTags {
+  return {
+    topDesc: [],
+    topChars: [],
+    rating: [],
+  }
 }

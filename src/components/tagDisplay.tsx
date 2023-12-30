@@ -1,7 +1,7 @@
 import { Box, CircularProgress, Divider, List, ListItem, ListItemText, Pagination, Typography } from '@mui/material'
 import React, { useMemo, useState } from 'react'
 
-import { ModelTag } from '@/services/inference/tagging'
+import { ModelTag } from '@/services/inference/utils'
 
 const itemsPerPage = 5
 

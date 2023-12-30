@@ -1,4 +1,4 @@
-import { ModelTags } from './inference/tagging'
+import { ModelTags } from './inference/utils'
 import { create } from 'zustand'
 import default_tags from '@/services/landing_tags'
 
