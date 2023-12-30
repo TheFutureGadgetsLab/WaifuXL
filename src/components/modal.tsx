@@ -102,8 +102,8 @@ export default function ModalComponent() {
               setFileName(`example_${name}`)
             }}
           >
-            {preset_list.map((preset) => (
-              <MenuItem color="success" value={`${preset.name}|${preset.url}`}>
+            {preset_list.map((preset, i) => (
+              <MenuItem color="success" value={`${preset.name}|${preset.url}`} key={i}>
                 {preset.name}
               </MenuItem>
             ))}
