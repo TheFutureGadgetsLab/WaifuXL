@@ -4,6 +4,7 @@ import Image from 'next/image'
 // @ts-ignore
 import { ReactCompareSlider } from 'react-compare-slider'
 import { useImageStore } from '../services/useState'
+import { Box, Container } from '@mui/material'
 
 export default function ImageDisplayComponent() {
   const { inputURI, outputURI } = useImageStore()

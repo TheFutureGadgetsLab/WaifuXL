@@ -1,27 +1,69 @@
-import { CloudDownload, CloudUpload, CopyAll, RunCircle } from '@mui/icons-material'
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material'
+import { CloudDownload, CloudUpload, CopyAll, RunCircle, Done } from '@mui/icons-material'
+import { Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, SxProps, Theme } from '@mui/material'
 import { useAppStateStore, useImageStore } from '@/services/useState'
+import { getEmptyTags } from '@/services/inference/utils'
 
 import ButtonComponent from './button'
-import { downloadImage } from '@/services/imageUtilities'
+import { downloadImage, getDataURIFromInput, setDataURIFromFile } from '@/services/imageUtilities'
 import { upScaleFromURI } from '@/services/inference/utils'
+
+const preset_list = [
+  {
+    name: 'Ozen',
+    url: 'https://i.imgur.com/Sf6sfPj.png',
+  },
+  {
+    name: 'Senjougahara',
+    url: 'https://i.imgur.com/cMX8YcK.jpg',
+  },
+  {
+    name: 'Moomin',
+    url: 'https://i.imgur.com/9I91yMq.png',
+  },
+  {
+    name: 'Megumin',
+    url: 'https://i.imgur.com/BKBt6bC.png',
+  },
+  {
+    name: 'Aqua',
+    url: 'https://i.imgur.com/yhIwVjZ.jpeg',
+  },
+  {
+    name: 'Natsumi',
+    url: 'https://i.imgur.com/yIIl7Z1.png',
+  },
+]
+
+const modalButtonSx = {
+  marginBottom: 2,
+  ':not(:last-child)': {
+    marginBottom: 1,
+  },
+  color: 'secondary.main',
+}
 
 const ModalUpload = () => {
   const { running, setInputModalOpen } = useAppStateStore()
   return (
     <ButtonComponent
       item_key="ModalUpload"
-      text="Choose Image / GIF"
+      text="Choose Image"
       func={() => {
         setInputModalOpen(true)
       }}
       Icon={CloudUpload}
       disabled={running}
+      sx={modalButtonSx}
+      color={'primary'}
     />
   )
 }
 
-const DownloadImage = () => {
+interface DownloadProps {
+  sx?: SxProps<Theme> | undefined
+}
+
+const DownloadImage = ({ sx = modalButtonSx }: DownloadProps) => {
   const { outputURI, fileName, hasntRun } = useImageStore()
 
   if (outputURI != null) {
@@ -36,6 +78,8 @@ const DownloadImage = () => {
         }}
         Icon={CloudDownload}
         disabled={hasntRun}
+        sx={sx}
+        color={'primary'}
       />
     )
   } else {
@@ -56,6 +100,8 @@ const CopyImage = () => {
         }}
         Icon={CopyAll}
         disabled={hasntRun}
+        sx={modalButtonSx}
+        color={'primary'}
       />
     )
   } else {
@@ -84,6 +130,8 @@ const RunModel = () => {
         }}
         Icon={RunCircle}
         disabled={running}
+        sx={modalButtonSx}
+        color={'primary'}
       />
     )
   } else {
@@ -117,6 +165,88 @@ const UpscaleFactor = () => {
   } else {
     return <></>
   }
+}
+
+const PresetSelect = () => {
+  const { setFileName, setInputURI } = useImageStore()
+  const { selectedPreset, setSelectedPreset } = useAppStateStore()
+
+  return (
+    <FormControl color="success" sx={{ minWidth: 200, marginBottom: 2 }} fullWidth>
+      <InputLabel>Preset</InputLabel>
+      <Select
+        color="success"
+        value={selectedPreset}
+        label="Preset"
+        onChange={(inp) => {
+          setSelectedPreset(inp.target.value)
+          const [name, url] = inp.target.value.split('|')
+          getDataURIFromInput(url).then((uri) => setInputURI(uri))
+          setFileName(`example_${name}`)
+        }}
+      >
+        {preset_list.map((preset, i) => (
+          <MenuItem color="success" value={`${preset.name}|${preset.url}`} key={i}>
+            {preset.name}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  )
+}
+
+const ImageUpload = () => {
+  const { setFileName, setInputURI } = useImageStore()
+  const { setSelectedPreset } = useAppStateStore()
+
+  return (
+    <Button
+      component="label"
+      key="ModalUpload"
+      variant="contained"
+      size="large"
+      sx={{ color: '#fff', marginRight: 2 }}
+      color="success"
+    >
+      <input
+        type="file"
+        hidden
+        accept="image/*"
+        onInput={(e) => {
+          let inp = e.target as HTMLInputElement
+          if (inp.files && inp.files[0]) {
+            setDataURIFromFile(inp.files[0], setInputURI)
+            setFileName(inp.files[0].name.split('.')[0])
+            setSelectedPreset('')
+          }
+        }}
+      />
+      Upload
+    </Button>
+  )
+}
+
+const ModalDone = () => {
+  const { inputURI, setInputURI, setTags } = useImageStore()
+  const { setSelectedPreset, setInputModalOpen } = useAppStateStore()
+
+  return (
+    <ButtonComponent
+      item_key="ModalDone"
+      func={() => {
+        setInputURI(inputURI)
+        setTags(getEmptyTags())
+        setInputModalOpen(false)
+        setSelectedPreset('')
+      }}
+      // variant="outlined"
+      sx={{ float: 'right', marginLeft: 2 }}
+      color="success"
+      text="Done"
+      disabled={false}
+      Icon={Done}
+    />
+  )
 }
 
 async function copyImg(src: string) {
@@ -163,4 +293,4 @@ async function pipeline(
   }
 }
 
-export { ModalUpload, DownloadImage, CopyImage, RunModel, UpscaleFactor }
+export { ModalUpload, DownloadImage, CopyImage, RunModel, UpscaleFactor, ModalDone, PresetSelect, ImageUpload }

@@ -28,6 +28,34 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               backgroundSize: 'contain',
               backgroundRepeat: 'no-repeat',
               backgroundAttachment: 'fixed',
+              display: { xs: 'none', sm: 'block' },
+              margin: 0,
+              overflow: 'hidden',
+            }}
+          >
+            {children}
+          </Box>
+          <Box
+            component="main"
+            sx={{
+              bgcolor: 'background.default',
+              mt: ['48px', '56px', '64px'],
+              p: 3,
+              backgroundImage: 'url(/mobileBG.svg)',
+              backgroundPosition: 'bottom right',
+              backgroundSize: 'auto',
+              backgroundRepeat: 'no-repeat',
+              backgroundAttachment: 'fixed',
+              display: { xs: 'block', sm: 'none' },
+              right: 0,
+              bottom: 0,
+              position: 'fixed',
+
+              top: 0,
+              left: 0,
+
+              width: '100%',
+              height: '100%',
             }}
           >
             {children}

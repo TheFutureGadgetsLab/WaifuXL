@@ -3,40 +3,12 @@
 import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select } from '@mui/material'
 import { getDataURIFromInput, setDataURIFromFile } from '@/services/imageUtilities'
 import { useAppStateStore, useImageStore } from '../services/useState'
-
-import { getEmptyTags } from '@/services/inference/utils'
-
-const preset_list = [
-  {
-    name: 'Ozen',
-    url: 'https://i.imgur.com/Sf6sfPj.png',
-  },
-  {
-    name: 'Senjougahara',
-    url: 'https://i.imgur.com/cMX8YcK.jpg',
-  },
-  {
-    name: 'Moomin',
-    url: 'https://i.imgur.com/9I91yMq.png',
-  },
-  {
-    name: 'Megumin',
-    url: 'https://i.imgur.com/BKBt6bC.png',
-  },
-  {
-    name: 'Aqua',
-    url: 'https://i.imgur.com/yhIwVjZ.jpeg',
-  },
-  {
-    name: 'Natsumi',
-    url: 'https://i.imgur.com/yIIl7Z1.png',
-  },
-]
+import { ImageUpload, ModalDone, PresetSelect } from './inputs'
 
 export default function ModalComponent() {
   const { inputModalOpen, setInputModalOpen } = useAppStateStore()
-  const { selectedPreset, setSelectedPreset } = useAppStateStore()
-  const { setInputURI, setTags, inputURI, setFileName } = useImageStore()
+  const { setSelectedPreset } = useAppStateStore()
+  const { setInputURI, inputURI, setFileName } = useImageStore()
 
   return (
     <Modal
@@ -89,64 +61,9 @@ export default function ModalComponent() {
             }}
           />
         </Box>
-        <FormControl color="success" sx={{ minWidth: 200, marginBottom: 2 }} fullWidth>
-          <InputLabel>Preset</InputLabel>
-          <Select
-            color="success"
-            value={selectedPreset}
-            label="Preset"
-            onChange={(inp) => {
-              setSelectedPreset(inp.target.value)
-              const [name, url] = inp.target.value.split('|')
-              getDataURIFromInput(url).then((uri) => setInputURI(uri))
-              setFileName(`example_${name}`)
-            }}
-          >
-            {preset_list.map((preset, i) => (
-              <MenuItem color="success" value={`${preset.name}|${preset.url}`} key={i}>
-                {preset.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <Button
-          component="label"
-          key="ModalUpload"
-          variant="contained"
-          size="large"
-          sx={{ color: '#fff', marginRight: 2 }}
-          color="success"
-        >
-          <input
-            type="file"
-            hidden
-            accept="image/*"
-            onInput={(e) => {
-              let inp = e.target as HTMLInputElement
-              if (inp.files && inp.files[0]) {
-                setDataURIFromFile(inp.files[0], setInputURI)
-                setFileName(inp.files[0].name.split('.')[0])
-                setSelectedPreset('')
-              }
-            }}
-          />
-          Upload
-        </Button>
-        <Button
-          key="ModalDone"
-          onClick={() => {
-            setInputURI(inputURI)
-            setTags(getEmptyTags())
-            setInputModalOpen(false)
-            setSelectedPreset('')
-          }}
-          variant="outlined"
-          size="large"
-          sx={{ float: 'right', marginLeft: 2 }}
-          color="success"
-        >
-          Done
-        </Button>
+        <PresetSelect />
+        <ImageUpload />
+        <ModalDone />
       </Box>
     </Modal>
   )

@@ -1,4 +1,4 @@
-import { Button, SvgIconTypeMap } from '@mui/material'
+import { Button, SvgIconTypeMap, SxProps, Theme } from '@mui/material'
 
 import { MouseEventHandler } from 'react'
 import { OverridableComponent } from '@mui/material/OverridableComponent'
@@ -9,9 +9,11 @@ interface buttonTypes {
   disabled: boolean
   Icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>
   text: string
+  color: 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning'
+  sx?: SxProps<Theme> | undefined
 }
 
-export default function ButtonComponent({ item_key, func, disabled, Icon, text }: buttonTypes) {
+export default function ButtonComponent({ item_key, func, disabled, Icon, text, sx, color }: buttonTypes) {
   return (
     <Button
       key={item_key}
@@ -19,16 +21,9 @@ export default function ButtonComponent({ item_key, func, disabled, Icon, text }
       disabled={disabled}
       variant="contained"
       size="large"
-      sx={{
-        justifyContent: 'flex-start',
-        marginBottom: 2,
-        ':not(:last-child)': {
-          marginBottom: 1,
-        },
-        color: 'secondary.main',
-      }}
+      sx={sx}
       startIcon={<Icon />}
-      color="primary"
+      color={color}
     >
       {text}
     </Button>

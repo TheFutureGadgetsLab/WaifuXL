@@ -25,7 +25,12 @@ export default function TitleComponent() {
   const displayText = downloadReady ? 'Download' : running ? 'Expanding' : 'Expand'
 
   return (
-    <Typography sx={{ fontWeight: 'bold' }} variant="h2" color="primary" paragraph>
+    <Typography
+      sx={{ fontWeight: 'bold', display: { xs: 'none', sm: 'block' } }}
+      variant="h2"
+      color="primary"
+      paragraph
+    >
       <span style={textStyle}>{displayText} your </span>
       waifu
       {running ? loadingText : '!'}
