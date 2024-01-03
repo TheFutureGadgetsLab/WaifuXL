@@ -1,14 +1,13 @@
 'use client'
 
-import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select } from '@mui/material'
+import { Box, Modal } from '@mui/material'
 import { ImageUpload, ModalDone, PresetSelect } from './inputs'
-import { getDataURIFromInput, setDataURIFromFile } from '@/services/imageUtilities'
 import { useAppStateStore, useImageStore } from '../services/useState'
 
 export default function ModalComponent() {
   const { inputModalOpen, setInputModalOpen } = useAppStateStore()
   const { setSelectedPreset } = useAppStateStore()
-  const { setInputURI, inputURI, setFileName } = useImageStore()
+  const { setInputURI, inputURI } = useImageStore()
 
   return (
     <Modal
@@ -54,8 +53,7 @@ export default function ModalComponent() {
             onInput={(e) => {
               let inp = e.target as HTMLInputElement
               if (inp.files && inp.files[0]) {
-                setDataURIFromFile(inp.files[0], setInputURI)
-                setFileName(inp.files[0].name.split('.')[0])
+                setInputURI(inp.files[0])
                 setSelectedPreset('')
               }
             }}

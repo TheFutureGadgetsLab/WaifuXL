@@ -1,4 +1,3 @@
-import { getDataURIFromInput, setDataURIFromFile } from '@/services/imageUtilities'
 import { useAppStateStore, useImageStore } from '@/services/useState'
 import { useEffect, useState } from 'react'
 
@@ -34,37 +33,31 @@ function useWindowSize(): WindowSize {
 }
 
 function registerEventHandlers(): void {
-  const setURI = useImageStore((state) => state.setInputURI)
-  const setFileName = useImageStore((state) => state.setFileName)
+  const setInputURI = useImageStore((state) => state.setInputURI)
   const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen)
 
   if (typeof window !== 'undefined') {
     window.addEventListener('paste', (e) => {
-      pasteListener(e, setURI, setFileName, setInputModalOpen)
+      pasteListener(e, setInputURI, setInputModalOpen)
     })
     const preventDefaultListeners = ['dragenter', 'drag', 'dragover', 'dragend', 'dragstart']
     preventDefaultListeners.forEach((event) => {
       window.addEventListener(event, preventDefault)
     })
     window.addEventListener('drop', (e) => {
-      dropListener(e, setFileName, setURI, setInputModalOpen)
+      dropListener(e, setInputURI, setInputModalOpen)
     })
   }
 }
 
-function handleInputFile(
-  items: DataTransferItemList,
-  setFileName: (name: string) => void,
-  setInputURI: (uri: string) => void,
-): boolean {
+function handleInputFile(items: DataTransferItemList, setInputURI: (uri: string | File) => void): boolean {
   try {
     for (const index in items) {
       const item = items[index]
       if (item.kind === 'file') {
         const file = item.getAsFile()
         if (file) {
-          setFileName(file.name.split('/').at(-1)!.split('.')[0])
-          setDataURIFromFile(file, setInputURI)
+          setInputURI(file)
           return true
         }
       }
@@ -79,18 +72,14 @@ function handleInputFile(
 
 const pasteListener = (
   e: ClipboardEvent,
-  setInputURI: (uri: string) => void,
-  setFileName: (name: string) => void,
+  setInputURI: (uri: string | File) => void,
   setInputModalOpen: (open: boolean) => void,
 ) => {
   if (e.clipboardData && e.clipboardData.getData('text/plain')) {
     const url = e.clipboardData.getData('text/plain')
-    getDataURIFromInput(url).then((u) => {
-      setInputURI(u)
-    })
-    setFileName(url.split('/').at(-1)!.split('.')[0])
+    setInputURI(url)
   } else if (e.clipboardData) {
-    const success = handleInputFile(e.clipboardData.items, setFileName, setInputURI)
+    const success = handleInputFile(e.clipboardData.items, setInputURI)
     if (success) {
       setInputModalOpen(true)
     }
@@ -99,17 +88,15 @@ const pasteListener = (
 
 const dropListener = (
   e: DragEvent,
-  setFileName: (name: string) => void,
-  setInputURI: (uri: string) => void,
+  setInputURI: (uri: string | File) => void,
   setInputModalOpen: (open: boolean) => void,
 ) => {
   e.preventDefault()
   e.stopPropagation()
   if (e.dataTransfer) {
-    const success = handleInputFile(e.dataTransfer.items, setFileName, setInputURI)
+    const success = handleInputFile(e.dataTransfer.items, setInputURI)
     if (success) {
       setInputModalOpen(true)
-      setFileName(e.dataTransfer.files[0].name.split('/').at(-1)!.split('.')[0])
     }
   }
 }

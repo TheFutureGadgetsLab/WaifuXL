@@ -1,6 +1,7 @@
 import { ModelTags } from './inference/utils'
 import { create } from 'zustand'
 import default_tags from '@/services/landing_tags'
+import { getDataURIFromInput } from './imageUtilities'
 
 type ImageStoreState = {
   inputURI: string
@@ -10,11 +11,10 @@ type ImageStoreState = {
   upscaleFactor: number
   hasntRun: boolean
 
-  setInputURI: (uri: string) => void
+  setInputURI: (uri: string | File) => void
   setUpscaleFactor: (newFactor: number) => void
   setOutputURI: (uri: string) => void
   setTags: (newTags: ModelTags) => void
-  setFileName: (newFilename: string) => void
 }
 
 // Define the store with its state and actions
@@ -26,16 +26,15 @@ const useImageStore = create<ImageStoreState>((set) => ({
   upscaleFactor: 1,
   hasntRun: true,
 
-  setInputURI: (uri: string) => {
-    set(() => ({ inputURI: uri, outputURI: null, hasntRun: true }))
-
-    // Assuming useAppStateStore is correctly typed and exists in the same scope
-    useAppStateStore.setState({ downloadReady: false })
+  setInputURI: (uri: string | File) => {
+    getDataURIFromInput(uri).then(({ dataUri, filename }) => {
+      useAppStateStore.setState({ downloadReady: false })
+      set(() => ({ inputURI: dataUri, hasntRun: true, outputURI: null, fileName: filename }))
+    })
   },
   setUpscaleFactor: (newFactor: number) => set(() => ({ upscaleFactor: newFactor })),
   setOutputURI: (uri: string) => set(() => ({ outputURI: uri, hasntRun: false })),
   setTags: (newTags: ModelTags) => set(() => ({ tags: newTags })),
-  setFileName: (newFilename: string) => set(() => ({ fileName: newFilename })),
 }))
 
 // Define the type for the state in the store

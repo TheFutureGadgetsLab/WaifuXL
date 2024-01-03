@@ -1,9 +1,9 @@
 import { Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, SxProps, Theme } from '@mui/material'
 import { CloudDownload, CloudUpload, CopyAll, Done, RunCircle } from '@mui/icons-material'
-import { downloadImage, getDataURIFromInput, setDataURIFromFile } from '@/services/imageUtilities'
 import { useAppStateStore, useImageStore } from '@/services/useState'
 
 import ButtonComponent from './button'
+import { downloadImage } from '@/services/imageUtilities'
 import { getEmptyTags } from '@/services/inference/utils'
 import { upScaleFromURI } from '@/services/inference/utils'
 
@@ -168,7 +168,7 @@ const UpscaleFactor = () => {
 }
 
 const PresetSelect = () => {
-  const { setFileName, setInputURI } = useImageStore()
+  const { setInputURI } = useImageStore()
   const { selectedPreset, setSelectedPreset } = useAppStateStore()
 
   return (
@@ -181,8 +181,7 @@ const PresetSelect = () => {
         onChange={(inp) => {
           setSelectedPreset(inp.target.value)
           const [name, url] = inp.target.value.split('|')
-          getDataURIFromInput(url).then((uri) => setInputURI(uri))
-          setFileName(`example_${name}`)
+          setInputURI(url)
         }}
       >
         {preset_list.map((preset, i) => (
@@ -196,7 +195,7 @@ const PresetSelect = () => {
 }
 
 const ImageUpload = () => {
-  const { setFileName, setInputURI } = useImageStore()
+  const { setInputURI } = useImageStore()
   const { setSelectedPreset } = useAppStateStore()
 
   return (
@@ -215,8 +214,7 @@ const ImageUpload = () => {
         onInput={(e) => {
           let inp = e.target as HTMLInputElement
           if (inp.files && inp.files[0]) {
-            setDataURIFromFile(inp.files[0], setInputURI)
-            setFileName(inp.files[0].name.split('.')[0])
+            setInputURI(inp.files[0])
             setSelectedPreset('')
           }
         }}
