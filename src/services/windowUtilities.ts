@@ -9,19 +9,17 @@ interface WindowSize {
 function useWindowSize(): WindowSize {
   const [windowSize, setWindowSize] = useState<WindowSize>({ width: undefined, height: undefined })
 
-  if (typeof window === 'undefined') {
-    return windowSize
-  }
-
   useEffect(() => {
-    const handleResize = () => {
-      setWindowSize({ width: window.innerWidth, height: window.innerHeight })
+    if (typeof window !== 'undefined') {
+      const handleResize = () => {
+        setWindowSize({ width: window.innerWidth, height: window.innerHeight })
+      }
+
+      window.addEventListener('resize', handleResize)
+      handleResize()
+
+      return () => window.removeEventListener('resize', handleResize)
     }
-
-    window.addEventListener('resize', handleResize)
-    handleResize()
-
-    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
   return windowSize
@@ -30,6 +28,10 @@ function useWindowSize(): WindowSize {
 function registerEventHandlers(): void {
   const setInputURI = useImageStore((state) => state.setInputURI)
   const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen)
+
+  if (typeof window === 'undefined') {
+    return
+  }
 
   window.addEventListener('paste', (e) => pasteListener(e, setInputURI, setInputModalOpen))
   const preventDefaultListeners = ['dragenter', 'dragover', 'dragstart', 'dragend']
