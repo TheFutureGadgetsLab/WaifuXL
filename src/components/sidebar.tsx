@@ -1,9 +1,10 @@
 'use client'
 
-import { useImageStore } from '../services/useState'
-import { ModalUpload, DownloadImage, CopyImage, RunModel, UpscaleFactor } from '@/components/inputs'
+import { CopyImage, DownloadImage, ModalUpload, RunModel, UpscaleFactor } from '@/components/inputs'
+
 import Drawer from '@mui/material/Drawer'
 import { TagDisplayComponent } from '@/components/tagDisplay'
+import { useImageStore } from '../services/useState'
 
 const DRAWER_WIDTH = 300
 

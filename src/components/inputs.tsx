@@ -1,10 +1,10 @@
-import { CloudDownload, CloudUpload, CopyAll, RunCircle, Done } from '@mui/icons-material'
 import { Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, SxProps, Theme } from '@mui/material'
+import { CloudDownload, CloudUpload, CopyAll, Done, RunCircle } from '@mui/icons-material'
+import { downloadImage, getDataURIFromInput, setDataURIFromFile } from '@/services/imageUtilities'
 import { useAppStateStore, useImageStore } from '@/services/useState'
-import { getEmptyTags } from '@/services/inference/utils'
 
 import ButtonComponent from './button'
-import { downloadImage, getDataURIFromInput, setDataURIFromFile } from '@/services/imageUtilities'
+import { getEmptyTags } from '@/services/inference/utils'
 import { upScaleFromURI } from '@/services/inference/utils'
 
 const preset_list = [

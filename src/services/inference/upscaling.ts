@@ -31,6 +31,9 @@ export async function multiUpscale(
   for (let s = 0; s < upscaleFactor; s += 1) {
     outArr = await upscaleFrame(session, outArr)
   }
+
+  console.log('Input shape:', imageArray.dims)
+  console.log('Output shape:', outArr.shape)
   console.timeEnd('Upscaling')
 
   return imgToDataURL(outArr)
@@ -82,17 +85,17 @@ async function upscaleFrame(session: InferenceSession, imageArray: NdArray): Pro
 }
 
 function imgToDataURL(img: NdArray<Uint8Array>): string {
-  const [height, width] = img.shape.slice(0, 2)
-
-  img = img.transpose(1, 0, 2)
+  const [width, height] = img.shape.slice(0, 2)
+  console.log('img shape:', img.shape)
 
   let buffer = new Uint8ClampedArray(width * height * 4) // RGBA for each pixel
-  for (let row = 0; row < height; row++) {
-    for (let col = 0; col < width; col++) {
-      buffer[row * width * 4 + col * 4] = img.get(row, col, 0) // Red
-      buffer[row * width * 4 + col * 4 + 1] = img.get(row, col, 1) // Green
-      buffer[row * width * 4 + col * 4 + 2] = img.get(row, col, 2) // Blue
-      buffer[row * width * 4 + col * 4 + 3] = 255 // Alpha
+  for (let r = 0; r < height; r++) {
+    for (let c = 0; c < width; c++) {
+      const i = (r * width + c) * 4
+      buffer[i] = img.get(c, r, 0)
+      buffer[i + 1] = img.get(c, r, 1)
+      buffer[i + 2] = img.get(c, r, 2)
+      buffer[i + 3] = img.get(c, r, 3)
     }
   }
 
@@ -102,8 +105,8 @@ function imgToDataURL(img: NdArray<Uint8Array>): string {
     throw new Error('Unable to get canvas context')
   }
 
-  canvas.width = height
-  canvas.height = width
+  canvas.width = width
+  canvas.height = height
 
   const imageData = ctx.createImageData(width, height)
   imageData.data.set(buffer)

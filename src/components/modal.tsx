@@ -1,9 +1,9 @@
 'use client'
 
 import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select } from '@mui/material'
+import { ImageUpload, ModalDone, PresetSelect } from './inputs'
 import { getDataURIFromInput, setDataURIFromFile } from '@/services/imageUtilities'
 import { useAppStateStore, useImageStore } from '../services/useState'
-import { ImageUpload, ModalDone, PresetSelect } from './inputs'
 
 export default function ModalComponent() {
   const { inputModalOpen, setInputModalOpen } = useAppStateStore()

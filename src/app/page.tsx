@@ -1,14 +1,18 @@
 'use client'
+
 import { Box, Container, Grid } from '@mui/material'
+import { DownloadImage, ImageUpload, RunModel } from '@/components/inputs'
 
 import ImageDisplayComponent from '@/components/imageDisplay'
 import ModalComponent from '@/components/modal'
 import Sidebar from '@/components/sidebar'
 import TitleComponent from '@/components/title'
-import { ImageUpload, DownloadImage, RunModel } from '@/components/inputs'
+import { registerEventHandlers } from '@/services/windowUtilities'
 import { useImageStore } from '@/services/useState'
+
 export default function HomePage() {
   const { outputURI } = useImageStore()
+  registerEventHandlers()
 
   return (
     <Container>
