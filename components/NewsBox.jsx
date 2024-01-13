@@ -25,6 +25,10 @@ const NewsBox = () => {
 const renderNewsItems = () => {
   return (
     <div className="px-4 py-2">
+       <p className="text-blue">
+        <span className="text-blue">01/12/2024: </span>
+        <span className="text-black">Hi Fam</span>
+      </p>
       <p className="text-blue">
         <span className="text-blue">03/25/2023: </span>
         <span className="text-black">WaifuXL v1.5.0 Released!</span>
