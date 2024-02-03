@@ -1,7 +1,5 @@
 'use client'
 
-import { Box, Container } from '@mui/material'
-
 import Image from 'next/image'
 // @ts-ignore
 import { ReactCompareSlider } from 'react-compare-slider'

@@ -94,7 +94,7 @@ async function imageDataToTensor(imgpath: string): Promise<TypedTensor<'uint8'>>
     }),
   )
 
-  const [_, C, H, W] = out.dims
+  const [, , H, W] = out.dims
   buf = buf.slice(0, H * W * 3)
   return new Tensor('uint8', buf, [1, 3, H, W])
 }

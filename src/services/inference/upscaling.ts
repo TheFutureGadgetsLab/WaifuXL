@@ -32,8 +32,6 @@ export async function multiUpscale(
     outArr = await upscaleFrame(session, outArr)
   }
 
-  console.log('Input shape:', imageArray.dims)
-  console.log('Output shape:', outArr.shape)
   console.timeEnd('Upscaling')
 
   return imgToDataURL(outArr)
@@ -86,7 +84,6 @@ async function upscaleFrame(session: InferenceSession, imageArray: NdArray): Pro
 
 function imgToDataURL(img: NdArray<Uint8Array>): string {
   const [width, height] = img.shape.slice(0, 2)
-  console.log('img shape:', img.shape)
 
   let buffer = new Uint8ClampedArray(width * height * 4) // RGBA for each pixel
   for (let r = 0; r < height; r++) {
