@@ -2,7 +2,7 @@
 
 import { Box, Modal } from '@mui/material'
 import { ImageUpload, ModalDone, PresetSelect } from './inputs'
-import { useAppStateStore, useImageStore } from '../services/useState'
+import { useAppStateStore, useImageStore } from '@/services/useState'
 
 export default function ModalComponent() {
   const { inputModalOpen, setInputModalOpen } = useAppStateStore()

@@ -4,7 +4,7 @@ import { CopyImage, DownloadImage, ModalUpload, RunModel, UpscaleFactor } from '
 
 import Drawer from '@mui/material/Drawer'
 import { TagDisplayComponent } from '@/components/tagDisplay'
-import { useImageStore } from '../services/useState'
+import { useImageStore } from '@/services/useState'
 
 const DRAWER_WIDTH = 300
 
