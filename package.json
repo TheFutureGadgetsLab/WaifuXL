@@ -18,11 +18,11 @@
     "ndarray": "^1.0.19",
     "ndarray-ops": "^1.2.2",
     "next": "latest",
-    "onnxruntime-web": "^1.17.0",
+    "onnxruntime-web": "^1.17.1",
     "react": "latest",
     "react-compare-slider": "latest",
     "react-dom": "latest",
-    "zustand": "^4.5.0"
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@types/ndarray": "^1.0.14",
