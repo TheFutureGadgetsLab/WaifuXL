@@ -1,102 +1,85 @@
 'use client'
 
+import { AppBar, Box, Button, Container, ThemeProvider, Toolbar, Typography } from '@mui/material'
+import { createTheme } from '@mui/material/styles'
+import { Roboto } from 'next/font/google'
+import Link from 'next/link'
 import * as React from 'react'
 
-import AppBar from '@mui/material/AppBar'
-import Box from '@mui/material/Box'
-import { Button } from '@mui/material'
-import Link from 'next/link'
-import ThemeRegistry from '@/components/ThemeRegistry/ThemeRegistry'
-import Toolbar from '@mui/material/Toolbar'
-import Typography from '@mui/material/Typography'
+const HEADER_LINKS = [
+  { text: 'About', href: '/about', weight: 450, color: 'text.primary' },
+  { text: 'WaifuXL', href: '/', weight: 600, color: 'secondary.main' },
+  { text: 'Donate', href: '/donate', weight: 450, color: 'text.primary' },
+]
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" style={{ height: '100%' }}>
-      <body style={{ height: '100%', margin: 0, overflow: 'hidden' }}>
-        <ThemeRegistry>
-          <HeaderBar />
+    <html lang="en">
+      <body style={{ margin: 0, padding: 0, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <ThemeProvider theme={theme}>
+          <AppBar position="static" color="primary" elevation={0}>
+            <Toolbar sx={{ justifyContent: 'center' }}>
+              {HEADER_LINKS.map((link) => (
+                <Link href={link.href} key={link.text} passHref>
+                  <Button color="inherit">
+                    <Typography variant="h6" color={link.color} sx={{ fontWeight: link.weight, textTransform: 'none' }}>
+                      {link.text}
+                    </Typography>
+                  </Button>
+                </Link>
+              ))}
+            </Toolbar>
+          </AppBar>
           <Box
             component="main"
             sx={{
-              height: '100%',
-              bgcolor: 'background.default',
-              mt: ['48px', '56px', '64px'],
-              p: 3,
+              flexGrow: 1,
               backgroundImage: 'url(/DesktopBG.svg)',
               backgroundPosition: 'bottom right',
               backgroundSize: 'contain',
               backgroundRepeat: 'no-repeat',
               backgroundAttachment: 'fixed',
-              display: { xs: 'none', sm: 'block' },
-              margin: 0,
-              overflow: 'hidden',
+              padding: 3,
             }}
           >
-            {children}
+            <Container>{children}</Container>
           </Box>
-          <Box
-            component="main"
-            sx={{
-              bgcolor: 'background.default',
-              mt: ['48px', '56px', '64px'],
-              p: 3,
-              backgroundImage: 'url(/mobileBG.svg)',
-              backgroundPosition: 'bottom right',
-              backgroundSize: 'auto',
-              backgroundRepeat: 'no-repeat',
-              backgroundAttachment: 'fixed',
-              display: { xs: 'block', sm: 'none' },
-              right: 0,
-              bottom: 0,
-              position: 'fixed',
-
-              top: 0,
-              left: 0,
-
-              width: '100%',
-              height: '100%',
-            }}
-          >
-            {children}
-          </Box>
-        </ThemeRegistry>
+        </ThemeProvider>
       </body>
     </html>
   )
 }
 
-function HeaderBar() {
-  const HEADER_LINKS = [
-    { text: 'About', href: '/about', weight: 450, color: 'text.primary' },
-    { text: 'WaifuXL', href: '/', weight: 600, color: 'secondary.main' },
-    { text: 'Donate', href: '/donate', weight: 450, color: 'text.primary' },
-  ]
+const roboto = Roboto({
+  weight: ['300', '400', '500', '700'],
+  subsets: ['latin'],
+  display: 'swap',
+})
 
-  return (
-    <AppBar sx={{ zIndex: 0, boxShadow: 'none' }} color="primary">
-      <Toolbar
-        sx={{
-          justifyContent: 'center',
-        }}
-      >
-        {HEADER_LINKS.map((link) => (
-          <Link href={link.href} key={link.text} passHref>
-            <Button color="inherit">
-              <Typography
-                variant="h4"
-                color={link.color}
-                sx={{
-                  fontWeight: link.weight,
-                  textTransform: 'none',
-                }}
-              >
-                {link.text}
-              </Typography>
-            </Button>
-          </Link>
-        ))}
-      </Toolbar>
-    </AppBar>
-  )
-}
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#FF869C',
+    },
+    secondary: {
+      main: '#FFFFFF',
+    },
+    success: {
+      main: '#44ABBC',
+    },
+  },
+  typography: {
+    fontFamily: roboto.style.fontFamily,
+  },
+  components: {
+    MuiAlert: {
+      styleOverrides: {
+        root: ({ ownerState }) => ({
+          ...(ownerState.severity === 'info' && {
+            backgroundColor: '#60a5fa',
+          }),
+        }),
+      },
+    },
+  },
+})

@@ -1,12 +1,5 @@
-const CopyPlugin = require('copy-webpack-plugin')
-const webpack = require('webpack')
-const execSync = require('child_process').execSync
+import CopyPlugin from 'copy-webpack-plugin'
 
-// Fetch git hashes
-const shortHash = execSync('git rev-parse --short HEAD').toString().trim()
-const longHash = execSync('git rev-parse HEAD').toString().trim()
-
-// Define output path for copied files
 const outputPath = 'static/chunks/'
 
 // Setup plugins
@@ -17,11 +10,6 @@ const copyPlugin = new CopyPlugin({
   ],
 })
 
-const hashPlugin = new webpack.DefinePlugin({
-  __SHORT_HASH__: JSON.stringify(shortHash),
-  __LONG_HASH__: JSON.stringify(longHash),
-})
-
 // Define Next.js configuration
 const nextConfig = {
   reactStrictMode: true,
@@ -29,7 +17,7 @@ const nextConfig = {
   images: { unoptimized: true },
   output: process.env.NODE_ENV === 'development' ? 'standalone' : 'export',
   webpack: (config) => {
-    config.plugins.push(copyPlugin, hashPlugin)
+    config.plugins.push(copyPlugin)
     return config
   },
   async headers() {
@@ -55,4 +43,4 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
+export default nextConfig

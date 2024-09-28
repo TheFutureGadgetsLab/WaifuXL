@@ -1,17 +1,16 @@
 'use client'
 
-import { Box, Container, Grid } from '@mui/material'
-import { DownloadImage, ImageUpload, RunModel } from '@/components/inputs'
+import { Box, Container, Typography } from '@mui/material'
 
-import ImageDisplayComponent from '@/components/imageDisplay'
 import ModalComponent from '@/components/modal'
 import Sidebar from '@/components/sidebar'
-import TitleComponent from '@/components/title'
+import { useAppStateStore, useImageStore } from '@/services/useState'
 import { registerEventHandlers } from '@/services/windowUtilities'
-import { useImageStore } from '@/services/useState'
+import Image from 'next/image'
+import { useEffect, useState } from 'react'
+import { ReactCompareSlider } from 'react-compare-slider'
 
 export default function HomePage() {
-  const { outputURI } = useImageStore()
   registerEventHandlers()
 
   return (
@@ -26,26 +25,56 @@ export default function HomePage() {
       >
         <Sidebar />
         <ImageDisplayComponent />
-        <TitleComponent />
+        <ProcessingTextComponent />
         <ModalComponent />
-        <Grid
-          sx={{
-            display: { xs: 'block', sm: 'none' },
-            marginTop: 2,
-          }}
-        >
-          {outputURI != null ? (
-            <>
-              <ImageUpload />
-              <DownloadImage sx={{}} />
-            </>
-          ) : (
-            <>
-              <RunModel />
-            </>
-          )}
-        </Grid>
       </Box>
     </Container>
+  )
+}
+
+function ImageDisplayComponent() {
+  const { inputURI, outputURI } = useImageStore()
+  return (
+    <>
+      {outputURI == null ? (
+        <Image src={inputURI} width="500" height="500" alt="base image" priority={true} />
+      ) : (
+        <ReactCompareSlider
+          itemOne={<Image src={inputURI} width="500" height="500" alt="before image" priority={true} />}
+          itemTwo={<Image src={outputURI} width="500" height="500" alt="after image" priority={true} />}
+        />
+      )}
+    </>
+  )
+}
+
+const textStyle = { color: 'black', fontWeight: 'bold' }
+function ProcessingTextComponent() {
+  const [loadingText, setLoadingText] = useState('')
+  const { running, downloadReady } = useAppStateStore()
+
+  useEffect(() => {
+    const updateLoadingText = () => {
+      setLoadingText((prev) => (prev === '...' ? '' : `${prev}.`))
+    }
+
+    const interval = setInterval(updateLoadingText, 750)
+    return () => clearInterval(interval)
+  }, [])
+
+  // Determine the display text based on app state
+  const displayText = downloadReady ? 'Download' : running ? 'Expanding' : 'Expand'
+
+  return (
+    <Typography
+      sx={{ fontWeight: 'bold', display: { xs: 'none', sm: 'block' } }}
+      variant="h2"
+      color="primary"
+      paragraph
+    >
+      <span style={textStyle}>{displayText} your </span>
+      waifu
+      {running ? loadingText : '!'}
+    </Typography>
   )
 }

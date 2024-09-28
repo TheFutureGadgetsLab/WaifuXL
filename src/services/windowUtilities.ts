@@ -1,83 +1,77 @@
-import { useAppStateStore, useImageStore } from '@/services/useState'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { useAppStateStore, useImageStore } from './useState'
 
 interface WindowSize {
-  width: number | undefined
-  height: number | undefined
+  width: number
+  height: number
 }
 
-function useWindowSize(): WindowSize {
-  const [windowSize, setWindowSize] = useState<WindowSize>({ width: undefined, height: undefined })
+export const useWindowSize = (): WindowSize => {
+  const [windowSize, setWindowSize] = useState<WindowSize>({ width: 0, height: 0 })
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const handleResize = () => {
-        setWindowSize({ width: window.innerWidth, height: window.innerHeight })
-      }
-
-      window.addEventListener('resize', handleResize)
-      handleResize()
-
-      return () => window.removeEventListener('resize', handleResize)
-    }
+    const handleResize = () => setWindowSize({ width: window.innerWidth, height: window.innerHeight })
+    window.addEventListener('resize', handleResize)
+    handleResize()
+    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
   return windowSize
 }
 
-function registerEventHandlers(): void {
+export const registerEventHandlers = (): void => {
   const setInputURI = useImageStore((state) => state.setInputURI)
   const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen)
 
-  if (typeof window === 'undefined') {
-    return
-  }
+  const handlePaste = useCallback(
+    (e: ClipboardEvent) => {
+      const text = e.clipboardData?.getData('text/plain')
+      if (text) {
+        setInputURI(text)
+      } else if (handleInputFile(e.clipboardData?.items)) {
+        setInputModalOpen(true)
+      }
+    },
+    [setInputURI, setInputModalOpen],
+  )
 
-  window.addEventListener('paste', (e) => pasteListener(e, setInputURI, setInputModalOpen))
-  const preventDefaultListeners = ['dragenter', 'dragover', 'dragstart', 'dragend']
-  preventDefaultListeners.forEach((event) => window.addEventListener(event, preventDefault))
-  window.addEventListener('drop', (e) => dropListener(e, setInputURI, setInputModalOpen))
-}
+  const handleDrop = useCallback(
+    (e: DragEvent) => {
+      e.preventDefault()
+      if (handleInputFile(e.dataTransfer?.items)) {
+        setInputModalOpen(true)
+      }
+    },
+    [setInputModalOpen],
+  )
 
-function handleInputFile(items: DataTransferItemList, setInputURI: (uri: string | File) => void): boolean {
-  let success = false
-  Array.from(items).forEach((item) => {
-    if (item.kind === 'file') {
-      const file = item.getAsFile()
+  const handleInputFile = useCallback(
+    (items?: DataTransferItemList): boolean => {
+      if (!items) return false
+      const file = Array.from(items)
+        .find((item) => item.kind === 'file')
+        ?.getAsFile()
       if (file) {
         setInputURI(file)
-        success = true
+        return true
       }
+      return false
+    },
+    [setInputURI],
+  )
+
+  useEffect(() => {
+    window.addEventListener('paste', handlePaste)
+    window.addEventListener('drop', handleDrop)
+    const preventDefault = (e: Event) => e.preventDefault()
+
+    const events = ['dragenter', 'dragover', 'dragstart', 'dragend']
+    events.forEach((event) => window.addEventListener(event, preventDefault))
+
+    return () => {
+      window.removeEventListener('paste', handlePaste)
+      window.removeEventListener('drop', handleDrop)
+      events.forEach((event) => window.removeEventListener(event, preventDefault))
     }
-  })
-  return success
+  }, [handlePaste, handleDrop])
 }
-
-const pasteListener = (
-  e: ClipboardEvent,
-  setInputURI: (uri: string | File) => void,
-  setInputModalOpen: (open: boolean) => void,
-) => {
-  if (e.clipboardData && e.clipboardData.getData('text/plain')) {
-    setInputURI(e.clipboardData.getData('text/plain'))
-  } else if (e.clipboardData) {
-    if (handleInputFile(e.clipboardData.items, setInputURI)) {
-      setInputModalOpen(true)
-    }
-  }
-}
-
-const dropListener = (
-  e: DragEvent,
-  setInputURI: (uri: string | File) => void,
-  setInputModalOpen: (open: boolean) => void,
-) => {
-  e.preventDefault()
-  if (e.dataTransfer && handleInputFile(e.dataTransfer.items, setInputURI)) {
-    setInputModalOpen(true)
-  }
-}
-
-const preventDefault = (e: Event) => e.preventDefault()
-
-export { useWindowSize, registerEventHandlers }

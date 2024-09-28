@@ -15,17 +15,17 @@
     "@emotion/styled": "latest",
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
+    "immer": "^10.1.1",
     "ndarray": "^1.0.19",
     "ndarray-ops": "^1.2.2",
     "next": "latest",
-    "onnxruntime-web": "^1.18.0",
+    "onnxruntime-web": "1.18.0",
     "react": "latest",
     "react-compare-slider": "latest",
     "react-dom": "latest",
-    "zustand": "^4.5.2"
+    "zustand": "^4.5.5"
   },
   "devDependencies": {
-    "npm-check-updates": "^16.14.20",
     "@types/ndarray": "^1.0.14",
     "@types/ndarray-ops": "^1.2.7",
     "@types/node": "latest",
@@ -34,7 +34,7 @@
     "copy-webpack-plugin": "^12.0.2",
     "eslint": "latest",
     "eslint-config-next": "latest",
-    "prettier": "3.2.5",
+    "prettier": "3.3.3",
     "typescript": "latest"
   }
 }
