@@ -120,8 +120,8 @@ const SideBarComponent: React.FC = () => {
   ]
 
   const tagDisplays = [
-    { title: 'Top Chars', tags: tags.topChars },
-    { title: 'Top Desc', tags: tags.topDesc },
+    { title: 'Top Characters', tags: tags.topChars },
+    { title: 'Top Descriptors', tags: tags.topDesc },
   ]
 
   return (
