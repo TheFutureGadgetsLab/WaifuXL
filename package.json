@@ -10,26 +10,27 @@
     "cloudflare_deploy": "npm run build"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.3",
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
     "immer": "^10.1.1",
-    "ndarray-ops": "^1.2.2",
     "ndarray": "^1.0.19",
+    "ndarray-ops": "^1.2.2",
     "next": "latest",
     "onnxruntime-web": "1.18.0",
+    "react": "latest",
     "react-compare-slider": "latest",
     "react-dom": "latest",
-    "react": "latest",
     "zustand": "^4.5.5"
   },
   "devDependencies": {
-    "typescript": "latest",
-    "prettier": "3.3.3",
-    "copy-webpack-plugin": "^12.0.2",
+    "@types/ndarray": "^1.0.14",
+    "@types/ndarray-ops": "^1.2.7",
+    "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
-    "@types/node": "latest",
-    "@types/ndarray": "^1.0.14",
-    "@types/ndarray-ops": "^1.2.7"
+    "copy-webpack-plugin": "^12.0.2",
+    "prettier": "3.3.3",
+    "typescript": "latest"
   }
 }

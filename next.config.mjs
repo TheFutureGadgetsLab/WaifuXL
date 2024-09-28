@@ -11,9 +11,11 @@ const copyPlugin = new CopyPlugin({
 })
 
 // Define Next.js configuration
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  productionBrowserSourceMaps: true,
   images: { unoptimized: true },
   output: process.env.NODE_ENV === 'development' ? 'standalone' : 'export',
   webpack: (config) => {
