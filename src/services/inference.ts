@@ -34,7 +34,7 @@ async function initializeONNX(): Promise<void> {
 }
 
 // Main pipeline function
-export async function upScaleAndTag(
+export async function upscaleAndTag(
   setTags: (tags: ModelTags) => void,
   uri: string,
   upscaleFactor: number
@@ -101,7 +101,7 @@ async function multiUpscale(
   return imgToDataURI(outArr)
 }
 
-async function upscaleFrame(session: InferenceSession, imageArray: NdArray): Promise<NdArray<Uint8Array>> {
+async function upscaleFrame(session: InferenceSession, imageArray: NdArray<Uint8Array>): Promise<NdArray<Uint8Array<ArrayBuffer>>> {
   const [inImgW, inImgH] = imageArray.shape
   const [outImgW, outImgH] = [inImgW * 2, inImgH * 2]
   const [numChunksWidth, numChunksHeight] = [Math.ceil(inImgW / CHUNK_SIZE), Math.ceil(inImgH / CHUNK_SIZE)]

@@ -10,10 +10,13 @@
     "cloudflare_deploy": "npm run build"
   },
   "dependencies": {
+    "@emotion/cache": "^11.13.1",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
-    "@mui/icons-material": "latest",
-    "@mui/material": "latest",
+    "@fontsource/roboto": "^5.1.0",
+    "@mui/icons-material": "^6.1.1",
+    "@mui/material": "^6.1.1",
+    "@mui/material-nextjs": "^6.1.1",
     "immer": "^10.1.1",
     "ndarray": "^1.0.19",
     "ndarray-ops": "^1.2.2",

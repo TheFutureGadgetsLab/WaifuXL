@@ -2,15 +2,13 @@ import default_tags from '@/services/landing_tags'
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import { ModelTags } from './inference'
+import { getImageURI } from './utils'
 
-type InputType = string | File
-type DataURIResult = { dataUri: string; filename: string }
 
 type ImageStoreState = {
   inputURI: string
   outputURI: string | null
   tags: ModelTags
-  fileName: string
   upscaleFactor: number
   hasntRun: boolean
 }
@@ -26,7 +24,6 @@ const initialImageState: ImageStoreState = {
   inputURI: './images/senjougahara.webp',
   outputURI: './images/senjougahara_2x.webp',
   tags: default_tags,
-  fileName: 'example',
   upscaleFactor: 1,
   hasntRun: true,
 }
@@ -36,17 +33,15 @@ export const useImageStore = create(
     ...initialImageState,
 
     setInputURI: (uri) => {
-      getDataURIFromInput(uri).then(({ dataUri, filename }) => {
+      getImageURI(uri).then((dataUri) => {
         set((state) => {
           state.inputURI = dataUri
           state.hasntRun = true
           state.outputURI = null
-          state.fileName = filename
         })
         useAppStateStore.setState({ downloadReady: false })
       })
     },
-
     setUpscaleFactor: (newFactor) =>
       set((state) => {
         state.upscaleFactor = newFactor
@@ -73,7 +68,6 @@ type AppStateStoreState = {
 
 type AppStateStoreActions = {
   setInputModalOpen: (newInputModalOpen: boolean) => void
-  setErrorMessage: (newError: string | null) => void
   setRunning: (newRunning: boolean) => void
   setDownloadReady: (newDownloadReady: boolean) => void
   setSelectedPreset: (newSelectedPreset: string) => void
@@ -95,10 +89,6 @@ export const useAppStateStore = create(
       set((state) => {
         state.inputModalOpen = newInputModalOpen
       }),
-    setErrorMessage: (newError) =>
-      set((state) => {
-        state.errorMessage = newError
-      }),
     setRunning: (newRunning) =>
       set((state) => {
         state.running = newRunning
@@ -113,40 +103,3 @@ export const useAppStateStore = create(
       }),
   })),
 )
-
-async function getDataURIFromInput(input: InputType): Promise<DataURIResult> {
-  const filename = 'superRes'
-
-  if (input instanceof File) {
-    return { dataUri: URL.createObjectURL(input), filename }
-  }
-
-  if (typeof input === 'string') {
-    const dataUri = isValidHttpUrl(input)
-      ? URL.createObjectURL(await (await fetch(input)).blob())
-      : await new Promise<string>((resolve, reject) => {
-          const img = new Image()
-          img.onload = () => {
-            const canvas = document.createElement('canvas')
-            canvas.width = img.width
-            canvas.height = img.height
-            canvas.getContext('2d')?.drawImage(img, 0, 0)
-            resolve(canvas.toDataURL())
-          }
-          img.onerror = () => reject(new Error('Image load error'))
-          img.src = input
-        })
-
-    return { dataUri, filename }
-  }
-
-  throw new Error('Invalid input type')
-}
-
-function isValidHttpUrl(url: string): boolean {
-  try {
-    return ['http:', 'https:'].includes(new URL(url).protocol)
-  } catch {
-    return false
-  }
-}
