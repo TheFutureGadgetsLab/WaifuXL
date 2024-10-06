@@ -2,14 +2,13 @@
 
 import { Box, Container, Grid2, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { ReactCompareSlider } from 'react-compare-slider'
+import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider'
 
 import ModalComponent from '@/components/modal'
 import Sidebar from '@/components/sidebar'
 import TitleBar from '@/components/titlebar'
 import { useAppStateStore, useImageStore } from '@/services/useState'
 import { registerEventHandlers } from '@/services/windowUtilities'
-import Image from 'next/image'
 
 export default function HomePage() {
   registerEventHandlers()
@@ -38,17 +37,31 @@ export default function HomePage() {
 function ImageDisplayComponent() {
   const { inputURI, outputURI } = useImageStore()
   return (
-    <>
-      {outputURI == null ? (
-        <Image src={inputURI} width={500} height={500} alt="base image" layout="responsive" />
-      ) : (
+    <Box sx={{ width: '100%', maxWidth: '80%' }}>
+      <Box sx={{ position: 'relative', paddingTop: '100%' }}>
         <ReactCompareSlider
-          itemOne={<Image src={inputURI} width={500} height={500} alt="before image" layout="responsive" />}
-          itemTwo={<Image src={outputURI} width={500} height={500} alt="after image" layout="responsive" />}
+          itemOne={
+            <ReactCompareSliderImage
+              src={inputURI}
+              alt="Before image"
+              style={{ objectFit: 'contain', width: '100%', height: '100%' }}
+            />
+          }
+          itemTwo={
+            outputURI ? (
+              <ReactCompareSliderImage
+                src={outputURI}
+                alt="After image"
+                style={{ objectFit: 'contain', width: '100%', height: '100%' }}
+              />
+            ) : null
+          }
+          handle={outputURI ? undefined : <></>}
+          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
         />
-      )}
+      </Box>
       <ProcessingTextComponent />
-    </>
+    </Box>
   )
 }
 
