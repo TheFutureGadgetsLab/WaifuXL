@@ -23,17 +23,20 @@ export const UI_CONFIG = {
   captionFontSize: '0.6rem',
   loadingTextInterval: 750,
   modal: {
-    maxWidth: 400,
-    imageHeight: '24rem',
+    maxWidth: { xs: '95vw', sm: 500, md: 600 },
+    imageHeight: { xs: '40vh', sm: '24rem', md: '28rem' },
     borderWidth: '2px',
-    iconSize: 48,
+    iconSize: { xs: 36, sm: 48 },
     spacing: 2,
-    minButtonWidth: 120,
+    minButtonWidth: { xs: 100, sm: 120 },
   },
   layout: {
-    contentHeight: '90vh',
-    sidebarBreakpoint: 'md',
-    maxImageWidth: '80%',
+    contentHeight: { xs: 'calc(100vh - 64px)', sm: 'calc(100vh - 70px)' },
+    sidebarBreakpoint: 'md' as const,
+    sidebarWidth: { md: 280, lg: 320 },
+    maxImageWidth: { xs: '95%', sm: '85%', md: '75%', lg: '70%' },
+    drawerWidth: 280,
+    appBarHeight: { xs: 64, sm: 70 },
   },
 } as const
 

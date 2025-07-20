@@ -7,44 +7,6 @@ import { Done, CloudUpload, Image } from '@mui/icons-material'
 import { useAppStateStore, useImageStore } from '@/services/useState'
 import { PRESET_IMAGES, UI_CONFIG, STYLES } from '@/constants'
 
-const styles = {
-  modal: {
-    position: 'absolute' as const,
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    bgcolor: 'background.paper',
-    border: `${UI_CONFIG.modal.borderWidth} solid #000`,
-    boxShadow: 24,
-    p: 4,
-    width: '90%',
-    maxWidth: UI_CONFIG.modal.maxWidth,
-  },
-  imagePreview: {
-    margin: '0 auto 16px',
-    width: '100%',
-    height: UI_CONFIG.modal.imageHeight,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    cursor: 'pointer',
-    ...STYLES.borderDashed,
-    ...STYLES.flexCenter,
-    ...STYLES.flexColumn,
-    gap: 1,
-    transition: 'all 0.2s ease-in-out',
-    '&:hover': {
-      borderColor: 'primary.dark',
-      backgroundColor: 'action.hover',
-    },
-  },
-  uploadPrompt: {
-    ...STYLES.flexCenter,
-    ...STYLES.flexColumn,
-    gap: 1,
-    color: 'text.secondary',
-  },
-} as const
-
 const ImageModal = () => {
   const inputModalOpen = useAppStateStore((state) => state.inputModalOpen)
   const selectedPreset = useAppStateStore((state) => state.selectedPreset)
@@ -83,31 +45,126 @@ const ImageModal = () => {
   }
 
   return (
-    <Modal open={inputModalOpen} onClose={handleClose}>
-      <Box sx={styles.modal}>
+    <Modal
+      open={inputModalOpen}
+      onClose={handleClose}
+      aria-labelledby="image-upload-modal"
+      aria-describedby="upload-image-or-select-preset"
+    >
+      <Box
+        sx={{
+          bgcolor: 'background.paper',
+          border: `${UI_CONFIG.modal.borderWidth} solid`,
+          borderColor: 'divider',
+          borderRadius: { xs: 1, sm: 2 },
+          boxShadow: { xs: 8, sm: 24 },
+          p: { xs: 2, sm: 3, md: 4 },
+          width: { xs: '95%', sm: '90%' },
+          maxWidth: UI_CONFIG.modal.maxWidth,
+          maxHeight: { xs: '90vh', sm: 'auto' },
+          overflowY: 'auto',
+        }}
+      >
         <Box
+          component="button"
+          onClick={() => document.getElementById('file-input')?.click()}
           sx={{
-            ...styles.imagePreview,
-            backgroundImage: inputURI ? `url(${inputURI})` : 'none',
+            margin: '0 auto',
+            marginBottom: { xs: 1.5, sm: 2 },
+            width: '100%',
+            height: UI_CONFIG.modal.imageHeight,
+            cursor: 'pointer',
+            bgcolor: 'transparent',
+            border: 'none',
+            p: 0,
+            ...STYLES.flexCenter,
+            transition: 'all 0.2s ease-in-out',
+            '&:focus': {
+              outline: '2px solid',
+              outlineColor: 'primary.main',
+              outlineOffset: '2px',
+            },
           }}
+          aria-label="Click to upload image"
         >
-          {!inputURI && (
-            <Box sx={styles.uploadPrompt}>
+          {inputURI ? (
+            <Box
+              component="img"
+              src={inputURI}
+              alt="Selected image preview"
+              sx={{
+                maxWidth: '100%',
+                maxHeight: '100%',
+                objectFit: 'contain',
+                border: '2px dashed',
+                borderColor: 'primary.main',
+                borderRadius: { xs: 1, sm: 2 },
+                transition: 'border-color 0.2s ease-in-out',
+                '&:hover': {
+                  borderColor: 'primary.dark',
+                },
+              }}
+            />
+          ) : (
+            <Box
+              sx={{
+                width: '100%',
+                height: '100%',
+                border: '2px dashed',
+                borderColor: 'primary.main',
+                borderRadius: { xs: 1, sm: 2 },
+                ...STYLES.flexCenter,
+                flexDirection: 'column',
+                gap: { xs: 0.5, sm: 1 },
+                transition: 'all 0.2s ease-in-out',
+                '&:hover': {
+                  borderColor: 'primary.dark',
+                  bgcolor: 'action.hover',
+                },
+              }}
+            >
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image sx={{ fontSize: UI_CONFIG.modal.iconSize, color: 'primary.main' }} />
-              <Typography variant="body1" color="primary.main" fontWeight="medium">
+              <Image
+                sx={{
+                  fontSize: UI_CONFIG.modal.iconSize,
+                  color: 'primary.main',
+                }}
+                aria-hidden="true"
+              />
+              <Typography
+                variant="body1"
+                color="primary.main"
+                fontWeight="medium"
+                sx={{
+                  fontSize: { xs: '0.9rem', sm: '1rem' },
+                  textAlign: 'center',
+                }}
+              >
                 Click to upload an image
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{
+                  fontSize: { xs: '0.8rem', sm: '0.875rem' },
+                  textAlign: 'center',
+                }}
+              >
                 or choose a preset below
               </Typography>
             </Box>
           )}
         </Box>
 
-        <FormControl fullWidth sx={{ mb: UI_CONFIG.modal.spacing }}>
-          <InputLabel>Preset</InputLabel>
-          <Select value={selectedPreset} label="Preset" onChange={handlePresetChange}>
+        <FormControl fullWidth sx={{ mb: 2 }}>
+          <InputLabel id="preset-select-label">Preset</InputLabel>
+          <Select
+            labelId="preset-select-label"
+            value={selectedPreset}
+            label="Preset"
+            onChange={handlePresetChange}
+            aria-describedby="preset-select-helper"
+          >
             {PRESET_IMAGES.map((preset, i) => (
               <MenuItem value={`${preset.name}|${preset.url}`} key={i}>
                 {preset.name}
@@ -116,18 +173,45 @@ const ImageModal = () => {
           </Select>
         </FormControl>
 
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: UI_CONFIG.modal.spacing }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
+            justifyContent: 'space-between',
+            gap: { xs: 1.5, sm: 2 },
+          }}
+        >
           <Button
             component="label"
             variant="outlined"
             color="primary"
             startIcon={<CloudUpload />}
-            sx={{ minWidth: UI_CONFIG.modal.minButtonWidth }}
+            sx={{
+              minWidth: UI_CONFIG.modal.minButtonWidth,
+              order: { xs: 2, sm: 1 },
+            }}
+            aria-label="Browse and select image files"
           >
             Browse Files
-            <input type="file" hidden accept="image/*" onChange={handleFileInput} />
+            <input
+              id="file-input"
+              type="file"
+              hidden
+              accept="image/*"
+              onChange={handleFileInput}
+              aria-label="Select image file"
+            />
           </Button>
-          <Button onClick={handleDone} variant="contained" color="success" endIcon={<Done />}>
+          <Button
+            onClick={handleDone}
+            variant="contained"
+            color="success"
+            endIcon={<Done />}
+            sx={{
+              order: { xs: 1, sm: 2 },
+            }}
+            aria-label="Confirm image selection"
+          >
             Done
           </Button>
         </Box>

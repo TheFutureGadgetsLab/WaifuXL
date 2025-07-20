@@ -17,7 +17,22 @@ const theme = createTheme({
     secondary: { main: '#FFFFFF' },
     success: { main: '#44ABBC' },
   },
-  typography: { fontFamily: roboto.style.fontFamily },
+  typography: {
+    fontFamily: roboto.style.fontFamily,
+    h2: {
+      fontWeight: 'bold',
+    },
+  },
+  spacing: 8, // Standard 8px spacing unit
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
   components: {
     MuiAlert: {
       styleOverrides: {
@@ -26,6 +41,31 @@ const theme = createTheme({
             backgroundColor: '#60a5fa',
           }),
         }),
+      },
+    },
+    MuiButton: {
+      defaultProps: {
+        disableElevation: true,
+      },
+      styleOverrides: {
+        root: {
+          borderRadius: 8,
+          textTransform: 'none',
+        },
+      },
+    },
+    MuiContainer: {
+      defaultProps: {
+        maxWidth: 'lg',
+      },
+    },
+    MuiModal: {
+      styleOverrides: {
+        root: {
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        },
       },
     },
   },

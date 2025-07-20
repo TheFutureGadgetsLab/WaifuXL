@@ -12,12 +12,17 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  Typography,
 } from '@mui/material'
 
-import { UPSCALE_FACTORS, UI_CONFIG, STYLES } from '@/constants'
+import { UPSCALE_FACTORS, UI_CONFIG } from '@/constants'
 import TagDisplay from './tags'
 
-const Sidebar = () => {
+interface SidebarProps {
+  isMobile?: boolean
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ isMobile = false }) => {
   const tags = useImageStore((state) => state.tags)
   const outputURI = useImageStore((state) => state.outputURI)
   const upscaleFactor = useImageStore((state) => state.upscaleFactor)
@@ -101,21 +106,95 @@ const Sidebar = () => {
   return (
     <Box
       sx={{
+        ...(!isMobile && {
+          display: { xs: 'none', [UI_CONFIG.layout.sidebarBreakpoint]: 'flex' },
+          width: UI_CONFIG.layout.sidebarWidth,
+          flexShrink: 0,
+        }),
+        ...(isMobile && {
+          width: '100%',
+          display: 'flex',
+        }),
+        flexDirection: 'column',
+        height: isMobile ? '100%' : UI_CONFIG.layout.contentHeight,
         '& .MuiDrawer-paper': {
-          padding: 2,
+          p: 2,
         },
-        display: { xs: 'none', [UI_CONFIG.layout.sidebarBreakpoint]: 'block' },
       }}
+      component="aside"
+      role="complementary"
+      aria-label="Image processing controls and results"
     >
-      <Container sx={{ marginTop: 2 }}>
-        <Box sx={{ ...STYLES.flexColumn, gap: 2 }}>
+      {isMobile && (
+        <Typography
+          variant="h6"
+          color="primary"
+          sx={{
+            textAlign: 'center',
+            mb: 2,
+            fontWeight: 'bold',
+          }}
+        >
+          WaifuXL Controls
+        </Typography>
+      )}
+
+      <Container
+        sx={{
+          mt: isMobile ? 0 : 2,
+          px: { xs: 2, sm: 3 },
+        }}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: { xs: 1.5, sm: 2 },
+          }}
+        >
           {renderButtons()}
           {renderUpscaleSelect()}
         </Box>
       </Container>
-      <TagDisplay title="Top Characters" tags={tags.topChars} />
-      <Divider sx={{ mt: 2 }} />
-      <TagDisplay title="Top Descriptors" tags={tags.topDesc} />
+
+      {(tags.topChars.length > 0 || tags.topDesc.length > 0) && (
+        <Box
+          sx={{
+            flex: 1,
+            overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column',
+            mt: 1,
+          }}
+        >
+          <Box
+            sx={{
+              flex: 1,
+              overflowY: 'auto',
+              px: 2,
+              pb: 2,
+              '&::-webkit-scrollbar': {
+                width: '6px',
+              },
+              '&::-webkit-scrollbar-track': {
+                background: 'rgba(0,0,0,0.1)',
+                borderRadius: '3px',
+              },
+              '&::-webkit-scrollbar-thumb': {
+                background: 'primary.main',
+                borderRadius: '3px',
+                '&:hover': {
+                  background: 'primary.dark',
+                },
+              },
+            }}
+          >
+            <TagDisplay title="Top Characters" tags={tags.topChars} />
+            <Divider sx={{ mt: 2, mb: 1 }} />
+            <TagDisplay title="Top Descriptors" tags={tags.topDesc} />
+          </Box>
+        </Box>
+      )}
     </Box>
   )
 }
