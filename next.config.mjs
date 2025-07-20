@@ -5,7 +5,7 @@ const outputPath = 'static/chunks/'
 // Setup plugins
 const copyPlugin = new CopyPlugin({
   patterns: [
-    { from: './node_modules/onnxruntime-web/dist/*.wasm', to: `${outputPath}[name][ext]` },
+    { from: './node_modules/onnxruntime-web/dist/*.wasm', to: `[name][ext]` },
     { from: './public/models', to: outputPath },
   ],
 })
