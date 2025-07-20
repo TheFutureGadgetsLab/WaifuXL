@@ -39,7 +39,6 @@
     "@types/react-dom": "latest",
     "@typescript-eslint/eslint-plugin": "^8.37.0",
     "@typescript-eslint/parser": "^8.37.0",
-    "copy-webpack-plugin": "^13.0.0",
     "eslint": "^9.31.0",
     "eslint-config-next": "^15.4.2",
     "eslint-config-prettier": "^10.1.8",

@@ -1,15 +1,3 @@
-import CopyPlugin from 'copy-webpack-plugin'
-
-const outputPath = 'static/chunks/'
-
-// Setup plugins
-const copyPlugin = new CopyPlugin({
-  patterns: [
-    { from: './node_modules/onnxruntime-web/dist/*.wasm', to: `[name][ext]` },
-    { from: './public/models', to: outputPath },
-  ],
-})
-
 // Define Next.js configuration
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -18,10 +6,6 @@ const nextConfig = {
   productionBrowserSourceMaps: true,
   images: { unoptimized: true },
   output: process.env.NODE_ENV === 'development' ? 'standalone' : 'export',
-  webpack: (config) => {
-    config.plugins.push(copyPlugin)
-    return config
-  },
   async headers() {
     return [
       {
