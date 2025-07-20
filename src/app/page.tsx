@@ -103,7 +103,7 @@ const MainContent = memo(({ isMobile, onToggleDrawer }: MainContentProps) => {
             height: '100%',
             background: 'url(/DesktopBG.svg) bottom right / contain no-repeat',
             pointerEvents: 'none',
-            zIndex: 0,
+            zIndex: -1,
           }}
         />
       )}
