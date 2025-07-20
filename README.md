@@ -2,6 +2,8 @@
 
 [![Upscale Count](https://img.shields.io/endpoint?color=blue&url=https%3A%2F%2Fwaifuxl_upscale_counter.haydnjonest8327.workers.dev%2Fbadge)](waifuxl.com) [![GitHub Super-Linter](https://github.com/TheFutureGadgetsLab/WaifuXL/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)
 
+
+
 # Notice
 
 WaifuXL 1.5 has been released!  
