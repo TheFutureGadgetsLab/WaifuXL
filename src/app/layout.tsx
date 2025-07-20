@@ -1,6 +1,6 @@
 'use client'
 
-import { ThemeProvider, createTheme } from '@mui/material'
+import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter'
 import { Roboto } from 'next/font/google'
 import React from 'react'

@@ -109,10 +109,7 @@ async function multiUpscale(
   return imgToDataURI(outArr)
 }
 
-async function upscaleFrame(
-  session: InferenceSession,
-  imageArray: NdArray<Uint8Array>
-): Promise<NdArray<Uint8Array<ArrayBuffer>>> {
+async function upscaleFrame(session: InferenceSession, imageArray: NdArray<Uint8Array>): Promise<NdArray<Uint8Array>> {
   const [inImgW, inImgH] = imageArray.shape
   const [outImgW, outImgH] = [inImgW * 2, inImgH * 2]
   const [numChunksWidth, numChunksHeight] = [Math.ceil(inImgW / CHUNK_SIZE), Math.ceil(inImgH / CHUNK_SIZE)]

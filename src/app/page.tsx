@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Container, Grid2, Typography } from '@mui/material'
+import { Box, Container, Grid, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider'
 
@@ -16,19 +16,19 @@ export default function HomePage() {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <TitleBar />
-      <Grid2 container sx={{ flexGrow: 1 }}>
-        <Grid2>
+      <Grid container sx={{ flexGrow: 1 }}>
+        <Grid>
           <Sidebar />
-        </Grid2>
-        <Grid2
+        </Grid>
+        <Grid
           size={'grow'}
           sx={{ height: '90vh', marginTop: 4, background: 'url(/DesktopBG.svg) bottom right / contain no-repeat' }}
         >
           <Container sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <ImageDisplayComponent />
           </Container>
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
       <ModalComponent />
     </Box>
   )

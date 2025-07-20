@@ -1,16 +1,16 @@
 'use client'
 
 import TitleBar from '@/components/titlebar'
-import { Box, Container, Grid2, Typography } from '@mui/material'
+import { Box, Container, Grid, Typography } from '@mui/material'
 import React from 'react'
 
 export default function AboutPage() {
   return (
-    <Grid2 container direction="column" sx={{ minHeight: '100vh' }}>
-      <Grid2>
+    <Grid container direction="column" sx={{ minHeight: '100vh' }}>
+      <Grid>
         <TitleBar />
-      </Grid2>
-      <Grid2>
+      </Grid>
+      <Grid>
         <Container maxWidth="md">
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4, py: 4 }}>
             <Section title="At A Glance">
@@ -43,8 +43,8 @@ export default function AboutPage() {
             </Section>
           </Box>
         </Container>
-      </Grid2>
-    </Grid2>
+      </Grid>
+    </Grid>
   )
 }
 

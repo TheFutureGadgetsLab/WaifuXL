@@ -1,15 +1,13 @@
 import TitleBar from '@/components/titlebar'
-import { Grid2 } from '@mui/material'
-import Box from '@mui/material/Box'
-import Container from '@mui/material/Container'
+import { Box, Container, Grid } from '@mui/material'
 
 export default function DonatePage() {
   return (
-    <Grid2 container direction="column" sx={{ minHeight: '100vh' }}>
-      <Grid2>
+    <Grid container direction="column" sx={{ minHeight: '100vh' }}>
+      <Grid>
         <TitleBar />
-      </Grid2>
-      <Grid2>
+      </Grid>
+      <Grid>
         <Container>
           <Box
             sx={{
@@ -34,7 +32,7 @@ export default function DonatePage() {
             ></iframe>
           </Box>
         </Container>
-      </Grid2>
-    </Grid2>
+      </Grid>
+    </Grid>
   )
 }
