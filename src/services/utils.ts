@@ -1,32 +1,32 @@
 export const downloadImage = (outputURI: string | null) => {
   if (outputURI) {
-    const link = document.createElement('a');
-    link.href = outputURI;
-    link.download = "superRes.png";
-    link.click();
+    const link = document.createElement('a')
+    link.href = outputURI
+    link.download = 'superRes.png'
+    link.click()
   }
-};
+}
 
 // Output URI can be null
 export const copyImageToClipboard = async (outputURI: string | null) => {
   if (outputURI) {
     try {
-      const imgBlob = await (await fetch(outputURI)).blob();
-      await navigator.clipboard.write([new ClipboardItem({ 'image/png': imgBlob })]);
+      const imgBlob = await (await fetch(outputURI)).blob()
+      await navigator.clipboard.write([new ClipboardItem({ 'image/png': imgBlob })])
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
   }
-};
+}
 
 export const truncateString = (str: string) => {
   const cleaned = str
     .toLowerCase()
     .replace(/(?:^|\s)\S/g, (a) => a.toUpperCase())
     .split('(')[0]
-    .replace(/_/g, ' ');
-  return cleaned.length > 25 ? cleaned.slice(0, 25) + '…' : cleaned;
-};
+    .replace(/_/g, ' ')
+  return cleaned.length > 25 ? cleaned.slice(0, 25) + '…' : cleaned
+}
 
 type InputType = string | File
 

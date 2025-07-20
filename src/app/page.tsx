@@ -8,10 +8,10 @@ import ModalComponent from '@/components/modal'
 import Sidebar from '@/components/sidebar'
 import TitleBar from '@/components/titlebar'
 import { useAppStateStore, useImageStore } from '@/services/useState'
-import { registerEventHandlers } from '@/services/windowUtilities'
+import { useEventHandlers } from '@/services/windowUtilities'
 
 export default function HomePage() {
-  registerEventHandlers()
+  useEventHandlers()
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>

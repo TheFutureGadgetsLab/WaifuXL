@@ -1,0 +1,7 @@
+node_modules/
+.next/
+out/
+*.config.js
+*.config.mjs
+package-lock.json
+public/

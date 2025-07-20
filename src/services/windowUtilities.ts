@@ -19,31 +19,9 @@ export const useWindowSize = (): WindowSize => {
   return windowSize
 }
 
-export const registerEventHandlers = (): void => {
+export const useEventHandlers = (): void => {
   const setInputURI = useImageStore((state) => state.setInputURI)
   const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen)
-
-  const handlePaste = useCallback(
-    (e: ClipboardEvent) => {
-      const text = e.clipboardData?.getData('text/plain')
-      if (text) {
-        setInputURI(text)
-      } else if (handleInputFile(e.clipboardData?.items)) {
-        setInputModalOpen(true)
-      }
-    },
-    [setInputURI, setInputModalOpen],
-  )
-
-  const handleDrop = useCallback(
-    (e: DragEvent) => {
-      e.preventDefault()
-      if (handleInputFile(e.dataTransfer?.items)) {
-        setInputModalOpen(true)
-      }
-    },
-    [setInputModalOpen],
-  )
 
   const handleInputFile = useCallback(
     (items?: DataTransferItemList): boolean => {
@@ -57,7 +35,29 @@ export const registerEventHandlers = (): void => {
       }
       return false
     },
-    [setInputURI],
+    [setInputURI]
+  )
+
+  const handlePaste = useCallback(
+    (e: ClipboardEvent) => {
+      const text = e.clipboardData?.getData('text/plain')
+      if (text) {
+        setInputURI(text)
+      } else if (handleInputFile(e.clipboardData?.items)) {
+        setInputModalOpen(true)
+      }
+    },
+    [setInputURI, setInputModalOpen, handleInputFile]
+  )
+
+  const handleDrop = useCallback(
+    (e: DragEvent) => {
+      e.preventDefault()
+      if (handleInputFile(e.dataTransfer?.items)) {
+        setInputModalOpen(true)
+      }
+    },
+    [setInputModalOpen, handleInputFile]
   )
 
   useEffect(() => {

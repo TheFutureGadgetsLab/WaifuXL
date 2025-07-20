@@ -4,7 +4,6 @@ import { immer } from 'zustand/middleware/immer'
 import { ModelTags } from './inference'
 import { getImageURI } from './utils'
 
-
 type ImageStoreState = {
   inputURI: string
   outputURI: string | null
@@ -55,7 +54,7 @@ export const useImageStore = create(
       set((state) => {
         state.tags = newTags
       }),
-  })),
+  }))
 )
 
 type AppStateStoreState = {
@@ -101,5 +100,5 @@ export const useAppStateStore = create(
       set((state) => {
         state.selectedPreset = newSelectedPreset
       }),
-  })),
+  }))
 )

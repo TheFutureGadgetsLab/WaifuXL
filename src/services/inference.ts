@@ -1,13 +1,21 @@
-import ndarray, { NdArray } from 'ndarray';
-import ops from 'ndarray-ops';
-import { InferenceSession, env as ORTEnv, Tensor, TypedTensor } from 'onnxruntime-web';
+import ndarray, { NdArray } from 'ndarray'
+import ops from 'ndarray-ops'
+import { InferenceSession, env as ORTEnv, Tensor, TypedTensor } from 'onnxruntime-web'
 
 // Types
-export interface ModelTag { name: string; prob: number }
-export interface ModelTags { topDesc: ModelTag[]; topChars: ModelTag[]; rating: ModelTag[] }
+export interface ModelTag {
+  name: string
+  prob: number
+}
+export interface ModelTags {
+  topDesc: ModelTag[]
+  topChars: ModelTag[]
+  rating: ModelTag[]
+}
 
 // Constants
-const CHUNK_SIZE = 256, PAD_SIZE = 32
+const CHUNK_SIZE = 256,
+  PAD_SIZE = 32
 
 // Session management
 let superSession: InferenceSession | null = null
@@ -101,7 +109,10 @@ async function multiUpscale(
   return imgToDataURI(outArr)
 }
 
-async function upscaleFrame(session: InferenceSession, imageArray: NdArray<Uint8Array>): Promise<NdArray<Uint8Array<ArrayBuffer>>> {
+async function upscaleFrame(
+  session: InferenceSession,
+  imageArray: NdArray<Uint8Array>
+): Promise<NdArray<Uint8Array<ArrayBuffer>>> {
   const [inImgW, inImgH] = imageArray.shape
   const [outImgW, outImgH] = [inImgW * 2, inImgH * 2]
   const [numChunksWidth, numChunksHeight] = [Math.ceil(inImgW / CHUNK_SIZE), Math.ceil(inImgH / CHUNK_SIZE)]
@@ -138,7 +149,9 @@ async function upscaleFrame(session: InferenceSession, imageArray: NdArray<Uint8
 
 async function runSuperRes(session: InferenceSession, imageArray: NdArray): Promise<Tensor | undefined> {
   try {
-    const output = await session.run({ input: new Tensor('uint8', (imageArray.data as number[]).slice(), imageArray.shape) })
+    const output = await session.run({
+      input: new Tensor('uint8', (imageArray.data as number[]).slice(), imageArray.shape),
+    })
     return output.output
   } catch (e) {
     console.error('Failed to run super resolution:', e)
@@ -163,7 +176,10 @@ function imgToDataURI(img: NdArray<Uint8Array>): string {
   const canvas = document.createElement('canvas')
   canvas.width = width
   canvas.height = height
-  canvas.getContext('2d')!.putImageData(new ImageData(buffer, width, height), 0, 0)
+  const ctx = canvas.getContext('2d')
+  if (ctx) {
+    ctx.putImageData(new ImageData(buffer, width, height), 0, 0)
+  }
   return canvas.toDataURL('image/png')
 }
 

@@ -23,7 +23,7 @@ export default function AboutPage() {
 
             <Section title="About Us">
               <Typography>
-                Hi, we're the Future Gadgets Lab! We make a lot of random stuff, check out our organization{' '}
+                Hi, we&apos;re the Future Gadgets Lab! We make a lot of random stuff, check out our organization{' '}
                 <a href="https://github.com/TheFutureGadgetsLab">here!</a>
               </Typography>
             </Section>
@@ -32,11 +32,11 @@ export default function AboutPage() {
               <Typography>
                 Check out the full write-up <a href="https://haydn.fgl.dev/posts/the-launch-of-waifuxl/">here!</a> We
                 send you neural networks to execute directly in your browser using the{' '}
-                <a href="https://onnxruntime.ai/">ONNX Runtime</a>. For the upscaling model we're using the{' '}
+                <a href="https://onnxruntime.ai/">ONNX Runtime</a>. For the upscaling model we&apos;re using the{' '}
                 <a href="https://arxiv.org/abs/2107.10833">SOTA Real-ESRGAN</a> Our tagger is a{' '}
-                <a href="https://arxiv.org/abs/1905.02244">MobileNetV3</a> On the web side we're using{' '}
+                <a href="https://arxiv.org/abs/1905.02244">MobileNetV3</a> On the web side we&apos;re using{' '}
                 <a href="https://reactjs.org/">React</a>, <a href="https://nextjs.org/">Next.js</a>, and{' '}
-                <a href="https://mui.com/">Material UI</a>. We're hosted on{' '}
+                <a href="https://mui.com/">Material UI</a>. We&apos;re hosted on{' '}
                 <a href="https://pages.cloudflare.com/">Cloudflare Pages</a> which generously provides unlimited
                 bandwith.
               </Typography>
