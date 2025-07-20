@@ -7,71 +7,69 @@ import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slide
 import ImageModal from '@/components/modal'
 import Sidebar from '@/components/sidebar'
 import TitleBar from '@/components/titlebar'
-import { LAYOUT, ANIMATION } from '@/constants'
+import { UI_CONFIG, STYLES } from '@/constants'
 import { useAppStateStore, useImageStore } from '@/services/useState'
 import { useEventHandlers } from '@/services/windowUtilities'
 
 const styles = {
   main: {
-    display: 'flex',
-    flexDirection: 'column',
+    ...STYLES.flexColumn,
     height: '100vh',
   },
   contentGrid: {
-    height: LAYOUT.contentHeight,
+    height: UI_CONFIG.layout.contentHeight,
     marginTop: 4,
     background: 'url(/DesktopBG.svg) bottom right / contain no-repeat',
   },
   container: {
+    ...STYLES.flexColumn,
     height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
     justifyContent: 'center',
   },
   imageBox: {
     width: '100%',
-    maxWidth: LAYOUT.maxImageWidth,
+    maxWidth: UI_CONFIG.layout.maxImageWidth,
   },
   imageContainer: {
     position: 'relative',
     paddingTop: '100%',
   },
   slider: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
+    ...STYLES.absolutePosition,
+    ...STYLES.fullSize,
   },
   image: {
     objectFit: 'contain' as const,
-    width: '100%',
-    height: '100%',
+    ...STYLES.fullSize,
   },
 } as const
 
-function HomePage() {
+const HomePage = () => {
   useEventHandlers()
 
   return (
     <Box sx={styles.main}>
       <TitleBar />
-      <Grid container sx={{ flexGrow: 1 }}>
-        <Grid>
-          <Sidebar />
-        </Grid>
-        <Grid size="grow" sx={styles.contentGrid}>
-          <Container sx={styles.container}>
-            <ImageDisplay />
-          </Container>
-        </Grid>
-      </Grid>
+      <MainContent />
       <ImageModal />
     </Box>
   )
 }
 
-function ImageDisplay() {
+const MainContent = () => (
+  <Grid container sx={{ flexGrow: 1 }}>
+    <Grid>
+      <Sidebar />
+    </Grid>
+    <Grid size="grow" sx={styles.contentGrid}>
+      <Container sx={styles.container}>
+        <ImageDisplay />
+      </Container>
+    </Grid>
+  </Grid>
+)
+
+const ImageDisplay = () => {
   const { inputURI, outputURI } = useImageStore()
 
   return (
@@ -91,20 +89,23 @@ function ImageDisplay() {
   )
 }
 
-function ProcessingText() {
-  const [loadingText, setLoadingText] = useState('')
-  const { running, downloadReady } = useAppStateStore()
+const ProcessingText = () => {
+  const [dots, setDots] = useState('')
+  const running = useAppStateStore((state) => state.running)
+  const outputURI = useImageStore((state) => state.outputURI)
 
   useEffect(() => {
-    const updateLoadingText = () => {
-      setLoadingText((prev) => (prev === '...' ? '' : `${prev}.`))
-    }
-
-    const interval = setInterval(updateLoadingText, ANIMATION.loadingTextInterval)
+    if (!running) return
+    
+    const interval = setInterval(() => {
+      setDots((prev) => (prev === '...' ? '' : `${prev}.`))
+    }, UI_CONFIG.loadingTextInterval)
+    
     return () => clearInterval(interval)
-  }, [])
+  }, [running])
 
-  const displayText = downloadReady ? 'Download' : running ? 'Expanding' : 'Expand'
+  const hasProcessed = outputURI !== null
+  const displayText = hasProcessed ? 'Download' : running ? 'Expanding' : 'Expand'
 
   return (
     <Typography variant="h2" color="primary" align="center" sx={{ fontWeight: 'bold', mb: 1 }}>
@@ -112,7 +113,7 @@ function ProcessingText() {
         {displayText} your{' '}
       </Box>
       waifu
-      {running ? loadingText : '!'}
+      {running ? dots : '!'}
     </Typography>
   )
 }

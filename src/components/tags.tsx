@@ -3,14 +3,14 @@ import { Box, CircularProgress, List, ListItem, ListItemText, Pagination, Typogr
 
 import { ModelTag } from '@/services/inference'
 import { truncateString } from '@/services/utils'
-import { TAGS_PER_PAGE } from '@/constants'
+import { TAGS_PER_PAGE, UI_CONFIG } from '@/constants'
 
 interface TagDisplayProps {
   title: string
   tags: ModelTag[]
 }
 
-function TagDisplay({ title, tags }: TagDisplayProps) {
+const TagDisplay = ({ title, tags }: TagDisplayProps) => {
   const [tagPage, setTagPage] = useState(1)
 
   const curTags = useMemo(() => tags.slice(TAGS_PER_PAGE * (tagPage - 1), TAGS_PER_PAGE * tagPage), [tags, tagPage])
@@ -52,10 +52,10 @@ interface CircularProgressWithLabelProps {
   value: number
 }
 
-function CircularProgressWithLabel({ value }: CircularProgressWithLabelProps) {
+const CircularProgressWithLabel = ({ value }: CircularProgressWithLabelProps) => {
   return (
     <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-      <CircularProgress size={24} value={value} variant="determinate" color="primary" />
+      <CircularProgress size={UI_CONFIG.circularProgressSize} value={value} variant="determinate" color="primary" />
       <Box
         sx={{
           position: 'absolute',
@@ -65,7 +65,7 @@ function CircularProgressWithLabel({ value }: CircularProgressWithLabelProps) {
           justifyContent: 'center',
         }}
       >
-        <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.6rem' }}>
+        <Typography variant="caption" color="text.secondary" sx={{ fontSize: UI_CONFIG.captionFontSize }}>
           {Math.round(value)}
         </Typography>
       </Box>
@@ -73,4 +73,4 @@ function CircularProgressWithLabel({ value }: CircularProgressWithLabelProps) {
   )
 }
 
-export { TagDisplay as default }
+export default TagDisplay

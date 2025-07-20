@@ -21,6 +21,7 @@ export const useWindowSize = (): WindowSize => {
 
 export const useEventHandlers = (): void => {
   const setInputURI = useImageStore((state) => state.setInputURI)
+  const resetOutput = useImageStore((state) => state.resetOutput)
   const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen)
 
   const handleInputFile = useCallback(
@@ -31,11 +32,12 @@ export const useEventHandlers = (): void => {
         ?.getAsFile()
       if (file) {
         setInputURI(file)
+        resetOutput()
         return true
       }
       return false
     },
-    [setInputURI]
+    [setInputURI, resetOutput]
   )
 
   const handlePaste = useCallback(
@@ -43,11 +45,12 @@ export const useEventHandlers = (): void => {
       const text = e.clipboardData?.getData('text/plain')
       if (text) {
         setInputURI(text)
+        resetOutput()
       } else if (handleInputFile(e.clipboardData?.items)) {
         setInputModalOpen(true)
       }
     },
-    [setInputURI, setInputModalOpen, handleInputFile]
+    [setInputURI, setInputModalOpen, resetOutput, handleInputFile]
   )
 
   const handleDrop = useCallback(
@@ -65,13 +68,13 @@ export const useEventHandlers = (): void => {
     window.addEventListener('drop', handleDrop)
     const preventDefault = (e: Event) => e.preventDefault()
 
-    const events = ['dragenter', 'dragover', 'dragstart', 'dragend']
-    events.forEach((event) => window.addEventListener(event, preventDefault))
+    const dragEvents = ['dragenter', 'dragover', 'dragstart', 'dragend'] as const
+    dragEvents.forEach((event) => window.addEventListener(event, preventDefault))
 
     return () => {
       window.removeEventListener('paste', handlePaste)
       window.removeEventListener('drop', handleDrop)
-      events.forEach((event) => window.removeEventListener(event, preventDefault))
+      dragEvents.forEach((event) => window.removeEventListener(event, preventDefault))
     }
   }, [handlePaste, handleDrop])
 }

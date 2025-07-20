@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 import { HEADER_LINKS } from '@/constants'
 
-function TitleBar() {
+const TitleBar = () => {
   return (
     <AppBar position="sticky" color="primary" elevation={0}>
       <Toolbar sx={{ justifyContent: 'center' }}>

@@ -5,7 +5,7 @@ import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select, Typograp
 import { Done, CloudUpload, Image } from '@mui/icons-material'
 
 import { useAppStateStore, useImageStore } from '@/services/useState'
-import { PRESET_IMAGES, MODAL_CONFIG } from '@/constants'
+import { PRESET_IMAGES, UI_CONFIG, STYLES } from '@/constants'
 
 const styles = {
   modal: {
@@ -14,26 +14,22 @@ const styles = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     bgcolor: 'background.paper',
-    border: '2px solid #000',
+    border: `${UI_CONFIG.modal.borderWidth} solid #000`,
     boxShadow: 24,
     p: 4,
     width: '90%',
-    maxWidth: MODAL_CONFIG.maxWidth,
+    maxWidth: UI_CONFIG.modal.maxWidth,
   },
   imagePreview: {
     margin: '0 auto 16px',
     width: '100%',
-    height: MODAL_CONFIG.imageHeight,
+    height: UI_CONFIG.modal.imageHeight,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     cursor: 'pointer',
-    border: '2px dashed',
-    borderColor: 'primary.main',
-    borderRadius: 2,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
+    ...STYLES.borderDashed,
+    ...STYLES.flexCenter,
+    ...STYLES.flexColumn,
     gap: 1,
     transition: 'all 0.2s ease-in-out',
     '&:hover': {
@@ -42,17 +38,22 @@ const styles = {
     },
   },
   uploadPrompt: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    ...STYLES.flexCenter,
+    ...STYLES.flexColumn,
     gap: 1,
     color: 'text.secondary',
   },
 } as const
 
-function ImageModal() {
-  const { inputModalOpen, setInputModalOpen, selectedPreset, setSelectedPreset } = useAppStateStore()
-  const { inputURI, setInputURI, setTags } = useImageStore()
+const ImageModal = () => {
+  const inputModalOpen = useAppStateStore((state) => state.inputModalOpen)
+  const selectedPreset = useAppStateStore((state) => state.selectedPreset)
+  const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen)
+  const setSelectedPreset = useAppStateStore((state) => state.setSelectedPreset)
+  const inputURI = useImageStore((state) => state.inputURI)
+  const setInputURI = useImageStore((state) => state.setInputURI)
+  const setTags = useImageStore((state) => state.setTags)
+  const resetOutput = useImageStore((state) => state.resetOutput)
 
   const handleClose = () => {
     setInputModalOpen(false)
@@ -62,8 +63,9 @@ function ImageModal() {
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
-      setInputURI(URL.createObjectURL(file))
+      setInputURI(file)
       setSelectedPreset('')
+      resetOutput()
     }
   }
 
@@ -71,6 +73,7 @@ function ImageModal() {
     setSelectedPreset(event.target.value)
     const [, url] = event.target.value.split('|')
     setInputURI(url)
+    resetOutput()
   }
 
   const handleDone = () => {
@@ -83,7 +86,6 @@ function ImageModal() {
     <Modal open={inputModalOpen} onClose={handleClose}>
       <Box sx={styles.modal}>
         <Box
-          component="label"
           sx={{
             ...styles.imagePreview,
             backgroundImage: inputURI ? `url(${inputURI})` : 'none',
@@ -91,7 +93,8 @@ function ImageModal() {
         >
           {!inputURI && (
             <Box sx={styles.uploadPrompt}>
-              <Image sx={{ fontSize: 48, color: 'primary.main' }} />
+              {/* eslint-disable-next-line jsx-a11y/alt-text */}
+              <Image sx={{ fontSize: UI_CONFIG.modal.iconSize, color: 'primary.main' }} />
               <Typography variant="body1" color="primary.main" fontWeight="medium">
                 Click to upload an image
               </Typography>
@@ -100,10 +103,9 @@ function ImageModal() {
               </Typography>
             </Box>
           )}
-          <input type="file" hidden accept="image/*" onChange={handleFileInput} />
         </Box>
 
-        <FormControl fullWidth sx={{ mb: 2 }}>
+        <FormControl fullWidth sx={{ mb: UI_CONFIG.modal.spacing }}>
           <InputLabel>Preset</InputLabel>
           <Select value={selectedPreset} label="Preset" onChange={handlePresetChange}>
             {PRESET_IMAGES.map((preset, i) => (
@@ -114,13 +116,13 @@ function ImageModal() {
           </Select>
         </FormControl>
 
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: UI_CONFIG.modal.spacing }}>
           <Button
             component="label"
             variant="outlined"
             color="primary"
             startIcon={<CloudUpload />}
-            sx={{ minWidth: 120 }}
+            sx={{ minWidth: UI_CONFIG.modal.minButtonWidth }}
           >
             Browse Files
             <input type="file" hidden accept="image/*" onChange={handleFileInput} />

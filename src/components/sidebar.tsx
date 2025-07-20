@@ -1,28 +1,32 @@
-import { upscaleAndTag } from '@/services/inference'
 import { useAppStateStore, useImageStore } from '@/services/useState'
 import { copyImageToClipboard, downloadImage } from '@/services/utils'
+import { useUpscale } from '@/services/useUpscale'
 import { CloudDownload, CloudUpload, CopyAll, RunCircle } from '@mui/icons-material'
-import { Box, Button, Container, Divider, FormControl, InputLabel, MenuItem, Select } from '@mui/material'
+import {
+  Box,
+  Button,
+  Container,
+  Divider,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from '@mui/material'
 
-import { UPSCALE_FACTORS, LAYOUT } from '@/constants'
+import { UPSCALE_FACTORS, UI_CONFIG, STYLES } from '@/constants'
 import TagDisplay from './tags'
 
-function Sidebar() {
-  const { tags, outputURI, hasntRun, inputURI, upscaleFactor, setOutputURI, setUpscaleFactor, setTags } =
-    useImageStore()
-  const { running, setInputModalOpen, setDownloadReady, setRunning } = useAppStateStore()
+const Sidebar = () => {
+  const tags = useImageStore((state) => state.tags)
+  const outputURI = useImageStore((state) => state.outputURI)
+  const upscaleFactor = useImageStore((state) => state.upscaleFactor)
+  const setUpscaleFactor = useImageStore((state) => state.setUpscaleFactor)
+  const running = useAppStateStore((state) => state.running)
+  const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen)
+  const handleUpscale = useUpscale()
 
-  const handleUpscale = async () => {
-    try {
-      setRunning(true)
-      const result = await upscaleAndTag(setTags, inputURI, upscaleFactor)
-      if (result) setOutputURI(result)
-    } finally {
-      setDownloadReady(true)
-      setRunning(false)
-      setUpscaleFactor(1)
-    }
-  }
+  const hasProcessed = outputURI !== null
 
   const renderButtons = () => (
     <>
@@ -41,7 +45,7 @@ function Sidebar() {
           <Button
             onClick={() => downloadImage(outputURI)}
             startIcon={<CloudDownload />}
-            disabled={hasntRun}
+            disabled={!hasProcessed}
             color="primary"
             variant="contained"
             fullWidth
@@ -51,7 +55,7 @@ function Sidebar() {
           <Button
             onClick={() => copyImageToClipboard(outputURI)}
             startIcon={<CopyAll />}
-            disabled={hasntRun}
+            disabled={!hasProcessed}
             color="primary"
             variant="contained"
             fullWidth
@@ -83,7 +87,7 @@ function Sidebar() {
           value={upscaleFactor.toString()}
           color="primary"
           label="Upscale Factor"
-          onChange={(e) => setUpscaleFactor(parseInt(e.target.value as string))}
+          onChange={(e: SelectChangeEvent<string>) => setUpscaleFactor(parseInt(e.target.value))}
         >
           {UPSCALE_FACTORS.map((factor) => (
             <MenuItem key={factor} value={factor / 2}>
@@ -100,11 +104,11 @@ function Sidebar() {
         '& .MuiDrawer-paper': {
           padding: 2,
         },
-        display: { xs: 'none', [LAYOUT.sidebarBreakpoint]: 'block' },
+        display: { xs: 'none', [UI_CONFIG.layout.sidebarBreakpoint]: 'block' },
       }}
     >
       <Container sx={{ marginTop: 2 }}>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Box sx={{ ...STYLES.flexColumn, gap: 2 }}>
           {renderButtons()}
           {renderUpscaleSelect()}
         </Box>

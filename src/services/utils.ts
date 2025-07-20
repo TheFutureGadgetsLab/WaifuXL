@@ -1,4 +1,6 @@
-export const downloadImage = (outputURI: string | null) => {
+import { UI_CONFIG } from '@/constants'
+
+export const downloadImage = (outputURI: string | null): void => {
   if (outputURI) {
     const link = document.createElement('a')
     link.href = outputURI
@@ -8,7 +10,7 @@ export const downloadImage = (outputURI: string | null) => {
 }
 
 // Output URI can be null
-export const copyImageToClipboard = async (outputURI: string | null) => {
+export const copyImageToClipboard = async (outputURI: string | null): Promise<void> => {
   if (outputURI) {
     try {
       const imgBlob = await (await fetch(outputURI)).blob()
@@ -19,18 +21,20 @@ export const copyImageToClipboard = async (outputURI: string | null) => {
   }
 }
 
-export const truncateString = (str: string) => {
+export const truncateString = (str: string): string => {
   const cleaned = str
     .toLowerCase()
     .replace(/(?:^|\s)\S/g, (a) => a.toUpperCase())
     .split('(')[0]
     .replace(/_/g, ' ')
-  return cleaned.length > 25 ? cleaned.slice(0, 25) + '…' : cleaned
+  return cleaned.length > UI_CONFIG.truncateStringLength
+    ? cleaned.slice(0, UI_CONFIG.truncateStringLength) + '…'
+    : cleaned
 }
 
-type InputType = string | File
+type ImageInput = string | File
 
-export async function getImageURI(input: InputType): Promise<string> {
+export async function getImageURI(input: ImageInput): Promise<string> {
   if (input instanceof File) {
     return URL.createObjectURL(input)
   }

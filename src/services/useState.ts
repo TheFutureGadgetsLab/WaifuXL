@@ -4,19 +4,19 @@ import { immer } from 'zustand/middleware/immer'
 import { ModelTags } from './inference'
 import { getImageURI } from './utils'
 
-type ImageStoreState = {
+interface ImageStoreState {
   inputURI: string
   outputURI: string | null
   tags: ModelTags
   upscaleFactor: number
-  hasntRun: boolean
 }
 
-type ImageStoreActions = {
+interface ImageStoreActions {
   setInputURI: (uri: string | File) => void
-  setUpscaleFactor: (newFactor: number) => void
-  setOutputURI: (uri: string) => void
-  setTags: (newTags: ModelTags) => void
+  setUpscaleFactor: (upscaleFactor: number) => void
+  setOutputURI: (outputURI: string) => void
+  setTags: (tags: ModelTags) => void
+  resetOutput: () => void
 }
 
 const initialImageState: ImageStoreState = {
@@ -24,7 +24,6 @@ const initialImageState: ImageStoreState = {
   outputURI: './images/senjougahara_2x.webp',
   tags: default_tags,
   upscaleFactor: 1,
-  hasntRun: true,
 }
 
 export const useImageStore = create(
@@ -35,48 +34,46 @@ export const useImageStore = create(
       getImageURI(uri).then((dataUri) => {
         set((state) => {
           state.inputURI = dataUri
-          state.hasntRun = true
           state.outputURI = null
         })
-        useAppStateStore.setState({ downloadReady: false })
       })
     },
-    setUpscaleFactor: (newFactor) =>
+    setUpscaleFactor: (upscaleFactor) =>
       set((state) => {
-        state.upscaleFactor = newFactor
+        state.upscaleFactor = upscaleFactor
       }),
-    setOutputURI: (uri) =>
+    setOutputURI: (outputURI) =>
       set((state) => {
-        state.outputURI = uri
-        state.hasntRun = false
+        state.outputURI = outputURI
       }),
-    setTags: (newTags) =>
+    setTags: (tags) =>
       set((state) => {
-        state.tags = newTags
+        state.tags = tags
+      }),
+    resetOutput: () =>
+      set((state) => {
+        state.outputURI = null
       }),
   }))
 )
 
-type AppStateStoreState = {
+interface AppStateStoreState {
   inputModalOpen: boolean
   errorMessage: string | null
   running: boolean
-  downloadReady: boolean
   selectedPreset: string
 }
 
-type AppStateStoreActions = {
-  setInputModalOpen: (newInputModalOpen: boolean) => void
-  setRunning: (newRunning: boolean) => void
-  setDownloadReady: (newDownloadReady: boolean) => void
-  setSelectedPreset: (newSelectedPreset: string) => void
+interface AppStateStoreActions {
+  setInputModalOpen: (inputModalOpen: boolean) => void
+  setRunning: (running: boolean) => void
+  setSelectedPreset: (selectedPreset: string) => void
 }
 
 const initialAppState: AppStateStoreState = {
   inputModalOpen: false,
   errorMessage: null,
   running: false,
-  downloadReady: false,
   selectedPreset: 'Senjougahara|https://i.imgur.com/cMX8YcK.jpg',
 }
 
@@ -84,21 +81,17 @@ export const useAppStateStore = create(
   immer<AppStateStoreState & AppStateStoreActions>((set) => ({
     ...initialAppState,
 
-    setInputModalOpen: (newInputModalOpen) =>
+    setInputModalOpen: (inputModalOpen) =>
       set((state) => {
-        state.inputModalOpen = newInputModalOpen
+        state.inputModalOpen = inputModalOpen
       }),
-    setRunning: (newRunning) =>
+    setRunning: (running) =>
       set((state) => {
-        state.running = newRunning
+        state.running = running
       }),
-    setDownloadReady: (newDownloadReady) =>
+    setSelectedPreset: (selectedPreset) =>
       set((state) => {
-        state.downloadReady = newDownloadReady
-      }),
-    setSelectedPreset: (newSelectedPreset) =>
-      set((state) => {
-        state.selectedPreset = newSelectedPreset
+        state.selectedPreset = selectedPreset
       }),
   }))
 )

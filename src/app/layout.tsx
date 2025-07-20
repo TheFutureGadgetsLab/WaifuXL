@@ -39,7 +39,7 @@ const bodyStyle = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body style={bodyStyle}>
+      <body style={bodyStyle} className={roboto.className}>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>{children}</ThemeProvider>
         </AppRouterCacheProvider>
