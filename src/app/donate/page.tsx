@@ -130,7 +130,7 @@ export default function DonatePage() {
                       transition: 'all 0.3s ease-in-out',
                     }}
                   >
-                    Buy me a Ko-fi
+                    Buy us a Ko-fi
                   </Button>
                 </Box>
 

@@ -12,6 +12,7 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  Stack,
   Typography,
 } from '@mui/material'
 
@@ -33,76 +34,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile = false }) => {
 
   const hasProcessed = outputURI !== null
 
-  const renderButtons = () => (
-    <>
-      <Button
-        onClick={() => setInputModalOpen(true)}
-        startIcon={<CloudUpload />}
-        disabled={running}
-        color="primary"
-        variant="contained"
-        fullWidth
-      >
-        Choose Image
-      </Button>
-      {outputURI ? (
-        <>
-          <Button
-            onClick={() => downloadImage(outputURI)}
-            startIcon={<CloudDownload />}
-            disabled={!hasProcessed}
-            color="primary"
-            variant="contained"
-            fullWidth
-          >
-            Download
-          </Button>
-          <Button
-            onClick={() => copyImageToClipboard(outputURI)}
-            startIcon={<CopyAll />}
-            disabled={!hasProcessed}
-            color="primary"
-            variant="contained"
-            fullWidth
-          >
-            Copy to Clipboard
-          </Button>
-        </>
-      ) : (
-        <Button
-          onClick={handleUpscale}
-          startIcon={<RunCircle />}
-          disabled={running}
-          color="primary"
-          variant="contained"
-          fullWidth
-        >
-          Run
-        </Button>
-      )}
-    </>
-  )
-
-  const renderUpscaleSelect = () =>
-    !outputURI && (
-      <FormControl fullWidth>
-        <InputLabel>Factor</InputLabel>
-        <Select
-          disabled={running}
-          value={upscaleFactor.toString()}
-          color="primary"
-          label="Upscale Factor"
-          onChange={(e: SelectChangeEvent<string>) => setUpscaleFactor(parseInt(e.target.value))}
-        >
-          {UPSCALE_FACTORS.map((factor) => (
-            <MenuItem key={factor} value={factor / 2}>
-              {factor}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    )
-
   return (
     <Box
       sx={{
@@ -116,87 +47,202 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile = false }) => {
           display: 'flex',
         }),
         flexDirection: 'column',
-        height: isMobile ? '100%' : UI_CONFIG.layout.contentHeight,
-        '& .MuiDrawer-paper': {
-          p: 2,
-        },
+        height: isMobile ? '100vh' : 'calc(100vh - 64px)',
+        overflow: 'hidden',
       }}
       component="aside"
       role="complementary"
       aria-label="Image processing controls and results"
     >
-      {isMobile && (
-        <Typography
-          variant="h6"
-          color="primary"
-          sx={{
-            textAlign: 'center',
-            mb: 2,
-            fontWeight: 'bold',
-          }}
-        >
-          WaifuXL Controls
-        </Typography>
-      )}
-
-      <Container
+      <Stack
+        direction="column"
         sx={{
-          mt: isMobile ? 0 : 2,
-          px: { xs: 2, sm: 3 },
+          height: '100%',
+          overflow: 'hidden',
         }}
       >
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: { xs: 1.5, sm: 2 },
-          }}
-        >
-          {renderButtons()}
-          {renderUpscaleSelect()}
-        </Box>
-      </Container>
-
-      {(tags.topChars.length > 0 || tags.topDesc.length > 0) && (
-        <Box
-          sx={{
-            flex: 1,
-            overflow: 'hidden',
-            display: 'flex',
-            flexDirection: 'column',
-            mt: 1,
-          }}
-        >
-          <Box
+        {isMobile && (
+          <Typography
+            variant="h6"
+            color="primary"
             sx={{
-              flex: 1,
-              overflowY: 'auto',
-              px: 2,
-              pb: 2,
-              '&::-webkit-scrollbar': {
-                width: '6px',
-              },
-              '&::-webkit-scrollbar-track': {
-                background: 'rgba(0,0,0,0.1)',
-                borderRadius: '3px',
-              },
-              '&::-webkit-scrollbar-thumb': {
-                background: 'primary.main',
-                borderRadius: '3px',
-                '&:hover': {
-                  background: 'primary.dark',
-                },
-              },
+              textAlign: 'center',
+              mb: 2,
+              mt: 1,
+              fontWeight: 'bold',
+              flexShrink: 0,
             }}
           >
-            <TagDisplay title="Top Characters" tags={tags.topChars} />
-            <Divider sx={{ mt: 2, mb: 1 }} />
-            <TagDisplay title="Top Descriptors" tags={tags.topDesc} />
-          </Box>
-        </Box>
-      )}
+            WaifuXL Controls
+          </Typography>
+        )}
+
+        <Container
+          sx={{
+            mt: isMobile ? 0 : 2,
+            px: { xs: 2, sm: 3 },
+            flexShrink: 0,
+          }}
+        >
+          <Stack spacing={{ xs: 1.5, sm: 2 }}>
+            <SidebarButtons
+              running={running}
+              outputURI={outputURI}
+              hasProcessed={hasProcessed}
+              setInputModalOpen={setInputModalOpen}
+              handleUpscale={handleUpscale}
+            />
+            <UpscaleSelect
+              outputURI={outputURI}
+              running={running}
+              upscaleFactor={upscaleFactor}
+              setUpscaleFactor={setUpscaleFactor}
+            />
+          </Stack>
+        </Container>
+
+        <TagSection tags={tags} />
+      </Stack>
     </Box>
   )
 }
+
+interface SidebarButtonsProps {
+  running: boolean
+  outputURI: string | null
+  hasProcessed: boolean
+  setInputModalOpen: (open: boolean) => void
+  handleUpscale: () => void
+}
+
+const SidebarButtons: React.FC<SidebarButtonsProps> = ({
+  running,
+  outputURI,
+  hasProcessed,
+  setInputModalOpen,
+  handleUpscale,
+}) => (
+  <>
+    <Button
+      onClick={() => setInputModalOpen(true)}
+      startIcon={<CloudUpload />}
+      disabled={running}
+      color="primary"
+      variant="contained"
+      fullWidth
+    >
+      Choose Image
+    </Button>
+    {outputURI ? (
+      <>
+        <Button
+          onClick={() => downloadImage(outputURI)}
+          startIcon={<CloudDownload />}
+          disabled={!hasProcessed}
+          color="primary"
+          variant="contained"
+          fullWidth
+        >
+          Download
+        </Button>
+        <Button
+          onClick={() => copyImageToClipboard(outputURI)}
+          startIcon={<CopyAll />}
+          disabled={!hasProcessed}
+          color="primary"
+          variant="contained"
+          fullWidth
+        >
+          Copy to Clipboard
+        </Button>
+      </>
+    ) : (
+      <Button
+        onClick={handleUpscale}
+        startIcon={<RunCircle />}
+        disabled={running}
+        color="primary"
+        variant="contained"
+        fullWidth
+      >
+        Run
+      </Button>
+    )}
+  </>
+)
+
+interface UpscaleSelectProps {
+  outputURI: string | null
+  running: boolean
+  upscaleFactor: number
+  setUpscaleFactor: (factor: number) => void
+}
+
+const UpscaleSelect: React.FC<UpscaleSelectProps> = ({ outputURI, running, upscaleFactor, setUpscaleFactor }) =>
+  !outputURI ? (
+    <FormControl fullWidth>
+      <InputLabel>Factor</InputLabel>
+      <Select
+        disabled={running}
+        value={upscaleFactor.toString()}
+        color="primary"
+        label="Upscale Factor"
+        onChange={(e: SelectChangeEvent<string>) => setUpscaleFactor(parseInt(e.target.value))}
+      >
+        {UPSCALE_FACTORS.map((factor) => (
+          <MenuItem key={factor} value={factor / 2}>
+            {factor}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  ) : null
+
+interface TagSectionProps {
+  tags: {
+    topChars: Array<{ name: string; prob: number }>
+    topDesc: Array<{ name: string; prob: number }>
+  }
+}
+
+const TagSection: React.FC<TagSectionProps> = ({ tags }) =>
+  tags.topChars.length > 0 || tags.topDesc.length > 0 ? (
+    <Box
+      sx={{
+        flex: 1,
+        minHeight: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        mt: 1,
+      }}
+    >
+      <Box
+        sx={{
+          flex: 1,
+          overflowY: 'auto',
+          px: 2,
+          pb: 2,
+          '&::-webkit-scrollbar': {
+            width: '6px',
+          },
+          '&::-webkit-scrollbar-track': {
+            background: 'rgba(0,0,0,0.1)',
+            borderRadius: '3px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            background: 'primary.main',
+            borderRadius: '3px',
+            '&:hover': {
+              background: 'primary.dark',
+            },
+          },
+        }}
+      >
+        <TagDisplay title="Top Characters" tags={tags.topChars} />
+        <Divider sx={{ mt: 2, mb: 1 }} />
+        <TagDisplay title="Top Descriptors" tags={tags.topDesc} />
+      </Box>
+    </Box>
+  ) : null
 
 export default Sidebar

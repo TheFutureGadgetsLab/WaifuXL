@@ -31,12 +31,11 @@ export const UI_CONFIG = {
     minButtonWidth: { xs: 100, sm: 120 },
   },
   layout: {
-    contentHeight: { xs: 'calc(100vh - 64px)', sm: 'calc(100vh - 70px)' },
+    appBarHeight: { xs: 64, sm: 70 },
     sidebarBreakpoint: 'md' as const,
     sidebarWidth: { md: 280, lg: 320 },
     maxImageWidth: { xs: '95%', sm: '85%', md: '75%', lg: '70%' },
     drawerWidth: 280,
-    appBarHeight: { xs: 64, sm: 70 },
   },
 } as const
 

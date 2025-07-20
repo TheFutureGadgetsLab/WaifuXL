@@ -80,7 +80,7 @@ export default function AboutPage() {
                   md: 3,
                 }}
               >
-                <FeatureCard icon={<Memory />} title="AI Powered" description="Real-ESRGAN neural networks" />
+                <FeatureCard icon={<Memory />} title="AI Powered" description="Real-ESRGAN style neural networks" />
               </Grid>
               <Grid
                 size={{
