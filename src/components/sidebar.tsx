@@ -121,7 +121,18 @@ const SidebarButtons: React.FC<SidebarButtonsProps> = ({
   hasProcessed,
   setInputModalOpen,
   handleUpscale,
-}) => (
+}) => {
+  const shouldFlashDownloadButton = useAppStateStore((state) => state.shouldFlashDownloadButton)
+  const setShouldFlashDownloadButton = useAppStateStore((state) => state.setShouldFlashDownloadButton)
+
+  const handleDownloadClick = () => {
+    if (shouldFlashDownloadButton) {
+      setShouldFlashDownloadButton(false)
+    }
+    downloadImage(outputURI)
+  }
+
+  return (
   <>
     <Button
       onClick={() => setInputModalOpen(true)}
@@ -136,12 +147,19 @@ const SidebarButtons: React.FC<SidebarButtonsProps> = ({
     {outputURI ? (
       <>
         <Button
-          onClick={() => downloadImage(outputURI)}
+          onClick={handleDownloadClick}
           startIcon={<CloudDownload />}
           disabled={!hasProcessed}
           color="primary"
           variant="contained"
           fullWidth
+          sx={{
+            animation: shouldFlashDownloadButton ? 'flash 2s infinite' : 'none',
+            '@keyframes flash': {
+              '0%, 50%': { opacity: 1 },
+              '25%, 75%': { opacity: 0.4 },
+            },
+          }}
         >
           Download
         </Button>
@@ -169,7 +187,8 @@ const SidebarButtons: React.FC<SidebarButtonsProps> = ({
       </Button>
     )}
   </>
-)
+  )
+}
 
 interface UpscaleSelectProps {
   outputURI: string | null

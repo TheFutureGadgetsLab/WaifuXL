@@ -26,7 +26,7 @@ const HomePage = () => {
   return (
     <Stack direction="column" sx={{ height: '100vh', overflow: 'hidden' }}>
       <TitleBar isMobile={isMobile} />
-      <MainContent isMobile={isMobile} onToggleDrawer={toggleMobileDrawer} />
+      <MainContent isMobile={isMobile} onToggleDrawer={toggleMobileDrawer} drawerOpen={mobileDrawerOpen} />
       <MobileDrawer open={mobileDrawerOpen} onClose={toggleMobileDrawer} />
       <ImageModal />
     </Stack>
@@ -36,9 +36,10 @@ const HomePage = () => {
 interface MainContentProps {
   isMobile: boolean
   onToggleDrawer: () => void
+  drawerOpen: boolean
 }
 
-const MainContent = memo(({ isMobile, onToggleDrawer }: MainContentProps) => {
+const MainContent = memo(({ isMobile, onToggleDrawer, drawerOpen }: MainContentProps) => {
   const theme = useTheme()
   const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'))
   const isMediumScreen = useMediaQuery(theme.breakpoints.only('md'))
@@ -80,7 +81,7 @@ const MainContent = memo(({ isMobile, onToggleDrawer }: MainContentProps) => {
         }}
       >
         <ImageDisplay />
-        <MobileMenuButton isMobile={isMobile} onToggleDrawer={onToggleDrawer} />
+        <MobileMenuButton isMobile={isMobile} onToggleDrawer={onToggleDrawer} drawerOpen={drawerOpen} />
       </Box>
 
       {!isMobile && isLargeScreen && (
@@ -263,25 +264,43 @@ MobileDrawer.displayName = 'MobileDrawer'
 interface MobileMenuButtonProps {
   isMobile: boolean
   onToggleDrawer: () => void
+  drawerOpen: boolean
 }
 
-const MobileMenuButton = memo(({ isMobile, onToggleDrawer }: MobileMenuButtonProps) =>
-  isMobile ? (
+const MobileMenuButton = memo(({ isMobile, onToggleDrawer, drawerOpen }: MobileMenuButtonProps) => {
+  const shouldFlashSidebarButton = useAppStateStore((state) => state.shouldFlashSidebarButton)
+  const setShouldFlashSidebarButton = useAppStateStore((state) => state.setShouldFlashSidebarButton)
+
+  const handleToggle = () => {
+    if (shouldFlashSidebarButton) {
+      setShouldFlashSidebarButton(false)
+    }
+    onToggleDrawer()
+  }
+
+  const shouldFlash = shouldFlashSidebarButton && !drawerOpen
+
+  return isMobile ? (
     <Fab
       color="primary"
       aria-label="open menu"
-      onClick={onToggleDrawer}
+      onClick={handleToggle}
       sx={{
         position: 'fixed',
         bottom: { xs: 16, sm: 24 },
         right: { xs: 16, sm: 24 },
         zIndex: (theme) => theme.zIndex.speedDial,
+        animation: shouldFlash ? 'flash 2s infinite' : 'none',
+        '@keyframes flash': {
+          '0%, 50%': { opacity: 1 },
+          '25%, 75%': { opacity: 0.4 },
+        },
       }}
     >
       <MenuIcon />
     </Fab>
   ) : null
-)
+})
 
 MobileMenuButton.displayName = 'MobileMenuButton'
 

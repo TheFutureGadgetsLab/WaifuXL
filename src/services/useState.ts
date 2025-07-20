@@ -62,12 +62,16 @@ interface AppStateStoreState {
   errorMessage: string | null
   running: boolean
   selectedPreset: string
+  shouldFlashSidebarButton: boolean
+  shouldFlashDownloadButton: boolean
 }
 
 interface AppStateStoreActions {
   setInputModalOpen: (inputModalOpen: boolean) => void
   setRunning: (running: boolean) => void
   setSelectedPreset: (selectedPreset: string) => void
+  setShouldFlashSidebarButton: (shouldFlash: boolean) => void
+  setShouldFlashDownloadButton: (shouldFlash: boolean) => void
 }
 
 const initialAppState: AppStateStoreState = {
@@ -75,6 +79,8 @@ const initialAppState: AppStateStoreState = {
   errorMessage: null,
   running: false,
   selectedPreset: 'Senjougahara|https://i.imgur.com/cMX8YcK.jpg',
+  shouldFlashSidebarButton: false,
+  shouldFlashDownloadButton: false,
 }
 
 export const useAppStateStore = create(
@@ -92,6 +98,14 @@ export const useAppStateStore = create(
     setSelectedPreset: (selectedPreset) =>
       set((state) => {
         state.selectedPreset = selectedPreset
+      }),
+    setShouldFlashSidebarButton: (shouldFlash) =>
+      set((state) => {
+        state.shouldFlashSidebarButton = shouldFlash
+      }),
+    setShouldFlashDownloadButton: (shouldFlash) =>
+      set((state) => {
+        state.shouldFlashDownloadButton = shouldFlash
       }),
   }))
 )

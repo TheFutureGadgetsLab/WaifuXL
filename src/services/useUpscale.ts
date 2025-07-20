@@ -9,17 +9,23 @@ export const useUpscale = () => {
   const setTags = useImageStore((state) => state.setTags)
   const setUpscaleFactor = useImageStore((state) => state.setUpscaleFactor)
   const setRunning = useAppStateStore((state) => state.setRunning)
+  const setShouldFlashSidebarButton = useAppStateStore((state) => state.setShouldFlashSidebarButton)
+  const setShouldFlashDownloadButton = useAppStateStore((state) => state.setShouldFlashDownloadButton)
 
   const handleUpscale = useCallback(async () => {
     try {
       setRunning(true)
       const result = await upscaleAndTag(setTags, inputURI, upscaleFactor)
-      if (result) setOutputURI(result)
+      if (result) {
+        setOutputURI(result)
+        setShouldFlashSidebarButton(true)
+        setShouldFlashDownloadButton(true)
+      }
     } finally {
       setRunning(false)
       setUpscaleFactor(1)
     }
-  }, [inputURI, upscaleFactor, setOutputURI, setTags, setRunning, setUpscaleFactor])
+  }, [inputURI, upscaleFactor, setOutputURI, setTags, setRunning, setUpscaleFactor, setShouldFlashSidebarButton, setShouldFlashDownloadButton])
 
   return handleUpscale
 }

@@ -48,9 +48,26 @@ export default function DonatePage() {
           flexGrow: 1,
           background: 'url(/MobileBG.svg) bottom center / contain no-repeat',
           backgroundSize: { xs: 'cover', sm: 'contain' },
+          display: 'grid',
+          gridTemplateColumns: {
+            xs: '1fr',
+            md: '280px 1fr',
+            lg: '320px 1fr 300px',
+            xl: '320px 1fr 400px',
+          },
         }}
       >
-        <Container maxWidth="md">
+        <Box sx={{ gridColumn: { xs: 1, md: 2, lg: 2 }, display: { xs: 'none', md: 'block' } }} />
+        <Container
+          maxWidth="md"
+          sx={{
+            gridColumn: {
+              xs: 1,
+              md: 2,
+              lg: 2,
+            },
+          }}
+        >
           <Box
             sx={{
               display: 'flex',
@@ -141,6 +158,7 @@ export default function DonatePage() {
             </Card>
           </Box>
         </Container>
+        <Box sx={{ gridColumn: { lg: 3, xl: 3 }, display: { xs: 'none', lg: 'block' } }} />
       </Grid>
     </Grid>
   )
