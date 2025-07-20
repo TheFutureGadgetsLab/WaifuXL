@@ -1,13 +1,9 @@
 import { AppBar, Button, Toolbar, Typography } from '@mui/material'
 import Link from 'next/link'
 
-const HEADER_LINKS = [
-  { text: 'About', href: '/about', weight: 450, color: 'text.primary' },
-  { text: 'WaifuXL', href: '/', weight: 600, color: 'secondary.main' },
-  { text: 'Donate', href: '/donate', weight: 450, color: 'text.primary' },
-] as const
+import { HEADER_LINKS } from '@/constants'
 
-export default function TitleBar() {
+function TitleBar() {
   return (
     <AppBar position="sticky" color="primary" elevation={0}>
       <Toolbar sx={{ justifyContent: 'center' }}>
@@ -24,3 +20,5 @@ export default function TitleBar() {
     </AppBar>
   )
 }
+
+export default TitleBar

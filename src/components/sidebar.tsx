@@ -2,34 +2,12 @@ import { upscaleAndTag } from '@/services/inference'
 import { useAppStateStore, useImageStore } from '@/services/useState'
 import { copyImageToClipboard, downloadImage } from '@/services/utils'
 import { CloudDownload, CloudUpload, CopyAll, RunCircle } from '@mui/icons-material'
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Container,
-  Divider,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  styled,
-} from '@mui/material'
-import React from 'react'
-import TagDisplayComponent from './tags'
+import { Box, Button, Container, Divider, FormControl, InputLabel, MenuItem, Select } from '@mui/material'
 
-const StyledSidebar = styled(Box)(({ theme }) => ({
-  '& .MuiDrawer-paper': {
-    padding: theme.spacing(2),
-  },
-  [theme.breakpoints.down('md')]: { display: 'none' },
-  [theme.breakpoints.up('md')]: { display: 'block' },
-}))
+import { UPSCALE_FACTORS, LAYOUT } from '@/constants'
+import TagDisplay from './tags'
 
-const StyledButton = styled(Button)(({ theme }) => ({
-  marginBottom: theme.spacing(2),
-}))
-
-const SideBarComponent: React.FC = () => {
+function Sidebar() {
   const { tags, outputURI, hasntRun, inputURI, upscaleFactor, setOutputURI, setUpscaleFactor, setTags } =
     useImageStore()
   const { running, setInputModalOpen, setDownloadReady, setRunning } = useAppStateStore()
@@ -48,46 +26,50 @@ const SideBarComponent: React.FC = () => {
 
   const renderButtons = () => (
     <>
-      <StyledButton
+      <Button
         onClick={() => setInputModalOpen(true)}
         startIcon={<CloudUpload />}
         disabled={running}
         color="primary"
         variant="contained"
+        fullWidth
       >
         Choose Image
-      </StyledButton>
+      </Button>
       {outputURI ? (
         <>
-          <StyledButton
+          <Button
             onClick={() => downloadImage(outputURI)}
             startIcon={<CloudDownload />}
             disabled={hasntRun}
             color="primary"
             variant="contained"
+            fullWidth
           >
             Download
-          </StyledButton>
-          <StyledButton
+          </Button>
+          <Button
             onClick={() => copyImageToClipboard(outputURI)}
             startIcon={<CopyAll />}
             disabled={hasntRun}
             color="primary"
             variant="contained"
+            fullWidth
           >
             Copy to Clipboard
-          </StyledButton>
+          </Button>
         </>
       ) : (
-        <StyledButton
+        <Button
           onClick={handleUpscale}
           startIcon={<RunCircle />}
           disabled={running}
           color="primary"
           variant="contained"
+          fullWidth
         >
           Run
-        </StyledButton>
+        </Button>
       )}
     </>
   )
@@ -103,7 +85,7 @@ const SideBarComponent: React.FC = () => {
           label="Upscale Factor"
           onChange={(e) => setUpscaleFactor(parseInt(e.target.value as string))}
         >
-          {[2, 4, 8].map((factor) => (
+          {UPSCALE_FACTORS.map((factor) => (
             <MenuItem key={factor} value={factor / 2}>
               {factor}
             </MenuItem>
@@ -113,24 +95,25 @@ const SideBarComponent: React.FC = () => {
     )
 
   return (
-    <StyledSidebar>
+    <Box
+      sx={{
+        '& .MuiDrawer-paper': {
+          padding: 2,
+        },
+        display: { xs: 'none', [LAYOUT.sidebarBreakpoint]: 'block' },
+      }}
+    >
       <Container sx={{ marginTop: 2 }}>
-        <ButtonGroup
-          orientation="vertical"
-          aria-label="Vertical button group"
-          variant="contained"
-          fullWidth={true}
-          sx={{ boxShadow: 0 }}
-        >
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           {renderButtons()}
           {renderUpscaleSelect()}
-        </ButtonGroup>
+        </Box>
       </Container>
-      <TagDisplayComponent title="Top Characters" tags={tags.topChars} />
+      <TagDisplay title="Top Characters" tags={tags.topChars} />
       <Divider sx={{ mt: 2 }} />
-      <TagDisplayComponent title="Top Descriptors" tags={tags.topDesc} />
-    </StyledSidebar>
+      <TagDisplay title="Top Descriptors" tags={tags.topDesc} />
+    </Box>
   )
 }
 
-export default SideBarComponent
+export default Sidebar

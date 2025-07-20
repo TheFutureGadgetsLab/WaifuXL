@@ -1,103 +1,61 @@
 'use client'
 
+import { SelectChangeEvent } from '@mui/material'
+import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select, Typography } from '@mui/material'
+import { Done, CloudUpload, Image } from '@mui/icons-material'
+
 import { useAppStateStore, useImageStore } from '@/services/useState'
-import { Done } from '@mui/icons-material'
-import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select, SelectChangeEvent } from '@mui/material'
-import React from 'react'
+import { PRESET_IMAGES, MODAL_CONFIG } from '@/constants'
 
-interface Preset {
-  name: string
-  url: string
-}
+const styles = {
+  modal: {
+    position: 'absolute' as const,
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+    width: '90%',
+    maxWidth: MODAL_CONFIG.maxWidth,
+  },
+  imagePreview: {
+    margin: '0 auto 16px',
+    width: '100%',
+    height: MODAL_CONFIG.imageHeight,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    cursor: 'pointer',
+    border: '2px dashed',
+    borderColor: 'primary.main',
+    borderRadius: 2,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 1,
+    transition: 'all 0.2s ease-in-out',
+    '&:hover': {
+      borderColor: 'primary.dark',
+      backgroundColor: 'action.hover',
+    },
+  },
+  uploadPrompt: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 1,
+    color: 'text.secondary',
+  },
+} as const
 
-const PRESET_LIST: Preset[] = [
-  { name: 'Ozen', url: 'https://i.imgur.com/Sf6sfPj.png' },
-  { name: 'Senjougahara', url: 'https://i.imgur.com/cMX8YcK.jpg' },
-  { name: 'Moomin', url: 'https://i.imgur.com/9I91yMq.png' },
-  { name: 'Megumin', url: 'https://i.imgur.com/BKBt6bC.png' },
-  { name: 'Aqua', url: 'https://i.imgur.com/yhIwVjZ.jpeg' },
-  { name: 'Natsumi', url: 'https://i.imgur.com/yIIl7Z1.png' },
-]
-
-interface UploadModalProps {
-  open: boolean
-  onClose: () => void
-  inputURI: string
-  selectedPreset: string
-  handlePresetChange: (event: SelectChangeEvent<string>) => void
-  handleFileInput: (event: React.ChangeEvent<HTMLInputElement>) => void
-  handleDone: () => void
-}
-
-const UploadModal: React.FC<UploadModalProps> = ({
-  open,
-  onClose,
-  inputURI,
-  selectedPreset,
-  handlePresetChange,
-  handleFileInput,
-  handleDone,
-}) => (
-  <Modal open={open} onClose={onClose}>
-    <Box
-      sx={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4,
-        width: '90%',
-        maxWidth: 400,
-      }}
-    >
-      <Box
-        component="label"
-        sx={{
-          display: 'block',
-          margin: '0 auto 10px',
-          width: '100%',
-          height: '24rem',
-          backgroundImage: `url(${inputURI})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          cursor: 'pointer',
-        }}
-      >
-        <input type="file" hidden accept="image/*" onChange={handleFileInput} />
-      </Box>
-      <FormControl fullWidth sx={{ mb: 2 }}>
-        <InputLabel>Preset</InputLabel>
-        <Select value={selectedPreset} label="Preset" onChange={handlePresetChange}>
-          {PRESET_LIST.map((preset, i) => (
-            <MenuItem value={`${preset.name}|${preset.url}`} key={i}>
-              {preset.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Button component="label" variant="contained" color="success">
-          Upload
-          <input type="file" hidden accept="image/*" onChange={handleFileInput} />
-        </Button>
-        <Button onClick={handleDone} variant="contained" color="success" endIcon={<Done />}>
-          Done
-        </Button>
-      </Box>
-    </Box>
-  </Modal>
-)
-
-export default function ModalComponent() {
+function ImageModal() {
   const { inputModalOpen, setInputModalOpen, selectedPreset, setSelectedPreset } = useAppStateStore()
   const { inputURI, setInputURI, setTags } = useImageStore()
 
   const handleClose = () => {
     setInputModalOpen(false)
-    setInputURI(inputURI)
     setSelectedPreset('')
   }
 
@@ -116,21 +74,64 @@ export default function ModalComponent() {
   }
 
   const handleDone = () => {
-    setInputURI(inputURI)
     setTags({ topDesc: [], topChars: [], rating: [] })
     setInputModalOpen(false)
     setSelectedPreset('')
   }
 
   return (
-    <UploadModal
-      open={inputModalOpen}
-      onClose={handleClose}
-      inputURI={inputURI}
-      selectedPreset={selectedPreset}
-      handlePresetChange={handlePresetChange}
-      handleFileInput={handleFileInput}
-      handleDone={handleDone}
-    />
+    <Modal open={inputModalOpen} onClose={handleClose}>
+      <Box sx={styles.modal}>
+        <Box
+          component="label"
+          sx={{
+            ...styles.imagePreview,
+            backgroundImage: inputURI ? `url(${inputURI})` : 'none',
+          }}
+        >
+          {!inputURI && (
+            <Box sx={styles.uploadPrompt}>
+              <Image sx={{ fontSize: 48, color: 'primary.main' }} />
+              <Typography variant="body1" color="primary.main" fontWeight="medium">
+                Click to upload an image
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                or choose a preset below
+              </Typography>
+            </Box>
+          )}
+          <input type="file" hidden accept="image/*" onChange={handleFileInput} />
+        </Box>
+
+        <FormControl fullWidth sx={{ mb: 2 }}>
+          <InputLabel>Preset</InputLabel>
+          <Select value={selectedPreset} label="Preset" onChange={handlePresetChange}>
+            {PRESET_IMAGES.map((preset, i) => (
+              <MenuItem value={`${preset.name}|${preset.url}`} key={i}>
+                {preset.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2 }}>
+          <Button
+            component="label"
+            variant="outlined"
+            color="primary"
+            startIcon={<CloudUpload />}
+            sx={{ minWidth: 120 }}
+          >
+            Browse Files
+            <input type="file" hidden accept="image/*" onChange={handleFileInput} />
+          </Button>
+          <Button onClick={handleDone} variant="contained" color="success" endIcon={<Done />}>
+            Done
+          </Button>
+        </Box>
+      </Box>
+    </Modal>
   )
 }
+
+export default ImageModal

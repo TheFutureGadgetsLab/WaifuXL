@@ -1,42 +1,50 @@
+import { useMemo, useState } from 'react'
+import { Box, CircularProgress, List, ListItem, ListItemText, Pagination, Typography } from '@mui/material'
+
 import { ModelTag } from '@/services/inference'
 import { truncateString } from '@/services/utils'
-import { Box, CircularProgress, List, ListItem, ListItemText, Pagination, Typography } from '@mui/material'
-import React, { useMemo, useState } from 'react'
+import { TAGS_PER_PAGE } from '@/constants'
 
-interface TagDisplayComponentProps {
+interface TagDisplayProps {
   title: string
   tags: ModelTag[]
 }
 
-const TagDisplayComponent: React.FC<TagDisplayComponentProps> = ({ title, tags }) => {
+function TagDisplay({ title, tags }: TagDisplayProps) {
   const [tagPage, setTagPage] = useState(1)
 
-  const ITEMS_PER_PAGE = 7
+  const curTags = useMemo(() => tags.slice(TAGS_PER_PAGE * (tagPage - 1), TAGS_PER_PAGE * tagPage), [tags, tagPage])
+  const maxTagPage = Math.ceil(tags.length / TAGS_PER_PAGE)
 
-  const curTags = useMemo(() => tags.slice(ITEMS_PER_PAGE * (tagPage - 1), ITEMS_PER_PAGE * tagPage), [tags, tagPage])
-  const maxTagPage = Math.ceil(tags.length / ITEMS_PER_PAGE)
+  if (tags.length === 0) return null
 
   return (
-    <>
-      <Typography align="center" sx={{ fontWeight: 'bold', mt: 2 }}>
+    <Box>
+      <Typography align="center" sx={{ fontWeight: 'bold', mt: 2, mb: 1 }}>
         {title}
       </Typography>
-      <List dense={true}>
+      <List dense>
         {curTags.map(({ name, prob }) => (
-          <ListItem key={name} alignItems="flex-start">
+          <ListItem key={name} sx={{ py: 0.5 }}>
             <ListItemText
               primary={
-                <Typography component="span" variant="body1">
-                  {truncateString(name)}
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Typography component="span" variant="body2" sx={{ flex: 1, mr: 1 }}>
+                    {truncateString(name)}
+                  </Typography>
                   <CircularProgressWithLabel value={prob * 100} />
-                </Typography>
+                </Box>
               }
             />
           </ListItem>
         ))}
       </List>
-      <Pagination count={maxTagPage} page={tagPage} onChange={(_, value) => setTagPage(value)} size="small" />
-    </>
+      {maxTagPage > 1 && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
+          <Pagination count={maxTagPage} page={tagPage} onChange={(_, value) => setTagPage(value)} size="small" />
+        </Box>
+      )}
+    </Box>
   )
 }
 
@@ -44,23 +52,25 @@ interface CircularProgressWithLabelProps {
   value: number
 }
 
-const CircularProgressWithLabel: React.FC<CircularProgressWithLabelProps> = ({ value }) => (
-  <Box sx={{ position: 'relative', display: 'inline-flex', float: 'right' }}>
-    <CircularProgress size={30} value={value} variant="determinate" />
-    <Box
-      sx={{
-        position: 'absolute',
-        inset: 0,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      <Typography variant="caption" color="text.secondary">
-        {Math.round(value)}
-      </Typography>
+function CircularProgressWithLabel({ value }: CircularProgressWithLabelProps) {
+  return (
+    <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+      <CircularProgress size={24} value={value} variant="determinate" color="primary" />
+      <Box
+        sx={{
+          position: 'absolute',
+          inset: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.6rem' }}>
+          {Math.round(value)}
+        </Typography>
+      </Box>
     </Box>
-  </Box>
-)
+  )
+}
 
-export default TagDisplayComponent
+export { TagDisplay as default }
