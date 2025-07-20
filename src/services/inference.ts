@@ -97,7 +97,7 @@ async function multiUpscale(
   upscaleFactor: number
 ): Promise<string> {
   console.time('Upscaling')
-  let outArr = ndarray(new Uint8Array(imageArray.data), imageArray.dims as number[])
+  let outArr: NdArray<Uint8Array> = ndarray(new Uint8Array(imageArray.data), imageArray.dims as number[])
     .pick(0, null, null, null)
     .transpose(2, 1, 0)
 
@@ -134,7 +134,7 @@ async function upscaleFrame(session: InferenceSession, imageArray: NdArray<Uint8
       const chunkData = await runSuperRes(session, subArr)
       if (!chunkData) continue
 
-      const chunkArr = ndarray(chunkData.data, [...chunkData.dims])
+      const chunkArr = ndarray(new Uint8Array(chunkData.data as unknown as ArrayBufferLike), [...chunkData.dims])
       const chunkSlice = chunkArr.lo((x - xStart) * 2, (y - yStart) * 2, 0).hi(outW, outH, 4)
       const outSlice = outArr.lo(x * 2, y * 2, 0).hi(outW, outH, 4)
       ops.assign(outSlice, chunkSlice)
