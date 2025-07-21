@@ -95,7 +95,7 @@ export default function AboutPage() {
                   md: 3,
                 }}
               >
-                <FeatureCard icon={<Memory />} title="AI Powered" description="Real-ESRGAN style neural networks" />
+                <FeatureCard icon={<Memory />} title="AI Powered" description="Real-ESRGAN" />
               </Grid>
               <Grid
                 size={{
@@ -149,17 +149,13 @@ export default function AboutPage() {
 
               <Section title="Technical Details" icon={<Code />}>
                 <Typography variant="body1" sx={{ fontSize: { xs: '1rem', sm: '1.1rem' }, lineHeight: 1.6, mb: 2 }}>
-                  We deliver neural networks that execute directly in your browser using advanced web technologies.
-                  Here&apos;s what powers WaifuXL:
+                  We deliver neural networks that execute directly in your browser. Here&apos;s what powers WaifuXL:
                 </Typography>
 
                 <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 1.5 }}>
                   <TechChip label="Real-ESRGAN" href="https://arxiv.org/abs/2107.10833" />
                   <TechChip label="MobileNetV3" href="https://arxiv.org/abs/1905.02244" />
                   <TechChip label="ONNX Runtime" href="https://onnxruntime.ai/" />
-                </Box>
-
-                <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 1.5 }}>
                   <TechChip label="React" href="https://reactjs.org/" />
                   <TechChip label="Next.js" href="https://nextjs.org/" />
                   <TechChip label="Material-UI" href="https://mui.com/" />

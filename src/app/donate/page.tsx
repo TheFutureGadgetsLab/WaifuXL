@@ -115,7 +115,7 @@ export default function DonatePage() {
                   color="text.secondary"
                   sx={{ fontSize: { xs: '1rem', sm: '1.1rem' }, mb: 2 }}
                 >
-                  Enjoying the free AI image upscaling? Consider buying us a coffee to help keep WaifuXL running and
+                  Enjoying the free AI image upscaling? Consider buying us a coffee to show your appreciation and
                   support future improvements!
                 </Typography>
 
