@@ -24,7 +24,7 @@
     "ndarray": "^1.0.19",
     "ndarray-ops": "^1.2.2",
     "next": "^15.4.2",
-    "onnxruntime-web": "1.18.0",
+    "onnxruntime-web": "1.22.0",
     "react": "latest",
     "react-compare-slider": "latest",
     "react-dom": "latest",

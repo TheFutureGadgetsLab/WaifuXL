@@ -26,7 +26,7 @@ async function initializeONNX(): Promise<void> {
 
   ORTEnv.wasm.proxy = true
   ORTEnv.wasm.numThreads = Math.min(navigator.hardwareConcurrency / 2, 16)
-  ORTEnv.wasm.wasmPaths = `https://cdn.jsdelivr.net/npm/onnxruntime-web@1.18.0/dist/`
+  ORTEnv.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/'
 
   const onnxOptions: InferenceSession.SessionOptions = {
     executionProviders: ['wasm'],
