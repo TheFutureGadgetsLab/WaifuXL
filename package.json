@@ -16,7 +16,6 @@
     "@emotion/cache": "^11.14.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@fontsource/roboto": "^5.2.6",
     "@mui/icons-material": "^7.0.0",
     "@mui/material": "^7.0.0",
     "@mui/material-nextjs": "^7.0.0",
@@ -34,11 +33,9 @@
     "@eslint/eslintrc": "^3.3.1",
     "@types/ndarray": "^1.0.14",
     "@types/ndarray-ops": "^1.2.7",
-    "@types/node": "latest",
+    "@types/node": "^24.1.0",
     "@types/react": "latest",
     "@types/react-dom": "latest",
-    "@typescript-eslint/eslint-plugin": "^8.37.0",
-    "@typescript-eslint/parser": "^8.37.0",
     "eslint": "^9.31.0",
     "eslint-config-next": "^15.4.2",
     "eslint-config-prettier": "^10.1.8",
@@ -46,6 +43,6 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "prettier": "^3.6.2",
-    "typescript": "latest"
+    "typescript": "^5.8.3"
   }
 }
