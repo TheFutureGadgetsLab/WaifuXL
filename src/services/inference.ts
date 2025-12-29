@@ -1,6 +1,7 @@
 import ndarray, { NdArray } from 'ndarray'
 import ops from 'ndarray-ops'
 import { InferenceSession, env as ORTEnv, Tensor, TypedTensor } from 'onnxruntime-web'
+import { INFERENCE_CONFIG } from '@/constants'
 
 // Types
 export interface ModelTag {
@@ -13,9 +14,26 @@ export interface ModelTags {
   rating: ModelTag[]
 }
 
+// Image ndarray with guaranteed stride structure [width, height, channels]
+interface ImageNdArray extends NdArray<Uint8Array> {
+  stride: [number, number, number]
+  shape: [number, number, number]
+}
+
 // Constants
-const CHUNK_SIZE = 256,
-  PAD_SIZE = 32
+const { CHUNK_SIZE, PAD_SIZE, TAG_INDICES } = INFERENCE_CONFIG
+
+// Chunk processing types
+interface ChunkBounds {
+  x: number
+  y: number
+  xStart: number
+  yStart: number
+  inW: number
+  inH: number
+  outW: number
+  outH: number
+}
 
 // Session management
 let superSession: InferenceSession | null = null
@@ -71,9 +89,9 @@ async function getTopTags(data: Tensor): Promise<ModelTags> {
   const tags = await loadTags()
   const flattened = Array.from(data.data as Float32Array)
   return {
-    topDesc: getTopK(flattened, 2000, 0, 2000, tags),
-    topChars: getTopK(flattened, 2000, 2000, 4000, tags),
-    rating: getTopK(flattened, 3, 4000, 4003, tags),
+    topDesc: getTopK(flattened, TAG_INDICES.DESCRIPTORS_END, TAG_INDICES.DESCRIPTORS_START, TAG_INDICES.DESCRIPTORS_END, tags),
+    topChars: getTopK(flattened, TAG_INDICES.CHARACTERS_END - TAG_INDICES.CHARACTERS_START, TAG_INDICES.CHARACTERS_START, TAG_INDICES.CHARACTERS_END, tags),
+    rating: getTopK(flattened, TAG_INDICES.RATINGS_END - TAG_INDICES.RATINGS_START, TAG_INDICES.RATINGS_START, TAG_INDICES.RATINGS_END, tags),
   }
 }
 
@@ -86,9 +104,62 @@ function getTopK(data: number[], k: number, startIndex: number, stopIndex: numbe
     .map(({ value, index }) => ({ name: tags[index], prob: value }))
 }
 
+let cachedTags: string[] | null = null
+
 async function loadTags(): Promise<string[]> {
+  if (cachedTags) return cachedTags
   const response = await fetch('./tags.json')
-  return (await response.json()).map((tag: [number, string]) => tag[1])
+  const tags: string[] = (await response.json()).map((tag: [number, string]) => tag[1])
+  cachedTags = tags
+  return tags
+}
+
+// Chunk processing helpers
+function calculateChunkBounds(
+  col: number,
+  row: number,
+  chunkWidth: number,
+  chunkHeight: number,
+  imgWidth: number,
+  imgHeight: number
+): ChunkBounds {
+  const x = col * chunkWidth
+  const y = row * chunkHeight
+  const xStart = Math.max(0, x - PAD_SIZE)
+  const yStart = Math.max(0, y - PAD_SIZE)
+
+  return {
+    x,
+    y,
+    xStart,
+    yStart,
+    inW: Math.min(xStart + chunkWidth + PAD_SIZE * 2, imgWidth) - xStart,
+    inH: Math.min(yStart + chunkHeight + PAD_SIZE * 2, imgHeight) - yStart,
+    outW: 2 * (Math.min(imgWidth, x + chunkWidth) - x),
+    outH: 2 * (Math.min(imgHeight, y + chunkHeight) - y),
+  }
+}
+
+function extractChunkWithPadding(image: ImageNdArray, bounds: ChunkBounds): NdArray<Uint8Array> {
+  const { xStart, yStart, inW, inH } = bounds
+  const inSlice = image.lo(xStart, yStart, 0).hi(inW, inH, 4)
+  const subArr = ndarray(new Uint8Array(inW * inH * 4), inSlice.shape)
+  ops.assign(subArr, inSlice)
+  return subArr
+}
+
+function tensorDataToUint8Array(data: Tensor['data']): Uint8Array {
+  if (data instanceof Uint8Array) return data
+  if (ArrayBuffer.isView(data)) return new Uint8Array(data.buffer, data.byteOffset, data.byteLength)
+  throw new Error('Unexpected tensor data type')
+}
+
+function blendChunkResult(output: ImageNdArray, chunkData: Tensor, bounds: ChunkBounds): void {
+  const { x, y, xStart, yStart, outW, outH } = bounds
+  const chunkArr = ndarray(tensorDataToUint8Array(chunkData.data), [...chunkData.dims])
+  const chunkSlice = chunkArr.lo((x - xStart) * 2, (y - yStart) * 2, 0).hi(outW, outH, 4)
+  const outSlice = output.lo(x * 2, y * 2, 0).hi(outW, outH, 4)
+  ops.assign(outSlice, chunkSlice)
 }
 
 // Upscaling functions
@@ -98,9 +169,9 @@ async function multiUpscale(
   upscaleFactor: number
 ): Promise<string> {
   console.time('Upscaling')
-  let outArr: NdArray<Uint8Array> = ndarray(new Uint8Array(imageArray.data), imageArray.dims as number[])
+  let outArr = ndarray(new Uint8Array(imageArray.data), imageArray.dims as number[])
     .pick(0, null, null, null)
-    .transpose(2, 1, 0)
+    .transpose(2, 1, 0) as ImageNdArray
 
   for (let s = 0; s < upscaleFactor; s++) {
     outArr = await upscaleFrame(session, outArr)
@@ -110,35 +181,23 @@ async function multiUpscale(
   return imgToDataURI(outArr)
 }
 
-async function upscaleFrame(session: InferenceSession, imageArray: NdArray<Uint8Array>): Promise<NdArray<Uint8Array>> {
+async function upscaleFrame(session: InferenceSession, imageArray: ImageNdArray): Promise<ImageNdArray> {
   const [inImgW, inImgH] = imageArray.shape
   const [outImgW, outImgH] = [inImgW * 2, inImgH * 2]
   const [numChunksWidth, numChunksHeight] = [Math.ceil(inImgW / CHUNK_SIZE), Math.ceil(inImgH / CHUNK_SIZE)]
   const [chunkWidth, chunkHeight] = [Math.floor(inImgW / numChunksWidth), Math.floor(inImgH / numChunksHeight)]
 
-  const outArr = ndarray(new Uint8Array(outImgW * outImgH * 4), [outImgW, outImgH, 4])
+  const outArr = ndarray(new Uint8Array(outImgW * outImgH * 4), [outImgW, outImgH, 4]) as ImageNdArray
 
   for (let r = 0; r < numChunksHeight; r++) {
     for (let c = 0; c < numChunksWidth; c++) {
-      const [x, y] = [c * chunkWidth, r * chunkHeight]
-      const [xStart, yStart] = [Math.max(0, x - PAD_SIZE), Math.max(0, y - PAD_SIZE)]
-      const [inW, inH] = [
-        Math.min(xStart + chunkWidth + PAD_SIZE * 2, inImgW) - xStart,
-        Math.min(yStart + chunkHeight + PAD_SIZE * 2, inImgH) - yStart,
-      ]
-      const [outW, outH] = [2 * (Math.min(inImgW, x + chunkWidth) - x), 2 * (Math.min(inImgH, y + chunkHeight) - y)]
-
-      const inSlice = imageArray.lo(xStart, yStart, 0).hi(inW, inH, 4)
-      const subArr = ndarray(new Uint8Array(inW * inH * 4), inSlice.shape)
-      ops.assign(subArr, inSlice)
+      const bounds = calculateChunkBounds(c, r, chunkWidth, chunkHeight, inImgW, inImgH)
+      const subArr = extractChunkWithPadding(imageArray, bounds)
 
       const chunkData = await runSuperRes(session, subArr)
       if (!chunkData) continue
 
-      const chunkArr = ndarray(new Uint8Array(chunkData.data as unknown as ArrayBufferLike), [...chunkData.dims])
-      const chunkSlice = chunkArr.lo((x - xStart) * 2, (y - yStart) * 2, 0).hi(outW, outH, 4)
-      const outSlice = outArr.lo(x * 2, y * 2, 0).hi(outW, outH, 4)
-      ops.assign(outSlice, chunkSlice)
+      blendChunkResult(outArr, chunkData, bounds)
     }
   }
 
@@ -158,10 +217,10 @@ async function runSuperRes(session: InferenceSession, imageArray: NdArray): Prom
 }
 
 // Helper functions
-function imgToDataURI(img: NdArray<Uint8Array>): string {
+function imgToDataURI(img: ImageNdArray): string {
   const [width, height] = img.shape
   const imgData = img.data
-  const [strideWidth, strideHeight] = [img.stride[0] || 4, img.stride[1] || width * (img.stride[0] || 4)]
+  const [strideWidth, strideHeight] = img.stride
 
   const buffer = new Uint8ClampedArray(width * height * 4)
   for (let r = 0; r < height; r++) {

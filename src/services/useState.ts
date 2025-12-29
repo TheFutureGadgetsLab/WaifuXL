@@ -59,7 +59,6 @@ export const useImageStore = create(
 
 interface AppStateStoreState {
   inputModalOpen: boolean
-  errorMessage: string | null
   running: boolean
   selectedPreset: string
   shouldFlashSidebarButton: boolean
@@ -76,7 +75,6 @@ interface AppStateStoreActions {
 
 const initialAppState: AppStateStoreState = {
   inputModalOpen: false,
-  errorMessage: null,
   running: false,
   selectedPreset: 'Senjougahara|https://i.imgur.com/cMX8YcK.jpg',
   shouldFlashSidebarButton: false,

@@ -1,16 +1,26 @@
 import { useCallback } from 'react'
+import { useShallow } from 'zustand/react/shallow'
 import { upscaleAndTag } from './inference'
 import { useAppStateStore, useImageStore } from './useState'
 
 export const useUpscale = () => {
-  const inputURI = useImageStore((state) => state.inputURI)
-  const upscaleFactor = useImageStore((state) => state.upscaleFactor)
-  const setOutputURI = useImageStore((state) => state.setOutputURI)
-  const setTags = useImageStore((state) => state.setTags)
-  const setUpscaleFactor = useImageStore((state) => state.setUpscaleFactor)
-  const setRunning = useAppStateStore((state) => state.setRunning)
-  const setShouldFlashSidebarButton = useAppStateStore((state) => state.setShouldFlashSidebarButton)
-  const setShouldFlashDownloadButton = useAppStateStore((state) => state.setShouldFlashDownloadButton)
+  const { inputURI, upscaleFactor, setOutputURI, setTags, setUpscaleFactor } = useImageStore(
+    useShallow((state) => ({
+      inputURI: state.inputURI,
+      upscaleFactor: state.upscaleFactor,
+      setOutputURI: state.setOutputURI,
+      setTags: state.setTags,
+      setUpscaleFactor: state.setUpscaleFactor,
+    }))
+  )
+
+  const { setRunning, setShouldFlashSidebarButton, setShouldFlashDownloadButton } = useAppStateStore(
+    useShallow((state) => ({
+      setRunning: state.setRunning,
+      setShouldFlashSidebarButton: state.setShouldFlashSidebarButton,
+      setShouldFlashDownloadButton: state.setShouldFlashDownloadButton,
+    }))
+  )
 
   const handleUpscale = useCallback(async () => {
     try {

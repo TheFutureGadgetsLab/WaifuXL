@@ -9,6 +9,19 @@ export const PRESET_IMAGES = [
 
 export const UPSCALE_FACTORS = [2, 4, 8] as const
 
+export const INFERENCE_CONFIG = {
+  CHUNK_SIZE: 256,
+  PAD_SIZE: 32,
+  TAG_INDICES: {
+    DESCRIPTORS_START: 0,
+    DESCRIPTORS_END: 2000,
+    CHARACTERS_START: 2000,
+    CHARACTERS_END: 4000,
+    RATINGS_START: 4000,
+    RATINGS_END: 4003,
+  },
+} as const
+
 export const TAGS_PER_PAGE = 7
 
 export const HEADER_LINKS = [

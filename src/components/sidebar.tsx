@@ -23,7 +23,7 @@ interface SidebarProps {
   isMobile?: boolean
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isMobile = false }) => {
+function Sidebar({ isMobile = false }: SidebarProps) {
   const tags = useImageStore((state) => state.tags)
   const outputURI = useImageStore((state) => state.outputURI)
   const upscaleFactor = useImageStore((state) => state.upscaleFactor)
@@ -115,13 +115,13 @@ interface SidebarButtonsProps {
   handleUpscale: () => void
 }
 
-const SidebarButtons: React.FC<SidebarButtonsProps> = ({
+function SidebarButtons({
   running,
   outputURI,
   hasProcessed,
   setInputModalOpen,
   handleUpscale,
-}) => {
+}: SidebarButtonsProps) {
   const shouldFlashDownloadButton = useAppStateStore((state) => state.shouldFlashDownloadButton)
   const setShouldFlashDownloadButton = useAppStateStore((state) => state.setShouldFlashDownloadButton)
 
@@ -197,8 +197,9 @@ interface UpscaleSelectProps {
   setUpscaleFactor: (factor: number) => void
 }
 
-const UpscaleSelect: React.FC<UpscaleSelectProps> = ({ outputURI, running, upscaleFactor, setUpscaleFactor }) =>
-  !outputURI ? (
+function UpscaleSelect({ outputURI, running, upscaleFactor, setUpscaleFactor }: UpscaleSelectProps) {
+  if (!outputURI) {
+    return (
     <FormControl fullWidth>
       <InputLabel>Factor</InputLabel>
       <Select
@@ -215,7 +216,10 @@ const UpscaleSelect: React.FC<UpscaleSelectProps> = ({ outputURI, running, upsca
         ))}
       </Select>
     </FormControl>
-  ) : null
+    )
+  }
+  return null
+}
 
 interface TagSectionProps {
   tags: {
@@ -224,8 +228,12 @@ interface TagSectionProps {
   }
 }
 
-const TagSection: React.FC<TagSectionProps> = ({ tags }) =>
-  tags.topChars.length > 0 || tags.topDesc.length > 0 ? (
+function TagSection({ tags }: TagSectionProps) {
+  if (tags.topChars.length === 0 && tags.topDesc.length === 0) {
+    return null
+  }
+
+  return (
     <Box
       sx={{
         flex: 1,
@@ -262,6 +270,7 @@ const TagSection: React.FC<TagSectionProps> = ({ tags }) =>
         <TagDisplay title="Top Descriptors" tags={tags.topDesc} />
       </Box>
     </Box>
-  ) : null
+  )
+}
 
 export default Sidebar

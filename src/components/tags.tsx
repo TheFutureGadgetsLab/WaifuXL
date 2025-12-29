@@ -12,9 +12,15 @@ interface TagDisplayProps {
 
 const TagDisplay = memo(({ title, tags }: TagDisplayProps) => {
   const [tagPage, setTagPage] = useState(1)
-
-  const curTags = useMemo(() => tags.slice(TAGS_PER_PAGE * (tagPage - 1), TAGS_PER_PAGE * tagPage), [tags, tagPage])
   const maxTagPage = Math.ceil(tags.length / TAGS_PER_PAGE)
+
+  // Clamp page to valid range when tags change (prevents showing empty page)
+  const effectivePage = tagPage > maxTagPage ? 1 : tagPage
+
+  const curTags = useMemo(
+    () => tags.slice(TAGS_PER_PAGE * (effectivePage - 1), TAGS_PER_PAGE * effectivePage),
+    [tags, effectivePage]
+  )
 
   if (tags.length === 0) return null
 
@@ -43,7 +49,7 @@ const TagDisplay = memo(({ title, tags }: TagDisplayProps) => {
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
           <Pagination
             count={maxTagPage}
-            page={tagPage}
+            page={effectivePage}
             onChange={(_, value) => setTagPage(value)}
             size="small"
             aria-label={`${title} pagination`}

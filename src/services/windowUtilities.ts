@@ -1,7 +1,11 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { useAppStateStore, useImageStore } from './useState'
 
+// Module-level flag to prevent duplicate listener registration across multiple hook instances
+let listenersRegistered = false
+
 export const useEventHandlers = (): void => {
+  const isRegistered = useRef(false)
   const setInputURI = useImageStore((state) => state.setInputURI)
   const resetOutput = useImageStore((state) => state.resetOutput)
   const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen)
@@ -46,6 +50,11 @@ export const useEventHandlers = (): void => {
   )
 
   useEffect(() => {
+    // Guard against duplicate registration
+    if (listenersRegistered || isRegistered.current) return
+    listenersRegistered = true
+    isRegistered.current = true
+
     window.addEventListener('paste', handlePaste)
     window.addEventListener('drop', handleDrop)
     const preventDefault = (e: Event) => e.preventDefault()
@@ -54,6 +63,8 @@ export const useEventHandlers = (): void => {
     dragEvents.forEach((event) => window.addEventListener(event, preventDefault))
 
     return () => {
+      listenersRegistered = false
+      isRegistered.current = false
       window.removeEventListener('paste', handlePaste)
       window.removeEventListener('drop', handleDrop)
       dragEvents.forEach((event) => window.removeEventListener(event, preventDefault))

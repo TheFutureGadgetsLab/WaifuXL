@@ -17,37 +17,39 @@ const ImageModal = () => {
   const setTags = useImageStore((state) => state.setTags)
   const resetOutput = useImageStore((state) => state.resetOutput)
 
-  const handleClose = () => {
+  const closeModal = () => {
     setInputModalOpen(false)
     setSelectedPreset('')
+  }
+
+  const processInput = (input: File | string) => {
+    setInputURI(input)
+    setSelectedPreset(typeof input === 'string' ? selectedPreset : '')
+    resetOutput()
   }
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
-      setInputURI(file)
-      setSelectedPreset('')
-      resetOutput()
+      processInput(file)
     }
   }
 
   const handlePresetChange = (event: SelectChangeEvent<string>) => {
     setSelectedPreset(event.target.value)
     const [, url] = event.target.value.split('|')
-    setInputURI(url)
-    resetOutput()
+    processInput(url)
   }
 
-  const handleDone = () => {
+  const handleComplete = () => {
     setTags({ topDesc: [], topChars: [], rating: [] })
-    setInputModalOpen(false)
-    setSelectedPreset('')
+    closeModal()
   }
 
   return (
     <Modal
       open={inputModalOpen}
-      onClose={handleClose}
+      onClose={closeModal}
       aria-labelledby="image-upload-modal"
       aria-describedby="upload-image-or-select-preset"
     >
@@ -203,7 +205,7 @@ const ImageModal = () => {
             />
           </Button>
           <Button
-            onClick={handleDone}
+            onClick={handleComplete}
             variant="contained"
             color="success"
             endIcon={<Done />}
