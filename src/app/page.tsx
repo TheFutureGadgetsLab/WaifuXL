@@ -1,122 +1,74 @@
 'use client'
 
-import { useEffect, useState, memo } from 'react'
-import { Box, Stack, Typography, useMediaQuery, useTheme, Drawer, IconButton, Fab } from '@mui/material'
-import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider'
-import { Menu as MenuIcon, Close as CloseIcon } from '@mui/icons-material'
+import { memo, useState, useCallback } from 'react'
+import Box from '@mui/material/Box'
+import Drawer from '@mui/material/Drawer'
+import Fab from '@mui/material/Fab'
+import IconButton from '@mui/material/IconButton'
+import Stack from '@mui/material/Stack'
+import MenuIcon from '@mui/icons-material/Menu'
+import CloseIcon from '@mui/icons-material/Close'
 
-import ImageModal from '@/components/modal'
-import Sidebar from '@/components/sidebar'
-import TitleBar from '@/components/titlebar'
-import { UI_CONFIG } from '@/constants'
-import { useAppStateStore, useImageStore } from '@/services/useState'
+import { Titlebar, MainGrid, DRAWER_WIDTH } from '@/components/layout'
+import { Sidebar } from '@/components/sidebar/Sidebar'
+import { ImageModal } from '@/components/modal/ImageModal'
+import { ImageComparison, ProcessingText } from '@/components/display'
+import { ErrorToast } from '@/components/feedback'
+import { useResponsive, useReducedMotion } from '@/hooks'
+import { useProcessingStore } from '@/services/stores'
 import { useEventHandlers } from '@/services/windowUtilities'
+import { STYLES } from '@/constants'
 
-const HomePage = () => {
-  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false)
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down(UI_CONFIG.layout.sidebarBreakpoint))
+export default function HomePage() {
+  // Modal and drawer state (local to page)
+  const [modalOpen, setModalOpen] = useState(false)
+  const [drawerOpen, setDrawerOpen] = useState(false)
 
+  // Responsive state
+  const { isMobile } = useResponsive()
+
+  // Register paste/drag-drop handlers
   useEventHandlers()
 
-  const toggleMobileDrawer = () => {
-    setMobileDrawerOpen(!mobileDrawerOpen)
-  }
+  // Handlers
+  const openModal = useCallback(() => setModalOpen(true), [])
+  const closeModal = useCallback(() => setModalOpen(false), [])
+  const toggleDrawer = useCallback(() => setDrawerOpen((prev) => !prev), [])
+  const closeDrawer = useCallback(() => setDrawerOpen(false), [])
 
   return (
     <Stack direction="column" sx={{ height: '100vh', overflow: 'hidden' }}>
-      <TitleBar isMobile={isMobile} />
-      <MainContent isMobile={isMobile} onToggleDrawer={toggleMobileDrawer} drawerOpen={mobileDrawerOpen} />
-      <MobileDrawer open={mobileDrawerOpen} onClose={toggleMobileDrawer} />
-      <ImageModal />
+      {/* Title bar */}
+      <Titlebar />
+
+      {/* Main content grid */}
+      <MainGrid
+        sidebar={<Sidebar onOpenModal={openModal} />}
+        content={<MainContent />}
+        rightPanel={<BackgroundImage />}
+      />
+
+      {/* Mobile drawer */}
+      {isMobile && (
+        <MobileDrawer open={drawerOpen} onClose={closeDrawer} onOpenModal={openModal} />
+      )}
+
+      {/* Mobile menu FAB */}
+      {isMobile && (
+        <MobileMenuButton onClick={toggleDrawer} drawerOpen={drawerOpen} />
+      )}
+
+      {/* Image selection modal */}
+      <ImageModal open={modalOpen} onClose={closeModal} />
+
+      {/* Error toast */}
+      <ErrorToast />
     </Stack>
   )
 }
 
-interface MainContentProps {
-  isMobile: boolean
-  onToggleDrawer: () => void
-  drawerOpen: boolean
-}
-
-const MainContent = memo(({ isMobile, onToggleDrawer, drawerOpen }: MainContentProps) => {
-  const theme = useTheme()
-  const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'))
-  const isMediumScreen = useMediaQuery(theme.breakpoints.only('md'))
-
-  return (
-    <Box
-      sx={{
-        flexGrow: 1,
-        height: 'calc(100vh - 64px)',
-        display: 'grid',
-        gridTemplateColumns: {
-          xs: '1fr',
-          md: isMobile ? '1fr' : '280px 1fr',
-          lg: isMobile ? '1fr' : '320px 1fr 300px',
-          xl: isMobile ? '1fr' : '320px 1fr 400px',
-        },
-        gridTemplateRows: '1fr',
-        position: 'relative',
-      }}
-    >
-      {!isMobile && (
-        <Box sx={{ gridColumn: 1 }}>
-          <Sidebar />
-        </Box>
-      )}
-
-      <Box
-        sx={{
-          gridColumn: {
-            xs: 1,
-            md: isMobile ? 1 : 2,
-            lg: isMobile ? 1 : 2,
-          },
-          position: 'relative',
-          p: { xs: 1, sm: 2, md: 4 },
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <ImageDisplay />
-        <MobileMenuButton isMobile={isMobile} onToggleDrawer={onToggleDrawer} drawerOpen={drawerOpen} />
-      </Box>
-
-      {!isMobile && isLargeScreen && (
-        <Box
-          sx={{
-            gridColumn: 3,
-            background: 'url(/DesktopBG.svg) bottom right / contain no-repeat',
-            pointerEvents: 'none',
-          }}
-        />
-      )}
-
-      {!isMobile && isMediumScreen && (
-        <Box
-          sx={{
-            position: 'absolute',
-            right: 0,
-            bottom: 0,
-            width: '250px',
-            height: '100%',
-            background: 'url(/DesktopBG.svg) bottom right / contain no-repeat',
-            pointerEvents: 'none',
-            zIndex: -1,
-          }}
-        />
-      )}
-    </Box>
-  )
-})
-
-MainContent.displayName = 'MainContent'
-
-const ImageDisplay = memo(() => {
-  const { inputURI, outputURI } = useImageStore()
-
+// Main content area with image comparison and text
+const MainContent = memo(function MainContent() {
   return (
     <Box
       sx={{
@@ -128,180 +80,96 @@ const ImageDisplay = memo(() => {
         mx: 'auto',
       }}
     >
-      <Box
-        sx={{
-          position: 'relative',
-          width: 'fit-content',
-          minWidth: { xs: '350px', sm: '500px', md: '650px' },
-          minHeight: { xs: '260px', sm: '375px', md: '490px' },
-          maxHeight: { xs: '70vh', sm: '75vh', md: '80vh' },
-          borderRadius: { xs: 1, sm: 2 },
-          overflow: 'hidden',
-          boxShadow: inputURI ? 3 : 1,
-          transition: 'box-shadow 0.3s ease-in-out',
-          mb: 2,
-          '& .react-compare-slider': {
-            minWidth: 'inherit',
-            minHeight: 'inherit',
-            maxHeight: 'inherit',
-          },
-        }}
-      >
-        <ReactCompareSlider
-          itemOne={
-            <ReactCompareSliderImage
-              src={inputURI}
-              alt="Before image"
-              style={{
-                objectFit: 'contain',
-                width: '100%',
-                height: '100%',
-                display: 'block',
-              }}
-            />
-          }
-          itemTwo={
-            outputURI ? (
-              <ReactCompareSliderImage
-                src={outputURI}
-                alt="After image"
-                style={{
-                  objectFit: 'contain',
-                  width: '100%',
-                  height: '100%',
-                  display: 'block',
-                }}
-              />
-            ) : null
-          }
-          handle={outputURI ? undefined : <></>}
-          style={{
-            width: '100%',
-            height: '100%',
-            minWidth: 'inherit',
-            minHeight: 'inherit',
-          }}
-        />
-      </Box>
+      <ImageComparison />
       <ProcessingText />
     </Box>
   )
 })
 
-ImageDisplay.displayName = 'ImageDisplay'
+MainContent.displayName = 'MainContent'
 
-const ProcessingText = memo(() => {
-  const [dots, setDots] = useState('')
-  const running = useAppStateStore((state) => state.running)
-  const outputURI = useImageStore((state) => state.outputURI)
-
-  useEffect(() => {
-    if (!running) return
-
-    const interval = setInterval(() => {
-      setDots((prev) => (prev === '...' ? '' : `${prev}.`))
-    }, UI_CONFIG.loadingTextInterval)
-
-    return () => clearInterval(interval)
-  }, [running])
-
-  const hasProcessed = outputURI !== null
-  const displayText = hasProcessed ? 'Download' : running ? 'Expanding' : 'Expand'
-
+// Background image for right panel (desktop only)
+const BackgroundImage = memo(function BackgroundImage() {
   return (
-    <Typography
-      variant="h2"
-      color="primary"
-      align="center"
+    <Box
       sx={{
-        fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3rem' },
-        fontWeight: { xs: 600, sm: 'bold' },
+        width: '100%',
+        height: '100%',
+        background: 'url(/DesktopBG.svg) bottom right / contain no-repeat',
+        pointerEvents: 'none',
       }}
-    >
-      <Box component="span" sx={{ color: 'text.primary' }}>
-        {displayText} your{' '}
-      </Box>
-      waifu
-      {running ? dots : '!'}
-    </Typography>
+      aria-hidden="true"
+    />
   )
 })
 
-ProcessingText.displayName = 'ProcessingText'
+BackgroundImage.displayName = 'BackgroundImage'
 
+// Mobile drawer with sidebar
 interface MobileDrawerProps {
   open: boolean
   onClose: () => void
+  onOpenModal: () => void
 }
 
-const MobileDrawer = memo(({ open, onClose }: MobileDrawerProps) => (
-  <Drawer
-    variant="temporary"
-    anchor="left"
-    open={open}
-    onClose={onClose}
-    ModalProps={{
-      keepMounted: true,
-    }}
-    sx={{
-      '& .MuiDrawer-paper': {
-        width: UI_CONFIG.layout.drawerWidth,
-        boxSizing: 'border-box',
-      },
-    }}
-  >
-    <Stack direction="row" justifyContent="flex-end" sx={{ p: 1 }}>
-      <IconButton onClick={onClose}>
-        <CloseIcon />
-      </IconButton>
-    </Stack>
-    <Sidebar isMobile />
-  </Drawer>
-))
+const MobileDrawer = memo(function MobileDrawer({ open, onClose, onOpenModal }: MobileDrawerProps) {
+  return (
+    <Drawer
+      variant="temporary"
+      anchor="left"
+      open={open}
+      onClose={onClose}
+      ModalProps={{
+        keepMounted: true,
+      }}
+      sx={{
+        '& .MuiDrawer-paper': {
+          width: DRAWER_WIDTH,
+          boxSizing: 'border-box',
+        },
+      }}
+    >
+      <Stack direction="row" justifyContent="flex-end" sx={{ p: 1 }}>
+        <IconButton onClick={onClose} aria-label="Close menu">
+          <CloseIcon />
+        </IconButton>
+      </Stack>
+      <Sidebar isMobile onOpenModal={onOpenModal} />
+    </Drawer>
+  )
+})
 
 MobileDrawer.displayName = 'MobileDrawer'
 
+// Mobile menu FAB
 interface MobileMenuButtonProps {
-  isMobile: boolean
-  onToggleDrawer: () => void
+  onClick: () => void
   drawerOpen: boolean
 }
 
-const MobileMenuButton = memo(({ isMobile, onToggleDrawer, drawerOpen }: MobileMenuButtonProps) => {
-  const shouldFlashSidebarButton = useAppStateStore((state) => state.shouldFlashSidebarButton)
-  const setShouldFlashSidebarButton = useAppStateStore((state) => state.setShouldFlashSidebarButton)
+const MobileMenuButton = memo(function MobileMenuButton({ onClick, drawerOpen }: MobileMenuButtonProps) {
+  const status = useProcessingStore((state) => state.status)
+  const prefersReducedMotion = useReducedMotion()
 
-  const handleToggle = () => {
-    if (shouldFlashSidebarButton) {
-      setShouldFlashSidebarButton(false)
-    }
-    onToggleDrawer()
-  }
+  // Flash when processing just completed and drawer is closed
+  const showFlash = status === 'complete' && !drawerOpen && !prefersReducedMotion
 
-  const shouldFlash = shouldFlashSidebarButton && !drawerOpen
-
-  return isMobile ? (
+  return (
     <Fab
       color="primary"
-      aria-label="open menu"
-      onClick={handleToggle}
+      aria-label="Open menu"
+      onClick={onClick}
       sx={{
         position: 'fixed',
         bottom: { xs: 16, sm: 24 },
         right: { xs: 16, sm: 24 },
         zIndex: (theme) => theme.zIndex.speedDial,
-        animation: shouldFlash ? 'flash 2s infinite' : 'none',
-        '@keyframes flash': {
-          '0%, 50%': { opacity: 1 },
-          '25%, 75%': { opacity: 0.4 },
-        },
+        ...(showFlash && STYLES.flashAnimation),
       }}
     >
       <MenuIcon />
     </Fab>
-  ) : null
+  )
 })
 
 MobileMenuButton.displayName = 'MobileMenuButton'
-
-export default HomePage

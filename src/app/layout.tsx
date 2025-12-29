@@ -4,6 +4,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter'
 import { Roboto } from 'next/font/google'
 import React from 'react'
+import { THEME_COLORS } from '@/constants'
 
 const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
@@ -13,9 +14,9 @@ const roboto = Roboto({
 
 const theme = createTheme({
   palette: {
-    primary: { main: '#FF869C' },
-    secondary: { main: '#FFFFFF' },
-    success: { main: '#44ABBC' },
+    primary: { main: THEME_COLORS.primary },
+    secondary: { main: THEME_COLORS.secondary },
+    success: { main: THEME_COLORS.success },
   },
   typography: {
     fontFamily: roboto.style.fontFamily,
@@ -38,7 +39,7 @@ const theme = createTheme({
       styleOverrides: {
         root: ({ ownerState }) => ({
           ...(ownerState.severity === 'info' && {
-            backgroundColor: '#60a5fa',
+            backgroundColor: THEME_COLORS.alertInfo,
           }),
         }),
       },

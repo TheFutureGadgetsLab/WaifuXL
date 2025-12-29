@@ -1,73 +1,78 @@
 import { useCallback, useEffect, useRef } from 'react'
-import { useAppStateStore, useImageStore } from './useState'
+import { useImageStore, useProcessingStore } from './stores'
+import { getImageURI } from './utils'
+import { parseError } from './errors'
 
-// Module-level flag to prevent duplicate listener registration across multiple hook instances
-let listenersRegistered = false
-
-export const useEventHandlers = (): void => {
+export function useEventHandlers(): void {
   const isRegistered = useRef(false)
   const setInputURI = useImageStore((state) => state.setInputURI)
-  const resetOutput = useImageStore((state) => state.resetOutput)
-  const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen)
+  const clearOutput = useImageStore((state) => state.clearOutput)
+  const setError = useProcessingStore((state) => state.setError)
+
+  const preventDefault = useCallback((e: Event) => e.preventDefault(), [])
 
   const handleInputFile = useCallback(
-    (items?: DataTransferItemList): boolean => {
+    async (items?: DataTransferItemList): Promise<boolean> => {
       if (!items) return false
       const file = Array.from(items)
         .find((item) => item.kind === 'file')
         ?.getAsFile()
       if (file) {
-        setInputURI(file)
-        resetOutput()
-        return true
+        try {
+          const uri = await getImageURI(file)
+          setInputURI(uri)
+          clearOutput()
+          return true
+        } catch (error) {
+          setError(parseError(error))
+        }
       }
       return false
     },
-    [setInputURI, resetOutput]
+    [setInputURI, clearOutput, setError]
   )
 
   const handlePaste = useCallback(
-    (e: ClipboardEvent) => {
+    async (e: ClipboardEvent) => {
       const text = e.clipboardData?.getData('text/plain')
       if (text) {
-        setInputURI(text)
-        resetOutput()
-      } else if (handleInputFile(e.clipboardData?.items)) {
-        setInputModalOpen(true)
+        try {
+          const uri = await getImageURI(text)
+          setInputURI(uri)
+          clearOutput()
+        } catch (error) {
+          setError(parseError(error))
+        }
+      } else {
+        await handleInputFile(e.clipboardData?.items)
       }
     },
-    [setInputURI, setInputModalOpen, resetOutput, handleInputFile]
+    [setInputURI, clearOutput, handleInputFile, setError]
   )
 
   const handleDrop = useCallback(
-    (e: DragEvent) => {
+    async (e: DragEvent) => {
       e.preventDefault()
-      if (handleInputFile(e.dataTransfer?.items)) {
-        setInputModalOpen(true)
-      }
+      await handleInputFile(e.dataTransfer?.items)
     },
-    [setInputModalOpen, handleInputFile]
+    [handleInputFile]
   )
 
   useEffect(() => {
-    // Guard against duplicate registration
-    if (listenersRegistered || isRegistered.current) return
-    listenersRegistered = true
+    if (isRegistered.current) return
     isRegistered.current = true
 
     window.addEventListener('paste', handlePaste)
     window.addEventListener('drop', handleDrop)
-    const preventDefault = (e: Event) => e.preventDefault()
 
     const dragEvents = ['dragenter', 'dragover', 'dragstart', 'dragend'] as const
     dragEvents.forEach((event) => window.addEventListener(event, preventDefault))
 
     return () => {
-      listenersRegistered = false
       isRegistered.current = false
       window.removeEventListener('paste', handlePaste)
       window.removeEventListener('drop', handleDrop)
       dragEvents.forEach((event) => window.removeEventListener(event, preventDefault))
     }
-  }, [handlePaste, handleDrop])
+  }, [handlePaste, handleDrop, preventDefault])
 }

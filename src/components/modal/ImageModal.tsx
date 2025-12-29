@@ -1,60 +1,91 @@
 'use client'
 
-import { SelectChangeEvent } from '@mui/material'
-import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select, Typography } from '@mui/material'
-import { Done, CloudUpload, Image } from '@mui/icons-material'
+import { memo, useState, useCallback } from 'react'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Modal from '@mui/material/Modal'
+import Typography from '@mui/material/Typography'
+import DoneIcon from '@mui/icons-material/Done'
+import CloudUploadIcon from '@mui/icons-material/CloudUpload'
+import ImageIcon from '@mui/icons-material/Image'
 
-import { useAppStateStore, useImageStore } from '@/services/useState'
-import { PRESET_IMAGES, UI_CONFIG, STYLES } from '@/constants'
+import { useImageStore, useProcessingStore } from '@/services/stores'
+import { getImageURI } from '@/services/utils'
+import { parseError } from '@/services/errors'
+import { UI_CONFIG, STYLES } from '@/constants'
+import { PresetSelector } from './PresetSelector'
 
-const ImageModal = () => {
-  const inputModalOpen = useAppStateStore((state) => state.inputModalOpen)
-  const selectedPreset = useAppStateStore((state) => state.selectedPreset)
-  const setInputModalOpen = useAppStateStore((state) => state.setInputModalOpen)
-  const setSelectedPreset = useAppStateStore((state) => state.setSelectedPreset)
+interface ImageModalProps {
+  open: boolean
+  onClose: () => void
+}
+
+export const ImageModal = memo(function ImageModal({ open, onClose }: ImageModalProps) {
   const inputURI = useImageStore((state) => state.inputURI)
   const setInputURI = useImageStore((state) => state.setInputURI)
-  const setTags = useImageStore((state) => state.setTags)
-  const resetOutput = useImageStore((state) => state.resetOutput)
+  const clearOutput = useImageStore((state) => state.clearOutput)
+  const clearTags = useImageStore((state) => state.clearTags)
+  const setError = useProcessingStore((state) => state.setError)
 
-  const closeModal = () => {
-    setInputModalOpen(false)
+  // Local state for preset selection
+  const [selectedPreset, setSelectedPreset] = useState('')
+
+  const handleClose = useCallback(() => {
     setSelectedPreset('')
-  }
+    onClose()
+  }, [onClose])
 
-  const processInput = (input: File | string) => {
-    setInputURI(input)
-    setSelectedPreset(typeof input === 'string' ? selectedPreset : '')
-    resetOutput()
-  }
+  const processInput = useCallback(
+    async (input: File | string) => {
+      try {
+        const uri = await getImageURI(input)
+        setInputURI(uri)
+        clearOutput()
+      } catch (error) {
+        setError(parseError(error))
+      }
+    },
+    [setInputURI, clearOutput, setError]
+  )
 
-  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      processInput(file)
-    }
-  }
+  const handleFileInput = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0]
+      if (file) {
+        processInput(file)
+        setSelectedPreset('')
+      }
+    },
+    [processInput]
+  )
 
-  const handlePresetChange = (event: SelectChangeEvent<string>) => {
-    setSelectedPreset(event.target.value)
-    const [, url] = event.target.value.split('|')
-    processInput(url)
-  }
+  const handlePresetChange = useCallback(
+    (preset: string, url: string) => {
+      setSelectedPreset(preset)
+      processInput(url)
+    },
+    [processInput]
+  )
 
-  const handleComplete = () => {
-    setTags({ topDesc: [], topChars: [], rating: [] })
-    closeModal()
-  }
+  const handleComplete = useCallback(() => {
+    // Clear tags so they get regenerated on next run
+    clearTags()
+    handleClose()
+  }, [clearTags, handleClose])
 
   return (
     <Modal
-      open={inputModalOpen}
-      onClose={closeModal}
+      open={open}
+      onClose={handleClose}
       aria-labelledby="image-upload-modal"
       aria-describedby="upload-image-or-select-preset"
     >
       <Box
         sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
           bgcolor: 'background.paper',
           border: `${UI_CONFIG.modal.borderWidth} solid`,
           borderColor: 'divider',
@@ -67,6 +98,7 @@ const ImageModal = () => {
           overflowY: 'auto',
         }}
       >
+        {/* Image preview / upload area */}
         <Box
           component="button"
           onClick={() => document.getElementById('file-input')?.click()}
@@ -98,9 +130,7 @@ const ImageModal = () => {
                 maxWidth: '100%',
                 maxHeight: '100%',
                 objectFit: 'contain',
-                border: '2px dashed',
-                borderColor: 'primary.main',
-                borderRadius: { xs: 1, sm: 2 },
+                ...STYLES.borderDashedResponsive,
                 transition: 'border-color 0.2s ease-in-out',
                 '&:hover': {
                   borderColor: 'primary.dark',
@@ -112,9 +142,7 @@ const ImageModal = () => {
               sx={{
                 width: '100%',
                 height: '100%',
-                border: '2px dashed',
-                borderColor: 'primary.main',
-                borderRadius: { xs: 1, sm: 2 },
+                ...STYLES.borderDashedResponsive,
                 ...STYLES.flexCenter,
                 flexDirection: 'column',
                 gap: { xs: 0.5, sm: 1 },
@@ -125,8 +153,7 @@ const ImageModal = () => {
                 },
               }}
             >
-              {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image
+              <ImageIcon
                 sx={{
                   fontSize: UI_CONFIG.modal.iconSize,
                   color: 'primary.main',
@@ -158,23 +185,10 @@ const ImageModal = () => {
           )}
         </Box>
 
-        <FormControl fullWidth sx={{ mb: 2 }}>
-          <InputLabel id="preset-select-label">Preset</InputLabel>
-          <Select
-            labelId="preset-select-label"
-            value={selectedPreset}
-            label="Preset"
-            onChange={handlePresetChange}
-            aria-describedby="preset-select-helper"
-          >
-            {PRESET_IMAGES.map((preset, i) => (
-              <MenuItem value={`${preset.name}|${preset.url}`} key={i}>
-                {preset.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        {/* Preset selector */}
+        <PresetSelector value={selectedPreset} onChange={handlePresetChange} />
 
+        {/* Action buttons */}
         <Box
           sx={{
             display: 'flex',
@@ -187,7 +201,7 @@ const ImageModal = () => {
             component="label"
             variant="outlined"
             color="primary"
-            startIcon={<CloudUpload />}
+            startIcon={<CloudUploadIcon />}
             sx={{
               minWidth: UI_CONFIG.modal.minButtonWidth,
               order: { xs: 2, sm: 1 },
@@ -208,7 +222,7 @@ const ImageModal = () => {
             onClick={handleComplete}
             variant="contained"
             color="success"
-            endIcon={<Done />}
+            endIcon={<DoneIcon />}
             sx={{
               order: { xs: 1, sm: 2 },
             }}
@@ -220,6 +234,6 @@ const ImageModal = () => {
       </Box>
     </Modal>
   )
-}
+})
 
-export default ImageModal
+ImageModal.displayName = 'ImageModal'

@@ -1,24 +1,23 @@
 'use client'
 
-import TitleBar from '@/components/titlebar'
-import { Box, Container, Grid, Typography, Button, Card, CardContent } from '@mui/material'
+import { PageLayout } from '@/components/layout'
+import { Box, Typography, Button, Card, CardContent } from '@mui/material'
 import { Favorite, Coffee } from '@mui/icons-material'
 import { useEffect } from 'react'
+import { EXTERNAL_LINKS, THEME_COLORS, RESPONSIVE } from '@/constants'
 
 export default function DonatePage() {
   useEffect(() => {
-    // Load Ko-fi widget script
     const script = document.createElement('script')
-    script.src = 'https://storage.ko-fi.com/cdn/widget/Widget_2.js'
+    script.src = EXTERNAL_LINKS.kofiWidgetScript
     script.async = true
     script.onload = () => {
-      // Initialize Ko-fi widget if script loads successfully
       const windowWithKofi = window as Window & { kofiWidgetOverlay?: { draw: (id: string, config: object) => void } }
       if (windowWithKofi.kofiWidgetOverlay) {
-        windowWithKofi.kofiWidgetOverlay.draw('thefuturegadgetslab', {
+        windowWithKofi.kofiWidgetOverlay.draw(EXTERNAL_LINKS.kofiHandle, {
           type: 'floating-chat',
           'floating-chat.donateButton.text': 'Support WaifuXL',
-          'floating-chat.donateButton.background-color': '#FF869C',
+          'floating-chat.donateButton.background-color': THEME_COLORS.primary,
           'floating-chat.donateButton.text-color': '#fff',
         })
       }
@@ -29,51 +28,23 @@ export default function DonatePage() {
     document.head.appendChild(script)
 
     return () => {
-      // Cleanup script on unmount
       document.head.removeChild(script)
     }
   }, [])
 
   const handleDirectDonation = () => {
-    window.open('https://ko-fi.com/thefuturegadgetslab', '_blank', 'noopener,noreferrer')
+    window.open(EXTERNAL_LINKS.kofi, '_blank', 'noopener,noreferrer')
   }
 
   return (
-    <Grid container direction="column" sx={{ minHeight: '100vh' }}>
-      <Grid>
-        <TitleBar />
-      </Grid>
-      <Grid
-        sx={{
-          flexGrow: 1,
-          background: 'url(/MobileBG.svg) bottom center / contain no-repeat',
-          backgroundSize: { xs: 'cover', sm: 'contain' },
-          display: 'grid',
-          gridTemplateColumns: {
-            xs: '1fr',
-            md: '280px 1fr',
-            lg: '320px 1fr 300px',
-            xl: '320px 1fr 400px',
-          },
-        }}
-      >
-        <Box sx={{ gridColumn: { xs: 1, md: 2, lg: 2 }, display: { xs: 'none', md: 'block' } }} />
-        <Container
-          maxWidth="md"
-          sx={{
-            gridColumn: {
-              xs: 1,
-              md: 2,
-              lg: 2,
-            },
-          }}
-        >
-          <Box
+    <PageLayout>
+      <Box
             sx={{
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'flex-start',
               alignItems: 'center',
+              // 200px accounts for titlebar + padding to vertically center the card
               minHeight: 'calc(100vh - 200px)',
               py: 2,
               pt: 8,
@@ -104,7 +75,7 @@ export default function DonatePage() {
                   gutterBottom
                   sx={{
                     fontWeight: 'bold',
-                    fontSize: { xs: '1.8rem', sm: '2.2rem' },
+                    fontSize: { xs: RESPONSIVE.headingFontSize.xs, sm: RESPONSIVE.headingFontSize.sm },
                   }}
                 >
                   Support WaifuXL
@@ -113,7 +84,7 @@ export default function DonatePage() {
                 <Typography
                   variant="body1"
                   color="text.secondary"
-                  sx={{ fontSize: { xs: '1rem', sm: '1.1rem' }, mb: 2 }}
+                  sx={{ fontSize: RESPONSIVE.bodyFontSize, mb: 2 }}
                 >
                   Enjoying the free AI image upscaling? Consider buying us a coffee to show your appreciation and
                   support future improvements!
@@ -131,16 +102,16 @@ export default function DonatePage() {
                     onClick={handleDirectDonation}
                     startIcon={<Favorite />}
                     sx={{
-                      backgroundColor: '#FF5F5F',
+                      backgroundColor: THEME_COLORS.donationButton,
                       color: 'white',
-                      fontSize: { xs: '1rem', sm: '1.1rem' },
+                      fontSize: RESPONSIVE.bodyFontSize,
                       px: { xs: 3, sm: 4 },
                       py: { xs: 1, sm: 1.5 },
                       borderRadius: 2,
                       textTransform: 'none',
                       fontWeight: 'bold',
                       '&:hover': {
-                        backgroundColor: '#FF4444',
+                        backgroundColor: THEME_COLORS.donationButtonHover,
                         transform: 'translateY(-2px)',
                         boxShadow: 4,
                       },
@@ -156,10 +127,7 @@ export default function DonatePage() {
                 </Typography>
               </CardContent>
             </Card>
-          </Box>
-        </Container>
-        <Box sx={{ gridColumn: { lg: 3, xl: 3 }, display: { xs: 'none', lg: 'block' } }} />
-      </Grid>
-    </Grid>
+      </Box>
+    </PageLayout>
   )
 }

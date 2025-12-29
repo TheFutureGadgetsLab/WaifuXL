@@ -1,46 +1,15 @@
 'use client'
 
-import TitleBar from '@/components/titlebar'
-import { Box, Container, Grid, Typography, Card, CardContent, Chip } from '@mui/material'
+import { PageLayout } from '@/components/layout'
+import { Box, Grid, Typography, Card, CardContent, Chip } from '@mui/material'
 import { Visibility, People, Code, Memory, CloudOff, Speed, GitHub, Article } from '@mui/icons-material'
+import { EXTERNAL_LINKS, RESPONSIVE } from '@/constants'
 import React from 'react'
 
 export default function AboutPage() {
   return (
-    <Grid container direction="column" sx={{ minHeight: '100vh' }}>
-      <Grid>
-        <TitleBar />
-      </Grid>
-      <Grid
-        sx={{
-          flexGrow: 1,
-          background: 'url(/MobileBG.svg) bottom center / contain no-repeat',
-          backgroundSize: { xs: 'cover', sm: 'contain' },
-          display: 'grid',
-          gridTemplateColumns: {
-            xs: '1fr',
-            md: '280px 1fr',
-            lg: '320px 1fr 300px',
-            xl: '320px 1fr 400px',
-          },
-        }}
-      >
-        <Box sx={{ gridColumn: { xs: 1, md: 2, lg: 2 }, display: { xs: 'none', md: 'block' } }} />
-        <Container
-          maxWidth="md"
-          sx={{
-            gridColumn: {
-              xs: 1,
-              md: 2,
-              lg: 2,
-            },
-          }}
-        >
-          <Box
-            sx={{
-              py: { xs: 2, sm: 3 },
-            }}
-          >
+    <PageLayout>
+      <Box sx={{ py: RESPONSIVE.sectionPadding }}>
             {/* Hero Section */}
             <Box sx={{ textAlign: 'center', mb: { xs: 3, sm: 4 } }}>
               <Typography
@@ -49,7 +18,7 @@ export default function AboutPage() {
                 gutterBottom
                 sx={{
                   fontWeight: 'bold',
-                  fontSize: { xs: '1.8rem', sm: '2.2rem', md: '2.5rem' },
+                  fontSize: RESPONSIVE.headingFontSize,
                   color: 'primary.main',
                 }}
               >
@@ -138,7 +107,7 @@ export default function AboutPage() {
                     icon={<GitHub />}
                     label="View Organization"
                     component="a"
-                    href="https://github.com/TheFutureGadgetsLab"
+                    href={EXTERNAL_LINKS.github}
                     target="_blank"
                     clickable
                     color="primary"
@@ -153,12 +122,12 @@ export default function AboutPage() {
                 </Typography>
 
                 <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 1.5 }}>
-                  <TechChip label="Real-ESRGAN" href="https://arxiv.org/abs/2107.10833" />
-                  <TechChip label="MobileNetV3" href="https://arxiv.org/abs/1905.02244" />
-                  <TechChip label="ONNX Runtime" href="https://onnxruntime.ai/" />
-                  <TechChip label="React" href="https://reactjs.org/" />
-                  <TechChip label="Next.js" href="https://nextjs.org/" />
-                  <TechChip label="Material-UI" href="https://mui.com/" />
+                  <TechChip label="Real-ESRGAN" href={EXTERNAL_LINKS.technical.realEsrgan} />
+                  <TechChip label="MobileNetV3" href={EXTERNAL_LINKS.technical.mobilenetv3} />
+                  <TechChip label="ONNX Runtime" href={EXTERNAL_LINKS.technical.onnxRuntime} />
+                  <TechChip label="React" href={EXTERNAL_LINKS.technical.react} />
+                  <TechChip label="Next.js" href={EXTERNAL_LINKS.technical.nextjs} />
+                  <TechChip label="Material-UI" href={EXTERNAL_LINKS.technical.materialUi} />
                 </Box>
 
                 <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
@@ -166,7 +135,7 @@ export default function AboutPage() {
                     icon={<Article />}
                     label="Read Full Write-up"
                     component="a"
-                    href="https://haydn.fgl.dev/posts/the-launch-of-waifuxl/"
+                    href={EXTERNAL_LINKS.blog}
                     target="_blank"
                     clickable
                     color="secondary"
@@ -175,11 +144,8 @@ export default function AboutPage() {
                 </Box>
               </Section>
             </Box>
-          </Box>
-        </Container>
-        <Box sx={{ gridColumn: { lg: 3, xl: 3 }, display: { xs: 'none', lg: 'block' } }} />
-      </Grid>
-    </Grid>
+      </Box>
+    </PageLayout>
   )
 }
 

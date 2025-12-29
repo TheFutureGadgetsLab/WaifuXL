@@ -9,15 +9,16 @@ export const downloadImage = (outputURI: string | null): void => {
   }
 }
 
-// Output URI can be null
-export const copyImageToClipboard = async (outputURI: string | null): Promise<void> => {
-  if (outputURI) {
-    try {
-      const imgBlob = await (await fetch(outputURI)).blob()
-      await navigator.clipboard.write([new ClipboardItem({ 'image/png': imgBlob })])
-    } catch (error) {
-      console.error(error)
-    }
+// Output URI can be null. Returns true if copy succeeded, false otherwise.
+export const copyImageToClipboard = async (outputURI: string | null): Promise<boolean> => {
+  if (!outputURI) return false
+  try {
+    const imgBlob = await (await fetch(outputURI)).blob()
+    await navigator.clipboard.write([new ClipboardItem({ 'image/png': imgBlob })])
+    return true
+  } catch (error) {
+    console.error('Failed to copy image to clipboard:', error)
+    return false
   }
 }
 

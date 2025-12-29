@@ -2,6 +2,8 @@ import ndarray, { NdArray } from 'ndarray'
 import ops from 'ndarray-ops'
 import { InferenceSession, env as ORTEnv, Tensor, TypedTensor } from 'onnxruntime-web'
 import { INFERENCE_CONFIG } from '@/constants'
+import type { ProgressInfo } from './stores/processingStore'
+import type { UpscaleFactor } from './stores/imageStore'
 
 // Types
 export interface ModelTag {
@@ -12,6 +14,25 @@ export interface ModelTags {
   topDesc: ModelTag[]
   topChars: ModelTag[]
   rating: ModelTag[]
+}
+
+// Progress callback type
+export type ProgressCallback = (info: ProgressInfo) => void
+
+// Result from the pure upscale function
+export interface UpscaleResult {
+  outputURI: string
+  tags: ModelTags
+}
+
+// Tags callback type - called when tags are ready (before upscaling completes)
+export type TagsCallback = (tags: ModelTags) => void
+
+// Options for upscaling
+export interface UpscaleOptions {
+  onProgress?: ProgressCallback
+  onTags?: TagsCallback
+  signal?: AbortSignal
 }
 
 // Image ndarray with guaranteed stride structure [width, height, channels]
@@ -39,12 +60,26 @@ interface ChunkBounds {
 let superSession: InferenceSession | null = null
 let taggerSession: InferenceSession | null = null
 
-async function initializeONNX(): Promise<void> {
+export function resetONNX(): void {
+  superSession = null
+  taggerSession = null
+}
+
+// Helper to check for abort
+function checkAbort(signal?: AbortSignal): void {
+  if (signal?.aborted) {
+    throw new DOMException('Operation was aborted', 'AbortError')
+  }
+}
+
+async function initializeONNX(onProgress?: ProgressCallback): Promise<void> {
   if (superSession && taggerSession) return
+
+  onProgress?.({ stage: 'loading-models', progress: 0 })
 
   ORTEnv.wasm.proxy = true
   ORTEnv.wasm.numThreads = Math.min(navigator.hardwareConcurrency / 2, 16)
-  ORTEnv.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/'
+  ORTEnv.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.23.2/dist/'
 
   const onnxOptions: InferenceSession.SessionOptions = {
     executionProviders: ['wasm'],
@@ -54,24 +89,54 @@ async function initializeONNX(): Promise<void> {
     executionMode: 'sequential',
   }
 
-  ;[taggerSession, superSession] = await Promise.all([
-    InferenceSession.create('./models/tagger.onnx', onnxOptions),
-    InferenceSession.create('./models/superRes.onnx', onnxOptions),
-  ])
+  onProgress?.({ stage: 'loading-models', progress: 25 })
+
+    ;[taggerSession, superSession] = await Promise.all([
+      InferenceSession.create('./models/tagger.onnx', onnxOptions),
+      InferenceSession.create('./models/superRes.onnx', onnxOptions),
+    ])
+
+  onProgress?.({ stage: 'loading-models', progress: 100 })
 }
 
-// Main pipeline function
-export async function upscaleAndTag(
-  setTags: (tags: ModelTags) => void,
+// Pure upscale function - returns result without side effects
+export async function upscaleImage(
   uri: string,
-  upscaleFactor: number
-): Promise<string> {
-  await initializeONNX()
+  upscaleFactor: UpscaleFactor,
+  options?: UpscaleOptions
+): Promise<UpscaleResult> {
+  const { onProgress, onTags, signal } = options ?? {}
+
+  // Check abort before starting
+  checkAbort(signal)
+
+  // Initialize ONNX
+  await initializeONNX(onProgress)
   if (!superSession || !taggerSession) throw new Error('ONNX sessions not initialized')
 
+  checkAbort(signal)
+
+  // Load image
+  onProgress?.({ stage: 'loading-image', progress: 0 })
   const tensor = await imageDataToTensor(uri)
-  setTags(await runTagger(taggerSession, tensor))
-  return await multiUpscale(superSession, tensor, upscaleFactor)
+  onProgress?.({ stage: 'loading-image', progress: 100 })
+
+  checkAbort(signal)
+
+  // Run tagger
+  onProgress?.({ stage: 'tagging', progress: 0 })
+  const tags = await runTagger(taggerSession, tensor)
+  onProgress?.({ stage: 'tagging', progress: 100 })
+
+  // Report tags immediately so UI can display them during upscaling
+  onTags?.(tags)
+
+  checkAbort(signal)
+
+  // Run upscaling
+  const outputURI = await multiUpscale(superSession, tensor, upscaleFactor, onProgress, signal)
+
+  return { outputURI, tags }
 }
 
 // Tagging functions
@@ -166,7 +231,9 @@ function blendChunkResult(output: ImageNdArray, chunkData: Tensor, bounds: Chunk
 async function multiUpscale(
   session: InferenceSession,
   imageArray: TypedTensor<'uint8'>,
-  upscaleFactor: number
+  upscaleFactor: number,
+  onProgress?: ProgressCallback,
+  signal?: AbortSignal
 ): Promise<string> {
   console.time('Upscaling')
   let outArr = ndarray(new Uint8Array(imageArray.data), imageArray.dims as number[])
@@ -174,23 +241,36 @@ async function multiUpscale(
     .transpose(2, 1, 0) as ImageNdArray
 
   for (let s = 0; s < upscaleFactor; s++) {
-    outArr = await upscaleFrame(session, outArr)
+    checkAbort(signal)
+    outArr = await upscaleFrame(session, outArr, onProgress, signal, s + 1, upscaleFactor)
   }
 
   console.timeEnd('Upscaling')
   return imgToDataURI(outArr)
 }
 
-async function upscaleFrame(session: InferenceSession, imageArray: ImageNdArray): Promise<ImageNdArray> {
+async function upscaleFrame(
+  session: InferenceSession,
+  imageArray: ImageNdArray,
+  onProgress?: ProgressCallback,
+  signal?: AbortSignal,
+  currentIteration?: number,
+  totalIterations?: number
+): Promise<ImageNdArray> {
   const [inImgW, inImgH] = imageArray.shape
   const [outImgW, outImgH] = [inImgW * 2, inImgH * 2]
   const [numChunksWidth, numChunksHeight] = [Math.ceil(inImgW / CHUNK_SIZE), Math.ceil(inImgH / CHUNK_SIZE)]
   const [chunkWidth, chunkHeight] = [Math.floor(inImgW / numChunksWidth), Math.floor(inImgH / numChunksHeight)]
 
+  const totalChunks = numChunksWidth * numChunksHeight
+  let currentChunk = 0
+
   const outArr = ndarray(new Uint8Array(outImgW * outImgH * 4), [outImgW, outImgH, 4]) as ImageNdArray
 
   for (let r = 0; r < numChunksHeight; r++) {
     for (let c = 0; c < numChunksWidth; c++) {
+      checkAbort(signal)
+
       const bounds = calculateChunkBounds(c, r, chunkWidth, chunkHeight, inImgW, inImgH)
       const subArr = extractChunkWithPadding(imageArray, bounds)
 
@@ -198,6 +278,16 @@ async function upscaleFrame(session: InferenceSession, imageArray: ImageNdArray)
       if (!chunkData) continue
 
       blendChunkResult(outArr, chunkData, bounds)
+
+      currentChunk++
+      onProgress?.({
+        stage: 'upscaling',
+        progress: Math.round((currentChunk / totalChunks) * 100),
+        currentChunk,
+        totalChunks,
+        currentIteration,
+        totalIterations,
+      })
     }
   }
 

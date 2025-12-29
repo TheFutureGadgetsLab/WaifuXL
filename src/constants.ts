@@ -1,3 +1,49 @@
+// Theme colors - centralized for consistency
+export const THEME_COLORS = {
+  primary: '#FF869C',
+  secondary: '#FFFFFF',
+  success: '#44ABBC',
+  alertInfo: '#60a5fa',
+  donationButton: '#FF5F5F',
+  donationButtonHover: '#FF4444',
+} as const
+
+// External links and brand info
+export const EXTERNAL_LINKS = {
+  github: 'https://github.com/TheFutureGadgetsLab',
+  kofi: 'https://ko-fi.com/thefuturegadgetslab',
+  kofiHandle: 'thefuturegadgetslab',
+  kofiWidgetScript: 'https://storage.ko-fi.com/cdn/widget/Widget_2.js',
+  blog: 'https://haydn.fgl.dev/posts/the-launch-of-waifuxl/',
+  technical: {
+    realEsrgan: 'https://arxiv.org/abs/2107.10833',
+    mobilenetv3: 'https://arxiv.org/abs/1905.02244',
+    onnxRuntime: 'https://onnxruntime.ai/',
+    react: 'https://reactjs.org/',
+    nextjs: 'https://nextjs.org/',
+    materialUi: 'https://mui.com/',
+  },
+} as const
+
+// Background assets
+export const ASSETS = {
+  mobileBg: '/MobileBG.svg',
+  desktopBg: '/DesktopBG.svg',
+} as const
+
+// Common responsive values used across components
+export const RESPONSIVE = {
+  headingFontSize: { xs: '1.8rem', sm: '2.2rem', md: '2.5rem' },
+  bodyFontSize: { xs: '1rem', sm: '1.1rem' },
+  sectionPadding: { xs: 2, sm: 3 },
+  pageGridColumns: {
+    xs: '1fr',
+    md: '280px 1fr',
+    lg: '320px 1fr 300px',
+    xl: '320px 1fr 400px',
+  },
+} as const
+
 export const PRESET_IMAGES = [
   { name: 'Ozen', url: 'https://i.imgur.com/Sf6sfPj.png' },
   { name: 'Senjougahara', url: 'https://i.imgur.com/cMX8YcK.jpg' },
@@ -66,14 +112,32 @@ export const STYLES = {
     width: '100%',
     height: '100%',
   },
-  absolutePosition: {
-    position: 'absolute' as const,
-    top: 0,
-    left: 0,
-  },
-  borderDashed: {
+  borderDashedResponsive: {
     border: '2px dashed',
     borderColor: 'primary.main',
-    borderRadius: 2,
+    borderRadius: { xs: 1, sm: 2 },
+  },
+  scrollbar: {
+    '&::-webkit-scrollbar': {
+      width: '6px',
+    },
+    '&::-webkit-scrollbar-track': {
+      background: 'rgba(0,0,0,0.1)',
+      borderRadius: '3px',
+    },
+    '&::-webkit-scrollbar-thumb': {
+      background: 'primary.main',
+      borderRadius: '3px',
+      '&:hover': {
+        background: 'primary.dark',
+      },
+    },
+  },
+  flashAnimation: {
+    animation: 'flash 2s infinite',
+    '@keyframes flash': {
+      '0%, 50%': { opacity: 1 },
+      '25%, 75%': { opacity: 0.4 },
+    },
   },
 } as const
