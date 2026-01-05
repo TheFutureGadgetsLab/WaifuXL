@@ -6,7 +6,6 @@ import { parseError } from './errors'
 export function useEventHandlers(): void {
   const isRegistered = useRef(false)
   const setInputURI = useImageStore((state) => state.setInputURI)
-  const clearOutput = useImageStore((state) => state.clearOutput)
   const setError = useProcessingStore((state) => state.setError)
 
   const preventDefault = useCallback((e: Event) => e.preventDefault(), [])
@@ -21,7 +20,6 @@ export function useEventHandlers(): void {
         try {
           const uri = await getImageURI(file)
           setInputURI(uri)
-          clearOutput()
           return true
         } catch (error) {
           setError(parseError(error))
@@ -29,25 +27,25 @@ export function useEventHandlers(): void {
       }
       return false
     },
-    [setInputURI, clearOutput, setError]
+    [setInputURI, setError]
   )
 
   const handlePaste = useCallback(
     async (e: ClipboardEvent) => {
+      const handledFile = await handleInputFile(e.clipboardData?.items)
+      if (handledFile) return
+
       const text = e.clipboardData?.getData('text/plain')
-      if (text) {
-        try {
-          const uri = await getImageURI(text)
-          setInputURI(uri)
-          clearOutput()
-        } catch (error) {
-          setError(parseError(error))
-        }
-      } else {
-        await handleInputFile(e.clipboardData?.items)
+      if (!text) return
+
+      try {
+        const uri = await getImageURI(text)
+        setInputURI(uri)
+      } catch (error) {
+        setError(parseError(error))
       }
     },
-    [setInputURI, clearOutput, handleInputFile, setError]
+    [setInputURI, handleInputFile, setError]
   )
 
   const handleDrop = useCallback(

@@ -109,6 +109,7 @@ export default function AboutPage() {
                     component="a"
                     href={EXTERNAL_LINKS.github}
                     target="_blank"
+                    rel="noopener noreferrer"
                     clickable
                     color="primary"
                     variant="outlined"
@@ -137,6 +138,7 @@ export default function AboutPage() {
                     component="a"
                     href={EXTERNAL_LINKS.blog}
                     target="_blank"
+                    rel="noopener noreferrer"
                     clickable
                     color="secondary"
                     variant="filled"
@@ -201,5 +203,16 @@ function FeatureCard({ icon, title, description }: { icon: React.ReactNode; titl
 }
 
 function TechChip({ label, href }: { label: string; href: string }) {
-  return <Chip label={label} component="a" href={href} target="_blank" clickable size="small" variant="outlined" />
+  return (
+    <Chip
+      label={label}
+      component="a"
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      clickable
+      size="small"
+      variant="outlined"
+    />
+  )
 }

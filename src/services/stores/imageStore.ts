@@ -24,8 +24,8 @@ export interface ImageStoreActions {
 }
 
 const initialState: ImageStoreState = {
-  inputURI: './images/senjougahara.webp',
-  outputURI: './images/senjougahara_2x.webp',
+  inputURI: '/images/senjougahara.webp',
+  outputURI: '/images/senjougahara_2x.webp',
   tags: default_tags,
   upscaleFactor: 1,
 }
@@ -36,12 +36,23 @@ const emptyTags: ModelTags = {
   rating: [],
 }
 
+const canRevokeObjectUrl = typeof URL !== 'undefined' && typeof URL.revokeObjectURL === 'function'
+
+function revokeObjectUrl(uri: string | null): void {
+  if (canRevokeObjectUrl && uri?.startsWith('blob:')) {
+    URL.revokeObjectURL(uri)
+  }
+}
+
 export const useImageStore = create(
   immer<ImageStoreState & ImageStoreActions>((set) => ({
     ...initialState,
 
     setInputURI: (uri) =>
       set((state) => {
+        if (state.inputURI && state.inputURI !== uri) {
+          revokeObjectUrl(state.inputURI)
+        }
         state.inputURI = uri
         state.outputURI = null
         state.tags = emptyTags
@@ -68,7 +79,14 @@ export const useImageStore = create(
         state.upscaleFactor = factor
       }),
 
-    reset: () => set(() => initialState),
+    reset: () =>
+      set((state) => {
+        revokeObjectUrl(state.inputURI)
+        state.inputURI = initialState.inputURI
+        state.outputURI = initialState.outputURI
+        state.tags = initialState.tags
+        state.upscaleFactor = initialState.upscaleFactor
+      }),
 
     clearOutput: () =>
       set((state) => {

@@ -39,7 +39,7 @@ export const FactorSelector = memo(function FactorSelector() {
         onChange={handleChange}
       >
         {UPSCALE_FACTORS.map((factor) => (
-          <MenuItem key={factor} value={factor / 2}>
+          <MenuItem key={factor} value={Math.log2(factor) as UpscaleFactor}>
             {factor}x
           </MenuItem>
         ))}

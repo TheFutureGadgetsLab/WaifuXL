@@ -60,11 +60,6 @@ interface ChunkBounds {
 let superSession: InferenceSession | null = null
 let taggerSession: InferenceSession | null = null
 
-export function resetONNX(): void {
-  superSession = null
-  taggerSession = null
-}
-
 // Helper to check for abort
 function checkAbort(signal?: AbortSignal): void {
   if (signal?.aborted) {
@@ -78,7 +73,8 @@ async function initializeONNX(onProgress?: ProgressCallback): Promise<void> {
   onProgress?.({ stage: 'loading-models', progress: 0 })
 
   ORTEnv.wasm.proxy = true
-  ORTEnv.wasm.numThreads = Math.min(navigator.hardwareConcurrency / 2, 16)
+  const maxThreads = Math.min(Math.floor((navigator.hardwareConcurrency ?? 1) / 2), 16)
+  ORTEnv.wasm.numThreads = Math.max(1, maxThreads)
   ORTEnv.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.23.2/dist/'
 
   const onnxOptions: InferenceSession.SessionOptions = {
@@ -92,8 +88,8 @@ async function initializeONNX(onProgress?: ProgressCallback): Promise<void> {
   onProgress?.({ stage: 'loading-models', progress: 25 })
 
     ;[taggerSession, superSession] = await Promise.all([
-      InferenceSession.create('./models/tagger.onnx', onnxOptions),
-      InferenceSession.create('./models/superRes.onnx', onnxOptions),
+      InferenceSession.create('/models/tagger.onnx', onnxOptions),
+      InferenceSession.create('/models/superRes.onnx', onnxOptions),
     ])
 
   onProgress?.({ stage: 'loading-models', progress: 100 })
@@ -173,7 +169,7 @@ let cachedTags: string[] | null = null
 
 async function loadTags(): Promise<string[]> {
   if (cachedTags) return cachedTags
-  const response = await fetch('./tags.json')
+  const response = await fetch('/tags.json')
   const tags: string[] = (await response.json()).map((tag: [number, string]) => tag[1])
   cachedTags = tags
   return tags

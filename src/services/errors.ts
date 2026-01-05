@@ -47,26 +47,6 @@ export function createImageLoadError(originalError?: unknown): AppError {
   }
 }
 
-export function createModelLoadError(originalError?: unknown): AppError {
-  return {
-    type: 'model-load',
-    message: 'Failed to load ONNX models',
-    userMessage: 'Failed to load the AI models. Please refresh the page and try again.',
-    retryable: true,
-    originalError,
-  }
-}
-
-export function createInferenceError(stage: string, originalError?: unknown): AppError {
-  return {
-    type: 'inference',
-    message: `Inference failed during ${stage}`,
-    userMessage: `Processing failed during ${stage}. Please try again with a different image or smaller size.`,
-    retryable: true,
-    originalError,
-  }
-}
-
 export function createNetworkError(originalError?: unknown): AppError {
   return {
     type: 'network',

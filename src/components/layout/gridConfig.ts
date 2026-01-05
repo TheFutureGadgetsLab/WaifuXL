@@ -1,18 +1,10 @@
-import { UI_CONFIG } from '@/constants'
-
-// Shared grid column configuration to ensure alignment between titlebar and main content
-export const GRID_COLUMNS = {
-  mobile: '1fr',
-  tablet: '280px 1fr',
-  desktop: '320px 1fr 300px',
-  largeDesktop: '320px 1fr 400px',
-} as const
+import { GRID_COLUMNS, UI_CONFIG } from '@/constants'
 
 export const getGridTemplateColumns = (isMobile: boolean) => ({
-  xs: '1fr',
-  md: isMobile ? '1fr' : GRID_COLUMNS.tablet,
-  lg: isMobile ? '1fr' : GRID_COLUMNS.desktop,
-  xl: isMobile ? '1fr' : GRID_COLUMNS.largeDesktop,
+  xs: GRID_COLUMNS.mobile,
+  md: isMobile ? GRID_COLUMNS.mobile : GRID_COLUMNS.tablet,
+  lg: isMobile ? GRID_COLUMNS.mobile : GRID_COLUMNS.desktop,
+  xl: isMobile ? GRID_COLUMNS.mobile : GRID_COLUMNS.largeDesktop,
 })
 
 export const SIDEBAR_WIDTH = UI_CONFIG.layout.sidebarWidth

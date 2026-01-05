@@ -31,16 +31,24 @@ export const ASSETS = {
   desktopBg: '/DesktopBG.svg',
 } as const
 
+// Grid column templates shared across layout components
+export const GRID_COLUMNS = {
+  mobile: '1fr',
+  tablet: '280px 1fr',
+  desktop: '320px 1fr 300px',
+  largeDesktop: '320px 1fr 400px',
+} as const
+
 // Common responsive values used across components
 export const RESPONSIVE = {
   headingFontSize: { xs: '1.8rem', sm: '2.2rem', md: '2.5rem' },
   bodyFontSize: { xs: '1rem', sm: '1.1rem' },
   sectionPadding: { xs: 2, sm: 3 },
   pageGridColumns: {
-    xs: '1fr',
-    md: '280px 1fr',
-    lg: '320px 1fr 300px',
-    xl: '320px 1fr 400px',
+    xs: GRID_COLUMNS.mobile,
+    md: GRID_COLUMNS.tablet,
+    lg: GRID_COLUMNS.desktop,
+    xl: GRID_COLUMNS.largeDesktop,
   },
 } as const
 
@@ -126,10 +134,10 @@ export const STYLES = {
       borderRadius: '3px',
     },
     '&::-webkit-scrollbar-thumb': {
-      background: 'primary.main',
+      backgroundColor: 'primary.main',
       borderRadius: '3px',
       '&:hover': {
-        background: 'primary.dark',
+        backgroundColor: 'primary.dark',
       },
     },
   },

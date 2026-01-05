@@ -23,8 +23,6 @@ interface ImageModalProps {
 export const ImageModal = memo(function ImageModal({ open, onClose }: ImageModalProps) {
   const inputURI = useImageStore((state) => state.inputURI)
   const setInputURI = useImageStore((state) => state.setInputURI)
-  const clearOutput = useImageStore((state) => state.clearOutput)
-  const clearTags = useImageStore((state) => state.clearTags)
   const setError = useProcessingStore((state) => state.setError)
 
   // Local state for preset selection
@@ -40,12 +38,11 @@ export const ImageModal = memo(function ImageModal({ open, onClose }: ImageModal
       try {
         const uri = await getImageURI(input)
         setInputURI(uri)
-        clearOutput()
       } catch (error) {
         setError(parseError(error))
       }
     },
-    [setInputURI, clearOutput, setError]
+    [setInputURI, setError]
   )
 
   const handleFileInput = useCallback(
@@ -68,10 +65,8 @@ export const ImageModal = memo(function ImageModal({ open, onClose }: ImageModal
   )
 
   const handleComplete = useCallback(() => {
-    // Clear tags so they get regenerated on next run
-    clearTags()
     handleClose()
-  }, [clearTags, handleClose])
+  }, [handleClose])
 
   return (
     <Modal
