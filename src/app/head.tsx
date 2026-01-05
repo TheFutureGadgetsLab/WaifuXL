@@ -3,6 +3,7 @@ import { ASSETS, DEFAULT_IMAGES } from '@/constants'
 export default function Head() {
   return (
     <>
+      <title>WaifuXL</title>
       <link
         rel="preload"
         as="image"

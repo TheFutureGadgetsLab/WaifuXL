@@ -17,7 +17,13 @@ import { useImageStore } from '@/services/stores'
 import { TAGS_PER_PAGE, UI_CONFIG, STYLES } from '@/constants'
 
 // Progress indicator with label
-const CircularProgressWithLabel = memo(function CircularProgressWithLabel({ value }: { value: number }) {
+const CircularProgressWithLabel = memo(function CircularProgressWithLabel({
+  value,
+  label,
+}: {
+  value: number
+  label: string
+}) {
   return (
     <Box sx={{ position: 'relative', display: 'inline-flex' }}>
       <CircularProgress
@@ -25,6 +31,7 @@ const CircularProgressWithLabel = memo(function CircularProgressWithLabel({ valu
         value={value}
         variant="determinate"
         color="primary"
+        aria-label={`${label} confidence ${Math.round(value)} percent`}
       />
       <Box
         sx={{
@@ -37,7 +44,7 @@ const CircularProgressWithLabel = memo(function CircularProgressWithLabel({ valu
           variant="caption"
           color="text.secondary"
           sx={{ fontSize: UI_CONFIG.captionFontSize }}
-          aria-label={`${Math.round(value)} percent confidence`}
+          aria-label={`${label} confidence ${Math.round(value)} percent`}
         >
           {Math.round(value)}
         </Typography>
@@ -86,7 +93,7 @@ const TagList = memo(function TagList({ title, tags }: TagListProps) {
                       {truncateString(name)}
                     </Typography>
                   </Tooltip>
-                  <CircularProgressWithLabel value={prob * 100} />
+                  <CircularProgressWithLabel value={prob * 100} label={name} />
                 </Box>
               }
             />

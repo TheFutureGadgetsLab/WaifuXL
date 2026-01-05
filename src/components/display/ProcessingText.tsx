@@ -43,23 +43,23 @@ export const ProcessingText = memo(function ProcessingText() {
   }
 
   return (
-    <Typography
-      variant="h2"
-      color="primary"
-      align="center"
-      role="status"
-      aria-live="polite"
-      sx={{
-        fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3rem' },
-        fontWeight: { xs: 600, sm: 'bold' },
-      }}
-    >
-      <Box component="span" sx={{ color: 'text.primary' }}>
-        {displayText} your{' '}
-      </Box>
-      waifu
-      {isProcessing ? dots : '!'}
-    </Typography>
+    <Box role="status" aria-live="polite" sx={{ textAlign: 'center' }}>
+      <Typography
+        variant="h2"
+        color="primary"
+        align="center"
+        sx={{
+          fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3rem' },
+          fontWeight: { xs: 600, sm: 'bold' },
+        }}
+      >
+        <Box component="span" sx={{ color: 'text.primary' }}>
+          {displayText} your{' '}
+        </Box>
+        waifu
+        {isProcessing ? dots : '!'}
+      </Typography>
+    </Box>
   )
 })
 

@@ -24,6 +24,8 @@ export const ProgressIndicator = memo(function ProgressIndicator({
 
   const progressValue = progress?.progress ?? 0
   const progressText = getProgressText(progress)
+  const progressLabel = progressText || 'Processing'
+  const isIndeterminate = progress?.stage === 'loading-models'
 
   return (
     <Box
@@ -48,11 +50,12 @@ export const ProgressIndicator = memo(function ProgressIndicator({
       )}
 
       <LinearProgress
-        variant={progress?.stage === 'loading-models' ? 'indeterminate' : 'determinate'}
+        variant={isIndeterminate ? 'indeterminate' : 'determinate'}
         value={progressValue}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-valuenow={Math.round(progressValue)}
+        aria-label={progressLabel}
+        aria-valuemin={isIndeterminate ? undefined : 0}
+        aria-valuemax={isIndeterminate ? undefined : 100}
+        aria-valuenow={isIndeterminate ? undefined : Math.round(progressValue)}
         aria-valuetext={progressText}
         sx={{
           height: compact ? 4 : 6,
