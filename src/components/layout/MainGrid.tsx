@@ -20,9 +20,9 @@ export const MainGrid = memo(function MainGrid({ sidebar, content, rightPanel }:
       sx={{
         display: 'grid',
         gridTemplateColumns: getGridTemplateColumns(isMobile),
-        minHeight: `calc(100vh - ${APP_BAR_HEIGHT.xs}px)`,
-        '@media (min-width: 600px)': {
-          minHeight: `calc(100vh - ${APP_BAR_HEIGHT.sm}px)`,
+        minHeight: {
+          xs: `calc(100vh - ${APP_BAR_HEIGHT.xs}px)`,
+          sm: `calc(100vh - ${APP_BAR_HEIGHT.sm}px)`,
         },
       }}
     >

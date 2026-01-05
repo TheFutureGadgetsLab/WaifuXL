@@ -4,6 +4,7 @@ import { PageLayout } from '@/components/layout'
 import { Box, Typography, Button, Card, CardContent } from '@mui/material'
 import { Favorite, Coffee } from '@mui/icons-material'
 import { useEffect } from 'react'
+import { alpha } from '@mui/material/styles'
 import { EXTERNAL_LINKS, THEME_COLORS, RESPONSIVE } from '@/constants'
 
 export default function DonatePage() {
@@ -51,13 +52,12 @@ export default function DonatePage() {
             }}
           >
             <Card
+              elevation={0}
               sx={{
                 maxWidth: 600,
                 width: '100%',
                 textAlign: 'center',
-                boxShadow: 0,
-                border: 'none',
-                backgroundColor: 'transparent',
+                backgroundColor: (theme) => alpha(theme.palette.background.paper, 0.9),
               }}
             >
               <CardContent sx={{ p: { xs: 3, sm: 4 } }}>
@@ -101,9 +101,8 @@ export default function DonatePage() {
                     size="large"
                     onClick={handleDirectDonation}
                     startIcon={<Favorite />}
+                    color="donation"
                     sx={{
-                      backgroundColor: THEME_COLORS.donationButton,
-                      color: 'white',
                       fontSize: RESPONSIVE.bodyFontSize,
                       px: { xs: 3, sm: 4 },
                       py: { xs: 1, sm: 1.5 },
@@ -111,7 +110,6 @@ export default function DonatePage() {
                       textTransform: 'none',
                       fontWeight: 'bold',
                       '&:hover': {
-                        backgroundColor: THEME_COLORS.donationButtonHover,
                         transform: 'translateY(-2px)',
                         boxShadow: 4,
                       },

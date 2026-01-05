@@ -1,9 +1,9 @@
 'use client'
 
 import { ReactNode } from 'react'
-import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
+import Stack from '@mui/material/Stack'
 import { Titlebar } from './Titlebar'
 import { ASSETS, RESPONSIVE } from '@/constants'
 
@@ -14,11 +14,11 @@ interface PageLayoutProps {
 
 export function PageLayout({ children, maxWidth = 'md' }: PageLayoutProps) {
   return (
-    <Grid container direction="column" sx={{ minHeight: '100vh' }}>
-      <Grid>
+    <Stack sx={{ minHeight: '100vh' }}>
+      <Box>
         <Titlebar />
-      </Grid>
-      <Grid
+      </Box>
+      <Box
         sx={{
           flexGrow: 1,
           background: `url(${ASSETS.mobileBg}) bottom center / contain no-repeat`,
@@ -43,7 +43,7 @@ export function PageLayout({ children, maxWidth = 'md' }: PageLayoutProps) {
         </Container>
 
         <Box sx={{ gridColumn: { lg: 3, xl: 3 }, display: { xs: 'none', lg: 'block' } }} />
-      </Grid>
-    </Grid>
+      </Box>
+    </Stack>
   )
 }

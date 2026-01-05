@@ -74,6 +74,7 @@ const TagList = memo(function TagList({ title, tags }: TagListProps) {
         {currentTags.map(({ name, prob }) => (
           <ListItem key={name} sx={{ py: 0.5 }}>
             <ListItemText
+              disableTypography
               primary={
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <Tooltip title={name} arrow enterTouchDelay={0}>

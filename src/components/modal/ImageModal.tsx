@@ -1,9 +1,13 @@
 'use client'
 
-import { memo, useState, useCallback } from 'react'
+import { memo, useState, useCallback, useId } from 'react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import Modal from '@mui/material/Modal'
+import ButtonBase from '@mui/material/ButtonBase'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogTitle from '@mui/material/DialogTitle'
 import Typography from '@mui/material/Typography'
 import DoneIcon from '@mui/icons-material/Done'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
@@ -27,6 +31,8 @@ export const ImageModal = memo(function ImageModal({ open, onClose }: ImageModal
 
   // Local state for preset selection
   const [selectedPreset, setSelectedPreset] = useState('')
+  const fileInputId = useId()
+  const showDropzoneBorder = !inputURI
 
   const handleClose = useCallback(() => {
     setSelectedPreset('')
@@ -69,19 +75,15 @@ export const ImageModal = memo(function ImageModal({ open, onClose }: ImageModal
   }, [handleClose])
 
   return (
-    <Modal
+    <Dialog
       open={open}
       onClose={handleClose}
-      aria-labelledby="image-upload-modal"
+      aria-labelledby="image-upload-modal-title"
       aria-describedby="upload-image-or-select-preset"
-    >
-      <Box
-        sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          bgcolor: 'background.paper',
+      maxWidth={false}
+      scroll="paper"
+      PaperProps={{
+        sx: {
           border: `${UI_CONFIG.modal.borderWidth} solid`,
           borderColor: 'divider',
           borderRadius: { xs: 1, sm: 2 },
@@ -90,25 +92,36 @@ export const ImageModal = memo(function ImageModal({ open, onClose }: ImageModal
           width: { xs: '95%', sm: '90%' },
           maxWidth: UI_CONFIG.modal.maxWidth,
           maxHeight: { xs: '90vh', sm: 'auto' },
-          overflowY: 'auto',
+        },
+      }}
+    >
+      <DialogTitle id="image-upload-modal-title" sx={{ p: 0, mb: 1 }}>
+        Select an image
+      </DialogTitle>
+      <DialogContent
+        id="upload-image-or-select-preset"
+        sx={{
+          p: 0,
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
         {/* Image preview / upload area */}
-        <Box
-          component="button"
-          onClick={() => document.getElementById('file-input')?.click()}
+        <ButtonBase
+          component="label"
+          htmlFor={fileInputId}
+          disableRipple
           sx={{
             margin: '0 auto',
             marginBottom: { xs: 1.5, sm: 2 },
             width: '100%',
             height: UI_CONFIG.modal.imageHeight,
             cursor: 'pointer',
-            bgcolor: 'transparent',
-            border: 'none',
             p: 0,
             ...STYLES.flexCenter,
             transition: 'all 0.2s ease-in-out',
-            '&:focus': {
+            borderRadius: { xs: 1, sm: 2 },
+            '&.Mui-focusVisible': {
               outline: '2px solid',
               outlineColor: 'primary.main',
               outlineOffset: '2px',
@@ -116,118 +129,121 @@ export const ImageModal = memo(function ImageModal({ open, onClose }: ImageModal
           }}
           aria-label="Click to upload image"
         >
-          {inputURI ? (
-            <Box
-              component="img"
-              src={inputURI}
-              alt="Selected image preview"
-              sx={{
-                maxWidth: '100%',
-                maxHeight: '100%',
-                objectFit: 'contain',
-                ...STYLES.borderDashedResponsive,
-                transition: 'border-color 0.2s ease-in-out',
-                '&:hover': {
-                  borderColor: 'primary.dark',
-                },
-              }}
-            />
-          ) : (
-            <Box
-              sx={{
-                width: '100%',
-                height: '100%',
-                ...STYLES.borderDashedResponsive,
-                ...STYLES.flexCenter,
-                flexDirection: 'column',
-                gap: { xs: 0.5, sm: 1 },
-                transition: 'all 0.2s ease-in-out',
-                '&:hover': {
-                  borderColor: 'primary.dark',
-                  bgcolor: 'action.hover',
-                },
-              }}
-            >
-              <ImageIcon
+          <Box
+            sx={{
+              width: '100%',
+              height: '100%',
+              ...(showDropzoneBorder ? STYLES.borderDashedResponsive : {}),
+              ...STYLES.flexCenter,
+              flexDirection: 'column',
+              gap: { xs: 0.5, sm: 1 },
+              transition: 'all 0.2s ease-in-out',
+              overflow: 'hidden',
+              borderRadius: { xs: 1, sm: 2 },
+              bgcolor: inputURI ? 'grey.100' : 'transparent',
+              '&:hover': showDropzoneBorder
+                ? {
+                    borderColor: 'primary.dark',
+                    bgcolor: 'action.hover',
+                  }
+                : {},
+            }}
+          >
+            {inputURI ? (
+              <Box
+                component="img"
+                src={inputURI}
+                alt="Selected image preview"
                 sx={{
-                  fontSize: UI_CONFIG.modal.iconSize,
-                  color: 'primary.main',
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                  display: 'block',
                 }}
-                aria-hidden="true"
               />
-              <Typography
-                variant="body1"
-                color="primary.main"
-                fontWeight="medium"
-                sx={{
-                  fontSize: { xs: '0.9rem', sm: '1rem' },
-                  textAlign: 'center',
-                }}
-              >
-                Click to upload an image
-              </Typography>
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{
-                  fontSize: { xs: '0.8rem', sm: '0.875rem' },
-                  textAlign: 'center',
-                }}
-              >
-                or choose a preset below
-              </Typography>
-            </Box>
-          )}
-        </Box>
+            ) : (
+              <>
+                <ImageIcon
+                  sx={{
+                    fontSize: UI_CONFIG.modal.iconSize,
+                    color: 'primary.main',
+                  }}
+                  aria-hidden="true"
+                />
+                <Typography
+                  variant="body1"
+                  color="primary.main"
+                  fontWeight="medium"
+                  sx={{
+                    fontSize: { xs: '0.9rem', sm: '1rem' },
+                    textAlign: 'center',
+                  }}
+                >
+                  Click to upload an image
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{
+                    fontSize: { xs: '0.8rem', sm: '0.875rem' },
+                    textAlign: 'center',
+                  }}
+                >
+                  or choose a preset below
+                </Typography>
+              </>
+            )}
+          </Box>
+        </ButtonBase>
 
         {/* Preset selector */}
         <PresetSelector value={selectedPreset} onChange={handlePresetChange} />
-
-        {/* Action buttons */}
-        <Box
+        <input
+          id={fileInputId}
+          type="file"
+          hidden
+          accept="image/*"
+          onChange={handleFileInput}
+          aria-label="Select image file"
+        />
+      </DialogContent>
+      <DialogActions
+        sx={{
+          p: 0,
+          display: 'flex',
+          flexDirection: { xs: 'column', sm: 'row' },
+          justifyContent: 'space-between',
+          gap: { xs: 1.5, sm: 2 },
+        }}
+      >
+        <Button
+          component="label"
+          htmlFor={fileInputId}
+          variant="outlined"
+          color="primary"
+          startIcon={<CloudUploadIcon />}
           sx={{
-            display: 'flex',
-            flexDirection: { xs: 'column', sm: 'row' },
-            justifyContent: 'space-between',
-            gap: { xs: 1.5, sm: 2 },
+            minWidth: UI_CONFIG.modal.minButtonWidth,
+            order: { xs: 2, sm: 1 },
           }}
+          aria-label="Browse and select image files"
         >
-          <Button
-            component="label"
-            variant="outlined"
-            color="primary"
-            startIcon={<CloudUploadIcon />}
-            sx={{
-              minWidth: UI_CONFIG.modal.minButtonWidth,
-              order: { xs: 2, sm: 1 },
-            }}
-            aria-label="Browse and select image files"
-          >
-            Browse Files
-            <input
-              id="file-input"
-              type="file"
-              hidden
-              accept="image/*"
-              onChange={handleFileInput}
-              aria-label="Select image file"
-            />
-          </Button>
-          <Button
-            onClick={handleComplete}
-            variant="contained"
-            color="success"
-            endIcon={<DoneIcon />}
-            sx={{
-              order: { xs: 1, sm: 2 },
-            }}
-            aria-label="Confirm image selection"
-          >
-            Done
-          </Button>
-        </Box>
-      </Box>
-    </Modal>
+          Browse Files
+        </Button>
+        <Button
+          onClick={handleComplete}
+          variant="contained"
+          color="success"
+          endIcon={<DoneIcon />}
+          sx={{
+            order: { xs: 1, sm: 2 },
+          }}
+          aria-label="Confirm image selection"
+        >
+          Done
+        </Button>
+      </DialogActions>
+    </Dialog>
   )
 })
 

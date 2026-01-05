@@ -1,7 +1,8 @@
 'use client'
 
 import { PageLayout } from '@/components/layout'
-import { Box, Chip, Grid, Typography } from '@mui/material'
+import { alpha } from '@mui/material/styles'
+import { Box, Chip, Grid, Paper, Typography } from '@mui/material'
 import { GitHub } from '@mui/icons-material'
 import { ReactNode } from 'react'
 import { EXTERNAL_LINKS, RESPONSIVE, UI_CONFIG } from '@/constants'
@@ -22,16 +23,15 @@ export default function AboutPage() {
           pb: RESPONSIVE.sectionPadding,
         }}
       >
-        <Box
+        <Paper
+          elevation={0}
           sx={{
             maxWidth: 860,
             mx: 'auto',
             gridRow: 2,
-            backgroundColor: 'rgba(255, 255, 255, 0.92)',
+            bgcolor: (theme) => alpha(theme.palette.background.paper, 0.92),
             borderRadius: 2,
             p: { xs: 2.5, sm: 4 },
-            boxShadow: '0 14px 30px rgba(23, 25, 35, 0.08)',
-            border: '1px solid rgba(255, 255, 255, 0.8)',
           }}
         >
           <Box sx={{ mb: { xs: 2, sm: 3 } }}>
@@ -99,7 +99,7 @@ export default function AboutPage() {
               </Section>
             </Grid>
           </Grid>
-        </Box>
+        </Paper>
       </Box>
     </PageLayout>
   )

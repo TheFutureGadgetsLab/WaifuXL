@@ -22,9 +22,9 @@ export const Sidebar = memo(function Sidebar({ isMobile = false, onOpenModal }: 
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        height: isMobile ? '100vh' : `calc(100vh - ${APP_BAR_HEIGHT.xs}px)`,
-        '@media (min-width: 600px)': {
-          height: isMobile ? '100vh' : `calc(100vh - ${APP_BAR_HEIGHT.sm}px)`,
+        height: {
+          xs: isMobile ? '100vh' : `calc(100vh - ${APP_BAR_HEIGHT.xs}px)`,
+          sm: isMobile ? '100vh' : `calc(100vh - ${APP_BAR_HEIGHT.sm}px)`,
         },
         width: isMobile ? '100%' : SIDEBAR_WIDTH,
         overflow: 'hidden',

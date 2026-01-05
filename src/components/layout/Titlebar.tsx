@@ -59,6 +59,7 @@ export const Titlebar = memo(function Titlebar() {
             >
               <Typography
                 variant="h4"
+                component="span"
                 color={color}
                 sx={{
                   fontWeight: weight,

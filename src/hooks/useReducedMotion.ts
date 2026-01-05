@@ -10,5 +10,5 @@ import useMediaQuery from '@mui/material/useMediaQuery'
  * @returns true if the user prefers reduced motion
  */
 export function useReducedMotion(): boolean {
-  return useMediaQuery('(prefers-reduced-motion: reduce)')
+  return useMediaQuery('(prefers-reduced-motion: reduce)', { defaultMatches: true })
 }
