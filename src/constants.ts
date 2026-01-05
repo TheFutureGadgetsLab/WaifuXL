@@ -31,6 +31,12 @@ export const ASSETS = {
   desktopBg: '/DesktopBG.svg',
 } as const
 
+// Default images for the comparison slider
+export const DEFAULT_IMAGES = {
+  input: '/images/senjougahara.webp',
+  output: '/images/senjougahara_2x.webp',
+} as const
+
 // Grid column templates shared across layout components
 export const GRID_COLUMNS = {
   mobile: '1fr',

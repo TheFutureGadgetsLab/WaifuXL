@@ -4,6 +4,7 @@ import { memo } from 'react'
 import Box from '@mui/material/Box'
 import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider'
 
+import { DEFAULT_IMAGES } from '@/constants'
 import { useImageStore } from '@/services/stores'
 
 const imageStyle = {
@@ -18,6 +19,8 @@ export const ImageComparison = memo(function ImageComparison() {
   const outputURI = useImageStore((state) => state.outputURI)
 
   const hasOutput = outputURI !== null
+  const inputFetchPriority = inputURI === DEFAULT_IMAGES.input ? 'high' : undefined
+  const outputFetchPriority = outputURI === DEFAULT_IMAGES.output ? 'high' : undefined
 
   return (
     <Box
@@ -45,10 +48,26 @@ export const ImageComparison = memo(function ImageComparison() {
         <ReactCompareSlider
           itemOne={
             inputURI ? (
-              <ReactCompareSliderImage src={inputURI} alt="Before image" style={imageStyle} />
+              <ReactCompareSliderImage
+                src={inputURI}
+                alt="Before image"
+                style={imageStyle}
+                loading="eager"
+                decoding="async"
+                fetchPriority={inputFetchPriority}
+              />
             ) : null
           }
-          itemTwo={<ReactCompareSliderImage src={outputURI} alt="After image" style={imageStyle} />}
+          itemTwo={
+            <ReactCompareSliderImage
+              src={outputURI}
+              alt="After image"
+              style={imageStyle}
+              loading="eager"
+              decoding="async"
+              fetchPriority={outputFetchPriority}
+            />
+          }
           style={{
             width: '100%',
             height: '100%',
@@ -62,6 +81,9 @@ export const ImageComparison = memo(function ImageComparison() {
             component="img"
             src={inputURI}
             alt="Input image"
+            loading="eager"
+            decoding="async"
+            fetchPriority={inputFetchPriority}
             sx={{
               ...imageStyle,
               maxWidth: '100%',

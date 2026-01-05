@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
+import { DEFAULT_IMAGES } from '@/constants'
 import { ModelTags } from '../inference'
 import default_tags from '../landing_tags'
 
@@ -24,8 +25,8 @@ export interface ImageStoreActions {
 }
 
 const initialState: ImageStoreState = {
-  inputURI: '/images/senjougahara.webp',
-  outputURI: '/images/senjougahara_2x.webp',
+  inputURI: DEFAULT_IMAGES.input,
+  outputURI: DEFAULT_IMAGES.output,
   tags: default_tags,
   upscaleFactor: 1,
 }

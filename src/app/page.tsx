@@ -17,7 +17,7 @@ import { ErrorToast } from '@/components/feedback'
 import { useResponsive, useReducedMotion } from '@/hooks'
 import { useProcessingStore } from '@/services/stores'
 import { useEventHandlers } from '@/services/windowUtilities'
-import { STYLES } from '@/constants'
+import { ASSETS, STYLES } from '@/constants'
 
 export default function HomePage() {
   // Modal and drawer state (local to page)
@@ -95,7 +95,7 @@ const BackgroundImage = memo(function BackgroundImage() {
       sx={{
         width: '100%',
         height: '100%',
-        background: 'url(/DesktopBG.svg) bottom right / contain no-repeat',
+        background: `url(${ASSETS.desktopBg}) bottom right / contain no-repeat`,
         pointerEvents: 'none',
       }}
       aria-hidden="true"

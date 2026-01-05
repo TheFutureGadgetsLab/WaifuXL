@@ -48,3 +48,4 @@ workbox-*.js.map
 torch_upscaler
 CLAUDE.md
 *.tsbuildinfo
+AGENTS.md
