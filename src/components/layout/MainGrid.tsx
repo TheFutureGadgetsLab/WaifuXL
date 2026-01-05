@@ -2,8 +2,8 @@
 
 import { memo, ReactNode } from 'react'
 import Box from '@mui/material/Box'
-import { useResponsive } from '@/hooks'
-import { getGridTemplateColumns, APP_BAR_HEIGHT } from './gridConfig'
+import { GRID_COLUMNS } from '@/constants'
+import { APP_BAR_HEIGHT } from './gridConfig'
 
 interface MainGridProps {
   sidebar?: ReactNode
@@ -12,14 +12,17 @@ interface MainGridProps {
 }
 
 export const MainGrid = memo(function MainGrid({ sidebar, content, rightPanel }: MainGridProps) {
-  const { isMobile, isDesktop } = useResponsive()
-
   return (
     <Box
       component="main"
       sx={{
         display: 'grid',
-        gridTemplateColumns: getGridTemplateColumns(isMobile),
+        gridTemplateColumns: {
+          xs: GRID_COLUMNS.mobile,
+          md: GRID_COLUMNS.tablet,
+          lg: GRID_COLUMNS.desktop,
+          xl: GRID_COLUMNS.largeDesktop,
+        },
         minHeight: {
           xs: `calc(100vh - ${APP_BAR_HEIGHT.xs}px)`,
           sm: `calc(100vh - ${APP_BAR_HEIGHT.sm}px)`,
@@ -27,14 +30,14 @@ export const MainGrid = memo(function MainGrid({ sidebar, content, rightPanel }:
       }}
     >
       {/* Left sidebar */}
-      {!isMobile && sidebar && (
+      {sidebar && (
         <Box
           component="aside"
           role="complementary"
           aria-label="Controls and settings"
           sx={{
             gridColumn: 1,
-            display: 'flex',
+            display: { xs: 'none', md: 'flex' },
             flexDirection: 'column',
           }}
         >
@@ -47,7 +50,7 @@ export const MainGrid = memo(function MainGrid({ sidebar, content, rightPanel }:
         sx={{
           gridColumn: {
             xs: 1,
-            md: isMobile ? 1 : 2,
+            md: 2,
           },
           display: 'flex',
           flexDirection: 'column',
@@ -60,12 +63,13 @@ export const MainGrid = memo(function MainGrid({ sidebar, content, rightPanel }:
       </Box>
 
       {/* Right panel (large screens only) */}
-      {!isMobile && isDesktop && rightPanel && (
+      {rightPanel && (
         <Box
           sx={{
             gridColumn: 3,
             position: 'relative',
             overflow: 'hidden',
+            display: { xs: 'none', lg: 'block' },
           }}
         >
           {rightPanel}

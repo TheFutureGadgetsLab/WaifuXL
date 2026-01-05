@@ -4,11 +4,13 @@ import { memo } from 'react'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
+import GitHubIcon from '@mui/icons-material/GitHub'
 import Link from 'next/link'
 
-import { HEADER_LINKS } from '@/constants'
+import { EXTERNAL_LINKS, HEADER_LINKS } from '@/constants'
 import { useResponsive } from '@/hooks'
 import { getGridTemplateColumns, APP_BAR_HEIGHT } from './gridConfig'
 
@@ -75,6 +77,28 @@ export const Titlebar = memo(function Titlebar() {
 
         {/* Right spacer for large screens */}
         {!isMobile && isDesktop && <Box sx={{ gridColumn: 3 }} />}
+      </Box>
+      <Box
+        sx={{
+          position: 'absolute',
+          right: { xs: 6, sm: 10 },
+          top: 0,
+          bottom: 0,
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <IconButton
+          component="a"
+          href={EXTERNAL_LINKS.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub"
+          color="inherit"
+          size="large"
+        >
+          <GitHubIcon sx={{ fontSize: { xs: 36, sm: 40 } }} />
+        </IconButton>
       </Box>
     </AppBar>
   )

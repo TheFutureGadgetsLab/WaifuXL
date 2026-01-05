@@ -70,8 +70,7 @@ export default function AboutPage() {
             >
               <Section title="What it does">
                 <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.7 }}>
-                  Upscaling happens entirely in your browser, so images never leave your device. The goal is to keep
-                  the workflow fast, private, and predictable.
+                  Upscaling happens entirely in your browser, so images never leave your device.
                 </Typography>
               </Section>
             </Grid>
@@ -83,7 +82,7 @@ export default function AboutPage() {
             >
               <Section title="Who we are">
                 <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.7, mb: 2 }}>
-                  We are the Future Gadgets Lab, a small team focused on practical, privacy-forward tools.
+                  We are the Future Gadgets Lab, a small and elite team of chuds.
                 </Typography>
                 <Chip
                   icon={<GitHub />}
