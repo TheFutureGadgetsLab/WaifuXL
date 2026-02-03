@@ -73,7 +73,8 @@ async function initializeONNX(onProgress?: ProgressCallback): Promise<void> {
   onProgress?.({ stage: 'loading-models', progress: 0 })
 
   ORTEnv.wasm.proxy = true
-  const maxThreads = Math.min(Math.floor((navigator.hardwareConcurrency ?? 1) / 2), 16)
+  const isWebKit = /AppleWebKit/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent)
+  const maxThreads = isWebKit ? 1 : Math.min(Math.floor((navigator.hardwareConcurrency ?? 1) / 2), 16)
   ORTEnv.wasm.numThreads = Math.max(1, maxThreads)
   ORTEnv.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.23.2/dist/'
 
