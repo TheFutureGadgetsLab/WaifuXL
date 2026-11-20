@@ -18,6 +18,7 @@ export function useUpscale() {
   // State values - trigger re-render when changed
   const inputURI = useImageStore((state) => state.inputURI)
   const upscaleFactor = useImageStore((state) => state.upscaleFactor)
+  const backend = useImageStore((state) => state.backend)
 
   // Actions - stable references, accessed directly
   const setOutputURI = useImageStore((state) => state.setOutputURI)
@@ -43,6 +44,7 @@ export function useUpscale() {
         onProgress: setProgress,
         onTags: setTags, // Set tags immediately when ready (before upscaling completes)
         signal: abortControllerRef.current.signal,
+        backend,
       })
 
       // Update stores with results
@@ -57,7 +59,7 @@ export function useUpscale() {
         resetProcessing()
       }
     }
-  }, [inputURI, upscaleFactor, startProcessing, setProgress, setComplete, setError, resetProcessing, setOutputURI, setTags, setUpscaleFactor])
+  }, [inputURI, upscaleFactor, backend, startProcessing, setProgress, setComplete, setError, resetProcessing, setOutputURI, setTags, setUpscaleFactor])
 
   const cancel = useCallback(() => {
     abortControllerRef.current?.abort()

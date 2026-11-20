@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import { DEFAULT_IMAGES } from '@/constants'
-import { ModelTags } from '../inference'
+import { ModelTags, InferenceBackend } from '../inference'
 import default_tags from '../landing_tags'
 
 // Types
@@ -12,6 +12,7 @@ export interface ImageStoreState {
   outputURI: string | null
   tags: ModelTags
   upscaleFactor: UpscaleFactor
+  backend: InferenceBackend
 }
 
 export interface ImageStoreActions {
@@ -20,6 +21,7 @@ export interface ImageStoreActions {
   setTags: (tags: ModelTags) => void
   clearTags: () => void
   setUpscaleFactor: (factor: UpscaleFactor) => void
+  setBackend: (backend: InferenceBackend) => void
   reset: () => void
   clearOutput: () => void
 }
@@ -29,6 +31,7 @@ const initialState: ImageStoreState = {
   outputURI: DEFAULT_IMAGES.output,
   tags: default_tags,
   upscaleFactor: 1,
+  backend: 'wasm',
 }
 
 const emptyTags: ModelTags = {
@@ -78,6 +81,11 @@ export const useImageStore = create(
       set((state) => {
         if (![1, 2, 3].includes(factor)) return
         state.upscaleFactor = factor
+      }),
+
+    setBackend: (backend) =>
+      set((state) => {
+        state.backend = backend
       }),
 
     reset: () =>

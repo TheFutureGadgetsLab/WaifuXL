@@ -1,7 +1,7 @@
 import ndarray, { NdArray } from 'ndarray'
 import ops from 'ndarray-ops'
 import { InferenceSession, env as ORTEnv, Tensor, TypedTensor } from 'onnxruntime-web'
-import { INFERENCE_CONFIG } from '@/constants'
+import { BACKENDS, INFERENCE_CONFIG } from '@/constants'
 import type { ProgressInfo } from './stores/processingStore'
 import type { UpscaleFactor } from './stores/imageStore'
 
@@ -33,6 +33,7 @@ export interface UpscaleOptions {
   onProgress?: ProgressCallback
   onTags?: TagsCallback
   signal?: AbortSignal
+  backend?: InferenceBackend
 }
 
 // Image ndarray with guaranteed stride structure [width, height, channels]
@@ -67,8 +68,11 @@ function checkAbort(signal?: AbortSignal): void {
   }
 }
 
-async function initializeONNX(onProgress?: ProgressCallback): Promise<void> {
-  if (superSession && taggerSession) return
+export type InferenceBackend = keyof typeof BACKENDS
+let activeBackend: InferenceBackend | null = null
+
+async function initializeONNX(backend: InferenceBackend, onProgress?: ProgressCallback): Promise<void> {
+  if (superSession && taggerSession && activeBackend === backend) return
 
   onProgress?.({ stage: 'loading-models', progress: 0 })
 
@@ -77,13 +81,19 @@ async function initializeONNX(onProgress?: ProgressCallback): Promise<void> {
   ORTEnv.wasm.numThreads = Math.max(1, maxThreads)
   ORTEnv.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.23.2/dist/'
 
+  const executionProviders: InferenceSession.ExecutionProviderName[] =
+    backend === 'webgpu' ? ['webgpu', 'wasm'] : ['wasm']
+
   const onnxOptions: InferenceSession.SessionOptions = {
-    executionProviders: ['wasm'],
+    executionProviders,
     graphOptimizationLevel: 'all',
     enableCpuMemArena: true,
     enableMemPattern: true,
     executionMode: 'sequential',
   }
+
+  await Promise.all([taggerSession?.release(), superSession?.release()])
+  taggerSession = superSession = null
 
   onProgress?.({ stage: 'loading-models', progress: 25 })
 
@@ -91,6 +101,7 @@ async function initializeONNX(onProgress?: ProgressCallback): Promise<void> {
       InferenceSession.create('/models/tagger.onnx', onnxOptions),
       InferenceSession.create('/models/superRes.onnx', onnxOptions),
     ])
+  activeBackend = backend
 
   onProgress?.({ stage: 'loading-models', progress: 100 })
 }
@@ -101,13 +112,13 @@ export async function upscaleImage(
   upscaleFactor: UpscaleFactor,
   options?: UpscaleOptions
 ): Promise<UpscaleResult> {
-  const { onProgress, onTags, signal } = options ?? {}
+  const { onProgress, onTags, signal, backend = 'wasm' } = options ?? {}
 
   // Check abort before starting
   checkAbort(signal)
 
   // Initialize ONNX
-  await initializeONNX(onProgress)
+  await initializeONNX(backend, onProgress)
   if (!superSession || !taggerSession) throw new Error('ONNX sessions not initialized')
 
   checkAbort(signal)
