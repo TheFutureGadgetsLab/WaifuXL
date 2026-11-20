@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography'
 
 import { ActionButtons } from './ActionButtons'
 import { FactorSelector } from './FactorSelector'
+import { BackendSelector } from './BackendSelector'
 import { TagDisplay } from './TagDisplay'
 import { SIDEBAR_WIDTH, APP_BAR_HEIGHT } from '@/components/layout'
 
@@ -65,6 +66,7 @@ export const Sidebar = memo(function Sidebar({ isMobile = false, onOpenModal }: 
           <Stack spacing={{ xs: 1.5, sm: 2 }}>
             <ActionButtons onOpenModal={onOpenModal} />
             <FactorSelector />
+            <BackendSelector />
           </Stack>
         </Container>
 

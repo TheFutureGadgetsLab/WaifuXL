@@ -69,6 +69,11 @@ export const PRESET_IMAGES = [
 
 export const UPSCALE_FACTORS = [2, 4, 8] as const
 
+export const BACKENDS = {
+  wasm: 'WebAssembly (CPU)',
+  webgpu: 'WebGPU (experimental)',
+} as const
+
 export const INFERENCE_CONFIG = {
   CHUNK_SIZE: 256,
   PAD_SIZE: 32,
